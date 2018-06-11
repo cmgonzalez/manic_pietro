@@ -54,7 +54,6 @@ void main(void) {
   game_gravity = GAME_GRAVITY; // 8;
   // vel_y0 + vel_y1 = -84
   player_vel_y0 = GAME_VELOCITY;     //-88; // Velocity
-  player_vel_y1 = GAME_MIN_VELOCITY; //-72; // Min Velocity
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;

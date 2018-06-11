@@ -73,6 +73,18 @@ unsigned char spr_move_up(void) {
     f_check = (s_lin1 >> 3) != (s_lin0 >> 3);
 
     if (f_check) {
+
+      if (colint[sprite] == 0) {
+        if (game_check_map(s_lin1, col[sprite])) {
+          return 1;
+        }
+      }
+      if (colint[sprite] == sprite_frames[sprite] - 1) {
+        if (game_check_map(s_lin1, col[sprite] + 1)) {
+          return 1;
+        }
+      }
+
       if (game_check_map(s_lin1, col[sprite]) ||
           game_check_map(s_lin1, col[sprite] + 1)) {
         return 1;
@@ -94,6 +106,16 @@ unsigned char spr_move_down(void) {
     s_lin1 = lin[sprite] + SPRITE_LIN_INC + 14;
     f_check = (s_lin1 >> 3) != (s_lin0 >> 3);
     if (f_check) {
+      if (colint[sprite] == 0) {
+        if (game_check_map(s_lin1, col[sprite])) {
+          return 1;
+        }
+      }
+      if (colint[sprite] == sprite_frames[sprite] - 1) {
+        if (game_check_map(s_lin1, col[sprite] + 1)) {
+          return 1;
+        }
+      }
       if (game_check_map(s_lin1, col[sprite]) ||
           game_check_map(s_lin1, col[sprite] + 1)) {
         return 1;
@@ -420,34 +442,31 @@ unsigned char spr_tile_dir(unsigned char *f_tile, unsigned char *f_sprite,
 
 void spr_back_repaint(void) {
   index1 = spr_calc_index(s_lin0, s_col0);
-  s_lin1 = s_lin0 + 16;
+  s_lin1 = s_lin0 >> 3;
+  s_lin1 = s_lin1 << 3;
+  s_lin1 = s_lin1 + 16;
+
   s_row1 = (s_lin0 >> 3) + 1;
   s_col1 = s_col0;
   game_cell_paint();
-
   index1++;
   s_col1++;
   game_cell_paint();
-
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
   game_cell_paint();
-
   index1--;
   s_col1--;
   game_cell_paint();
-
   if ((s_lin0 & 2) != 0) {
-
     s_lin1 = s_lin1 + 8;
     s_row1++;
     index1 = index1 + 32;
-    //game_cell_paint();
-
-    index1--;
-    s_col1--;
-    //game_cell_paint();
+    game_cell_paint();
+    index1++;
+    s_col1++;
+    game_cell_paint();
   }
 }
 

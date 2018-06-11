@@ -24,8 +24,7 @@
 
 
 #define GAME_GRAVITY                  1
-#define GAME_VELOCITY                 -8
-#define GAME_MIN_VELOCITY             -7
+#define GAME_VELOCITY                 -6
 #define GAME_START_LIVES              3
 #define GAME_START_MAX_MANA           100
 #define GAME_START_MAX_VITA           100
@@ -37,9 +36,24 @@
 /* Map foreground tiles */
 
 #define TILE_EMPTY                    0
-#define TILE_EMPTY_DARK               29 //INTERIOR BACK 2
-#define TILE_EMPTY_DARK_A             24 //INTERIOR BACK 2
-#define TILE_EMPTY_DARK_B             13 //BRICKS BACK
+
+#define TILE_FLOOR                    1
+
+#define TILE_FLOOR0                   2
+#define TILE_FLOOR1                   3
+
+#define TILE_BRICK                    4
+#define TILE_CHAIN                    5
+
+#define TILE_DEADLY1                  6
+#define TILE_DEADLY2                  7
+
+
+#define TILE_BRICK1                   62
+#define TILE_BRICK2                   63
+#define TILE_BRICK3                   64
+
+
 #define TILE_WORLD_EXIT               57
 #define TILE_BACKGROUND_S             0  //START OF BACKGROUND
 #define TILE_BACKGROUND_E             35 //END OF BACKGROUND
@@ -49,7 +63,7 @@
 #define TILE_ITEM_S                   36 //START OF ITEMS
 #define TILE_ITEM_E                   47 //END OF ITEMS
 
-#define TILE_FLOOR                    58 //START FLOOR TILES
+
 #define TILE_CEIL                     72 //START CEILS TILES
 
 #define TILE_DOOR_E                   76 //END OF DOOR TILES
@@ -66,9 +80,6 @@
 #define TILE_STOPPER                  35 //TURN ENEMY DIRECTION
 
 
-#define TILE_BRICK1                   62
-#define TILE_BRICK2                   63
-#define TILE_BRICK3                   64
 
 /* Enemies Class indexes */
 #define PLAYER                        0xFF
@@ -167,10 +178,6 @@
 #define TILE_DOOR_CYAN                75
 
 #define FRAMES_PLAYER                 4
-
-/* Screen tiles */
-#define TILE_BRICK                    48
-
 
 /* Player indexes */
 #define SPR_P1                        7
@@ -292,7 +299,6 @@ extern unsigned int player_score;
 extern signed char  player_vel_x;
 extern signed char  player_vel_y;
 extern signed char  player_vel_y0;
-extern signed char  player_vel_y1;
 extern signed char  player_vel_inc;
 extern unsigned char player_keys[4];
 //PLAYER ATTRIBUTES

@@ -101,7 +101,6 @@ unsigned char player_coins;
 signed char player_vel_x;
 signed char player_vel_y;
 signed char player_vel_y0;
-signed char player_vel_y1;
 signed char player_vel_inc;
 unsigned char player_keys[4];
 unsigned char player_hit_count;

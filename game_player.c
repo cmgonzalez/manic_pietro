@@ -74,7 +74,9 @@ unsigned char player_move(void) {
     /* Read player input */
     player_move_input();
     /* Check if the player have floor, and set fall if not */
-    player_check_floor();
+    if (player_check_floor(lin[SPR_P1] + 16, col[SPR_P1])) {
+      BIT_SET(s_state, STAT_FALL);
+    }
   }
   spr_paint_player();
 
@@ -92,12 +94,7 @@ unsigned char player_check_input(void) {
     return 1;
   }
 
-  if (dirs & IN_STICK_UP) {
-
-    return 1;
-  }
-
-  if (dirs & IN_STICK_LEFT || dirs & IN_STICK_RIGHT || dirs & IN_STICK_DOWN) {
+  if (dirs & IN_STICK_LEFT || dirs & IN_STICK_RIGHT) {
     return 1;
   }
 
@@ -105,27 +102,13 @@ unsigned char player_check_input(void) {
 }
 
 unsigned char player_action_jump() {
-  /* New jump */
 
-  switch (game_control_mode) {
-  case 0:
-    if (dirs & IN_STICK_FIRE) {
-      return 1;
-    }
-    break;
-  case 1:
-    return (dirs & IN_STICK_FIRE) && (dirs & IN_STICK_UP);
-    break;
-  case 2:
-    if (dirs & IN_STICK_UP) {
-      return 1;
-    }
-    break;
+  if (dirs & IN_STICK_FIRE) {
+    return 1;
   }
 
   return 0;
 }
-
 
 unsigned char player_move_input(void) {
   // TODO CLEAN THIS!
@@ -174,8 +157,6 @@ unsigned char player_move_input(void) {
   return 0;
 }
 
-
-
 void player_1up() {
   if (player_lives < 100) {
     ++player_lives;
@@ -191,8 +172,6 @@ void player_tile(unsigned char f_tile, unsigned char f_inc) {
   tile[SPR_P1] = spr_tile_dir(&f_tile, &sprite, &f_inc);
 }
 
-
-
 void player_score_add(unsigned int f_score) __z88dk_fastcall {
   player_score = player_score + f_score;
 
@@ -203,62 +182,48 @@ void player_score_add(unsigned int f_score) __z88dk_fastcall {
   game_print_score();
 }
 
-void player_check_floor(void) {
-  unsigned int index_d;
+unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
+  unsigned char v0;
   unsigned char v1;
-  unsigned char v2;
 
-  index_d = spr_calc_index(lin[SPR_P1] + 16, col[SPR_P1]);
-  v1 = scr_map[index_d];
+  index1 = spr_calc_index(f_lin, f_col);
 
-  if (s_lin0 == GAME_LIN_FLOOR) {
-    tmp1 = 1 + (scr_curr / map_heigth);
-    if (tmp1 < map_heigth) {
-      v1 = TILE_EMPTY;
-    } else {
-      v1 = TILE_CEIL;
-    }
-  } else {
-    if ((col[SPR_P1] & 1) == 0) {
-      v2 = TILE_EMPTY;
-    } else {
-      v2 = scr_map[index_d + 1];
-    }
+  v0 = scr_map[index1];
+  v1 = scr_map[index1 + 1];
+
+  if (colint[SPR_P1] == 0) {
+    v1 = 0;
+  }
+  if (colint[SPR_P1] == sprite_frames[SPR_P1] - 1) {
+    v0 = 0;
   }
 
-  if ((v1 < TILE_FLOOR || v1 >= TILE_END) &&
-      (v2 < TILE_FLOOR || v2 >= TILE_END)) {
-    BIT_SET(s_state, STAT_FALL);
-  } else {
-    if (game_check_time(&player_brick_time, 16)) {
-      player_brick_time = zx_clock();
-      if (v1 == TILE_BRICK3) {
-        scr_map[index_d] = TILE_EMPTY;
-        player_gasta_brick();
-      }
-      if (v1 == TILE_BRICK2) {
-        scr_map[index_d] = TILE_BRICK3;
-        player_gasta_brick();
-      }
-      if (v1 == TILE_BRICK1) {
-        scr_map[index_d] = TILE_BRICK2;
-        player_gasta_brick();
-      }
-
-      if (v2 == TILE_BRICK3) {
-        scr_map[index_d + 1] = TILE_EMPTY;
-        player_gasta_brick();
-      }
-      if (v2 == TILE_BRICK2) {
-        scr_map[index_d + 1] = TILE_BRICK3;
-        player_gasta_brick();
-      }
-      if (v2 == TILE_BRICK1) {
-        scr_map[index_d + 1] = TILE_BRICK2;
-        player_gasta_brick();
-      }
-    }
+  if (v0 == 0 && v1 == 0) {
+    return 1;
   }
+  return 0;
+}
+
+unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
+  unsigned char v0;
+  unsigned char v1;
+
+  index1 = spr_calc_index(f_lin, f_col);
+
+  v0 = scr_map[index1];
+  v1 = scr_map[index1 + 1];
+
+  if (colint[SPR_P1] == 0) {
+    v1 = 0;
+  }
+  if (colint[SPR_P1] == sprite_frames[SPR_P1] - 1) {
+    v0 = 0;
+  }
+
+  if (v0 != TILE_BRICK && v1 != TILE_BRICK) {
+    return 1;
+  }
+  return 0;
 }
 
 void player_gasta_brick() {
@@ -276,15 +241,6 @@ unsigned char player_move_jump(void) {
   signed int val_yc;
 
   player_vel_y = player_vel_y + game_gravity;
-  // JUMP BOOST
-
-  if (player_vel_inc) {
-    if ((player_vel_y > player_vel_y1) && (player_vel_y < 0) &&
-        (!player_action_jump())) {
-      player_vel_y = 0; // TODO FIX WHEN FALLING!
-      player_vel_inc = 0;
-    }
-  }
 
   // MAX SPEEDS
   if (player_vel_y > 120) {
@@ -312,9 +268,9 @@ unsigned char player_move_jump(void) {
     if (s_lin1 > GAME_LIN_FLOOR) {
       s_lin1 = 0;
     }
-
-    if (game_check_map(s_lin1, col[SPR_P1]) ||
-        game_check_map(s_lin1, col[SPR_P1] + 1)) {
+    if (!player_check_ceil(s_lin1, col[SPR_P1])) {
+      // if (game_check_map(s_lin1, col[SPR_P1]) ||
+      //    game_check_map(s_lin1, col[SPR_P1] + 1)) {
       player_vel_y = 0;
     } else {
       lin[SPR_P1] = s_lin1;
@@ -328,8 +284,9 @@ unsigned char player_move_jump(void) {
     }
 
     // 7z80_delay_ms(50);
-    if (game_check_map(s_lin1 + 16, col[SPR_P1]) ||
-        game_check_map(s_lin1 + 16, col[SPR_P1] + 1)) {
+    // if (game_check_map(s_lin1 + 16, col[SPR_P1]) ||
+    //  game_check_map(s_lin1 + 16, col[SPR_P1] + 1)) {
+    if (!player_check_floor(s_lin1 + 16, col[SPR_P1])) {
       // Jump end
 
       lin[SPR_P1] = (s_lin1 >> 3) << 3;
@@ -355,6 +312,7 @@ unsigned char player_move_jump(void) {
     }
   }
 
+  //spr_move_horizontal();
   spr_move_horizontal();
   return 0;
 }

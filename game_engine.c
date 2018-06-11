@@ -40,7 +40,6 @@ void game_loop(void) {
   while (!game_over) {
 
     while (!game_round_up && !game_over) {
-      zx_print_chr(22, 0, lin[SPR_P1]);
 
       /*Enemies turn*/
       enemy_turn();
@@ -138,9 +137,10 @@ void game_cell_paint() {
   unsigned char *f_attrib;
   switch (scr_map[index1]) {
   case TILE_EMPTY:
+    //zx_print_str(s_row1, s_col1, "a");
     f_attrib = attrib0;
     break;
-  case 1:
+  case TILE_FLOOR:
     zx_print_str(s_row1, s_col1, "b");
     f_attrib = attrib1;
     break;
@@ -507,10 +507,10 @@ void game_attribs() {
   attrib[3] = map_paper | BRIGHT | INK_WHITE;
 
   // ATTRIB HIGHLIGHT
-  attrib_hl[0] = map_paper | BRIGHT | INK_BLUE;
-  attrib_hl[1] = map_paper | BRIGHT | INK_BLUE;
-  attrib_hl[2] = map_paper | BRIGHT | INK_MAGENTA;
-  attrib_hl[3] = map_paper | BRIGHT | INK_CYAN;
+  attrib_hl[0] = map_paper | BRIGHT | INK_RED | PAPER_RED ;
+  attrib_hl[1] = map_paper | BRIGHT | INK_RED | PAPER_RED;
+  attrib_hl[2] = map_paper | BRIGHT | INK_RED | PAPER_RED;
+  attrib_hl[3] = map_paper | BRIGHT | INK_RED | PAPER_RED;
 
   // ATTRIB OSD
   attrib_osd[0] = map_paper | BRIGHT | INK_YELLOW;
