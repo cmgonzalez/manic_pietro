@@ -47,7 +47,7 @@ unsigned char scr_map[] = { //16 * 32
   4,1,1,1,1,0,0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,0,0,0,4, //9
   4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,4, //10
   4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //11
-  4,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,4,4,4,4,3,3,3,3,3,1,1,1,4, //12
+  4,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,4,4,4,3,3,3,3,3,1,1,1,1,4, //12
   4,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,4, //13
   4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //14
   4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4, //15
@@ -81,6 +81,10 @@ unsigned char dirs;
 unsigned char class[8];   // CLASS OF SPRITE
 unsigned char state[8];   // SPRITE STATES SEE DEFINES UPPER BIT VALUES
 unsigned char state_a[8]; // SPRITE STATES ALT SEE DEFINES UPPER BIT VALUES
+unsigned char value_a[8]; // SPRITE VALUE A MIN COL/LIN
+unsigned char value_b[8]; // SPRITE VALUE B MAX COL/LIN
+
+
 unsigned char tile[8];    // TILE
 unsigned char lin[8];     // LINE
 unsigned char tbuffer[7];
@@ -166,7 +170,7 @@ unsigned char attrib[4];
 unsigned char attrib_hl[4];
 unsigned char attrib_osd[4];
 
-//TILE ATTRIB
+//TILE ATTRIB TODO REMOVE
 unsigned char attrib0[4];
 unsigned char attrib1[4];
 unsigned char attrib2[4];
@@ -231,9 +235,7 @@ unsigned char map_paper_clr;
 unsigned char map_paper_last;
 unsigned char map_paper_last_a;
 
-unsigned char stp_tile;
-unsigned char stp_col;
-unsigned char stp_row;
+
 
 //###############################################################################################
 //# # # ENEMIES ANIMATION SPEEDS - INTERRUPTS VALUES 50HZ
@@ -244,131 +246,56 @@ unsigned char stp_row;
 //Enemy intialization variables, based on index on map array, used along GAME_TOTAL_INDEX_CLASSES.
 unsigned char spr_init[] = {
   //TILE INDEX ON MAP FILE, CLASS OF ENEMY TO CREATE, SPRITE DIRECTION IF APLLY
-  96, BIRD1, DIR_LEFT,
-  97, BIRD1, DIR_RIGHT,
-  98, ORC, DIR_LEFT,
-  99, ORC, DIR_RIGHT,
-  100, WARG, DIR_LEFT,
-  101, WARG, DIR_RIGHT,
-  102, DWARF, DIR_LEFT,
-  103, DWARF, DIR_RIGHT,
-  104, ELF, DIR_LEFT,
-  105, ELF, DIR_RIGHT,
-  106, DRAGON, DIR_RIGHT,
-  107, DRAGON, DIR_LEFT,
-  108, BAT, DIR_NONE,
-  109, GHOST, DIR_RIGHT,
-  110, SPIDER, DIR_NONE,
-  111, PLANT, DIR_NONE,
-  112, SNAKE, DIR_NONE,
-  113, BAT_H, DIR_NONE,
-  114, FIRE, DIR_NONE,
-  115, PIRANHA, DIR_NONE,
-  116, GHOST, DIR_LEFT,
-  117, DEVIL, DIR_NONE,
-  118, GOTA, DIR_NONE,
-  119, FIRE_S, DIR_NONE,
+  16, GUARDIAN_HOR1, DIR_LEFT,
+  17, GUARDIAN_HOR1, DIR_RIGHT,
+  18, GUARDIAN_HOR2, DIR_LEFT,
+  19, GUARDIAN_HOR2, DIR_RIGHT,
+  20, GUARDIAN_VER_UP, DIR_NONE,
+  21, GUARDIAN_VER_DOWN, DIR_NONE,
+  22, SKYLAB, DIR_NONE,
+  23, EUGENE, DIR_NONE,
 };
 
 unsigned char sprite_kind[] = {
   0,// PLAYER
-  E_GOTA,// GOTA
-  E_VERTICAL,// DRAGON
-  E_VERTICAL,// BAT
-  E_GHOST,// GHOST
-  E_VERTICAL,// SPIDER
-  E_WALK,// MUSHROOM_VITA
-  E_WALK,// MUSHROOM_MANA
-  E_WALK,// MUSHROOM_EXTRA
-  E_VERTICAL,// FIRE
-  E_VERTICAL,// PIRANHA
-  E_WALK,// BIRD1
-  E_WALK,// ORC
-  E_WALK,// WARG
-  E_WALK,// DWARF
-  E_WALK,// ELF
-  E_STATIC,// PLANT
-  E_STATIC,// TRAP
-  E_STATIC,// SNAKE
-  E_HORIZONTAL,// BAT_H
-  E_GHOST,// DEVIL
-  E_STATIC,// FIRE_S
+  E_HORIZONTAL,
+  E_HORIZONTAL,
+  E_VERTICAL,
+  E_VERTICAL,
+  E_GOTA,
+  E_EUGENE,
 };
 
 unsigned char sprite_speed[8];
 unsigned char sprite_base_speed[] = {
     2,// PLAYER
-    4,// GOTA
-    6,// DRAGON
-    2,// BAT
-    8,// GHOST
-    2,// SPIDER
-    2,// MUSHROOM_VITA
-    2,// MUSHROOM_MANA
-    2,// MUSHROOM_EXTRA
-    2,// FIRE
-    1,// PIRANHA
-    4,// BIRD1
-    3,// ORC
-    1,// WARG
-    4,// DWARF
-    6,// ELF
-    8,// PLANT
-    0,// TRAP
-    8,// SNAKE
-    2,// BAT_H
-    8,// DEVIL
-    2,// FIRE_S
+    2,// E_HORIZONTAL
+    2,// E_HORIZONTAL
+    2,// E_VERTICAL
+    2,// E_VERTICAL
+    2,// E_GOTA
+    2,// E_EUGENE
 };
 
 //Sprite tile and animation frames for init, used with GAME_TOTAL_CLASSES
 unsigned char spr_map_tile[] = {
   //ENEMY Class     ,TILE INDEX ,DIR INC
-  GOTA              , 91        ,0,
-  BIRD1             ,144        ,4,
-  ORC               ,148        ,0,
-  WARG              ,152        ,2,
-  DWARF             ,156        ,0,
-  ELF               ,160        ,4,
-  DRAGON            ,168        ,2,
-  BAT               ,172        ,0,
-  GHOST             ,192        ,2,
-  DEVIL             ,174        ,0,
-  SPIDER            ,176        ,0,
-  PLANT             ,178        ,0,
-  SNAKE             ,180        ,0,
-  FIRE              ,196        ,0,
-  PIRANHA           ,198        ,0,
-  BAT_H             ,182        ,0,
-  MUSHROOM_VITA     ,185        ,0,
-  MUSHROOM_MANA     ,187        ,0,
-  MUSHROOM_EXTRA    ,189        ,0,
-  FIRE_S            ,94         ,0,
+  GUARDIAN_HOR1     ,144        ,4,
+  GUARDIAN_HOR2     ,144        ,4,
+  GUARDIAN_VER_UP   ,148        ,4,
+  GUARDIAN_VER_DOWN ,152        ,4,
+  EUGENE            ,156        ,4,
+
 };
 
 unsigned char sprite_frames[] = { //TODO REPLACE CONSTANT WITH FIXED VALUES TO SIMPLIFY
   4,// PLAYER
-  3,// GOTA
-  2,// DRAGON
-  2,// BAT
-  2,// GHOST
-  2,// SPIDER
-  2,// MUSHROOM_VITA
-  2,// MUSHROOM_MANA
-  2,// MUSHROOM_EXTRA
-  1,// FIRE
-  1,// PIRANHA
-  4,// BIRD1
-  4,// ORC
-  2,// WARG
-  4,// DWARF
-  4,// ELF
-  2,// PLANT
-  0,// TRAP
-  2,// SNAKE
-  3,// BAT_H
-  2,// DEVIL
-  2,// FIRE_S
+  4,// GUARDIAN_HOR1
+  4,// GUARDIAN_HOR2
+  4,// GUARDIAN_VER_UP
+  4,// GUARDIAN_VER_DOWN
+  4,// SKYLAB
+  4,// EUGENE
 };
 
 

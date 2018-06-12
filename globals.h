@@ -34,19 +34,26 @@
 #define GAME_COLLISION_TIME           30 //TIME BETWN COLISION CHECKS
 
 /* Map foreground tiles */
+/*
+Offsets 544 to 552: Background
+Offsets 553 to 561: Floor
+Offsets 562 to 570: Crumbling Floor
+Offsets 571 to 579: Wall
+Offsets 580 to 588: Conveyor
+Offsets 589 to 597: Nasty 1
+Offsets 598 to 606: Nasty 2
+Offsets 607 to 615: Spare
+*/
 
 #define TILE_EMPTY                    0
-
 #define TILE_FLOOR                    1
-
 #define TILE_FLOOR0                   2
 #define TILE_FLOOR1                   3
-
 #define TILE_BRICK                    4
 #define TILE_CHAIN                    5
-
 #define TILE_DEADLY1                  6
 #define TILE_DEADLY2                  7
+
 
 
 #define TILE_BRICK1                   62
@@ -83,30 +90,16 @@
 
 /* Enemies Class indexes */
 #define PLAYER                        0xFF
-#define GOTA                          1 //
-#define DRAGON                        2 //
-#define BAT                           3 //
-#define GHOST                         4 //
-#define SPIDER                        5 //
-#define MUSHROOM_VITA                 6  //
-#define MUSHROOM_MANA                 7  //
-#define MUSHROOM_EXTRA                8  //
-#define FIRE                          9  //
-#define PIRANHA                       10 //
-#define BIRD1                      11 //
-#define ORC                           12 //
-#define WARG                          13 //
-#define DWARF                         14 //
-#define ELF                           15 //
-#define PLANT                         16 //
-#define TRAP                          17 //
-#define SNAKE                         18 //
-#define BAT_H                         19 //
-#define DEVIL                         20
-#define FIRE_S                        21 //
+#define GUARDIAN_HOR1                 1 //Different right / left sprite
+#define GUARDIAN_HOR2                 2 //Simetric Horizonal
+#define GUARDIAN_VER_UP               3 //
+#define GUARDIAN_VER_DOWN             4 //
+#define SKYLAB                        5 //
+#define EUGENE                        6 //
 
-#define GAME_TOTAL_CLASSES            20  //Total class of enemies
-#define GAME_TOTAL_INDEX_CLASSES      23  //Total class of enemies variations, the same enemy can be left/right etc...
+
+#define GAME_TOTAL_CLASSES            6 //Total class of enemies
+#define GAME_TOTAL_INDEX_CLASSES      8 //Total class of enemies variations, the same enemy can be left/right etc...
 
 #define E_HORIZONTAL                  1
 #define E_VERTICAL                    2
@@ -114,6 +107,7 @@
 #define E_STATIC                      4
 #define E_GHOST                       5
 #define E_GOTA                        6
+#define E_EUGENE                      7
 
 
 
@@ -139,43 +133,11 @@
 // 56..63   SPECIAL BRICKS (FLORR AND CEIL CAN BE HITTED)
 
 /* Player 1 tiles */
-#define TILE_P1_STANR                 112
+
 #define TILE_P1_RIGHT                 96
-#define TILE_P1_JUMPR                 100
 #define TILE_P1_LEN                   8 //LEN OF PLAYER SPRITES FOR EACH DIRECTION
-#define TILE_ANIM_PICK                132
-#define TILE_ANIM_FIRE                135
-#define TILE_ANIM_DEAD                141
-#define TILE_P1_KILL                  76
-#define TILE_P1_HITR                  76
-#define TILE_P1_FIRE_R                208
-#define TILE_P1_FIRE_L                209
 
-#define TILE_FIREBALL                 120
-#define TILE_ARROW                    124
-#define TILE_AXE                      128
 
-#define TILE_KEY_WHITE                36
-#define TILE_KEY_RED                  37
-#define TILE_KEY_GREEN                38
-#define TILE_KEY_CYAN                 39
-
-#define TILE_MONEY                    40
-
-#define TILE_SHIELD                   41
-#define TILE_HELMET                   42
-#define TILE_SWORD                    43
-
-#define TILE_POTION                   44
-#define TILE_ORB                      45
-#define TILE_SCROLL                   46
-
-#define TILE_CHEST                    47
-
-#define TILE_DOOR_WHITE               72
-#define TILE_DOOR_RED                 73
-#define TILE_DOOR_GREEN               74
-#define TILE_DOOR_CYAN                75
 
 #define FRAMES_PLAYER                 4
 
@@ -203,6 +165,7 @@
 #define DIR_LEFT                      255
 #define DIR_RIGHT                     1
 #define DIR_NONE                      0
+
 /*Stats (bit position number)*/
 #define STAT_JUMP                     0
 #define STAT_FALL                     1
@@ -220,6 +183,7 @@
 #define STAT_LDIRR                    4
 #define STAT_RESTART                  6
 #define STAT_HITBRICK                 7
+
 /* General */
 #define SPRITE_FALL_SPEED             3  /* Speed for falling from the screen after a kill */
 #define SPRITE_RESTART_SPEED          8
@@ -228,18 +192,6 @@
 #define SPRITE_VCOL_MARGIN            14 //VERTICAL COLLISION MARGIN
 
 /* Player */
-
-#define PLAYER_HIT_BRICK_TIME         4
-
-#define PLAYER_HCOL_MARGIN            2  //HORIZONTAL COLLISION MARGIN
-#define PLAYER_HCOL_MARGIN_INT        4  //HORIZONTAL COLLISION MARGIN INTERNAL (1 COL = 3 INT)
-#define PLAYER_JUMP_SPEED             2
-#define PLAYER_FALL_SPEED             2
-#define PLAYER_INERT_TIME             8  /* Time for Player Inertia */
-#define PLAYER_ANIM_HIT_TIME          40 /* Time for Player Hit Sprite display after kill */
-
-#define PLAYER_JUMP_MAX               5  /* Max Jump Time 10 frames */
-#define PLAYER_JUMP_SUSPEND           6
 
 
 /* Enemies */
@@ -254,7 +206,6 @@
 #define TIME_EVENT                    100
 #define TIME_ANIM                     8
 #define TIME_ANIM_PLAYER_EXPODE       12
-#define TILE_ANIM_FIRE_END            89
 #define GAME_RANDOM_TYPE              2
 
 /* Sound Mode Variables */
@@ -285,6 +236,8 @@ extern unsigned char dirs;
 extern unsigned char class[8];
 extern unsigned char state[8];
 extern unsigned char state_a[8];
+extern unsigned char value_a[8];
+extern unsigned char value_b[8];
 extern unsigned char tile[8];
 extern unsigned char lin[8];
 extern unsigned char tbuffer[7];
@@ -452,9 +405,7 @@ extern unsigned char map_paper;
 extern unsigned char map_paper_clr;
 extern unsigned char map_paper_last;
 extern unsigned char map_paper_last_a;
-extern unsigned char stp_tile;
-extern unsigned char stp_col;
-extern unsigned char stp_row;
+
 
 
 

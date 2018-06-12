@@ -50,74 +50,6 @@ void enemy_turn(void) {
 }
 
 
-void boss_turn() {
-
-  if (game_check_time(&boss_time, 6)) {
-
-
-
-    s_col1 = boss_col;
-    s_lin1 = boss_lin;
-
-    // MOVE VERTICAL
-    if (BIT_CHK(boss_stat, STAT_JUMP)) {
-      boss_lin = boss_lin - 2;
-      if (boss_lin < 48) {
-        spr_set_down(&boss_stat);
-      }
-    } else {
-      boss_lin = boss_lin + 2;
-      if (boss_lin >= (GAME_LIN_FLOOR - 48)) {
-        spr_set_up(&boss_stat);
-      }
-    }
-    if (game_check_time(&boss_time_fire, 64)) {
-      --boss_col;
-      --boss_col;
-      tmp0 = 0;
-      audio_disparo_fire();
-      if (game_world == 1) {
-        tmp0 = 1;
-      }
-      boss_time_fire = zx_clock();
-      ++boss_col;
-      ++boss_col;
-    }
-
-
-
-    // PAINT
-    boss_draw();
-
-
-    boss_time = zx_clock();
-    // KILL PLAYER INSTANTLY
-    if (spr_colision_boss(lin[SPR_P1], col[SPR_P1])) {
-      player_lost_life();
-    }
-
-
-  }
-}
-
-void boss_draw() {
-  intrinsic_halt();
-  if (boss_inc) {
-    boss_inc = 0;
-    boss_draw_frame(0);
-  } else {
-    boss_inc = 1;
-    boss_draw_frame(2);
-  }
-}
-
-void boss_draw_frame(unsigned char f_inc) __z88dk_fastcall {
-  NIRVANAP_drawT_raw(boss_tile + f_inc + 0, boss_lin, s_col1);
-  NIRVANAP_drawT_raw(boss_tile + f_inc + 1, boss_lin, s_col1 + 2);
-  NIRVANAP_drawT_raw(boss_tile + f_inc + 12, boss_lin + 16, s_col1);
-  NIRVANAP_drawT_raw(boss_tile + f_inc + 13, boss_lin + 16, s_col1 + 2);
-}
-
 void enemy_move(void) {
 
   switch (sprite_kind[s_class]) {
@@ -203,19 +135,18 @@ void enemy_static() {
 
 void enemy_horizontal() {
   if (BIT_CHK(s_state, STAT_DIRR)) {
-    if (spr_move_right()) {
-
+    spr_move_right_f();
+    if (col[sprite] == value_b[sprite]) {
       spr_set_left(&s_state);
       state[sprite] = s_state;
       tile[sprite] = spr_tile(&sprite);
-
     }
   } else {
-    if (spr_move_left()) {
+    spr_move_left_f();
+    if (col[sprite] == value_a[sprite]) {
       spr_set_right(&s_state);
       state[sprite] = s_state;
       tile[sprite] = spr_tile(&sprite);
-
     }
   }
 }
@@ -232,7 +163,6 @@ void enemy_kill(unsigned char f_sprite) __z88dk_fastcall {
   s_lin0 = lin[f_sprite];
   s_col0 = col[f_sprite];
   spr_destroy(f_sprite);
-  spr_add_anim(s_lin0, s_col0, TILE_ANIM_DEAD, 3, 0);
 
 }
 

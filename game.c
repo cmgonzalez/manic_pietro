@@ -89,6 +89,7 @@ void main(void) {
   NIRVANAP_tiles(_btiles);
   game_attribs();
   game_over = 1;
+  zx_print_ink(INK_WHITE);
   /*
   if (!game_debug) {
     zx_print_str(12, 6, "FOR FELIPE AND EDDIE");

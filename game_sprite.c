@@ -137,6 +137,29 @@ unsigned char spr_move_horizontal(void) {
   return 0;
 }
 
+unsigned char spr_move_right_f(void) {
+  unsigned char *f_colint;
+  unsigned char *f_col;
+  f_colint = &colint[sprite];
+  f_col = &col[sprite];
+
+  ++*f_colint;
+  if (*f_colint == sprite_frames[s_class]) {
+
+    s_lin1 = lin[sprite];
+    if (*f_col < 31) {
+      ++*f_col;
+      *f_colint = 0;
+      if (*f_col > SCR_COLS_M) {
+        *f_col = SCR_COLS_M;
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
 unsigned char spr_move_right(void) {
   unsigned char *f_colint;
   unsigned char *f_col;
@@ -183,6 +206,23 @@ unsigned char spr_move_left(void) {
           col[sprite] = 0;
           return 1;
         }
+      }
+    }
+  }
+  return 0;
+}
+
+unsigned char spr_move_left_f(void) {
+  --colint[sprite];
+  if (colint[sprite] == 255) {
+    s_lin1 = lin[sprite];
+    if (col[sprite] > 0) {
+      --col[sprite];
+      colint[sprite] = sprite_frames[s_class] - 1;
+
+      if (col[sprite] == 255) {
+        col[sprite] = 0;
+        return 1;
       }
     }
   }
@@ -372,11 +412,14 @@ unsigned char spr_paint(void) {
     /* Column or lin Movement */
     // Speed UP hack
     s_tile1 = tile[sprite] + colint[sprite];
-    if ((s_lin1 & 7) == 0) {
-      spr_back_repaint();
-    } else {
-      NIRVANAP_fillT(map_paper_clr, s_lin0, s_col0);
-    }
+    /*
+        if ((s_lin1 & 7) == 0) {
+          spr_back_repaint();
+        } else {
+          NIRVANAP_fillT(map_paper_clr, s_lin0, s_col0);
+        }
+    */
+    NIRVANAP_fillT(map_paper_clr, s_lin0 + 16, s_col0);
     NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + 16, s_col1);
     return 1;
   } else {

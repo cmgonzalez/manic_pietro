@@ -27,7 +27,4 @@ extern void          enemy_init(unsigned char f_lin,unsigned  char f_col,unsigne
 extern void          enemy_kill( unsigned char f_sprite) __z88dk_fastcall;
 extern void          enemy_avoid_fall(void);
 extern unsigned char enemy_avoid_dead(void);
-extern void          boss_turn(void);
-extern void          boss_draw(void);
-extern void          boss_draw_frame(unsigned char f_inc) __z88dk_fastcall;
 #endif

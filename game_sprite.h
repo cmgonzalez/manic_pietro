@@ -25,6 +25,8 @@ extern void             spr_set_right(unsigned char * f_state) __z88dk_fastcall;
 extern unsigned char    spr_move_up(void);
 extern unsigned char    spr_move_down(void);
 extern unsigned char    spr_move_horizontal(void);
+extern unsigned char    spr_move_right_f(void);
+extern unsigned char    spr_move_left_f(void);
 extern unsigned char    spr_move_right(void);
 extern unsigned char    spr_move_left(void);
 extern unsigned char    spr_paint(void);

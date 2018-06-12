@@ -38,7 +38,9 @@ void game_loop(void) {
   game_round_init();
 
   while (!game_over) {
-
+    enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT );
+    value_a[0] = 6;
+    value_b[0] = 14;
     while (!game_round_up && !game_over) {
 
       /*Enemies turn*/
@@ -46,10 +48,6 @@ void game_loop(void) {
       /*Player 1 turn*/
       // sprite = SPR_P1;
       player_turn();
-
-      if (game_boss) {
-        boss_turn();
-      }
 
       /*Play animatios*/
       if (game_check_time(&anim_time, TIME_ANIM)) {
@@ -137,7 +135,7 @@ void game_cell_paint() {
   unsigned char *f_attrib;
   switch (scr_map[index1]) {
   case TILE_EMPTY:
-    //zx_print_str(s_row1, s_col1, "a");
+    zx_print_str(s_row1, s_col1, "a");
     f_attrib = attrib0;
     break;
   case TILE_FLOOR:
@@ -377,6 +375,9 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
   if (f_tile == 0) {
     return 0;
   } else {
+    if (f_tile == TILE_DEADLY1 || f_tile == TILE_DEADLY2) {
+      zx_border(INK_RED);
+    }
     return f_tile;
   }
 }
@@ -460,10 +461,10 @@ void game_rotate_attrib_osd(void) {
 
 void game_attribs() {
 //TODO ESTO DEBE QUEDAR EN BANK6
-  attrib0[0] = map_paper | BRIGHT | INK_BLACK | PAPER_BLACK;
-  attrib0[1] = map_paper | BRIGHT | INK_BLACK | PAPER_BLACK;
-  attrib0[2] = map_paper | BRIGHT | INK_BLACK | PAPER_BLACK;
-  attrib0[3] = map_paper | BRIGHT | INK_BLACK | PAPER_BLACK;
+  attrib0[0] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
+  attrib0[1] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
+  attrib0[2] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
+  attrib0[3] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
 
   attrib1[0] = map_paper | BRIGHT | INK_RED;
   attrib1[1] = map_paper | INK_RED;

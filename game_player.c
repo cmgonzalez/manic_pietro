@@ -50,6 +50,7 @@ void player_init(unsigned char f_lin, unsigned char f_col,
 
 void player_turn(void) {
   if (spr_chktime(&sprite)) {
+    zx_border(INK_BLACK); //TODO REMOVE ME ONLY FOR COLISION DETECTION
     dirs = (joyfunc1)(&k1);
     /* Player initial Values */
     // TODO POINTERS
@@ -122,9 +123,7 @@ unsigned char player_move_input(void) {
       audio_salto();
       spr_set_up(&s_state);
       jump_lin[SPR_P1] = lin[SPR_P1];
-      state[SPR_P1] = s_state; /*TODO FIXME!*/
-      player_tile(TILE_P1_JUMPR, TILE_P1_LEN);
-      sprite_speed[SPR_P1] = PLAYER_JUMP_SPEED;
+      state[SPR_P1] = s_state;
       player_vel_y = player_vel_y0;
       return 1;
     }
@@ -201,6 +200,10 @@ unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
   if (v0 == 0 && v1 == 0) {
     return 1;
   }
+
+  if (v0 == TILE_DEADLY1 || v1 == TILE_DEADLY1 || v0 == TILE_DEADLY2 || v1 == TILE_DEADLY2) {
+    zx_border(INK_RED);
+  }
   return 0;
 }
 
@@ -216,13 +219,20 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   if (colint[SPR_P1] == 0) {
     v1 = 0;
   }
+
   if (colint[SPR_P1] == sprite_frames[SPR_P1] - 1) {
     v0 = 0;
+  }
+
+  if (v0 == TILE_DEADLY1 || v1 == TILE_DEADLY1 || v0 == TILE_DEADLY2 || v1 == TILE_DEADLY2) {
+    zx_border(INK_RED);
   }
 
   if (v0 != TILE_BRICK && v1 != TILE_BRICK) {
     return 1;
   }
+
+
   return 0;
 }
 
@@ -313,6 +323,8 @@ unsigned char player_move_jump(void) {
   }
 
   //spr_move_horizontal();
+
+
   spr_move_horizontal();
   return 0;
 }
@@ -331,36 +343,7 @@ void player_lost_life() {
   }
   ay_reset();
   audio_explosion();
-
-  // Player Explode
-  spr_add_anim(s_lin0 - 16, s_col0, TILE_ANIM_FIRE, 3, 0);
-  spr_add_anim(s_lin0, s_col0 - 2, TILE_ANIM_FIRE, 3, 0);
-  spr_add_anim(s_lin0, s_col0, TILE_ANIM_FIRE, 3, 0);
-  spr_add_anim(s_lin0, s_col0 + 2, TILE_ANIM_FIRE, 3, 0);
-  spr_add_anim(s_lin0 + 16, s_col0, TILE_ANIM_FIRE, 3, 0);
-  // zx_border(INK_BLACK);
-
-  // Animate Explotion
-  i = 1;
-  anim_time = zx_clock();
-  while (i) {
-    if (game_check_time(&anim_time, TIME_ANIM_PLAYER_EXPODE)) {
-      anim_time = zx_clock();
-      if (anim_count) {
-        spr_play_anim();
-      } else {
-        i = 0;
-      }
-    }
-  }
-
   audio_lotr_lose_a_life();
-
-  if (game_boss) {
-    s_lin1 = boss_lin;
-    s_col1 = boss_col;
-    boss_draw();
-  }
 
   // Player lost life
   if (!game_inf_lives) {
