@@ -39,7 +39,7 @@ void game_loop(void) {
 
   while (!game_over) {
     enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT);
-    value_a[0] = 6;
+    value_a[0] = 7;
     value_b[0] = 14;
     while (!game_round_up && !game_over) {
 
@@ -69,6 +69,10 @@ void game_loop(void) {
       ++loop_count;
       ++fps;
       game_rotate_attrib();
+      if (obj_count == player_coins) {
+        game_over = 1;
+        zx_border(INK_BLACK);
+      }
     }
     if (game_round_up) {
       game_round_up = 0;
@@ -92,12 +96,10 @@ void game_fps(void) {
 }
 
 void game_draw_screen(void) {
-  unsigned char obj_count;
 
   intrinsic_halt();
   game_boss = 0;
   game_boss_fix = 0;
-  player_brick_time = zx_clock();
 
   spr_count = 0;
   spr_init_effects();
@@ -152,32 +154,56 @@ void game_cell_paint() {
     zx_print_str(s_row1, s_col1, "b");
     f_attrib = attrib1;
     break;
-  case 2:
-    zx_print_str(s_row1, s_col1, "b");
+  case TILE_FLOOR0:
+    zx_print_str(s_row1, s_col1, "c");
     f_attrib = attrib2;
     break;
-  case 3:
-    zx_print_str(s_row1, s_col1, "c");
-    f_attrib = attrib3;
-    break;
-  case 4:
+  case TILE_FLOOR1:
     zx_print_str(s_row1, s_col1, "d");
+    f_attrib = attrib2;
+    break;
+  case TILE_FLOOR2:
+    zx_print_str(s_row1, s_col1, "e");
+    f_attrib = attrib2;
+    break;
+  case TILE_FLOOR3:
+    zx_print_str(s_row1, s_col1, "f");
+    f_attrib = attrib2;
+    break;
+  case TILE_FLOOR4:
+    zx_print_str(s_row1, s_col1, "g");
+    f_attrib = attrib2;
+    break;
+  case TILE_FLOOR5:
+    zx_print_str(s_row1, s_col1, "h");
+    f_attrib = attrib2;
+    break;
+  case TILE_FLOOR6:
+    zx_print_str(s_row1, s_col1, "i");
+    f_attrib = attrib2;
+    break;
+  case TILE_FLOOR7:
+    zx_print_str(s_row1, s_col1, "j");
+    f_attrib = attrib2;
+    break;
+  case TILE_WALL:
+    zx_print_str(s_row1, s_col1, "k");
     f_attrib = attrib4;
     break;
-  case 5:
-    zx_print_str(s_row1, s_col1, "e");
+  case TILE_CHAIN:
+    zx_print_str(s_row1, s_col1, "l");
     f_attrib = attrib5;
     break;
-  case 6:
-    zx_print_str(s_row1, s_col1, "f");
+  case TILE_DEADLY1:
+    zx_print_str(s_row1, s_col1, "m");
     f_attrib = attrib6;
     break;
-  case 7:
-    zx_print_str(s_row1, s_col1, "g");
+  case TILE_DEADLY2:
+    zx_print_str(s_row1, s_col1, "n");
     f_attrib = attrib7;
     break;
-  case 8:
-    zx_print_str(s_row1, s_col1, "h");
+  case TILE_OBJECT:
+    zx_print_str(s_row1, s_col1, "o");
     f_attrib = attrib8;
     break;
   }
@@ -236,8 +262,6 @@ void game_add_enemy(unsigned char enemy_tile_index) __z88dk_fastcall {
 }
 
 void game_print_footer(void) {
-
-  // zx_print_str(21, 15, "_"); // live p1 face
 
   if (game_debug) {
     /* phase osd bottom*/
@@ -339,7 +363,22 @@ void game_round_init(void) {
   ay_reset();
   audio_level_start();
   game_draw_screen();
+
   game_set_checkpoint();
+  game_paint_attrib(&attrib_hl, 0, 32, 144);
+
+  zx_print_str(17, 9, "CENTRAL CAVERN");
+
+  game_paint_attrib(&attrib_red, 0, 10, 144 + 8);
+  game_paint_attrib(&attrib_osd, 10, 32, 144 + 8);
+  zx_print_str(18, 0, "AIR ----------------------------");
+  zx_print_ink(INK_YELLOW);
+
+  zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
+  zx_print_ink(INK_MAGENTA);
+  zx_print_str(21, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
+
+
   game_song_play_start = 0;
 
   // ay_reset();
@@ -348,6 +387,7 @@ void game_round_init(void) {
   if (!game_over) {
     player_init(player_lin_scr, player_col_scr, TILE_P1_RIGHT);
   }
+
   game_update_stats();
   // z80_delay_ms(50);
 
@@ -362,9 +402,9 @@ void game_round_init(void) {
 
 void game_print_header(void) {
 
-  zx_print_ink(INK_RED);
-  zx_print_str(0, 11, "$%|");
-  zx_print_ink(INK_WHITE);
+  // zx_print_ink(INK_RED);
+  // zx_print_str(0, 11, "$%|");
+  // zx_print_ink(INK_WHITE);
   /* Print score */
   game_print_score();
 }
@@ -385,12 +425,19 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
 
   f_tile = scr_map[*f_index];
 
-  if (f_tile == 0) {
+  if (f_tile == TILE_DEADLY1 || f_tile == TILE_DEADLY2) {
+    zx_border(INK_RED);
+  }
+
+  if (f_tile == TILE_OBJECT) {
+    zx_border(INK_WHITE);
+    scr_map[*f_index] = TILE_EMPTY;
+    ++player_coins;
+  }
+
+  if (f_tile != TILE_WALL) {
     return 0;
   } else {
-    if (f_tile == TILE_DEADLY1 || f_tile == TILE_DEADLY2) {
-      zx_border(INK_RED);
-    }
     return f_tile;
   }
 }
@@ -521,8 +568,8 @@ void game_attribs() {
 
   attrib8[0] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
   attrib8[1] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
-  attrib8[2] = map_paper | BRIGHT | INK_WHITE   | PAPER_BLACK;
-  attrib8[3] = map_paper | BRIGHT | INK_WHITE   | PAPER_BLACK;
+  attrib8[2] = map_paper | BRIGHT | INK_WHITE | PAPER_BLACK;
+  attrib8[3] = map_paper | BRIGHT | INK_WHITE | PAPER_BLACK;
 
   // ATTRIB NORMAL
   attrib[0] = map_paper | BRIGHT | INK_WHITE;
@@ -531,14 +578,19 @@ void game_attribs() {
   attrib[3] = map_paper | BRIGHT | INK_WHITE;
 
   // ATTRIB HIGHLIGHT
-  attrib_hl[0] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
-  attrib_hl[1] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
-  attrib_hl[2] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
-  attrib_hl[3] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib_hl[0] = map_paper | INK_BLACK | PAPER_YELLOW;
+  attrib_hl[1] = map_paper | INK_BLUE | PAPER_YELLOW;
+  attrib_hl[2] = map_paper | INK_MAGENTA | PAPER_YELLOW;
+  attrib_hl[3] = map_paper | INK_BLACK | PAPER_YELLOW;
 
   // ATTRIB OSD
-  attrib_osd[0] = map_paper | BRIGHT | INK_YELLOW;
-  attrib_osd[1] = map_paper | BRIGHT | INK_WHITE;
-  attrib_osd[2] = map_paper | BRIGHT | INK_WHITE;
-  attrib_osd[3] = map_paper | BRIGHT | INK_YELLOW;
+  attrib_osd[0] = map_paper | INK_WHITE | PAPER_GREEN;
+  attrib_osd[1] = map_paper | INK_WHITE | PAPER_GREEN;
+  attrib_osd[2] = map_paper | INK_WHITE | PAPER_GREEN;
+  attrib_osd[3] = map_paper | INK_WHITE | PAPER_GREEN;
+
+  attrib_red[0] = map_paper | INK_WHITE | PAPER_RED;
+  attrib_red[1] = map_paper | INK_WHITE | PAPER_RED;
+  attrib_red[2] = map_paper | INK_WHITE | PAPER_RED;
+  attrib_red[3] = map_paper | INK_WHITE | PAPER_RED;
 }

@@ -51,9 +51,8 @@ void main(void) {
   // ENABLE SOUND BASED ON DETECTED MODEL
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
-  game_gravity = GAME_GRAVITY; // 8;
-  // vel_y0 + vel_y1 = -84
-  player_vel_y0 = GAME_VELOCITY;     //-88; // Velocity
+  game_gravity = GAME_GRAVITY;
+  player_vel_y0 = GAME_VELOCITY; // Velocity BUG 5 WILL TRIGGER SPRITE CLEAN BUG!!! NASTY
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;

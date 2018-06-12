@@ -31,29 +31,11 @@
 #include <z80.h>
 
 void audio_ingame(void) {
-/*
+
   if (game_song_play && !game_song_play_start) {
     game_song_play_start = 1;
-    if (!game_boss) {
-      switch (game_world) {
-      case 0:
-        ay_song_play(AY_SONG_LOOP, 3, ay_song_03_tdm_cs9);
-        break;
-      case 1:
-        ay_song_play(AY_SONG_LOOP, 4, ay_song_04_hope);
-        break;
-      case 2:
-        ay_song_play(AY_SONG_LOOP, 4, ay_song_04_ciel);
-        break;
-      case 3:
-        ay_song_play(AY_SONG_LOOP, 4, ay_song_04_doom);
-        break;
-      }
-    } else {
-      ay_song_play(AY_SONG_LOOP, 3, ay_song_03_regis);
-    }
+      ay_song_play(AY_SONG_LOOP, 4, ay_song_04_ingame);
   }
-  */
 }
 
 void audio_explosion(void) {
@@ -99,11 +81,11 @@ void audio_level_complete(void) {
 }
 void audio_game_end(void) {
   ay_reset();
-  ay_song_play(AY_SONG_ONCE, 3, ay_song_03_sunflower);
+  //ay_song_play(AY_SONG_ONCE, 3, ay_song_03_sunflower);
 }
 void audio_menu(void) {
   ay_reset();
-  ay_song_play(AY_SONG_LOOP, 3, ay_song_03_tdm_cs9);
+  //ay_song_play(AY_SONG_LOOP, 3, ay_song_03_tdm_cs9);
 }
 void audio_checkpoint(void) {
   ay_fx_stop();

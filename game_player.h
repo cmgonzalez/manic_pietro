@@ -19,13 +19,13 @@
 
 extern void          player_init(unsigned char f_lin, unsigned char f_col, unsigned char f_tile);
 extern unsigned char player_check_input(void);
-extern unsigned char player_action_jump();
+extern unsigned char player_new_jump();
 extern unsigned char player_move(void);
 extern void          player_turn(void);
-extern void          player_new_jump(void);
 extern unsigned char player_move_input(void);
 extern void          player_score_add(unsigned int f_score) __z88dk_fastcall;
 extern unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col);
+extern unsigned char player_check_floor1(unsigned char f_lin, unsigned char f_col);
 extern unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col);
 extern void          player_pick_item(void);
 extern void          player_tile( unsigned char f_tile, unsigned char f_inc );

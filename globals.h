@@ -21,8 +21,6 @@
 #define GAME_ROWS                     10
 #define GAME_SCR_MAX_INDEX            512
 
-
-
 #define GAME_GRAVITY                  1
 #define GAME_VELOCITY                 -6
 #define GAME_START_LIVES              3
@@ -49,11 +47,17 @@ Offsets 607 to 615: Spare
 #define TILE_FLOOR                    1
 #define TILE_FLOOR0                   2
 #define TILE_FLOOR1                   3
-#define TILE_WALL                    4
-#define TILE_CHAIN                    5
-#define TILE_DEADLY1                  6
-#define TILE_DEADLY2                  7
-#define TILE_OBJECT                   8
+#define TILE_FLOOR2                   4
+#define TILE_FLOOR3                   5
+#define TILE_FLOOR4                   6
+#define TILE_FLOOR5                   7
+#define TILE_FLOOR6                   8
+#define TILE_FLOOR7                   9
+#define TILE_WALL                     10
+#define TILE_CHAIN                    11
+#define TILE_DEADLY1                  12
+#define TILE_DEADLY2                  13
+#define TILE_OBJECT                   14
 
 
 
@@ -136,7 +140,7 @@ Offsets 607 to 615: Spare
 /* Player 1 tiles */
 
 #define TILE_P1_RIGHT                 96
-#define TILE_P1_LEN                   8 //LEN OF PLAYER SPRITES FOR EACH DIRECTION
+#define TILE_P1_LEN                   4 //LEN OF PLAYER SPRITES FOR EACH DIRECTION
 
 
 
@@ -251,6 +255,7 @@ extern unsigned int spr_timer[8];
 
 extern unsigned char obj_lin[8]; // object lin for HIGHLIGHT
 extern unsigned char obj_col[8]; // object col for HIGHLIGHT
+extern unsigned char obj_count;
 
 
 
@@ -304,7 +309,7 @@ extern unsigned char sprite;
 extern unsigned char game_debug;
 
 extern unsigned char player_hit_count;
-extern unsigned int  player_brick_time;
+extern unsigned char player_jump_top;
 extern unsigned char s_tile0;
 extern unsigned char s_tile1;
 extern unsigned char s_lin0;
@@ -327,6 +332,8 @@ extern unsigned char zx_val_asm;
 extern unsigned char attrib[4];
 extern unsigned char attrib_hl[4];
 extern unsigned char attrib_osd[4];
+extern unsigned char attrib_red[4];
+
 
 //TILE ATTRIB
 extern unsigned char attrib0[4];

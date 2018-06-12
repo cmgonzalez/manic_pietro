@@ -100,8 +100,6 @@ _ay_fx_06_sin_mana:
   BINARY "fx/sin_mana.afx"
 _ay_fx_06_magic:
   BINARY "fx/magic.afx"
-_ay_song_04_ciel:
-  BINARY "songs/ciel.pt3"
 _ay_fx_06_disparo1:
   BINARY "fx/disparo1.afx"
 _ay_fx_06_disparo2:

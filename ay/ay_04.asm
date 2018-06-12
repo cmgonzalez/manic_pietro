@@ -16,18 +16,6 @@ INCLUDE "src/mfx.asm"
 
 SECTION BANK_4_AUDIO
 
-PUBLIC _ay_song_04_hope
-_ay_song_04_hope:
-  BINARY "songs/hope.pt3"
-
-PUBLIC _ay_song_04_ciel
-_ay_song_04_ciel:
-  BINARY "songs/ciel_2.pt3"
-
-PUBLIC _ay_song_04_luna
-_ay_song_04_luna:
-  BINARY "songs/luna.pt3"
-
-PUBLIC _ay_song_04_doom
-_ay_song_04_doom:
-  BINARY "songs/doom.pt3"
+PUBLIC _ay_song_04_ingame
+_ay_song_04_ingame:
+  BINARY "songs/Davos_MOZART.pt3"

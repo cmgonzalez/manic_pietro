@@ -136,14 +136,14 @@ void enemy_static() {
 void enemy_horizontal() {
   if (BIT_CHK(s_state, STAT_DIRR)) {
     spr_move_right_f();
-    if (col[sprite] == value_b[sprite]) {
+    if (col[sprite] == value_b[sprite] && colint[sprite] == 3) { //HACK sprite_frames[sprite] - 1
       spr_set_left(&s_state);
       state[sprite] = s_state;
       tile[sprite] = spr_tile(&sprite);
     }
   } else {
     spr_move_left_f();
-    if (col[sprite] == value_a[sprite]) {
+    if (col[sprite] == value_a[sprite] && colint[sprite] == 0) {
       spr_set_right(&s_state);
       state[sprite] = s_state;
       tile[sprite] = spr_tile(&sprite);
