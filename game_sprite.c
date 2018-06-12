@@ -387,7 +387,7 @@ unsigned char spr_paint_player(void) {
     s_tile1 = tile[SPR_P1] + colint[SPR_P1];
 
     // NIRVANAP_fillT_raw(map_paper_clr, s_lin0+16, s_col0);
-    NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + 16, s_col1);
+    NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     spr_back_repaint();
     return 1;
   } else {
@@ -419,8 +419,8 @@ unsigned char spr_paint(void) {
           NIRVANAP_fillT(map_paper_clr, s_lin0, s_col0);
         }
     */
-    NIRVANAP_fillT(map_paper_clr, s_lin0 + 16, s_col0);
-    NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + 16, s_col1);
+    NIRVANAP_fillT(map_paper_clr, s_lin0 + GAME_OFFSET_Y, s_col0);
+    NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     return 1;
   } else {
     s_tile0 = *SPRITEVAL(sprite);
@@ -593,18 +593,6 @@ void spr_play_anim(void) {
   }
 }
 
-unsigned char spr_colision_boss(unsigned char f_lin, unsigned char f_col) {
-  // Colission Boss -> Sprite
-
-  tmp0 = abs((f_col + 1) - (boss_col + 2));
-  if (tmp0 < 2) {
-    tmp1 = abs((f_lin + 8) - (boss_lin + 16));
-    if (tmp1 < 16) {
-      return 1;
-    }
-  }
-  return 0;
-}
 
 void spr_turn_horizontal(void) {
   if (BIT_CHK(s_state, STAT_DIRR)) {

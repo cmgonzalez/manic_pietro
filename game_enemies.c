@@ -170,9 +170,9 @@ void enemy_avoid_fall() {
 
   /* Don't fall on edge*/
   if (BIT_CHK(s_state, STAT_DIRR)) {
-    index1 = spr_calc_index(lin[sprite] + 16, col[sprite] + 2);
+    index1 = spr_calc_index(lin[sprite] + GAME_OFFSET_Y, col[sprite] + 2);
   } else {
-    index1 = spr_calc_index(lin[sprite] + 16, col[sprite] - 2);
+    index1 = spr_calc_index(lin[sprite] + GAME_OFFSET_Y, col[sprite] - 2);
   }
   if (scr_map[index1] < TILE_FLOOR) {
     spr_turn_horizontal();

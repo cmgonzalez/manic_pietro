@@ -21,27 +21,21 @@
 unsigned char spec128;
 //###############################################################################################
 //# # # SCREEN GAME MAP
-//# #
-//#
 //###############################################################################################
-// TILE MAP'S
-//  0..23   BACKGROUND
-// 24..31   OBJECTS (CAN BE PICKED)
-// 32..39   BACKGROUND DEADLY
-// 40..47   PLATFORMS (FLOOR ONLY)
-// 48..51   SPECIAL PLATFORMS (STAIRS)
-// 52..55   BRICKS (FLOOR AND CEIL)
-// 56..63   SPECIAL BRICKS (FLORR AND CEIL CAN BE HITTED)
-//unsigned char scr_map[GAME_SCR_MAX_INDEX];
+/*
+
+
+
+*/
 unsigned char scr_map[] = { //16 * 32
 //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-  4,0,0,0,0,0,0,0,0,0,7,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //0
-  4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //1
+  4,0,0,0,0,0,0,0,8,0,7,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,4, //0
+  4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //1
   4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //2
   4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //3
-  4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,6,0,0,0,4, //4
+  4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,8,0,0,6,0,0,0,4, //4
   4,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,1,3,3,3,1,1,1,1,1,1,1,1,1,1,4, //5
-  4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //6
+  4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,4, //6
   4,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4, //7
   4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,4,0,6,0,0,0,0,0,0,0,0,0,0,4, //8
   4,1,1,1,1,0,0,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,0,0,0,4, //9
@@ -97,6 +91,9 @@ unsigned char colint[8];   // INTERNAL COLUMN/TILE INCREMENT
 unsigned int spr_timer[8]; // SPRITE GENERAL TIMER MILISECONDS
 unsigned int last_time[8]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
 unsigned char jump_lin[8]; // START JUMP LINE
+
+unsigned char obj_lin[8]; // object lin for HIGHLIGHT
+unsigned char obj_col[8]; // object col for HIGHLIGHT
 
 // PLAYER ONLY
 unsigned int player_score;    // SCORE
@@ -179,6 +176,7 @@ unsigned char attrib4[4];
 unsigned char attrib5[4];
 unsigned char attrib6[4];
 unsigned char attrib7[4];
+unsigned char attrib8[4];
 
 unsigned char s_state;
 

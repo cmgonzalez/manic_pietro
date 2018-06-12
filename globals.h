@@ -49,16 +49,17 @@ Offsets 607 to 615: Spare
 #define TILE_FLOOR                    1
 #define TILE_FLOOR0                   2
 #define TILE_FLOOR1                   3
-#define TILE_BRICK                    4
+#define TILE_WALL                    4
 #define TILE_CHAIN                    5
 #define TILE_DEADLY1                  6
 #define TILE_DEADLY2                  7
+#define TILE_OBJECT                   8
 
 
 
-#define TILE_BRICK1                   62
-#define TILE_BRICK2                   63
-#define TILE_BRICK3                   64
+#define TILE_WALL1                   62
+#define TILE_WALL2                   63
+#define TILE_WALL3                   64
 
 
 #define TILE_WORLD_EXIT               57
@@ -155,6 +156,7 @@ Offsets 607 to 615: Spare
 #define PAPER                         PAPER_BLUE | INK_BLUE | BRIGHT/* Screen paper */
 #define GAME_LIN_FLOOR                128
 #define GAME_LIN_TOP_PLATFORM         48
+#define GAME_OFFSET_Y                 16
 
 #define ST_STAND_R                    0
 #define ST_STAND_L                    1
@@ -247,6 +249,11 @@ extern unsigned char colint[8];
 extern unsigned char jump_lin[8];
 extern unsigned int spr_timer[8];
 
+extern unsigned char obj_lin[8]; // object lin for HIGHLIGHT
+extern unsigned char obj_col[8]; // object col for HIGHLIGHT
+
+
+
 extern unsigned int last_time[8];
 extern unsigned int player_score;
 extern signed char  player_vel_x;
@@ -330,6 +337,7 @@ extern unsigned char attrib4[4];
 extern unsigned char attrib5[4];
 extern unsigned char attrib6[4];
 extern unsigned char attrib7[4];
+extern unsigned char attrib8[4];
 
 
 extern unsigned char s_state;

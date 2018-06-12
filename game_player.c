@@ -228,7 +228,7 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
     zx_border(INK_RED);
   }
 
-  if (v0 != TILE_BRICK && v1 != TILE_BRICK) {
+  if (v0 != TILE_WALL && v1 != TILE_WALL) {
     return 1;
   }
 

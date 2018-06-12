@@ -38,7 +38,7 @@ void game_loop(void) {
   game_round_init();
 
   while (!game_over) {
-    enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT );
+    enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT);
     value_a[0] = 6;
     value_b[0] = 14;
     while (!game_round_up && !game_over) {
@@ -68,6 +68,7 @@ void game_loop(void) {
 
       ++loop_count;
       ++fps;
+      game_rotate_attrib();
     }
     if (game_round_up) {
       game_round_up = 0;
@@ -91,6 +92,7 @@ void game_fps(void) {
 }
 
 void game_draw_screen(void) {
+  unsigned char obj_count;
 
   intrinsic_halt();
   game_boss = 0;
@@ -102,6 +104,8 @@ void game_draw_screen(void) {
   while (spr_count < SPR_P1) { // TODO SINGLE CLEAR FUNC
     // Clear enemies related tables
     class[spr_count] = 0;
+    obj_col[spr_count] = 0;
+    obj_lin[spr_count] = 0;
     ++spr_count;
   }
   index1 = 16;
@@ -114,10 +118,16 @@ void game_draw_screen(void) {
   s_row1 = 1;
   s_lin1 = 16;
   s_col1 = 0;
+  obj_count = 0;
 
   NIRVANAP_stop();
   zx_print_ink(INK_BLACK);
   while (index1 < GAME_SCR_MAX_INDEX) {
+    if (scr_map[index1] == TILE_OBJECT) {
+      obj_col[obj_count] = s_col1;
+      obj_lin[obj_count] = s_lin1;
+      ++obj_count;
+    }
     game_cell_paint();
     ++index1;
     ++s_col1;
@@ -166,11 +176,14 @@ void game_cell_paint() {
     zx_print_str(s_row1, s_col1, "g");
     f_attrib = attrib7;
     break;
+  case 8:
+    zx_print_str(s_row1, s_col1, "h");
+    f_attrib = attrib8;
+    break;
   }
 
   NIRVANAP_paintC(f_attrib, s_lin1, s_col1);
 }
-
 
 void game_end() {}
 
@@ -443,11 +456,16 @@ void game_boss_clear() {}
 
 void game_rotate_attrib(void) {
 
-  tmp_uc = attrib_hl[3];
-  attrib_hl[3] = attrib_hl[2];
-  attrib_hl[2] = attrib_hl[1];
-  attrib_hl[1] = attrib_hl[0];
-  attrib_hl[0] = tmp_uc;
+  tmp_uc = attrib8[3];
+  attrib8[3] = attrib8[2];
+  attrib8[2] = attrib8[1];
+  attrib8[1] = attrib8[0];
+  attrib8[0] = tmp_uc;
+  for (tmp_uc = 0; tmp_uc < 8; ++tmp_uc) {
+    if (obj_col[tmp_uc] != 0) {
+      NIRVANAP_paintC(attrib8, obj_lin[tmp_uc], obj_col[tmp_uc]);
+    }
+  }
 }
 
 void game_rotate_attrib_osd(void) {
@@ -460,7 +478,7 @@ void game_rotate_attrib_osd(void) {
 }
 
 void game_attribs() {
-//TODO ESTO DEBE QUEDAR EN BANK6
+  // TODO ESTO DEBE QUEDAR EN BANK6
   attrib0[0] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
   attrib0[1] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
   attrib0[2] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
@@ -501,6 +519,11 @@ void game_attribs() {
   attrib7[2] = map_paper | BRIGHT | INK_CYAN;
   attrib7[3] = map_paper | BRIGHT | INK_CYAN;
 
+  attrib8[0] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
+  attrib8[1] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
+  attrib8[2] = map_paper | BRIGHT | INK_WHITE   | PAPER_BLACK;
+  attrib8[3] = map_paper | BRIGHT | INK_WHITE   | PAPER_BLACK;
+
   // ATTRIB NORMAL
   attrib[0] = map_paper | BRIGHT | INK_WHITE;
   attrib[1] = map_paper | BRIGHT | INK_WHITE;
@@ -508,10 +531,10 @@ void game_attribs() {
   attrib[3] = map_paper | BRIGHT | INK_WHITE;
 
   // ATTRIB HIGHLIGHT
-  attrib_hl[0] = map_paper | BRIGHT | INK_RED | PAPER_RED ;
-  attrib_hl[1] = map_paper | BRIGHT | INK_RED | PAPER_RED;
-  attrib_hl[2] = map_paper | BRIGHT | INK_RED | PAPER_RED;
-  attrib_hl[3] = map_paper | BRIGHT | INK_RED | PAPER_RED;
+  attrib_hl[0] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib_hl[1] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib_hl[2] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib_hl[3] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
 
   // ATTRIB OSD
   attrib_osd[0] = map_paper | BRIGHT | INK_YELLOW;
