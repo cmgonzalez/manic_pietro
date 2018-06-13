@@ -25,7 +25,6 @@ extern void          game_fill_row(unsigned char f_row, unsigned char f_asc) __z
 extern void          game_print_footer(void);
 extern void			     game_update_stats(void);
 extern void			     game_start_timer(void);
-extern void          game_set_checkpoint();
 extern void			     game_round_init(void);
 extern void			     game_loop(void);
 extern unsigned char game_check_map(unsigned char f_lin, unsigned char f_col);

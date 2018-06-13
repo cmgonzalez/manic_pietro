@@ -65,7 +65,6 @@ PUBLIC _ay_fx_06_disparo2
 PUBLIC _ay_fx_06_efecto
 PUBLIC _ay_fx_06_explosion1
 PUBLIC _ay_fx_06_mushroom
-PUBLIC _ay_fx_06_checkpoint
 PUBLIC _ay_fx_06_levelup
 PUBLIC _ay_fx_06_respawn
 PUBLIC _ay_fx_06_disparo_axe

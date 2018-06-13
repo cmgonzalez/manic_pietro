@@ -70,7 +70,6 @@ Offsets 607 to 615: Spare
 #define TILE_BACKGROUND_S             0  //START OF BACKGROUND
 #define TILE_BACKGROUND_E             35 //END OF BACKGROUND
 
-#define TILE_CHECKPOINT               21
 
 #define TILE_ITEM_S                   36 //START OF ITEMS
 #define TILE_ITEM_E                   47 //END OF ITEMS
@@ -277,9 +276,6 @@ extern unsigned char player_max_vita;
 extern unsigned char player_col_scr;
 extern unsigned char player_lin_scr;
 
-extern unsigned char game_checkpoint_col;
-extern unsigned char game_checkpoint_lin;
-extern unsigned char game_checkpoint_scr;
 
 extern unsigned int player_hit_time;
 extern unsigned char player_hit;

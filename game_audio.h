@@ -37,6 +37,5 @@ extern void audio_level_start(void);
 extern void audio_level_complete(void);
 extern void audio_game_end(void);
 extern void audio_menu(void);
-extern void audio_checkpoint(void);
 extern void audio_levelup(void);
 #endif

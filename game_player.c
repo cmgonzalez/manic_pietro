@@ -69,11 +69,13 @@ unsigned char player_move(void) {
 
   if (BIT_CHK(s_state, STAT_JUMP) || BIT_CHK(s_state, STAT_FALL)) {
     /* Jump Handling */
+
     player_move_jump();
     /*Handle Fire*/
   } else {
     /* Read player input */
-    player_move_input();
+    player_move_walk();
+
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor1(lin[SPR_P1] + 16, col[SPR_P1])) {
       BIT_SET(s_state, STAT_FALL);
@@ -104,45 +106,49 @@ unsigned char player_check_input(void) {
   return 0;
 }
 
-unsigned char player_new_jump() {
-
-  if (dirs & IN_STICK_FIRE) {
-    return 1;
-  }
-
-  return 0;
-}
-
-unsigned char player_move_input(void) {
+unsigned char player_move_walk(void) {
   // TODO CLEAN THIS!
   /* User have pressed valid input */
 
   if (player_check_input()) {
 
-    if (player_new_jump()) {
+    if (dirs & IN_STICK_FIRE) {
       // NEW JUMP
       player_vel_inc = 1;
       audio_salto();
       spr_set_up(&s_state);
       jump_lin[SPR_P1] = lin[SPR_P1];
-      state[SPR_P1] = s_state;
       player_vel_y = player_vel_y0;
+
+      BIT_CLR(s_state, STAT_DIRL);
+      BIT_CLR(s_state, STAT_DIRR);
+
+      if (dirs & IN_STICK_LEFT) {
+        spr_set_left(&s_state);
+      }
+
+      if (dirs & IN_STICK_RIGHT) {
+        spr_set_right(&s_state);
+      }
+
+      state[SPR_P1] = s_state;
+      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
       return 1;
     }
 
     /* Move Right */
     if (dirs & IN_STICK_RIGHT) {
       spr_set_right(&s_state);
-      BIT_SET(state_a[SPR_P1], STAT_LDIRR);
-      BIT_CLR(state_a[SPR_P1], STAT_LDIRL);
+      //BIT_SET(state_a[SPR_P1], STAT_LDIRR);
+      //BIT_CLR(state_a[SPR_P1], STAT_LDIRL);
       spr_move_horizontal();
     }
 
     /* Move Left */
     if (dirs & IN_STICK_LEFT) {
       spr_set_left(&s_state);
-      BIT_SET(state_a[SPR_P1], STAT_LDIRL);
-      BIT_CLR(state_a[SPR_P1], STAT_LDIRR);
+      //BIT_SET(state_a[SPR_P1], STAT_LDIRL);
+      //BIT_CLR(state_a[SPR_P1], STAT_LDIRR);
       spr_move_horizontal();
     }
 
@@ -402,7 +408,7 @@ unsigned char player_move_jump(void) {
       if (!player_check_floor(s_lin1 + 16, col[SPR_P1])) {
         // Jump end
         tmp_uc = (s_lin1 >> 3) << 3;
-  
+
         if (tmp_uc - s_lin1 <= 2) {
           lin[SPR_P1] = tmp_uc;
           player_vel_y = 0;
@@ -415,16 +421,16 @@ unsigned char player_move_jump(void) {
 
     lin[SPR_P1] = s_lin1;
   }
-
-  if (!BIT_CHK(s_state, STAT_DIRL) && !BIT_CHK(s_state, STAT_DIRR)) {
-    if (dirs & IN_STICK_LEFT) {
-      spr_set_left(&s_state);
+  /*
+    if (!BIT_CHK(s_state, STAT_DIRL) && !BIT_CHK(s_state, STAT_DIRR)) {
+      if (dirs & IN_STICK_LEFT) {
+        spr_set_left(&s_state);
+      }
+      if (dirs & IN_STICK_RIGHT) {
+        spr_set_right(&s_state);
+      }
     }
-    if (dirs & IN_STICK_RIGHT) {
-      spr_set_right(&s_state);
-    }
-  }
-
+  */
   spr_move_horizontal();
   spr_move_horizontal();
   return 0;
@@ -455,9 +461,6 @@ void player_lost_life() {
 
   if (player_lives > 0) {
     z80_delay_ms(500);
-    player_col_scr = game_checkpoint_col;
-    player_lin_scr = game_checkpoint_lin;
-    scr_curr = game_checkpoint_scr;
     game_round_init();
   } else {
     // Game End

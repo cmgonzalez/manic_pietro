@@ -65,7 +65,6 @@ extern unsigned char ay_fx_06_salto[];
 extern unsigned char ay_fx_06_sin_mana[];
 extern unsigned char ay_fx_06_magic[];
 extern unsigned char ay_fx_06_levelup[];
-extern unsigned char ay_fx_06_checkpoint[];
 extern unsigned char ay_fx_06_disparo1[];
 extern unsigned char ay_fx_06_disparo2[];
 extern unsigned char ay_fx_06_efecto[];

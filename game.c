@@ -117,7 +117,6 @@ void main(void) {
     player_score = 0;
     player_lin_scr = GAME_LIN_FLOOR - 24;
     player_col_scr = 2;
-    game_set_checkpoint();
     game_round_up = 0;
     game_boss_alive = 1;
     game_over = 0;

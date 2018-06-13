@@ -114,9 +114,6 @@ unsigned char player_col_scr;
 unsigned char player_lin_scr;
 
 
-unsigned char game_checkpoint_col;
-unsigned char game_checkpoint_lin;
-unsigned char game_checkpoint_scr;
 
 
 unsigned int  player_hit_time;

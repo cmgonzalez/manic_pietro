@@ -127,13 +127,15 @@ unsigned char spr_move_down(void) {
 }
 
 unsigned char spr_move_horizontal(void) {
+
   if (BIT_CHK(state[sprite], STAT_DIRR)) {
     return spr_move_right();
-  } else {
-    if (BIT_CHK(state[sprite], STAT_DIRL)) {
-      return spr_move_left();
-    }
   }
+
+  if (BIT_CHK(state[sprite], STAT_DIRL)) {
+    return spr_move_left();
+  }
+
   return 0;
 }
 
@@ -174,6 +176,8 @@ unsigned char spr_move_right(void) {
 
       if (game_check_map(s_lin1 + 8, *f_col + 2)) {
         --*f_colint;
+        zx_border(INK_GREEN);
+
         return 1;
       } else {
         ++*f_col;
@@ -370,7 +374,7 @@ void spr_page_map(void) {
 }
 
 unsigned char spr_paint_player(void) {
-
+/* Parpadeo
   if (player_hit) {
     if ((loop_count & 1) == 0) {
       spr_back_repaint();
@@ -378,11 +382,12 @@ unsigned char spr_paint_player(void) {
       return 1;
     }
   }
-
+*/
   s_col1 = col[SPR_P1];
   s_lin1 = lin[SPR_P1];
 
   if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
+    
     /* Column or lin Movement */
     s_tile1 = tile[SPR_P1] + colint[SPR_P1];
 
@@ -391,6 +396,7 @@ unsigned char spr_paint_player(void) {
     spr_back_repaint();
     return 1;
   } else {
+
     s_tile0 = *SPRITEVAL(sprite);
     s_tile1 = tile[SPR_P1] + colint[SPR_P1];
 
@@ -592,7 +598,6 @@ void spr_play_anim(void) {
     }
   }
 }
-
 
 void spr_turn_horizontal(void) {
   if (BIT_CHK(s_state, STAT_DIRR)) {

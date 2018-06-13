@@ -87,10 +87,6 @@ void audio_menu(void) {
   ay_reset();
   //ay_song_play(AY_SONG_LOOP, 3, ay_song_03_tdm_cs9);
 }
-void audio_checkpoint(void) {
-  ay_fx_stop();
-  ay_fx_play(6, ay_fx_06_checkpoint);
-}
 
 void audio_levelup(void) {
   ay_fx_stop();

@@ -34,7 +34,8 @@
 /* Main Game Loop  */
 
 void game_loop(void) {
-
+  unsigned char flag;
+  flag = 0;
   game_round_init();
 
   while (!game_over) {
@@ -53,8 +54,26 @@ void game_loop(void) {
       if (game_check_time(&anim_time, TIME_ANIM)) {
         // zx_border(INK_BLACK);
         anim_time = zx_clock();
-        if (anim_count)
-          spr_play_anim();
+        // if (anim_count)
+        //  spr_play_anim();
+        switch (flag) {
+        case 0:
+          zx_print_str(10, 7, "rrrrrrrrrrrrrrrrrrrrr");
+          flag = 1;
+          break;
+        case 1:
+          zx_print_str(10, 7, "qqqqqqqqqqqqqqqqqqqqq");
+          flag = 2;
+          break;
+        case 2:
+          zx_print_str(10, 7, "ppppppppppppppppppppp");
+          flag = 3;
+          break;
+        case 3:
+          zx_print_str(10, 7, "lllllllllllllllllllll");
+          flag = 0;
+          break;
+        }
       }
 
       /*Each second aprox - update fps/score/phase left/phase advance*/
@@ -69,6 +88,7 @@ void game_loop(void) {
       ++loop_count;
       ++fps;
       game_rotate_attrib();
+
       if (obj_count == player_coins) {
         game_over = 1;
         zx_border(INK_BLACK);
@@ -337,12 +357,6 @@ void game_start_timer(void) {
   z80_wpoke(&NIRVANAP_ISR_HOOK[1], (unsigned int)game_tick); // game_tick
 }
 
-void game_set_checkpoint() {
-  game_checkpoint_col = (player_col_scr >> 1) << 1;
-  game_checkpoint_lin = ((player_lin_scr >> 3) << 3);
-  game_checkpoint_scr = scr_curr;
-}
-
 void game_round_init(void) {
 
   /* screen init */
@@ -361,10 +375,9 @@ void game_round_init(void) {
   game_print_footer();
   // TODO ENABLE spr_page_map();
   ay_reset();
-  audio_level_start();
+  // audio_level_start();
   game_draw_screen();
 
-  game_set_checkpoint();
   game_paint_attrib(&attrib_hl, 0, 32, 144);
 
   zx_print_str(17, 9, "CENTRAL CAVERN");
@@ -377,7 +390,6 @@ void game_round_init(void) {
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
   zx_print_ink(INK_MAGENTA);
   zx_print_str(21, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
-
 
   game_song_play_start = 0;
 
@@ -555,21 +567,21 @@ void game_attribs() {
   attrib5[1] = map_paper | BRIGHT | INK_GREEN;
   attrib5[2] = map_paper | BRIGHT | INK_CYAN;
   attrib5[3] = map_paper | BRIGHT | INK_CYAN;
-
+  // TILE_DEADLY1
   attrib6[0] = map_paper | BRIGHT | INK_YELLOW;
   attrib6[1] = map_paper | BRIGHT | INK_GREEN;
   attrib6[2] = map_paper | BRIGHT | INK_GREEN;
   attrib6[3] = map_paper | BRIGHT | INK_GREEN;
-
+  // TILE_DEADLY2
   attrib7[0] = map_paper | BRIGHT | INK_MAGENTA;
-  attrib7[1] = map_paper | INK_WHITE;
+  attrib7[1] = map_paper | INK_CYAN;
   attrib7[2] = map_paper | BRIGHT | INK_CYAN;
-  attrib7[3] = map_paper | BRIGHT | INK_CYAN;
+  attrib7[3] = map_paper | BRIGHT | INK_WHITE;
 
-  attrib8[0] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
-  attrib8[1] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
-  attrib8[2] = map_paper | BRIGHT | INK_WHITE | PAPER_BLACK;
-  attrib8[3] = map_paper | BRIGHT | INK_WHITE | PAPER_BLACK;
+  attrib8[0] = map_paper | BRIGHT | INK_WHITE | PAPER_BLACK;
+  attrib8[1] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
+  attrib8[2] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib8[3] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
 
   // ATTRIB NORMAL
   attrib[0] = map_paper | BRIGHT | INK_WHITE;
