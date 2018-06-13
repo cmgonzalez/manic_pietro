@@ -559,7 +559,7 @@
 555   0000              	GLOBAL _player_check_floor1
 556   0000              	GLOBAL _player_check_floor
 557   0000              	GLOBAL _player_score_add
-558   0000              	GLOBAL _player_move_input
+558   0000              	GLOBAL _player_move_walk
 559   0000              	GLOBAL _player_turn
 560   0000              	GLOBAL _player_move
 561   0000              	GLOBAL _player_new_jump
@@ -796,244 +796,256 @@
 792   0000              	GLOBAL _joyfunc2
 793   0000              	GLOBAL _joyfunc1
 794   0000              	GLOBAL _btiles
-795   0000              	GLOBAL _spec128
-796   0000              	GLOBAL _GLOBAL_ZX_PORT_7FFD
-797   0000              	GLOBAL _GLOBAL_ZX_PORT_1FFD
-798   0000              	GLOBAL _GLOBAL_ZX_PORT_FE
-799   0000              	GLOBAL _ay_fx_06_disparo_fire
-800   0000              	GLOBAL _ay_fx_06_disparo_axe
-801   0000              	GLOBAL _ay_fx_06_explosion1
-802   0000              	GLOBAL _ay_fx_06_efecto
-803   0000              	GLOBAL _ay_fx_06_disparo2
-804   0000              	GLOBAL _ay_fx_06_disparo1
-805   0000              	GLOBAL _ay_fx_06_levelup
-806   0000              	GLOBAL _ay_fx_06_magic
-807   0000              	GLOBAL _ay_fx_06_sin_mana
-808   0000              	GLOBAL _ay_fx_06_salto
-809   0000              	GLOBAL _ay_fx_06_puerta
-810   0000              	GLOBAL _ay_fx_06_magic1
-811   0000              	GLOBAL _ay_fx_06_golpe
-812   0000              	GLOBAL _ay_fx_06_explosion
-813   0000              	GLOBAL _ay_fx_06_dano_por_toque
-814   0000              	GLOBAL _ay_fx_06_coin
-815   0000              	GLOBAL _ay_song_06_lotr_level_start
-816   0000              	GLOBAL _ay_song_06_lotr_level_complete
-817   0000              	GLOBAL _ay_song_06_lotr_lose_a_life
-818   0000              	GLOBAL _ay_song_04_ingame
-819   0000              	GLOBAL _world0_h
-820   0000              	GLOBAL _world0_w
-821   0000              	GLOBAL _world0
-822   0000              	GLOBAL _paper0
-823   0000              	GLOBAL _lenght0
-824   0000              	GLOBAL _start_scr0
-825   0000              ;--------------------------------------------------------
-826   0000              ; special function registers
-827   0000              ;--------------------------------------------------------
-828   0000              defc _IO_FE	=	0x00fe
-829   0000              defc _IO_1FFD	=	0x1ffd
-830   0000              defc _IO_7FFD	=	0x7ffd
-831   0000              ;--------------------------------------------------------
-832   0000              ; ram data
-833   0000              ;--------------------------------------------------------
-834   0000              	SECTION bss_compiler
-835   0000              ;--------------------------------------------------------
-836   0000              ; ram data
-837   0000              ;--------------------------------------------------------
-838   0000              
-839   0000              IF 0
-840   0000              
-841   0000              ; .area _INITIALIZED removed by z88dk
-842   0000              
+795   0000              	GLOBAL _i
+796   0000              	GLOBAL _spec128
+797   0000              	GLOBAL _GLOBAL_ZX_PORT_7FFD
+798   0000              	GLOBAL _GLOBAL_ZX_PORT_1FFD
+799   0000              	GLOBAL _GLOBAL_ZX_PORT_FE
+800   0000              	GLOBAL _ay_fx_06_disparo_fire
+801   0000              	GLOBAL _ay_fx_06_disparo_axe
+802   0000              	GLOBAL _ay_fx_06_explosion1
+803   0000              	GLOBAL _ay_fx_06_efecto
+804   0000              	GLOBAL _ay_fx_06_disparo2
+805   0000              	GLOBAL _ay_fx_06_disparo1
+806   0000              	GLOBAL _ay_fx_06_levelup
+807   0000              	GLOBAL _ay_fx_06_magic
+808   0000              	GLOBAL _ay_fx_06_sin_mana
+809   0000              	GLOBAL _ay_fx_06_salto
+810   0000              	GLOBAL _ay_fx_06_puerta
+811   0000              	GLOBAL _ay_fx_06_magic1
+812   0000              	GLOBAL _ay_fx_06_golpe
+813   0000              	GLOBAL _ay_fx_06_explosion
+814   0000              	GLOBAL _ay_fx_06_dano_por_toque
+815   0000              	GLOBAL _ay_fx_06_coin
+816   0000              	GLOBAL _ay_song_06_lotr_level_start
+817   0000              	GLOBAL _ay_song_06_lotr_level_complete
+818   0000              	GLOBAL _ay_song_06_lotr_lose_a_life
+819   0000              	GLOBAL _ay_song_04_ingame
+820   0000              	GLOBAL _world0_h
+821   0000              	GLOBAL _world0_w
+822   0000              	GLOBAL _world0
+823   0000              	GLOBAL _paper0
+824   0000              	GLOBAL _lenght0
+825   0000              	GLOBAL _start_scr0
+826   0000              ;--------------------------------------------------------
+827   0000              ; special function registers
+828   0000              ;--------------------------------------------------------
+829   0000              defc _IO_FE	=	0x00fe
+830   0000              defc _IO_1FFD	=	0x1ffd
+831   0000              defc _IO_7FFD	=	0x7ffd
+832   0000              ;--------------------------------------------------------
+833   0000              ; ram data
+834   0000              ;--------------------------------------------------------
+835   0000              	SECTION bss_compiler
+836   0000              ;--------------------------------------------------------
+837   0000              ; ram data
+838   0000              ;--------------------------------------------------------
+839   0000              
+840   0000              IF 0
+841   0000              
+842   0000              ; .area _INITIALIZED removed by z88dk
 843   0000              
-844   0000              ENDIF
-845   0000              
-846   0000              ;--------------------------------------------------------
-847   0000              ; absolute external ram data
-848   0000              ;--------------------------------------------------------
-849   0000              	SECTION IGNORE
-850   0000              ;--------------------------------------------------------
-851   0000              ; global & static initialisations
-852   0000              ;--------------------------------------------------------
-853   0000              	SECTION code_crt_init
-854   0000              ;--------------------------------------------------------
-855   0000              ; Home
-856   0000              ;--------------------------------------------------------
-857   0000              	SECTION IGNORE
-858   0000              ;--------------------------------------------------------
-859   0000              ; code
-860   0000              ;--------------------------------------------------------
-861   0000              	SECTION code_compiler
-862   0000              ;	---------------------------------
-863   0000              ; Function main
-864   0000              ; ---------------------------------
-865   0000              _main:
-866   0000  2E 00       	ld	l,0x00
-867   0002  CD 00 00    	call	_zx_border_fastcall
-868   0005  21 9A 02    	ld	hl,0x029a
-869   0008  CD 00 00    	call	_z80_delay_ms_fastcall
-870   000B  21 00 00    	ld	hl,_game_inmune
-871   000E  36 00       	ld	(hl),0x00
-872   0010  21 00 00    	ld	hl,_game_inf_lives
-873   0013  36 00       	ld	(hl),0x00
-874   0015  21 00 00    	ld	hl,_game_debug
-875   0018  36 01       	ld	(hl),0x01
-876   001A  21 00 00    	ld	hl,_game_world
-877   001D  36 00       	ld	(hl),0x00
-878   001F  21 00 00    	ld	hl,_scr_curr
-879   0022  36 FF       	ld	(hl),0xff
-880   0024  21 00 00    	ld	hl,_game_song_play
-881   0027  36 01       	ld	(hl),0x01
-882   0029  CD 00 00    	call	_ay_reset
-883   002C  3A 00 00    	ld	a,(_spec128)
-884   002F  B7          	or	a, a
-885   0030  28 04       	jr	Z,l_main_00114
-886   0032  0E 0C       	ld	c,0x0c
-887   0034  18 02       	jr	l_main_00115
-888   0036              l_main_00114:
-889   0036  0E 03       	ld	c,0x03
-890   0038              l_main_00115:
-891   0038  21 00 00    	ld	hl,_game_sound
-892   003B  71          	ld	(hl), c
-893   003C  21 01 00    	ld	hl,0x0001
-894   003F  22 00 00    	ld	(_game_gravity),hl
-895   0042  21 00 00    	ld	hl,_player_vel_y0
-896   0045  36 FA       	ld	(hl),0xfa
-897   0047  21 7F 04    	ld	hl,0x047f
-898   004A  22 00 00    	ld	(_k1), hl
-899   004D  21 DF 02    	ld	hl,0x02df
-900   0050  22 04 00    	ld	(_k1 + 0x0004),hl
-901   0053  26 01       	ld	h,0x01
-902   0055  22 02 00    	ld	(_k1 + 0x0002),hl
-903   0058  2E FB       	ld	l,0xfb
-904   005A  22 08 00    	ld	(_k1 + 0x0008),hl
-905   005D  2E FD       	ld	l,0xfd
-906   005F  22 06 00    	ld	(_k1 + 0x0006),hl
-907   0062  21 FF FF    	ld	hl,0xffff
-908   0065  22 04 00    	ld	(_k2 + 0x0004),hl
-909   0068  2E FF       	ld	l,0xff
-910   006A  22 02 00    	ld	(_k2 + 0x0002),hl
-911   006D  22 08 00    	ld	(_k2 + 0x0008),hl
-912   0070  22 06 00    	ld	(_k2 + 0x0006),hl
-913   0073  21 7F 01    	ld	hl,0x017f
-914   0076  22 00 00    	ld	(_k2), hl
-915   0079  21 00 00    	ld	hl,_in_stick_sinclair1
-916   007C  22 00 00    	ld	(_joyfunc1),hl
-917   007F  21 00 00    	ld	hl,_in_stick_keyboard
-918   0082  22 00 00    	ld	(_joyfunc2),hl
-919   0085  3A 00 00    	ld	a,(_game_debug)
-920   0088  B7          	or	a,a
-921   0089  20 1A       	jr	NZ,l_main_00103
-922   008B  CD 00 00    	call	_in_wait_nokey
-923   008E  01 B8 7A    	ld	bc,0x7ab8
-924   0091              l_main_00110:
-925   0091  CD 00 00    	call	_in_test_key
-926   0094  7C          	ld	a, h
-927   0095  B5          	or	a,l
-928   0096  20 08       	jr	NZ,l_main_00101
-929   0098  21 4D 27    	ld	hl,0x274d
-930   009B  09          	add	hl,bc
-931   009C  4D          	ld	c, l
-932   009D  44          	ld	b, h
-933   009E  18 F1       	jr	l_main_00110
-934   00A0              l_main_00101:
-935   00A0  69          	ld	l, c
-936   00A1  60          	ld	h, b
-937   00A2  CD 00 00    	call	_srand_fastcall
-938   00A5              l_main_00103:
-939   00A5  2E 00       	ld	l,0x00
-940   00A7  CD 00 00    	call	_zx_border_fastcall
-941   00AA  CD 00 00    	call	_game_cls
-942   00AD  CD 00 00    	call	_game_start_timer
-943   00B0  21 00 00    	ld	hl,_btiles
-944   00B3  22 00 00    	ld	(_NIRVANAP_TILE_IMAGES),hl
-945   00B6  CD 00 00    	call	_game_attribs
-946   00B9  21 00 00    	ld	hl,_game_over
-947   00BC  36 01       	ld	(hl),0x01
-948   00BE  21 00 00    	ld	hl,_screen_ink
-949   00C1  36 07       	ld	(hl),0x07
-950   00C3  2A 00 00    	ld	hl,(_curr_time)
-951   00C6  22 00 00    	ld	(_frame_time),hl
-952   00C9  21 00 00    	ld	hl,_menu_curr_sel
-953   00CC  36 01       	ld	(hl),0x01
-954   00CE  21 00 00    	ld	hl,_map_paper_last
-955   00D1  36 08       	ld	(hl),0x08
-956   00D3  21 00 00    	ld	hl,_game_control_mode
-957   00D6  36 02       	ld	(hl),0x02
-958   00D8              l_main_00107:
-959   00D8  21 00 00    	ld	hl,_player_lives
-960   00DB  36 03       	ld	(hl),0x03
-961   00DD  3A 00 00    	ld	a,(_player_max_vita)
-962   00E0  32 00 00    	ld	(_player_vita),a
-963   00E3  21 00 00    	ld	hl,0x0000
-964   00E6  22 00 00    	ld	(_player_score),hl
-965   00E9  21 00 00    	ld	hl,_player_lin_scr
-966   00EC  36 68       	ld	(hl),0x68
-967   00EE  21 00 00    	ld	hl,_player_col_scr
-968   00F1  36 02       	ld	(hl),0x02
-969   00F3  21 00 00    	ld	hl,_game_round_up
-970   00F6  36 00       	ld	(hl),0x00
-971   00F8  21 00 00    	ld	hl,_game_boss_alive
-972   00FB  36 01       	ld	(hl),0x01
-973   00FD  21 00 00    	ld	hl,_game_over
-974   0100  36 00       	ld	(hl),0x00
-975   0102  21 00 00    	ld	hl,_dirs
-976   0105  36 00       	ld	(hl),0x00
-977   0107  21 00 00    	ld	hl,_map_paper
-978   010A  36 00       	ld	(hl),0x00
-979   010C  CD 00 00    	call	_game_attribs
-980   010F  CD 00 00    	call	_spr_btile_paint_back
-981   0112  3A 00 00    	ld	a,(_game_debug)
-982   0115  B7          	or	a, a
-983   0116  20 03       	jr	NZ,l_main_00105
-984   0118  CD 00 00    	call	_menu_main
-985   011B              l_main_00105:
-986   011B  CD 00 00    	call	_game_loop
-987   011E  CD 00 00    	call	_spr_flatten
-988   0121  CD 00 00    	call	_game_update_stats
-989   0124  21 00 00    	ld	hl,___str_0
-990   0127  E5          	push	hl
-991   0128  21 0C 0C    	ld	hl,0x0c0c
-992   012B  E5          	push	hl
-993   012C  CD 00 00    	call	_zx_print_str
-994   012F  AF          	xor	a,a
-995   0130  32 00 00    	ld	(_game_over),a
-996   0133  F5          	push	af
-997   0134  33          	inc	sp
-998   0135  21 FA 00    	ld	hl,0x00fa
-999   0138  E5          	push	hl
-1000  0139  21 0C 15    	ld	hl,0x150c
-1001  013C  E5          	push	hl
-1002  013D  3E 0C       	ld	a,0x0c
-1003  013F  F5          	push	af
-1004  0140  33          	inc	sp
-1005  0141  CD 00 00    	call	_game_colour_message
-1006  0144  F1          	pop	af
-1007  0145  F1          	pop	af
-1008  0146  F1          	pop	af
-1009  0147  CD 00 00    	call	_spr_clear_scr
-1010  014A  21 00 00    	ld	hl,_game_world
-1011  014D  36 00       	ld	(hl),0x00
-1012  014F  21 00 00    	ld	hl,_scr_curr
-1013  0152  36 FF       	ld	(hl),0xff
-1014  0154  CD 00 00    	call	_game_cls
-1015  0157  C3 D8 00    	jp	l_main_00107
-1016  015A              	SECTION rodata_compiler
-1017  0000              ___str_0:
-1018  0000  47 41 4D 45 20 4F 56 45 52 
-                        	DEFM "GAME OVER"
-1019  0009  00          	DEFB 0x00
-1020  000A              	SECTION code_compiler
-1021  015A              ;	---------------------------------
-1022  015A              ; Function test_proc is a stub
-1023  015A              ; ---------------------------------
-1024  015A              EXTERN l_ret
-1025  015A              defc _test_proc = l_ret
-1026  015A              	SECTION code_compiler
-1027  015A              ;	---------------------------------
-1028  015A              ; Function test_func
-1029  015A              ; ---------------------------------
-1030  015A              _test_func:
-1031  015A  2E 00       	ld	l,0x00
-1032  015C  C9          	ret
-1033  015D              	SECTION IGNORE
-1034  0000              
+844   0000              
+845   0000              ENDIF
+846   0000              
+847   0000              ;--------------------------------------------------------
+848   0000              ; absolute external ram data
+849   0000              ;--------------------------------------------------------
+850   0000              	SECTION IGNORE
+851   0000              ;--------------------------------------------------------
+852   0000              ; global & static initialisations
+853   0000              ;--------------------------------------------------------
+854   0000              	SECTION code_crt_init
+855   0000              ;--------------------------------------------------------
+856   0000              ; Home
+857   0000              ;--------------------------------------------------------
+858   0000              	SECTION IGNORE
+859   0000              ;--------------------------------------------------------
+860   0000              ; code
+861   0000              ;--------------------------------------------------------
+862   0000              	SECTION code_compiler
+863   0000              ;	---------------------------------
+864   0000              ; Function main
+865   0000              ; ---------------------------------
+866   0000              _main:
+867   0000  2E 00       	ld	l,0x00
+868   0002  CD 00 00    	call	_zx_border_fastcall
+869   0005  21 9A 02    	ld	hl,0x029a
+870   0008  CD 00 00    	call	_z80_delay_ms_fastcall
+871   000B  21 00 00    	ld	hl,_game_inmune
+872   000E  36 00       	ld	(hl),0x00
+873   0010  21 00 00    	ld	hl,_game_inf_lives
+874   0013  36 00       	ld	(hl),0x00
+875   0015  21 00 00    	ld	hl,_game_debug
+876   0018  36 01       	ld	(hl),0x01
+877   001A  21 00 00    	ld	hl,_game_world
+878   001D  36 00       	ld	(hl),0x00
+879   001F  21 00 00    	ld	hl,_scr_curr
+880   0022  36 FF       	ld	(hl),0xff
+881   0024  21 00 00    	ld	hl,_game_song_play
+882   0027  36 01       	ld	(hl),0x01
+883   0029  CD 00 00    	call	_ay_reset
+884   002C  3A 00 00    	ld	a,(_spec128)
+885   002F  B7          	or	a, a
+886   0030  28 04       	jr	Z,l_main_00117
+887   0032  0E 0C       	ld	c,0x0c
+888   0034  18 02       	jr	l_main_00118
+889   0036              l_main_00117:
+890   0036  0E 03       	ld	c,0x03
+891   0038              l_main_00118:
+892   0038  21 00 00    	ld	hl,_game_sound
+893   003B  71          	ld	(hl), c
+894   003C  21 01 00    	ld	hl,0x0001
+895   003F  22 00 00    	ld	(_game_gravity),hl
+896   0042  21 00 00    	ld	hl,_player_vel_y0
+897   0045  36 FA       	ld	(hl),0xfa
+898   0047  21 7F 04    	ld	hl,0x047f
+899   004A  22 00 00    	ld	(_k1), hl
+900   004D  21 DF 02    	ld	hl,0x02df
+901   0050  22 04 00    	ld	(_k1 + 0x0004),hl
+902   0053  26 01       	ld	h,0x01
+903   0055  22 02 00    	ld	(_k1 + 0x0002),hl
+904   0058  2E FB       	ld	l,0xfb
+905   005A  22 08 00    	ld	(_k1 + 0x0008),hl
+906   005D  2E FD       	ld	l,0xfd
+907   005F  22 06 00    	ld	(_k1 + 0x0006),hl
+908   0062  21 FF FF    	ld	hl,0xffff
+909   0065  22 04 00    	ld	(_k2 + 0x0004),hl
+910   0068  2E FF       	ld	l,0xff
+911   006A  22 02 00    	ld	(_k2 + 0x0002),hl
+912   006D  22 08 00    	ld	(_k2 + 0x0008),hl
+913   0070  22 06 00    	ld	(_k2 + 0x0006),hl
+914   0073  21 7F 01    	ld	hl,0x017f
+915   0076  22 00 00    	ld	(_k2), hl
+916   0079  21 00 00    	ld	hl,_in_stick_sinclair1
+917   007C  22 00 00    	ld	(_joyfunc1),hl
+918   007F  21 00 00    	ld	hl,_in_stick_keyboard
+919   0082  22 00 00    	ld	(_joyfunc2),hl
+920   0085  3A 00 00    	ld	a,(_game_debug)
+921   0088  B7          	or	a,a
+922   0089  20 1A       	jr	NZ,l_main_00103
+923   008B  CD 00 00    	call	_in_wait_nokey
+924   008E  01 B8 7A    	ld	bc,0x7ab8
+925   0091              l_main_00111:
+926   0091  CD 00 00    	call	_in_test_key
+927   0094  7C          	ld	a, h
+928   0095  B5          	or	a,l
+929   0096  20 08       	jr	NZ,l_main_00101
+930   0098  21 4D 27    	ld	hl,0x274d
+931   009B  09          	add	hl,bc
+932   009C  4D          	ld	c, l
+933   009D  44          	ld	b, h
+934   009E  18 F1       	jr	l_main_00111
+935   00A0              l_main_00101:
+936   00A0  69          	ld	l, c
+937   00A1  60          	ld	h, b
+938   00A2  CD 00 00    	call	_srand_fastcall
+939   00A5              l_main_00103:
+940   00A5  2E 00       	ld	l,0x00
+941   00A7  CD 00 00    	call	_zx_border_fastcall
+942   00AA  CD 00 00    	call	_game_cls
+943   00AD  CD 00 00    	call	_game_start_timer
+944   00B0  21 00 00    	ld	hl,_btiles
+945   00B3  22 00 00    	ld	(_NIRVANAP_TILE_IMAGES),hl
+946   00B6  CD 00 00    	call	_game_attribs
+947   00B9  21 00 00    	ld	hl,_game_over
+948   00BC  36 01       	ld	(hl),0x01
+949   00BE  21 00 00    	ld	hl,_screen_ink
+950   00C1  36 07       	ld	(hl),0x07
+951   00C3  2A 00 00    	ld	hl,(_curr_time)
+952   00C6  22 00 00    	ld	(_frame_time),hl
+953   00C9  21 00 00    	ld	hl,_menu_curr_sel
+954   00CC  36 01       	ld	(hl),0x01
+955   00CE  21 00 00    	ld	hl,_map_paper_last
+956   00D1  36 08       	ld	(hl),0x08
+957   00D3  21 00 00    	ld	hl,_game_control_mode
+958   00D6  36 02       	ld	(hl),0x02
+959   00D8              l_main_00108:
+960   00D8  21 00 00    	ld	hl,_player_lives
+961   00DB  36 03       	ld	(hl),0x03
+962   00DD  3A 00 00    	ld	a,(_player_max_vita)
+963   00E0  32 00 00    	ld	(_player_vita),a
+964   00E3  21 00 00    	ld	hl,0x0000
+965   00E6  22 00 00    	ld	(_player_score),hl
+966   00E9  21 00 00    	ld	hl,_player_lin_scr
+967   00EC  36 68       	ld	(hl),0x68
+968   00EE  21 00 00    	ld	hl,_player_col_scr
+969   00F1  36 02       	ld	(hl),0x02
+970   00F3  21 00 00    	ld	hl,_game_round_up
+971   00F6  36 00       	ld	(hl),0x00
+972   00F8  21 00 00    	ld	hl,_game_boss_alive
+973   00FB  36 01       	ld	(hl),0x01
+974   00FD  21 00 00    	ld	hl,_game_over
+975   0100  36 00       	ld	(hl),0x00
+976   0102  21 00 00    	ld	hl,_dirs
+977   0105  36 00       	ld	(hl),0x00
+978   0107  21 00 00    	ld	hl,_map_paper
+979   010A  36 00       	ld	(hl),0x00
+980   010C  CD 00 00    	call	_game_attribs
+981   010F  CD 00 00    	call	_spr_btile_paint_back
+982   0112  3A 00 00    	ld	a,(_game_debug)
+983   0115  B7          	or	a, a
+984   0116  20 03       	jr	NZ,l_main_00105
+985   0118  CD 00 00    	call	_menu_main
+986   011B              l_main_00105:
+987   011B  CD 00 00    	call	_game_loop
+988   011E  21 00 00    	ld	hl,___str_0
+989   0121  E5          	push	hl
+990   0122  21 0C 0C    	ld	hl,0x0c0c
+991   0125  E5          	push	hl
+992   0126  CD 00 00    	call	_zx_print_str
+993   0129  AF          	xor	a,a
+994   012A  32 00 00    	ld	(_game_over),a
+995   012D  F5          	push	af
+996   012E  33          	inc	sp
+997   012F  21 FA 00    	ld	hl,0x00fa
+998   0132  E5          	push	hl
+999   0133  21 0C 15    	ld	hl,0x150c
+1000  0136  E5          	push	hl
+1001  0137  3E 0C       	ld	a,0x0c
+1002  0139  F5          	push	af
+1003  013A  33          	inc	sp
+1004  013B  CD 00 00    	call	_game_colour_message
+1005  013E  F1          	pop	af
+1006  013F  F1          	pop	af
+1007  0140  F1          	pop	af
+1008  0141  21 00 00    	ld	hl,_game_world
+1009  0144  36 00       	ld	(hl),0x00
+1010  0146  21 00 00    	ld	hl,_scr_curr
+1011  0149  36 FF       	ld	(hl),0xff
+1012  014B  21 00 00    	ld	hl,_i
+1013  014E  36 00       	ld	(hl),0x00
+1014  0150              l_main_00113:
+1015  0150  21 00 00    	ld	hl,0x0000
+1016  0153  E5          	push	hl
+1017  0154  AF          	xor	a, a
+1018  0155  2A 00 00    	ld	hl,(_i)
+1019  0158  67          	ld	h,a
+1020  0159  E5          	push	hl
+1021  015A  CD 00 00    	call	_NIRVANAP_spriteT_callee
+1022  015D  21 00 00    	ld	hl,_i
+1023  0160  34          	inc	(hl)
+1024  0161  3E 07       	ld	a,0x07
+1025  0163  96          	sub	a, (hl)
+1026  0164  30 EA       	jr	NC,l_main_00113
+1027  0166  C3 D8 00    	jp	l_main_00108
+1028  0169              	SECTION rodata_compiler
+1029  0000              ___str_0:
+1030  0000  44 45 4D 4F 20 4F 56 45 52 
+                        	DEFM "DEMO OVER"
+1031  0009  00          	DEFB 0x00
+1032  000A              	SECTION code_compiler
+1033  0169              ;	---------------------------------
+1034  0169              ; Function test_proc is a stub
+1035  0169              ; ---------------------------------
+1036  0169              EXTERN l_ret
+1037  0169              defc _test_proc = l_ret
+1038  0169              	SECTION code_compiler
+1039  0169              ;	---------------------------------
+1040  0169              ; Function test_func
+1041  0169              ; ---------------------------------
+1042  0169              _test_func:
+1043  0169  2E 00       	ld	l,0x00
+1044  016B  C9          	ret
+1045  016C              	SECTION IGNORE
+1046  0000              

@@ -176,8 +176,6 @@ unsigned char spr_move_right(void) {
 
       if (game_check_map(s_lin1 + 8, *f_col + 2)) {
         --*f_colint;
-        zx_border(INK_GREEN);
-
         return 1;
       } else {
         ++*f_col;
@@ -387,7 +385,7 @@ unsigned char spr_paint_player(void) {
   s_lin1 = lin[SPR_P1];
 
   if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
-    
+
     /* Column or lin Movement */
     s_tile1 = tile[SPR_P1] + colint[SPR_P1];
 

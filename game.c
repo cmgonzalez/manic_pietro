@@ -130,17 +130,19 @@ void main(void) {
     // GAME
     game_loop();
     // GAME OVER
-    spr_flatten();
-    game_update_stats();
-    zx_print_str(12, 12, "GAME OVER");
+    //spr_flatten();
+    //game_update_stats();
+    zx_print_str(12, 12, "DEMO OVER");
     game_over = 0; // Hack game_colour_message to render background
     game_colour_message(12, 12, 12 + 9, 250, 0);
 
-    spr_clear_scr();
+    //spr_clear_scr();
     game_world = 0;
     scr_curr = 0xFF;
-
-    game_cls();
+    for (i = 0; i <= SPR_P1; ++i){
+      NIRVANAP_spriteT(i,0,0,0);
+    }
+    //game_cls();
   }
 }
 

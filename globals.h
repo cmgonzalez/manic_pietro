@@ -176,7 +176,7 @@ Offsets 607 to 615: Spare
 #define STAT_FALL                     1
 #define STAT_DIRR                     2
 #define STAT_DIRL                     3
-#define STAT_HIT                      4
+#define STAT_CHAIN                    4
 #define STAT_KILL                     5
 #define STAT_ANGRY                    6
 #define STAT_UPGR                     7
@@ -229,6 +229,7 @@ Offsets 607 to 615: Spare
 
 
 extern unsigned char spec128;
+extern unsigned char i;
 extern unsigned char btiles[];
 extern uint16_t (*joyfunc1)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
 extern uint16_t (*joyfunc2)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h

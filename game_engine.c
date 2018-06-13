@@ -389,7 +389,7 @@ void game_round_init(void) {
 
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
   zx_print_ink(INK_MAGENTA);
-  zx_print_str(21, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
+  zx_print_str(22, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
 
   game_song_play_start = 0;
 
@@ -442,7 +442,6 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
   }
 
   if (f_tile == TILE_OBJECT) {
-    zx_border(INK_WHITE);
     scr_map[*f_index] = TILE_EMPTY;
     ++player_coins;
   }
@@ -578,10 +577,10 @@ void game_attribs() {
   attrib7[2] = map_paper | BRIGHT | INK_CYAN;
   attrib7[3] = map_paper | BRIGHT | INK_WHITE;
 
-  attrib8[0] = map_paper | BRIGHT | INK_WHITE | PAPER_BLACK;
-  attrib8[1] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
-  attrib8[2] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
-  attrib8[3] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
+  attrib8[0] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
+  attrib8[1] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib8[2] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
+  attrib8[3] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
 
   // ATTRIB NORMAL
   attrib[0] = map_paper | BRIGHT | INK_WHITE;
