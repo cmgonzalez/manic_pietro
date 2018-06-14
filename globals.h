@@ -229,7 +229,11 @@ Offsets 607 to 615: Spare
 
 
 extern unsigned char spec128;
+//General Use VARIABLES
 extern unsigned char i;
+extern unsigned char v0;
+extern unsigned char v1;
+
 extern unsigned char btiles[];
 extern uint16_t (*joyfunc1)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
 extern uint16_t (*joyfunc2)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
@@ -304,6 +308,7 @@ extern unsigned int fps;
 
 extern unsigned char sprite;
 extern unsigned char game_debug;
+extern unsigned char game_fps_show;
 
 extern unsigned char player_hit_count;
 extern unsigned char player_jump_top;
@@ -372,19 +377,22 @@ extern unsigned char spr_init[];
 
 extern unsigned char scr_map[];
 
+
 //extern unsigned char scr_obj0[];
 //extern unsigned char scr_obj1[];
 extern unsigned char sprite_kind[];
 
 
 //Bank 6 Level Data
+extern const unsigned char scr_map06[];
+/*
 extern const unsigned char start_scr0[];
 extern const unsigned char lenght0[];
 extern const unsigned char paper0[];
 extern const unsigned char world0[];
 extern const unsigned char world0_w[];
 extern const unsigned char world0_h[];
-
+*/
 extern unsigned char scr_curr;
 extern unsigned char map_width;
 extern unsigned char map_heigth;

@@ -39,9 +39,10 @@ void game_loop(void) {
   game_round_init();
 
   while (!game_over) {
-    enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT);
-    value_a[0] = 7;
-    value_b[0] = 14;
+
+    enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT); //TODO
+    value_a[0] = 7;//TODO
+    value_b[0] = 14;//TODO
     while (!game_round_up && !game_over) {
 
       /*Enemies turn*/
@@ -52,6 +53,7 @@ void game_loop(void) {
 
       /*Play animatios*/
       if (game_check_time(&anim_time, TIME_ANIM)) {
+        //TODO
         // zx_border(INK_BLACK);
         anim_time = zx_clock();
         // if (anim_count)
@@ -80,7 +82,7 @@ void game_loop(void) {
       if (game_check_time(&frame_time, TIME_EVENT)) {
         frame_time = zx_clock();
         // intrinsic_halt();
-        if (game_debug)
+        if (game_fps_show)
           game_fps();
       }
       // INGAME
@@ -283,8 +285,9 @@ void game_add_enemy(unsigned char enemy_tile_index) __z88dk_fastcall {
 
 void game_print_footer(void) {
 
-  if (game_debug) {
+  if (game_fps_show) {
     /* phase osd bottom*/
+    zx_print_ink(INK_WHITE);
     zx_print_str(23, 20, "LPS:");
   }
   game_update_stats();
@@ -373,7 +376,7 @@ void game_round_init(void) {
   spr_init_effects();
   game_print_header();
   game_print_footer();
-  // TODO ENABLE spr_page_map();
+  spr_page_map();
   ay_reset();
   // audio_level_start();
   game_draw_screen();

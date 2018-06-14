@@ -41,6 +41,7 @@ void main(void) {
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_debug = 1;
+  game_fps_show = 0;
   game_world = 0;
   scr_curr = 0xFF;
   game_song_play = 1;
@@ -89,12 +90,7 @@ void main(void) {
   game_attribs();
   game_over = 1;
   zx_print_ink(INK_WHITE);
-  /*
-  if (!game_debug) {
-    zx_print_str(12, 6, "FOR FELIPE AND EDDIE");
-    game_colour_message(12, 6, 6 + 20, 30, 0);
-  }
-  */
+
   // Init Screen
   frame_time = zx_clock();
 
@@ -106,6 +102,7 @@ void main(void) {
 
 
   /*MAIN LOOP*/
+  game_attribs();
   while (1) {
 
 
@@ -115,6 +112,8 @@ void main(void) {
     player_vita = player_max_vita;
 
     player_score = 0;
+    player_coins = 0;
+
     player_lin_scr = GAME_LIN_FLOOR - 24;
     player_col_scr = 2;
     game_round_up = 0;
@@ -122,19 +121,20 @@ void main(void) {
     game_over = 0;
     dirs = 0x00;
     map_paper = PAPER_BLACK;
-    game_attribs();
     spr_btile_paint_back();
     // MENU
-    if (!game_debug)
+    if (!game_debug) {
       menu_main();
+    }
+
     // GAME
     game_loop();
     // GAME OVER
     //spr_flatten();
     //game_update_stats();
-    zx_print_str(12, 12, "DEMO OVER");
+    zx_print_str(11, 12, "DEMO OVER");
     game_over = 0; // Hack game_colour_message to render background
-    game_colour_message(12, 12, 12 + 9, 250, 0);
+    //game_colour_message(12, 12, 12 + 9, 250, 0);
 
     //spr_clear_scr();
     game_world = 0;

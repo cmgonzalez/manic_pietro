@@ -258,6 +258,24 @@ void spr_clear_scr() {
 }
 
 void spr_page_map(void) {
+  unsigned char val;
+  unsigned int l_index;
+
+  // Read Player start screen on world map
+  l_index = 0;
+  while (l_index < 512) {
+    /* code */
+    intrinsic_di();
+    GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
+    IO_7FFD = 0x10 + 6;
+    val = scr_map06[l_index];
+    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
+    IO_7FFD = 0x10 + 0;
+    intrinsic_ei();
+    scr_map[l_index] = val;
+    ++l_index;
+  }
+
   /*
     unsigned char v0;
     unsigned char v1;
@@ -372,15 +390,15 @@ void spr_page_map(void) {
 }
 
 unsigned char spr_paint_player(void) {
-/* Parpadeo
-  if (player_hit) {
-    if ((loop_count & 1) == 0) {
-      spr_back_repaint();
-      NIRVANAP_spriteT(sprite, 0, 0, 0);
-      return 1;
+  /* Parpadeo
+    if (player_hit) {
+      if ((loop_count & 1) == 0) {
+        spr_back_repaint();
+        NIRVANAP_spriteT(sprite, 0, 0, 0);
+        return 1;
+      }
     }
-  }
-*/
+  */
   s_col1 = col[SPR_P1];
   s_lin1 = lin[SPR_P1];
 
