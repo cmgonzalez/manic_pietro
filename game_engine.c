@@ -212,7 +212,7 @@ void game_cell_paint() {
     zx_print_str(s_row1, s_col1, "k");
     f_attrib = attrib4;
     break;
-  case TILE_CHAIN:
+  case TILE_CONVEYOR:
     zx_print_str(s_row1, s_col1, "l");
     f_attrib = attrib5;
     break;

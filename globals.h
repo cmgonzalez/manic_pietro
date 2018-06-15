@@ -54,7 +54,7 @@ Offsets 607 to 615: Spare
 #define TILE_FLOOR6                   8
 #define TILE_FLOOR7                   9
 #define TILE_WALL                     10
-#define TILE_CHAIN                    11
+#define TILE_CONVEYOR                    11
 #define TILE_DEADLY1                  12
 #define TILE_DEADLY2                  13
 #define TILE_OBJECT                   14
@@ -176,7 +176,7 @@ Offsets 607 to 615: Spare
 #define STAT_FALL                     1
 #define STAT_DIRR                     2
 #define STAT_DIRL                     3
-#define STAT_CHAIN                    4
+#define STAT_CONVEYOR                    4
 #define STAT_KILL                     5
 #define STAT_ANGRY                    6
 #define STAT_UPGR                     7

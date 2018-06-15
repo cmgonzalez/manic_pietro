@@ -111,10 +111,16 @@ unsigned char player_check_input(void) {
     // Error on reading both horizontal's
     dirs = 0;
   }
-
+if ( BIT_CHK(*p_state, STAT_CONVEYOR) ) { //TODO PLAYER OVER CONVEYOR (MISS CONVEYOR DIR)
+  if (dirs & IN_STICK_FIRE) {
+    return 1;
+  }
+} else {
   if (dirs & IN_STICK_LEFT || dirs & IN_STICK_RIGHT || dirs & IN_STICK_FIRE) {
     return 1;
   }
+}
+
 
   return 0;
 }
@@ -214,7 +220,7 @@ unsigned char player_move_walk(void) {
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
 
-      if (dirs & IN_STICK_LEFT) {
+      if ( (dirs & IN_STICK_LEFT) || BIT_CHK(*p_state, STAT_CONVEYOR)) { //TODO PLAYER OVER CONVEYOR (MISS CONVEYOR DIR)
         spr_set_left();
       }
 
@@ -246,7 +252,7 @@ unsigned char player_move_walk(void) {
   } else {
     BIT_CLR(*p_state, STAT_DIRL);
     BIT_CLR(*p_state, STAT_DIRR);
-    if (BIT_CHK(*p_state, STAT_CHAIN)) {
+    if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
 
       BIT_SET(*p_state, STAT_DIRL); // TODO
       player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
@@ -384,10 +390,10 @@ unsigned char player_check_floor1(unsigned char f_lin, unsigned char f_col) {
     game_cell_paint();
   }
 
-  if (v0 == TILE_CHAIN || v1 == TILE_CHAIN) {
-    BIT_SET(*p_state, STAT_CHAIN);
+  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+    BIT_SET(*p_state, STAT_CONVEYOR);
   } else {
-    BIT_CLR(*p_state, STAT_CHAIN);
+    BIT_CLR(*p_state, STAT_CONVEYOR);
   }
 
   return 0;

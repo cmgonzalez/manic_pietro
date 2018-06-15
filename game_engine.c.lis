@@ -2014,10 +2014,10 @@
 2002  0628  07          	rlca
 2003  0629  07          	rlca
 2004  062A  E6 F8       	and	a,0xf8
-2005  062C  DD 77 FA    	ld	(ix-6),a
+2005  062C  DD 77 FF    	ld	(ix-1),a
 2006  062F  C6 08       	add	a,0x08
-2007  0631  DD 77 FF    	ld	(ix-1),a
-2008  0634  DD 77 FE    	ld	(ix-2),a
+2007  0631  DD 77 FE    	ld	(ix-2),a
+2008  0634  DD 77 FD    	ld	(ix-3),a
 2009  0637              l_game_colour_message_00112:
 2010  0637  3A 00 00    	ld	a,(_tmp)
 2011  063A  B7          	or	a, a
@@ -2043,23 +2043,23 @@
 2031  065B  CD 50 07    	call	_game_check_time
 2032  065E  F1          	pop	af
 2033  065F  33          	inc	sp
-2034  0660  DD 75 FD    	ld	(ix-3),l
+2034  0660  DD 75 FC    	ld	(ix-4),l
 2035  0663  7D          	ld	a, l
 2036  0664  B7          	or	a, a
 2037  0665  28 4D       	jr	Z,l_game_colour_message_00105
 2038  0667  2A 00 00    	ld	hl,(_curr_time)
-2039  066A  DD 74 FC    	ld	(ix-4),h
-2040  066D  DD 75 FB    	ld	(ix-5),l
+2039  066A  DD 74 FB    	ld	(ix-5),h
+2040  066D  DD 75 FA    	ld	(ix-6),l
 2041  0670  7D          	ld	a, l
 2042  0671  21 00 00    	ld	hl,_frame_time
 2043  0674  77          	ld	(hl), a
-2044  0675  DD 7E FC    	ld	a,(ix-4)
+2044  0675  DD 7E FB    	ld	a,(ix-5)
 2045  0678  23          	inc	hl
 2046  0679  77          	ld	(hl), a
 2047  067A  3A 00 00    	ld	a,(_game_over)
 2048  067D  B7          	or	a, a
 2049  067E  28 1B       	jr	Z,l_game_colour_message_00102
-2050  0680  DD 66 FE    	ld	h,(ix-2)
+2050  0680  DD 66 FD    	ld	h,(ix-3)
 2051  0683  DD 6E 06    	ld	l,(ix+6)
 2052  0686  E5          	push	hl
 2053  0687  DD 7E 05    	ld	a,(ix+5)
@@ -2074,7 +2074,7 @@
 2062  0696  CD 7A 07    	call	_game_rotate_attrib
 2063  0699  18 19       	jr	l_game_colour_message_00105
 2064  069B              l_game_colour_message_00102:
-2065  069B  DD 66 FF    	ld	h,(ix-1)
+2065  069B  DD 66 FE    	ld	h,(ix-2)
 2066  069E  DD 6E 06    	ld	l,(ix+6)
 2067  06A1  E5          	push	hl
 2068  06A2  DD 7E 05    	ld	a,(ix+5)
@@ -2097,10 +2097,10 @@
 2085  06BF  2A 00 00    	ld	hl,(_joyfunc1)
 2086  06C2  CD 00 00    	call	___sdcc_call_hl
 2087  06C5  F1          	pop	af
-2088  06C6  DD 74 FC    	ld	(ix-4),h
-2089  06C9  DD 75 FB    	ld	(ix-5),l
+2088  06C6  DD 74 FB    	ld	(ix-5),h
+2089  06C9  DD 75 FA    	ld	(ix-6),l
 2090  06CC  7C          	ld	a,h
-2091  06CD  DD B6 FB    	or	a,(ix-5)
+2091  06CD  DD B6 FA    	or	a,(ix-6)
 2092  06D0  CA 37 06    	jp	Z, l_game_colour_message_00112
 2093  06D3  21 00 00    	ld	hl,_tmp
 2094  06D6  36 00       	ld	(hl),0x00
@@ -2140,7 +2140,7 @@
 2128  0716              l_game_colour_message_00118:
 2129  0716  21 00 00    	ld	hl,_tmp1
 2130  0719  71          	ld	(hl), c
-2131  071A  DD 7E FA    	ld	a,(ix-6)
+2131  071A  DD 7E FF    	ld	a,(ix-1)
 2132  071D  32 00 00    	ld	(_s_lin0),a
 2133  0720  DD 7E 05    	ld	a,(ix+5)
 2134  0723  CB 3F       	srl	a
