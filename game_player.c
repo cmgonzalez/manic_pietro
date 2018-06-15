@@ -81,7 +81,9 @@ unsigned char player_move(void) {
     }
     */
     player_move_jump();
+
     spr_move_horizontal();
+
     /*Handle Fire*/
   } else {
     sprite_speed[SPR_P1] = 4;

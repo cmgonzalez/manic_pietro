@@ -530,7 +530,8 @@ void spr_back_repaint(void) {
   index1--;
   s_col1--;
   game_cell_paint();
-  if ((s_lin0 & 2) != 0) {
+  //TODO PERFORMANCE
+  //if ( (s_lin0 >> 3) != 0 ) {
     s_lin1 = s_lin1 + 8;
     s_row1++;
     index1 = index1 + 32;
@@ -538,7 +539,7 @@ void spr_back_repaint(void) {
     index1++;
     s_col1++;
     game_cell_paint();
-  }
+  //}
 }
 
 void spr_init_effects(void) {

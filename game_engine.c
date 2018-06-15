@@ -392,7 +392,7 @@ void game_round_init(void) {
 
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
   zx_print_ink(INK_MAGENTA);
-  zx_print_str(22, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
+  //zx_print_str(22, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
 
   game_song_play_start = 0;
 
@@ -541,13 +541,13 @@ void game_attribs() {
   attrib0[2] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
   attrib0[3] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
 
-  attrib1[0] = map_paper | BRIGHT | INK_RED;
-  attrib1[1] = map_paper | INK_RED;
+  attrib1[0] = map_paper | INK_RED;
+  attrib1[1] = map_paper | BRIGHT | INK_RED;
   attrib1[2] = map_paper | INK_MAGENTA;
   attrib1[3] = map_paper | BRIGHT | INK_MAGENTA;
 
-  attrib2[0] = map_paper | BRIGHT | INK_RED;
-  attrib2[1] = map_paper | INK_RED;
+  attrib2[0] = map_paper | INK_RED;
+  attrib2[1] = map_paper | BRIGHT | INK_RED;
   attrib2[2] = map_paper | INK_MAGENTA;
   attrib2[3] = map_paper | BRIGHT | INK_MAGENTA;
 
@@ -571,7 +571,7 @@ void game_attribs() {
   attrib6[2] = map_paper | BRIGHT | INK_GREEN;
   attrib6[3] = map_paper | BRIGHT | INK_GREEN;
   // TILE_DEADLY2
-  attrib7[0] = map_paper | BRIGHT | INK_MAGENTA;
+  attrib7[0] = map_paper | BRIGHT | INK_BLUE;
   attrib7[1] = map_paper | INK_CYAN;
   attrib7[2] = map_paper | BRIGHT | INK_CYAN;
   attrib7[3] = map_paper | BRIGHT | INK_WHITE;
