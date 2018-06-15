@@ -265,10 +265,10 @@ extern unsigned char obj_count;
 
 extern unsigned int last_time[8];
 extern unsigned int player_score;
-extern signed char  player_vel_x;
-extern signed char  player_vel_y;
-extern signed char  player_vel_y0;
+extern signed int  player_vel_y;
+extern signed int  player_vel_y0;
 extern signed char  player_vel_inc;
+
 extern unsigned char player_keys[4];
 //PLAYER ATTRIBUTES
 extern unsigned char player_vita;
@@ -284,7 +284,7 @@ extern unsigned char player_lin_scr;
 
 extern unsigned int player_hit_time;
 extern unsigned char player_hit;
-
+extern unsigned char player_jumpcount;
 
 
 extern signed   int  game_gravity;
@@ -349,7 +349,9 @@ extern unsigned char attrib7[4];
 extern unsigned char attrib8[4];
 
 
-extern unsigned char s_state;
+extern unsigned char *p_state;
+extern unsigned char *p_state_a;
+
 extern unsigned int curr_time;
 extern unsigned int frame_time;
 extern unsigned int anim_time;

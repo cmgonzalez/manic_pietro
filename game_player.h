@@ -19,7 +19,6 @@
 
 extern void          player_init(unsigned char f_lin, unsigned char f_col, unsigned char f_tile);
 extern unsigned char player_check_input(void);
-extern unsigned char player_new_jump();
 extern unsigned char player_move(void);
 extern void          player_turn(void);
 extern unsigned char player_move_walk(void);
@@ -29,14 +28,13 @@ extern unsigned char player_check_floor1(unsigned char f_lin, unsigned char f_co
 extern unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col);
 
 extern unsigned char player_pick_item(unsigned char l_val, int l_index);
-extern unsigned char player_pick_deadly(unsigned char l_val, int l_index);
+extern unsigned char player_pick_deadly(unsigned char l_val);
 
 
 extern void          player_tile( unsigned char f_tile, unsigned char f_inc );
 extern unsigned char player_move_jump(void);
 extern void          player_damage(unsigned char f_val) __z88dk_fastcall;
 extern void          player_lost_life();
-extern void          player_gasta_brick();
 
 
 #endif

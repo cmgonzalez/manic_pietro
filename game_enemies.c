@@ -37,12 +37,10 @@ void enemy_turn(void) {
     if (s_class > 0 && spr_chktime(&sprite)) {
       s_lin0 = lin[sprite];
       s_col0 = col[sprite];
-      // s_tile0 = tile[sprite] + colint[sprite];
-      s_state = state[sprite];
+      p_state = &state[sprite];
+      p_state_a = &state_a[sprite];
       enemy_move();
       spr_paint();
-
-      state[sprite] = s_state;
       last_time[sprite] = zx_clock();
     }
     ++sprite;
@@ -94,13 +92,13 @@ void enemy_ghost() {
   v = 0;
 
   if (s_col0 < col[SPR_P1]) {
-    spr_set_right(&s_state);
+    spr_set_right();
     tile[sprite] = spr_tile(&sprite);
     spr_move_right();
     v = 1;
   }
   if (s_col0 > col[SPR_P1]) {
-    spr_set_left(&s_state);
+    spr_set_left();
     tile[sprite] = spr_tile(&sprite);
     spr_move_left();
     v = 1;
@@ -134,18 +132,18 @@ void enemy_static() {
 }
 
 void enemy_horizontal() {
-  if (BIT_CHK(s_state, STAT_DIRR)) {
+  if (BIT_CHK(*p_state, STAT_DIRR)) {
     spr_move_right_f();
     if (col[sprite] == value_b[sprite] && colint[sprite] == 3) { //HACK sprite_frames[sprite] - 1
-      spr_set_left(&s_state);
-      state[sprite] = s_state;
+      spr_set_left();
+      state[sprite] = *p_state;
       tile[sprite] = spr_tile(&sprite);
     }
   } else {
     spr_move_left_f();
     if (col[sprite] == value_a[sprite] && colint[sprite] == 0) {
-      spr_set_right(&s_state);
-      state[sprite] = s_state;
+      spr_set_right();
+      state[sprite] = *p_state;
       tile[sprite] = spr_tile(&sprite);
     }
   }
@@ -169,7 +167,7 @@ void enemy_kill(unsigned char f_sprite) __z88dk_fastcall {
 void enemy_avoid_fall() {
 
   /* Don't fall on edge*/
-  if (BIT_CHK(s_state, STAT_DIRR)) {
+  if (BIT_CHK(*p_state, STAT_DIRR)) {
     index1 = spr_calc_index(lin[sprite] + GAME_OFFSET_Y, col[sprite] + 2);
   } else {
     index1 = spr_calc_index(lin[sprite] + GAME_OFFSET_Y, col[sprite] - 2);
@@ -182,7 +180,7 @@ void enemy_avoid_fall() {
 unsigned char enemy_avoid_dead() {
 
   index1 = spr_calc_index(lin[sprite], col[sprite]);
-  if (BIT_CHK(s_state, STAT_DIRR)) {
+  if (BIT_CHK(*p_state, STAT_DIRR)) {
     index1++;
   } else {
     index1--;

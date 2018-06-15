@@ -43,22 +43,30 @@ unsigned char spr_chktime(unsigned char *sprite) __z88dk_fastcall {
   return 0;
 }
 
-void spr_set_up(unsigned char *f_state) __z88dk_fastcall {
-  BIT_SET(*f_state, STAT_JUMP);
-  BIT_CLR(*f_state, STAT_FALL);
+void spr_set_up() {
+  BIT_SET(*p_state, STAT_JUMP);
+  BIT_CLR(*p_state, STAT_FALL);
 }
-void spr_set_down(unsigned char *f_state) __z88dk_fastcall {
-  BIT_SET(*f_state, STAT_FALL);
-  BIT_CLR(*f_state, STAT_JUMP);
+void spr_set_down() {
+  BIT_SET(*p_state, STAT_FALL);
+  BIT_CLR(*p_state, STAT_JUMP);
 }
 
-void spr_set_left(unsigned char *f_state) __z88dk_fastcall {
-  BIT_SET(*f_state, STAT_DIRL);
-  BIT_CLR(*f_state, STAT_DIRR);
+void spr_set_left() {
+  BIT_CLR(*p_state_a, STAT_LDIRR);
+  BIT_SET(*p_state_a, STAT_LDIRL);
+
+  BIT_CLR(*p_state, STAT_DIRR);
+  BIT_SET(*p_state, STAT_DIRL);
+
 }
-void spr_set_right(unsigned char *f_state) __z88dk_fastcall {
-  BIT_SET(*f_state, STAT_DIRR);
-  BIT_CLR(*f_state, STAT_DIRL);
+void spr_set_right() {
+  BIT_CLR(*p_state_a, STAT_LDIRL);
+  BIT_SET(*p_state_a, STAT_LDIRR);
+
+  BIT_CLR(*p_state, STAT_DIRL);
+  BIT_SET(*p_state, STAT_DIRR);
+
 }
 
 unsigned char spr_move_up(void) {
@@ -128,11 +136,11 @@ unsigned char spr_move_down(void) {
 
 unsigned char spr_move_horizontal(void) {
 
-  if (BIT_CHK(state[sprite], STAT_DIRR)) {
+  if (BIT_CHK(*p_state, STAT_DIRR)) {
     return spr_move_right();
   }
 
-  if (BIT_CHK(state[sprite], STAT_DIRL)) {
+  if (BIT_CHK(*p_state, STAT_DIRL)) {
     return spr_move_left();
   }
 
@@ -146,7 +154,7 @@ unsigned char spr_move_right_f(void) {
   f_col = &col[sprite];
 
   ++*f_colint;
-  if (*f_colint == sprite_frames[s_class]) {
+  if (*f_colint >= sprite_frames[s_class]) {
 
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
@@ -169,7 +177,7 @@ unsigned char spr_move_right(void) {
   f_col = &col[sprite];
 
   ++*f_colint;
-  if (*f_colint == sprite_frames[s_class]) {
+  if (*f_colint >= sprite_frames[s_class]) {
 
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
@@ -193,7 +201,7 @@ unsigned char spr_move_right(void) {
 
 unsigned char spr_move_left(void) {
   --colint[sprite];
-  if (colint[sprite] == 255) {
+  if (colint[sprite] >= sprite_frames[s_class]) {
     s_lin1 = lin[sprite];
     if (col[sprite] > 0) {
 
@@ -216,7 +224,7 @@ unsigned char spr_move_left(void) {
 
 unsigned char spr_move_left_f(void) {
   --colint[sprite];
-  if (colint[sprite] == 255) {
+  if (colint[sprite] >= sprite_frames[s_class]) {
     s_lin1 = lin[sprite];
     if (col[sprite] > 0) {
       --col[sprite];
@@ -479,27 +487,25 @@ unsigned char spr_tile(unsigned char *f_sprite) __z88dk_fastcall {
   while (tmp0 < GAME_TOTAL_CLASSES) {
     tmp1 = tmp0 * 3;
     if (spr_map_tile[tmp1] == class[*f_sprite]) {
-      return spr_tile_dir(&spr_map_tile[tmp1 + 1], f_sprite,
-                          &spr_map_tile[tmp1 + 2]);
+      return spr_tile_dir(&spr_map_tile[tmp1 + 1], &spr_map_tile[tmp1 + 2]);
     }
     ++tmp0;
   }
   return 0;
 }
 
-unsigned char spr_tile_dir(unsigned char *f_tile, unsigned char *f_sprite,
-                           unsigned char *f_inc) {
+unsigned char spr_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {
 
-  if (BIT_CHK(state[*f_sprite], STAT_DIRR)) {
+  if (BIT_CHK(*p_state, STAT_DIRR)) {
     return *f_tile;
   }
-  if (BIT_CHK(state[*f_sprite], STAT_DIRL)) {
+  if (BIT_CHK(*p_state, STAT_DIRL)) {
     return *f_tile + *f_inc;
   }
-  if (BIT_CHK(state_a[*f_sprite], STAT_LDIRR)) {
+  if (BIT_CHK(*p_state_a, STAT_LDIRR)) {
     return *f_tile;
   }
-  if (BIT_CHK(state_a[*f_sprite], STAT_LDIRL)) {
+  if (BIT_CHK(*p_state_a, STAT_LDIRL)) {
     return *f_tile + *f_inc;
   }
   return *f_tile;
@@ -616,12 +622,12 @@ void spr_play_anim(void) {
 }
 
 void spr_turn_horizontal(void) {
-  if (BIT_CHK(s_state, STAT_DIRR)) {
-    spr_set_left(&s_state);
+  if (BIT_CHK(*p_state, STAT_DIRR)) {
+    spr_set_left();
   } else {
-    spr_set_right(&s_state);
+    spr_set_right();
   }
-  state[sprite] = s_state;
+  //state[sprite] = *p_state;
   tile[sprite] = spr_tile(&sprite);
 }
 

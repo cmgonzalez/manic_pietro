@@ -41,7 +41,7 @@ void main(void) {
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_debug = 1;
-  game_fps_show = 0;
+  game_fps_show = 1;
   game_world = 0;
   scr_curr = 0xFF;
   game_song_play = 1;
@@ -52,8 +52,8 @@ void main(void) {
   // ENABLE SOUND BASED ON DETECTED MODEL
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
-  game_gravity = GAME_GRAVITY;
-  player_vel_y0 = GAME_VELOCITY; // Velocity BUG 5 WILL TRIGGER SPRITE CLEAN BUG!!! NASTY
+  game_gravity = 98;//GAME_GRAVITY;
+  player_vel_y0 = -690;//GAME_VELOCITY;
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;

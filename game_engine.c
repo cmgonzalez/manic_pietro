@@ -270,7 +270,7 @@ void game_add_enemy(unsigned char enemy_tile_index) __z88dk_fastcall {
       }
       // boss_tile = TILE_ENEMY_BOSS1 + (game_world * 4);
       boss_stat = 0;
-      spr_set_up(&boss_stat);
+      spr_set_up();
       game_boss = 1;
       game_boss_hit = 6;
       game_song_play_start = 0;
@@ -440,14 +440,10 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
 
   f_tile = scr_map[*f_index];
 
-  if (f_tile == TILE_DEADLY1 || f_tile == TILE_DEADLY2) {
-    zx_border(INK_RED);
-  }
+  f_tile = player_pick_deadly(f_tile);
+  f_tile = player_pick_item(f_tile, *f_index);
 
-  if (f_tile == TILE_OBJECT) {
-    scr_map[*f_index] = TILE_EMPTY;
-    ++player_coins;
-  }
+
 
   if (f_tile != TILE_WALL) {
     return 0;

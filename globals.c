@@ -28,11 +28,7 @@ unsigned char v1;
 //###############################################################################################
 //# # # SCREEN GAME MAP
 //###############################################################################################
-/*
 
-
-
-*/
 unsigned char scr_map[512];
 unsigned char scr_curr;
 unsigned char map_width;
@@ -83,10 +79,10 @@ unsigned char obj_count;
 unsigned int player_score;    // SCORE
 unsigned char player_lives;
 unsigned char player_coins;
-signed char player_vel_x;
-signed char player_vel_y;
-signed char player_vel_y0;
+signed int player_vel_y;
+signed int player_vel_y0;
 signed char player_vel_inc;
+
 unsigned char player_keys[4];
 unsigned char player_hit_count;
 unsigned char player_jump_top;
@@ -104,6 +100,7 @@ unsigned char player_lin_scr;
 
 unsigned int  player_hit_time;
 unsigned char player_hit;
+unsigned char player_jumpcount;
 
 
 signed int    game_gravity;
@@ -161,7 +158,8 @@ unsigned char attrib6[4];
 unsigned char attrib7[4];
 unsigned char attrib8[4];
 
-unsigned char s_state;
+unsigned char *p_state;
+unsigned char *p_state_a;
 
 
 unsigned int curr_time;
