@@ -43,7 +43,6 @@ extern void             spr_init_effects(void);
 extern void             spr_btile_paint_back(void);
 extern void             spr_flatten(void);
 extern void             spr_unflattenP1(void);
-extern unsigned char    spr_colision_boss(unsigned char f_lin, unsigned char f_col);
 extern void             spr_destroy(unsigned char f_sprite) __z88dk_fastcall;
 
 

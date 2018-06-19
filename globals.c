@@ -24,6 +24,8 @@ unsigned char spec128;
 unsigned char i;
 unsigned char v0;
 unsigned char v1;
+unsigned char v2;
+unsigned char v3;
 
 //###############################################################################################
 //# # # SCREEN GAME MAP
@@ -87,14 +89,14 @@ unsigned char player_keys[4];
 unsigned char player_hit_count;
 unsigned char player_jump_top;
 // PLAYER ATTRIBUTES
-unsigned char player_vita;
 // Maximun Mana n Vitality
 unsigned char player_max_mana;
 unsigned char player_max_vita;
 
 unsigned char player_col_scr;
 unsigned char player_lin_scr;
-
+unsigned char player_killed;
+unsigned int player_kill_index;
 
 
 
@@ -105,10 +107,6 @@ unsigned char player_jumpcount;
 
 signed int    game_gravity;
 unsigned char game_world;
-unsigned char game_boss;
-unsigned char game_boss_hit;
-unsigned char game_boss_alive;
-unsigned char game_boss_fix;
 unsigned char game_song_play;
 unsigned char game_song_play_start;
 
@@ -146,6 +144,7 @@ unsigned char attrib[4];
 unsigned char attrib_hl[4];
 unsigned char attrib_red[4];
 unsigned char attrib_osd[4];
+unsigned char game_attrib_osd;
 
 //TILE ATTRIB TODO REMOVE
 unsigned char attrib0[4];
@@ -179,16 +178,6 @@ unsigned char anim_int[8];
 unsigned char anim_end[8];
 unsigned char anim_loop[8];
 unsigned char anim_respanwn[8];
-
-unsigned char boss_lin;
-unsigned char boss_col;
-unsigned char boss_inc;
-unsigned char boss_tile;
-unsigned int  boss_time;
-unsigned int  boss_time_fire;
-unsigned char boss_stat;
-
-
 
 //###############################################################################################
 //# # # GAME VARIABLES
@@ -247,7 +236,7 @@ unsigned char sprite_kind[] = {
 
 unsigned char sprite_speed[8];
 unsigned char sprite_base_speed[] = {
-    4,// PLAYER
+    4,// PLAYER TODO PIETRO 2 - WILLY 4
     4,// E_HORIZONTAL
     4,// E_HORIZONTAL
     2,// E_VERTICAL
@@ -259,8 +248,8 @@ unsigned char sprite_base_speed[] = {
 //Sprite tile and animation frames for init, used with GAME_TOTAL_CLASSES
 unsigned char spr_map_tile[] = {
   //ENEMY Class     ,TILE INDEX ,DIR INC
-  GUARDIAN_HOR1     ,144        ,4,
-  GUARDIAN_HOR2     ,144        ,4,
+  GUARDIAN_HOR1     ,144        ,4, //TODO 144 WILLY 160 PIETRO
+  GUARDIAN_HOR2     ,144        ,4, //TODO 144 WILLY 160 PIETRO
   GUARDIAN_VER_UP   ,148        ,4,
   GUARDIAN_VER_DOWN ,152        ,4,
   EUGENE            ,156        ,4,

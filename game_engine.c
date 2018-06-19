@@ -40,9 +40,6 @@ void game_loop(void) {
 
   while (!game_over) {
 
-    enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT); //TODO
-    value_a[0] = 7;//TODO
-    value_b[0] = 14;//TODO
     while (!game_round_up && !game_over) {
 
       /*Enemies turn*/
@@ -53,12 +50,12 @@ void game_loop(void) {
 
       /*Play animatios*/
       if (game_check_time(&anim_time, TIME_ANIM)) {
-        //TODO
+        // TODO
         // zx_border(INK_BLACK);
         anim_time = zx_clock();
         // if (anim_count)
         //  spr_play_anim();
-        switch (flag) {
+        switch (flag) { // TODO
         case 0:
           zx_print_str(10, 7, "rrrrrrrrrrrrrrrrrrrrr");
           flag = 1;
@@ -99,8 +96,6 @@ void game_loop(void) {
     if (game_round_up) {
       game_round_up = 0;
       game_world++;
-      game_boss_alive = 1;
-      game_boss = 0;
       scr_curr = 255;
       player_lin_scr = 0;
       player_col_scr = 0;
@@ -120,8 +115,6 @@ void game_fps(void) {
 void game_draw_screen(void) {
 
   intrinsic_halt();
-  game_boss = 0;
-  game_boss_fix = 0;
 
   spr_count = 0;
   spr_init_effects();
@@ -143,7 +136,7 @@ void game_draw_screen(void) {
   s_lin1 = 16;
   s_col1 = 0;
   obj_count = 0;
-
+  game_cls();
   NIRVANAP_stop();
   zx_print_ink(INK_BLACK);
   while (index1 < GAME_SCR_MAX_INDEX) {
@@ -163,6 +156,17 @@ void game_draw_screen(void) {
   }
   NIRVANAP_start();
   game_update_stats();
+}
+
+void game_cell_paint_index() {
+
+
+  s_col1 = index1 % 32;
+  s_lin1 = ( index1 / 32 ) * 8;
+  s_row1 = (s_lin1 >> 3) + 1;
+  s_lin1 = s_lin1 + 16;
+  game_cell_paint();
+
 }
 
 void game_cell_paint() {
@@ -237,49 +241,15 @@ void game_end() {}
 
 void game_add_enemy(unsigned char enemy_tile_index) __z88dk_fastcall {
 
-  if (enemy_tile_index != INDEX_ENEMY_BOSS1) {
-    tmp0 = 0;
-    while (tmp0 <= GAME_TOTAL_INDEX_CLASSES) {
-      tmp1 = tmp0 * 3;
-      if (spr_init[tmp1] == enemy_tile_index) {
-        enemy_init(s_lin1, s_col1, spr_init[tmp1 + 1], spr_init[tmp1 + 2]);
-        tmp0 = 0xFF;
-      } else {
-        ++tmp0;
-      }
-    }
-  } else {
-    if (game_boss == 0 && game_boss_alive) {
-      boss_lin = s_lin1;
-      boss_col = s_col1;
-      // zx_print_ink(INK_WHITE);
-      // z80_delay_ms(200);
-      switch (game_world) {
-      case 0:
-        boss_tile = TILE_ENEMY_BOSS1;
-        break;
-      case 1:
-        boss_tile = TILE_ENEMY_BOSS1 + 4 + 12;
-        break;
-      case 2:
-        boss_tile = TILE_ENEMY_BOSS1 + 8 + 12;
-        break;
-      case 3:
-        boss_tile = TILE_ENEMY_BOSS1 + 12 + 12;
-        break;
-      }
-      // boss_tile = TILE_ENEMY_BOSS1 + (game_world * 4);
-      boss_stat = 0;
-      spr_set_up();
-      game_boss = 1;
-      game_boss_hit = 6;
-      game_song_play_start = 0;
-      ay_reset();
-      audio_ingame();
+  tmp0 = 0;
+  while (tmp0 <= GAME_TOTAL_INDEX_CLASSES) {
+    tmp1 = tmp0 * 3;
+    if (spr_init[tmp1] == enemy_tile_index) {
+      enemy_init(s_lin1, s_col1, spr_init[tmp1 + 1], spr_init[tmp1 + 2]);
+      tmp0 = 0xFF;
     } else {
-      if (!game_boss)
-        game_boss_fix = 1;
-    };
+      ++tmp0;
+    }
   }
 }
 
@@ -309,46 +279,7 @@ void game_cls() {
   NIRVANAP_start();
 }
 
-void game_update_stats(void) {
-  /*
-  zx_print_ink(INK_WHITE);
-  zx_print_chr(20, 3, player_lives);
-  zx_print_chr(22, 9, player_coins);
-
-  zx_print_ink(INK_RED);
-  zx_print_chr(20, 10, player_vita);
-
-  if (game_boss) {
-    zx_print_ink(INK_MAGENTA);
-    for (tmp0 = 0; tmp0 < 6; ++tmp0) {
-      if (tmp0 < game_boss_hit) {
-        zx_print_str(19, 13 + tmp0, "*");
-      } else {
-        zx_print_str(19, 13 + tmp0, " ");
-      }
-    }
-
-    // zx_print_chr(1, 16, game_boss_hit);
-  }
-
-  if (player_keys[0]) {
-    zx_print_ink(INK_WHITE);
-    zx_print_str(22, 2, "]");
-  }
-  if (player_keys[1]) {
-    zx_print_ink(INK_RED);
-    zx_print_str(22, 3, "]");
-  }
-  if (player_keys[2]) {
-    zx_print_ink(INK_GREEN);
-    zx_print_str(22, 4, "]");
-  }
-  if (player_keys[3]) {
-    zx_print_ink(INK_CYAN);
-    zx_print_str(22, 5, "]");
-  }
-  */
-}
+void game_update_stats(void) {}
 
 void game_tick(void) {
   ++curr_time;
@@ -392,7 +323,7 @@ void game_round_init(void) {
 
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
   zx_print_ink(INK_MAGENTA);
-  //zx_print_str(22, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
+  zx_print_str(22, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
 
   game_song_play_start = 0;
 
@@ -413,6 +344,9 @@ void game_round_init(void) {
     game_colour_message(12, 6, 6 + tmp0, 200, 0);
   }
   audio_ingame();
+  enemy_init(56, 7, GUARDIAN_HOR1, DIR_RIGHT); // TODO
+  value_a[0] = 7;                              // TODO
+  value_b[0] = 14;                             // TODO
 }
 
 void game_print_header(void) {
@@ -439,11 +373,9 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
   }
 
   f_tile = scr_map[*f_index];
-
+  index1 = *f_index;
   f_tile = player_pick_deadly(f_tile);
   f_tile = player_pick_item(f_tile, *f_index);
-
-
 
   if (f_tile != TILE_WALL) {
     return 0;
@@ -509,15 +441,23 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
   }
 }
 
-void game_boss_clear() {}
-
 void game_rotate_attrib(void) {
-
+/*
   tmp_uc = attrib8[3];
   attrib8[3] = attrib8[2];
   attrib8[2] = attrib8[1];
   attrib8[1] = attrib8[0];
   attrib8[0] = tmp_uc;
+  */
+  if (game_attrib_osd == 7) {
+    game_attrib_osd = 1;
+  }
+  ++game_attrib_osd;
+  attrib8[0] = PAPER_BLACK | game_attrib_osd;
+  attrib8[1] = attrib8[0];
+  attrib8[2] = attrib8[0];
+  attrib8[3] = attrib8[0];
+
   for (tmp_uc = 0; tmp_uc < 8; ++tmp_uc) {
     if (obj_col[tmp_uc] != 0) {
       NIRVANAP_paintC(attrib8, obj_lin[tmp_uc], obj_col[tmp_uc]);
@@ -526,12 +466,23 @@ void game_rotate_attrib(void) {
 }
 
 void game_rotate_attrib_osd(void) {
-
+  /*
   tmp_uc = attrib_osd[3];
   attrib_osd[3] = attrib_osd[2];
   attrib_osd[2] = attrib_osd[1];
   attrib_osd[1] = attrib_osd[0];
   attrib_osd[0] = tmp_uc;
+  */
+  if (game_attrib_osd == 7) {
+    game_attrib_osd = 1;
+  }
+  ++game_attrib_osd;
+  attrib_osd[0] = PAPER_BLACK | game_attrib_osd;
+  attrib_osd[1] = attrib_osd[0];
+  attrib_osd[2] = attrib_osd[0];
+  attrib_osd[3] = attrib_osd[0];
+
+
 }
 
 void game_attribs() {

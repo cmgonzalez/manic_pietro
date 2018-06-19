@@ -34,7 +34,7 @@ void audio_ingame(void) {
 
   if (game_song_play && !game_song_play_start) {
     game_song_play_start = 1;
-      ay_song_play(AY_SONG_LOOP, 4, ay_song_04_ingame);
+      //ay_song_play(AY_SONG_LOOP, 4, ay_song_04_ingame);
   }
 }
 

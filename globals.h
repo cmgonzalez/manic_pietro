@@ -81,11 +81,6 @@ Offsets 607 to 615: Spare
 #define TILE_END                      96 //END OF TILES
 
 
-#define TILE_DIRT                     77 //CAN BE DESTROYED BY FIREBALLS
-#define TILE_SPECIAL                  88 //HAVE A MUSHROM VITA / MANA
-#define TILE_HIDDEN_BRICK             93 //HIDDEN TREASURE (COINS LIKE MARIO?)
-#define TILE_NORMAL_BRICK             84
-#define TILE_NOSPECIAL                79 //AFTER HIT
 
 #define TILE_HIT                      69 //UP FROM THIS CAN BE HIT BY PLAYER JUMP
 #define TILE_STOPPER                  35 //TURN ENEMY DIRECTION
@@ -114,13 +109,6 @@ Offsets 607 to 615: Spare
 #define E_EUGENE                      7
 
 
-
-//BOSSES
-#define INDEX_ENEMY_BOSS1             120
-#define TILE_ENEMY_BOSS1              200
-
-
-
 #define TILE_TITLE                    204
 #define TILE_ANIM                     128
 
@@ -138,7 +126,7 @@ Offsets 607 to 615: Spare
 
 /* Player 1 tiles */
 
-#define TILE_P1_RIGHT                 96
+#define TILE_P1_RIGHT                 96 //96 Willy 112 Pietro
 #define TILE_P1_LEN                   4 //LEN OF PLAYER SPRITES FOR EACH DIRECTION
 
 
@@ -233,6 +221,8 @@ extern unsigned char spec128;
 extern unsigned char i;
 extern unsigned char v0;
 extern unsigned char v1;
+extern unsigned char v2;
+extern unsigned char v3;
 
 extern unsigned char btiles[];
 extern uint16_t (*joyfunc1)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
@@ -271,7 +261,6 @@ extern signed char  player_vel_inc;
 
 extern unsigned char player_keys[4];
 //PLAYER ATTRIBUTES
-extern unsigned char player_vita;
 
 extern unsigned char player_max_mana;
 extern unsigned char player_max_vita;
@@ -289,10 +278,6 @@ extern unsigned char player_jumpcount;
 
 extern signed   int  game_gravity;
 extern unsigned char game_world;
-extern unsigned char game_boss;
-extern unsigned char game_boss_alive;
-extern unsigned char game_boss_hit;
-extern unsigned char game_boss_fix;
 extern unsigned char game_song_play;
 extern unsigned char game_song_play_start;
 
@@ -312,6 +297,9 @@ extern unsigned char game_fps_show;
 
 extern unsigned char player_hit_count;
 extern unsigned char player_jump_top;
+extern unsigned char player_killed;
+extern unsigned int player_kill_index;
+
 extern unsigned char s_tile0;
 extern unsigned char s_tile1;
 extern unsigned char s_lin0;
@@ -334,6 +322,7 @@ extern unsigned char zx_val_asm;
 extern unsigned char attrib[4];
 extern unsigned char attrib_hl[4];
 extern unsigned char attrib_osd[4];
+extern unsigned char game_attrib_osd;
 extern unsigned char attrib_red[4];
 
 
@@ -409,27 +398,10 @@ extern unsigned char anim_respanwn[8];
 
 extern unsigned char anim_count;
 
-
-
-
-
-extern unsigned char boss_lin;
-extern unsigned char boss_col;
-extern unsigned char boss_inc;
-extern unsigned char boss_tile;
-extern unsigned int  boss_time;
-extern unsigned int  boss_time_fire;
-extern unsigned char boss_stat;
-
-
-
 extern unsigned char map_paper;
 extern unsigned char map_paper_clr;
 extern unsigned char map_paper_last;
 extern unsigned char map_paper_last_a;
-
-
-
 
 extern unsigned char key_map[];
 extern unsigned int scan_map[];

@@ -136,15 +136,24 @@ unsigned char spr_move_down(void) {
 
 unsigned char spr_move_horizontal(void) {
 
+unsigned char l_ret;
+
   if (BIT_CHK(*p_state, STAT_DIRR)) {
-    return spr_move_right();
+    l_ret = spr_move_right();
   }
 
   if (BIT_CHK(*p_state, STAT_DIRL)) {
-    return spr_move_left();
+    l_ret = spr_move_left();
+  }
+  /* Stop horizontal if player hit walls */
+  if (sprite == SPR_P1 && l_ret) {
+    if ( BIT_CHK(*p_state, STAT_JUMP) || BIT_CHK(*p_state, STAT_FALL) ) {
+      BIT_CLR(*p_state, STAT_DIRL);
+      BIT_CLR(*p_state, STAT_DIRR);
+    }
   }
 
-  return 0;
+  return l_ret;
 }
 
 unsigned char spr_move_right_f(void) {
@@ -633,6 +642,7 @@ void spr_turn_horizontal(void) {
 }
 
 void spr_btile_paint_back() {
+/*
   unsigned char f_tile;
   unsigned char f_paper_c;
 
@@ -675,6 +685,7 @@ void spr_btile_paint_back() {
   }
   map_paper_last = map_paper;
   game_attribs();
+  */
 }
 
 void spr_flatten(void) {

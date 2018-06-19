@@ -33,8 +33,7 @@ extern unsigned char player_pick_deadly(unsigned char l_val);
 
 extern void          player_tile( unsigned char f_tile, unsigned char f_inc );
 extern unsigned char player_move_jump(void);
-extern void          player_damage(unsigned char f_val) __z88dk_fastcall;
-extern void          player_lost_life();
+extern void          player_lost_life(void);
 
 
 #endif

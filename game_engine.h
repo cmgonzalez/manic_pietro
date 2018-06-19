@@ -30,6 +30,7 @@ extern void			     game_loop(void);
 extern unsigned char game_check_map(unsigned char f_lin, unsigned char f_col);
 extern unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall;
 extern void          game_cell_paint();
+extern void          game_cell_paint_index();
 extern void			     game_print_score(void);
 extern void          game_paint_attrib( unsigned char *f_attrib[], char f_start, unsigned char f_end, unsigned char f_lin);
 extern void			     game_colour_message( unsigned char f_row, unsigned char f_col, unsigned char f_col2, unsigned int f_miliseconds, unsigned char skip);
@@ -38,6 +39,5 @@ extern void			     game_rotate_attrib_osd(void);
 extern unsigned char game_check_time(unsigned int *start, unsigned char lapse);
 extern void          game_print_header(void);
 extern void          game_add_enemy( unsigned char enemy_tile_index) __z88dk_fastcall;
-extern void          game_boss_clear( );
 extern void          game_attribs( );
 #endif

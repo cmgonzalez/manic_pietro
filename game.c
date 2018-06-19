@@ -109,7 +109,6 @@ void main(void) {
     /*Player Init*/
 
     player_lives = GAME_START_LIVES;
-    player_vita = player_max_vita;
 
     player_score = 0;
     player_coins = 0;
@@ -117,7 +116,6 @@ void main(void) {
     player_lin_scr = GAME_LIN_FLOOR - 24;
     player_col_scr = 2;
     game_round_up = 0;
-    game_boss_alive = 1;
     game_over = 0;
     dirs = 0x00;
     map_paper = PAPER_BLACK;
@@ -133,6 +131,7 @@ void main(void) {
     //spr_flatten();
     //game_update_stats();
     zx_print_str(11, 12, "DEMO OVER");
+    z80_delay_ms(250);
     game_over = 0; // Hack game_colour_message to render background
     //game_colour_message(12, 12, 12 + 9, 250, 0);
 
