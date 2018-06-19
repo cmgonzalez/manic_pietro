@@ -322,9 +322,7 @@ void game_round_init(void) {
   zx_print_ink(INK_YELLOW);
 
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
-  zx_print_ink(INK_MAGENTA);
-  zx_print_str(22, 0, "DEMO PARA EL CANAL DE JAVI ORTIZ");
-
+  
   game_song_play_start = 0;
 
   // ay_reset();
@@ -374,8 +372,8 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
 
   f_tile = scr_map[*f_index];
   index1 = *f_index;
-  f_tile = player_pick_deadly(f_tile);
-  f_tile = player_pick_item(f_tile, *f_index);
+  //f_tile = player_pick_deadly(f_tile);
+  //f_tile = player_pick_item(f_tile, *f_index);
 
   if (f_tile != TILE_WALL) {
     return 0;

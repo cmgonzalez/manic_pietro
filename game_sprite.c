@@ -146,12 +146,16 @@ unsigned char l_ret;
     l_ret = spr_move_left();
   }
   /* Stop horizontal if player hit walls */
+  /*
   if (sprite == SPR_P1 && l_ret) {
+
     if ( BIT_CHK(*p_state, STAT_JUMP) || BIT_CHK(*p_state, STAT_FALL) ) {
+      NIRVANAP_spriteT(SPR_P1,tile[SPR_P1]+colint[SPR_P1],0,0);
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
     }
   }
+  */
 
   return l_ret;
 }
@@ -191,7 +195,7 @@ unsigned char spr_move_right(void) {
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
 
-      if (game_check_map(s_lin1 + 8, *f_col + 2)) {
+      if (game_check_map(s_lin1 + 14, *f_col + 2)) {
         --*f_colint;
         return 1;
       } else {
@@ -214,7 +218,7 @@ unsigned char spr_move_left(void) {
     s_lin1 = lin[sprite];
     if (col[sprite] > 0) {
 
-      if (game_check_map(s_lin1 + 8, col[sprite] - 1)) {
+      if (game_check_map(s_lin1 + 14, col[sprite] - 1)) {
         ++colint[sprite];
         return 1;
       } else {

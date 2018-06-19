@@ -64,6 +64,42 @@ void player_turn(void) {
     s_class = 0;
     player_move();
     player_collision();
+    /*
+        index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1]);
+        v0 = scr_map[index1];
+        if (v0 != TILE_EMPTY) {
+          NIRVANAP_halt();
+          NIRVANAP_spriteT(SPR_P1,tile[SPR_P1]+colint[SPR_P1],0,0);
+          NIRVANAP_drawT(tile[SPR_P1]+colint[SPR_P1],0,0);
+          NIRVANAP_halt();
+          game_cell_paint_index();
+        }
+        ++index1;
+        v0 = scr_map[index1];
+        if (v0 != TILE_EMPTY) {
+          NIRVANAP_halt();
+          NIRVANAP_spriteT(SPR_P1,tile[SPR_P1]+colint[SPR_P1],0,0);
+          NIRVANAP_halt();
+          game_cell_paint_index();
+        }
+        index1 = index1 + 31;
+        v0 = scr_map[index1];
+        if (v0 != TILE_EMPTY) {
+          NIRVANAP_halt();
+          NIRVANAP_spriteT(SPR_P1,tile[SPR_P1]+colint[SPR_P1],0,0);
+          NIRVANAP_halt();
+          game_cell_paint_index();
+        }
+        ++index1;
+        v0 = scr_map[index1];
+        if (v0 != TILE_EMPTY) {
+          NIRVANAP_halt();
+          NIRVANAP_spriteT(SPR_P1,tile[SPR_P1]+colint[SPR_P1],0,0);
+          NIRVANAP_halt();
+          game_cell_paint_index();
+          NIRVANAP_halt();
+        }
+    */
     if (player_killed) {
       player_killed = 0;
       if (game_inmune) {
@@ -76,6 +112,32 @@ void player_turn(void) {
 }
 
 void player_collision() {
+  // Left
+  if (colint[SPR_P1] < 3) {
+    index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1]);
+    v0 = scr_map[index1];
+    v0 = player_pick_deadly(v0);
+    v0 = player_pick_item(v0, index1);
+
+    index1 = spr_calc_index(lin[SPR_P1]+16, col[SPR_P1]);
+    v0 = scr_map[index1];
+    v0 = player_pick_deadly(v0);
+    v0 = player_pick_item(v0, index1);
+  }
+
+  // Right
+  if (colint[SPR_P1] > 0) {
+    index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1] + 1);
+    v0 = scr_map[index1];
+    v0 = player_pick_deadly(v0);
+    v0 = player_pick_item(v0, index1);
+
+    index1 = spr_calc_index(lin[SPR_P1]+16, col[SPR_P1] + 1);
+    v0 = scr_map[index1];
+    v0 = player_pick_deadly(v0);
+    v0 = player_pick_item(v0, index1);
+  }
+
   for (i = 0; i < SPR_P1; ++i) {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[SPR_P1]); // TODO INCLUDE COLINT FOR BETTER
@@ -162,6 +224,8 @@ unsigned char player_move_jump(void) {
     }
     if (!player_check_ceil(s_lin1, col[SPR_P1])) {
       player_vel_y = 0;
+      BIT_CLR(*p_state, STAT_DIRR);
+      BIT_CLR(*p_state, STAT_DIRL);
     } else {
       lin[SPR_P1] = s_lin1;
     }
@@ -209,30 +273,35 @@ unsigned char player_move_walk(void) {
   if (player_check_input()) {
 
     if (dirs & IN_STICK_FIRE) {
+      // Pre CHECK
+      if (player_check_ceil(lin[SPR_P1] - 2, col[SPR_P1])) {
+        // NEW JUMP
+        player_vel_inc = 1;
+        player_jumpcount = 0xFF;
+        audio_salto();
+        spr_set_up();
+        jump_lin[SPR_P1] = lin[SPR_P1];
+        player_vel_y = player_vel_y0;
 
-      // NEW JUMP
-      player_vel_inc = 1;
-      player_jumpcount = 0xFF;
-      audio_salto();
-      spr_set_up();
-      jump_lin[SPR_P1] = lin[SPR_P1];
-      player_vel_y = player_vel_y0;
+        BIT_CLR(*p_state, STAT_DIRL);
+        BIT_CLR(*p_state, STAT_DIRR);
 
-      BIT_CLR(*p_state, STAT_DIRL);
-      BIT_CLR(*p_state, STAT_DIRR);
+        if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
+          spr_set_left();
+        } else {
 
-      if ((dirs & IN_STICK_LEFT) ||
-          BIT_CHK(
-              *p_state,
-              STAT_CONVEYOR)) { // TODO PLAYER OVER CONVEYOR (MISS CONVEYOR DIR)
-        spr_set_left();
+          if ((dirs & IN_STICK_LEFT)) { // TODO PLAYER OVER CONVEYOR (MISS
+                                        // CONVEYOR DIR)
+            spr_set_left();
+          }
+
+          if (dirs & IN_STICK_RIGHT) {
+            spr_set_right();
+          }
+        }
+
+        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
       }
-
-      if (dirs & IN_STICK_RIGHT) {
-        spr_set_right();
-      }
-
-      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
 
       return 1;
     }
@@ -299,6 +368,7 @@ unsigned char player_pick_item(unsigned char l_val, int l_index) {
     audio_coin();
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
+    zx_border(INK_YELLOW);
     return 0;
   }
   return l_val;
@@ -309,7 +379,7 @@ unsigned char player_pick_deadly(unsigned char l_val) {
   if (l_val == TILE_DEADLY1 || l_val == TILE_DEADLY2) {
     player_killed = 1;
     player_kill_index = index1;
-    // To exit from check routines
+    zx_border(INK_RED);
     v0 = TILE_EMPTY;
     v1 = TILE_EMPTY;
     return 0;
@@ -321,13 +391,6 @@ unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
   if (colint[SPR_P1] < 3) {
     index1 = spr_calc_index(f_lin, f_col);
     v0 = scr_map[index1];
-    v0 = player_pick_deadly(v0);
-    v0 = player_pick_item(v0, index1);
-
-    index1 = index1 - 32;
-    v2 = scr_map[index1];
-    v2 = player_pick_deadly(v2);
-    player_pick_item(v2, index1);
   } else {
     v0 = TILE_EMPTY;
   }
@@ -335,22 +398,17 @@ unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
   if (colint[SPR_P1] > 0) {
     index1 = spr_calc_index(f_lin, f_col + 1);
     v1 = scr_map[index1];
-    v1 = player_pick_deadly(v1);
-    v1 = player_pick_item(v1, index1);
-
-    index1 = index1 - 32;
-    v2 = scr_map[index1];
-    v2 = player_pick_deadly(v2);
-    player_pick_item(v2, index1);
   } else {
     v1 = TILE_EMPTY;
   }
 
-  if (v0 == 0 && v1 == 0) {
-    return 1;
+  if (v0 >= TILE_FLOOR && v0 <= TILE_CONVEYOR) {
+    return 0;
   }
-
-  return 0;
+  if (v1 >= TILE_FLOOR && v1 <= TILE_CONVEYOR) {
+    return 0;
+  }
+  return 1;
 }
 
 unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
@@ -358,13 +416,6 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   if (colint[SPR_P1] < 3) {
     index1 = spr_calc_index(f_lin, f_col);
     v0 = scr_map[index1];
-    v0 = player_pick_deadly(v0);
-    player_pick_item(v0, index1);
-
-    index1 = index1 + 32;
-    v2 = scr_map[index1];
-    v2 = player_pick_deadly(v2);
-    player_pick_item(v2, index1);
   } else {
     v0 = TILE_EMPTY;
   }
@@ -372,13 +423,6 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   if (colint[SPR_P1] > 0) {
     index1 = spr_calc_index(f_lin, f_col + 1);
     v1 = scr_map[index1];
-    v1 = player_pick_deadly(v1);
-    player_pick_item(v1, index1);
-
-    index1 = index1 + 32;
-    v2 = scr_map[index1];
-    v2 = player_pick_deadly(v2);
-    player_pick_item(v2, index1);
   } else {
     v1 = TILE_EMPTY;
   }
