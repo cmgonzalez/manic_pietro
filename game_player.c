@@ -389,28 +389,12 @@ unsigned char player_pick_deadly(unsigned char l_val) {
 
 unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
 
-  if (BIT_CHK(*p_state_a, STAT_DIRR) || BIT_CHK(*p_state_a, STAT_DIRL)) {
-    //With horizontal move
+
     index1 = spr_calc_index(f_lin, f_col);
     v0 = scr_map[index1];
     index1 = spr_calc_index(f_lin, f_col + 1);
     v1 = scr_map[index1];
-  } else {
-    //Falling or jumping 100% vertical
-    if (colint[SPR_P1] < 3) {
-      index1 = spr_calc_index(f_lin, f_col);
-      v0 = scr_map[index1];
-    } else {
-      v0 = TILE_EMPTY;
-    }
 
-    if (colint[SPR_P1] > 0) {
-      index1 = spr_calc_index(f_lin, f_col + 1);
-      v1 = scr_map[index1];
-    } else {
-      v1 = TILE_EMPTY;
-    }
-  }
 
   if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
     BIT_SET(*p_state, STAT_CONVEYOR);
@@ -457,13 +441,7 @@ unsigned char player_check_floor1(unsigned char f_lin, unsigned char f_col) {
   v0 = scr_map[index1];
   v1 = scr_map[index1 + 1];
 
-  if (colint[SPR_P1] == 0) {
-    v1 = 0; // HACK
-  }
-  if (colint[SPR_P1] == sprite_frames[SPR_P1] - 1) {
-    v0 = 0; // HACK
-  }
-
+  
   if (v0 == 0 && v1 == 0) {
     return 1;
   }

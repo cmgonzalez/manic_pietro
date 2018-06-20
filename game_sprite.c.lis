@@ -1918,23 +1918,23 @@
 1914  067A  35          	dec	(hl)
 1915  067B  3E 00       	ld	a, +((_lin) & 0xFF)
 1916  067D  80          	add	a, b
-1917  067E  DD 77 FC    	ld	(ix-4),a
-1918  0681  3E 00       	ld	a, +((_lin) / 256)
-1919  0683  CE 00       	adc	a,0x00
-1920  0685  DD 77 FD    	ld	(ix-3),a
-1921  0688  E1          	pop	hl
-1922  0689  7E          	ld	a,(hl)
-1923  068A  E5          	push	hl
+1917  067E  DD 77 FE    	ld	(ix-2),a
+1918  0681  6F          	ld	l,a
+1919  0682  3E 00       	ld	a,+((_lin) / 256)
+1920  0684  CE 00       	adc	a,0x00
+1921  0686  DD 77 FF    	ld	(ix-1),a
+1922  0689  67          	ld	h,a
+1923  068A  7E          	ld	a, (hl)
 1924  068B  32 00 00    	ld	(_s_lin0),a
 1925  068E  3E 00       	ld	a, +((_col) & 0xFF)
 1926  0690  80          	add	a, b
-1927  0691  DD 77 FE    	ld	(ix-2),a
-1928  0694  6F          	ld	l,a
-1929  0695  3E 00       	ld	a,+((_col) / 256)
-1930  0697  CE 00       	adc	a,0x00
-1931  0699  DD 77 FF    	ld	(ix-1),a
-1932  069C  67          	ld	h,a
-1933  069D  7E          	ld	a, (hl)
+1927  0691  DD 77 FC    	ld	(ix-4),a
+1928  0694  3E 00       	ld	a, +((_col) / 256)
+1929  0696  CE 00       	adc	a,0x00
+1930  0698  DD 77 FD    	ld	(ix-3),a
+1931  069B  E1          	pop	hl
+1932  069C  7E          	ld	a,(hl)
+1933  069D  E5          	push	hl
 1934  069E  32 00 00    	ld	(_s_col0),a
 1935  06A1  2A 00 00    	ld	hl,(_s_lin0)
 1936  06A4  C5          	push	bc
@@ -1962,14 +1962,14 @@
 1958  06C9  5F          	ld	e, a
 1959  06CA  3E 00       	ld	a, +((_tile) / 256)
 1960  06CC  CE 00       	adc	a,0x00
-1961  06CE  57          	ld	d, a
-1962  06CF  3A 00 00    	ld	a,(_s_tile0)
-1963  06D2  12          	ld	(de), a
-1964  06D3  DD 6E FE    	ld	l,(ix-2)
-1965  06D6  DD 66 FF    	ld	h,(ix-1)
-1966  06D9  36 00       	ld	(hl),0x00
-1967  06DB  E1          	pop	hl
-1968  06DC  E5          	push	hl
+1961  06CE  E1          	pop	hl
+1962  06CF  57          	ld	d,a
+1963  06D0  3A 00 00    	ld	a,(_s_tile0)
+1964  06D3  12          	ld	(de),a
+1965  06D4  E5          	push	hl
+1966  06D5  36 00       	ld	(hl),0x00
+1967  06D7  DD 6E FE    	ld	l,(ix-2)
+1968  06DA  DD 66 FF    	ld	h,(ix-1)
 1969  06DD  36 00       	ld	(hl),0x00
 1970  06DF  11 00 00    	ld	de,_class+0
 1971  06E2  68          	ld	l,b
@@ -2323,7 +2323,7 @@
 2319  08FB  CE 00       	adc	a,0x00
 2320  08FD  57          	ld	d, a
 2321  08FE  1A          	ld	a, (de)
-2322  08FF  DD 77 FD    	ld	(ix-3),a
+2322  08FF  DD 77 FA    	ld	(ix-6),a
 2323  0902  3C          	inc	a
 2324  0903  CA D2 09    	jp	Z,l_spr_play_anim_00115
 2325  0906  3E 00       	ld	a, +((_anim_int) & 0xFF)
@@ -2379,7 +2379,7 @@
 2375  095A  21 00 00    	ld	hl,_anim_loop
 2376  095D  09          	add	hl, bc
 2377  095E  7E          	ld	a, (hl)
-2378  095F  DD 77 FC    	ld	(ix-4),a
+2378  095F  DD 77 FD    	ld	(ix-3),a
 2379  0962  B7          	or	a, a
 2380  0963  20 60       	jr	NZ,l_spr_play_anim_00106
 2381  0965  21 00 00    	ld	hl,_anim_count
@@ -2389,7 +2389,7 @@
 2385  096E  09          	add	hl, bc
 2386  096F  7E          	ld	a, (hl)
 2387  0970  32 00 00    	ld	(_s_col0),a
-2388  0973  DD 7E FD    	ld	a,(ix-3)
+2388  0973  DD 7E FA    	ld	a,(ix-6)
 2389  0976  32 00 00    	ld	(_s_lin0),a
 2390  0979  3A 00 00    	ld	a,(_s_col0)
 2391  097C  2A 00 00    	ld	hl,(_s_lin0)
@@ -2399,28 +2399,28 @@
 2395  0982  E5          	push	hl
 2396  0983  CD 00 00    	call	_spr_calc_index
 2397  0986  F1          	pop	af
-2398  0987  DD 74 FB    	ld	(ix-5),h
-2399  098A  DD 75 FA    	ld	(ix-6),l
+2398  0987  DD 74 FC    	ld	(ix-4),h
+2399  098A  DD 75 FB    	ld	(ix-5),l
 2400  098D  D1          	pop	de
 2401  098E  C1          	pop	bc
-2402  098F  DD 6E FA    	ld	l,(ix-6)
-2403  0992  DD 66 FB    	ld	h,(ix-5)
+2402  098F  DD 6E FB    	ld	l,(ix-5)
+2403  0992  DD 66 FC    	ld	h,(ix-4)
 2404  0995  22 00 00    	ld	(_index0),hl
 2405  0998  3E 00       	ld	a,+((_scr_map) & 0xFF)
 2406  099A  21 00 00    	ld	hl,_index0
 2407  099D  86          	add	a, (hl)
-2408  099E  DD 77 FA    	ld	(ix-6),a
+2408  099E  DD 77 FB    	ld	(ix-5),a
 2409  09A1  3E 00       	ld	a, +((_scr_map) / 256)
 2410  09A3  23          	inc	hl
 2411  09A4  8E          	adc	a, (hl)
-2412  09A5  DD 6E FA    	ld	l,(ix-6)
-2413  09A8  DD 77 FB    	ld	(ix-5),a
+2412  09A5  DD 6E FB    	ld	l,(ix-5)
+2413  09A8  DD 77 FC    	ld	(ix-4),a
 2414  09AB  67          	ld	h,a
 2415  09AC  7E          	ld	a, (hl)
 2416  09AD  D6 80       	sub	a,0x80
 2417  09AF  38 08       	jr	C,l_spr_play_anim_00104
-2418  09B1  DD 6E FA    	ld	l,(ix-6)
-2419  09B4  DD 66 FB    	ld	h,(ix-5)
+2418  09B1  DD 6E FB    	ld	l,(ix-5)
+2419  09B4  DD 66 FC    	ld	h,(ix-4)
 2420  09B7  36 00       	ld	(hl),0x00
 2421  09B9              l_spr_play_anim_00104:
 2422  09B9  C5          	push	bc
@@ -2432,7 +2432,7 @@
 2428  09C2  12          	ld	(de), a
 2429  09C3  18 0D       	jr	l_spr_play_anim_00115
 2430  09C5              l_spr_play_anim_00106:
-2431  09C5  DD 46 FC    	ld	b,(ix-4)
+2431  09C5  DD 46 FD    	ld	b,(ix-3)
 2432  09C8  05          	dec	b
 2433  09C9  70          	ld	(hl), b
 2434  09CA  DD 6E FE    	ld	l,(ix-2)
