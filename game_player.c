@@ -119,7 +119,7 @@ void player_collision() {
     v0 = player_pick_deadly(v0);
     v0 = player_pick_item(v0, index1);
 
-    index1 = spr_calc_index(lin[SPR_P1]+16, col[SPR_P1]);
+    index1 = spr_calc_index(lin[SPR_P1] + 14, col[SPR_P1]);
     v0 = scr_map[index1];
     v0 = player_pick_deadly(v0);
     v0 = player_pick_item(v0, index1);
@@ -132,7 +132,7 @@ void player_collision() {
     v0 = player_pick_deadly(v0);
     v0 = player_pick_item(v0, index1);
 
-    index1 = spr_calc_index(lin[SPR_P1]+16, col[SPR_P1] + 1);
+    index1 = spr_calc_index(lin[SPR_P1] + 14, col[SPR_P1] + 1);
     v0 = scr_map[index1];
     v0 = player_pick_deadly(v0);
     v0 = player_pick_item(v0, index1);
@@ -290,8 +290,7 @@ unsigned char player_move_walk(void) {
           spr_set_left();
         } else {
 
-          if ((dirs & IN_STICK_LEFT)) { // TODO PLAYER OVER CONVEYOR (MISS
-                                        // CONVEYOR DIR)
+          if (dirs & IN_STICK_LEFT) {
             spr_set_left();
           }
 
@@ -386,20 +385,37 @@ unsigned char player_pick_deadly(unsigned char l_val) {
   }
   return l_val;
 }
+
+
 unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
 
-  if (colint[SPR_P1] < 3) {
+  if (BIT_CHK(*p_state_a, STAT_DIRR) || BIT_CHK(*p_state_a, STAT_DIRL)) {
+    //With horizontal move
     index1 = spr_calc_index(f_lin, f_col);
     v0 = scr_map[index1];
-  } else {
-    v0 = TILE_EMPTY;
-  }
-
-  if (colint[SPR_P1] > 0) {
     index1 = spr_calc_index(f_lin, f_col + 1);
     v1 = scr_map[index1];
   } else {
-    v1 = TILE_EMPTY;
+    //Falling or jumping 100% vertical
+    if (colint[SPR_P1] < 3) {
+      index1 = spr_calc_index(f_lin, f_col);
+      v0 = scr_map[index1];
+    } else {
+      v0 = TILE_EMPTY;
+    }
+
+    if (colint[SPR_P1] > 0) {
+      index1 = spr_calc_index(f_lin, f_col + 1);
+      v1 = scr_map[index1];
+    } else {
+      v1 = TILE_EMPTY;
+    }
+  }
+
+  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+    BIT_SET(*p_state, STAT_CONVEYOR);
+  } else {
+    BIT_CLR(*p_state, STAT_CONVEYOR);
   }
 
   if (v0 >= TILE_FLOOR && v0 <= TILE_CONVEYOR) {
