@@ -19,3 +19,7 @@ SECTION BANK_4_AUDIO
 PUBLIC _ay_song_04_ingame
 _ay_song_04_ingame:
   BINARY "songs/Davos_MOZART.pt3"
+
+PUBLIC _ay_song_04_ingame0
+_ay_song_04_ingame0:
+  BINARY "songs/pietro_cavern.pt3"

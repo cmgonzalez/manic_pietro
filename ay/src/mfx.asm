@@ -2,7 +2,7 @@
 
 ; mFX Player v0.1
 ; by Intense in 2017
-; 
+;
 ; A sound effect player intended for simultaneous AY music+fx.
 ; Uses sound effects authored with Shiru's AyFxEdit.
 ; Uses a single redefinable AY channel for playback.
@@ -36,7 +36,7 @@
 ; Values are 0 for channel A, 1 for channel B, 2 for channel C
 ; Default: 1
 
-defc mfxAyChannel = 2
+defc mfxAyChannel = 1ı
 
 
 

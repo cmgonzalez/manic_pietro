@@ -49,6 +49,7 @@ extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 //BANK_4
 
 extern unsigned char ay_song_04_ingame[];
+extern unsigned char ay_song_04_ingame0[];
 
 //BANK_6
 extern unsigned char ay_song_06_lotr_lose_a_life[];

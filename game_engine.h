@@ -18,7 +18,7 @@
 #define GAME_GAME_H
 
 #include "globals.h"
-extern void          game_draw_screen(void);
+extern void          game_draw_map(void);
 extern void          game_fps(void);
 extern void          game_cls(void);
 extern void          game_fill_row(unsigned char f_row, unsigned char f_asc) __z88dk_callee;
@@ -40,4 +40,6 @@ extern unsigned char game_check_time(unsigned int *start, unsigned char lapse);
 extern void          game_print_header(void);
 extern void          game_add_enemy( unsigned char enemy_tile_index) __z88dk_fastcall;
 extern void          game_attribs( );
+extern void          game_page_map(void);
+
 #endif

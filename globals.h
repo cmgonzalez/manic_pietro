@@ -157,6 +157,7 @@ Offsets 607 to 615: Spare
 /* Starting positions*/
 #define DIR_LEFT                      255
 #define DIR_RIGHT                     1
+
 #define DIR_NONE                      0
 
 /*Stats (bit position number)*/
@@ -198,6 +199,8 @@ Offsets 607 to 615: Spare
 /* Game times */
 #define TIME_EVENT                    100
 #define TIME_ANIM                     8
+#define TIME_ROTATE                   6
+
 #define TIME_ANIM_PLAYER_EXPODE       12
 #define GAME_RANDOM_TYPE              2
 
@@ -280,6 +283,10 @@ extern signed   int  game_gravity;
 extern unsigned char game_world;
 extern unsigned char game_song_play;
 extern unsigned char game_song_play_start;
+extern unsigned char game_conveyor_dir;
+extern unsigned char game_conveyor_lin;
+extern unsigned char game_conveyor_col0;
+extern unsigned char game_conveyor_col1;
 
 
 extern unsigned char game_round_up;
@@ -340,10 +347,22 @@ extern unsigned char attrib8[4];
 
 extern unsigned char *p_state;
 extern unsigned char *p_state_a;
+//TODO REVIEW 128 bytes! needs loop on final target without udg's
+extern unsigned char conv0[];
+extern unsigned char conv1[];
+extern unsigned char conv2[];
+extern unsigned char conv3[];
+extern unsigned char game_conveyor_flag;
+
+
+
 
 extern unsigned int curr_time;
 extern unsigned int frame_time;
 extern unsigned int anim_time;
+extern unsigned int rotate_time;
+extern unsigned char last_rotated;
+
 extern unsigned char spr_count;
 extern unsigned char sprite_curr_index;
 
@@ -375,7 +394,8 @@ extern unsigned char sprite_kind[];
 
 
 //Bank 6 Level Data
-extern const unsigned char scr_map06[];
+extern const unsigned char world0[];
+extern const unsigned char lenght0[];
 /*
 extern const unsigned char start_scr0[];
 extern const unsigned char lenght0[];

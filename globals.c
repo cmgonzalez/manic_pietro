@@ -109,6 +109,10 @@ signed int    game_gravity;
 unsigned char game_world;
 unsigned char game_song_play;
 unsigned char game_song_play_start;
+unsigned char game_conveyor_dir;
+unsigned char game_conveyor_lin;
+unsigned char game_conveyor_col0;
+unsigned char game_conveyor_col1;
 
 
 unsigned char game_round_up;
@@ -160,10 +164,20 @@ unsigned char attrib8[4];
 unsigned char *p_state;
 unsigned char *p_state_a;
 
+//TODO REVIEW
+unsigned char conv0[31];
+unsigned char conv1[31];
+unsigned char conv2[31];
+unsigned char conv3[31];
+unsigned char game_conveyor_flag;
+
 
 unsigned int curr_time;
 unsigned int frame_time;
 unsigned int anim_time;
+unsigned int rotate_time;
+unsigned char last_rotated;
+
 
 unsigned char anim_count;
 

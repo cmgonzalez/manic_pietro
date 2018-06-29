@@ -57,7 +57,6 @@ void spr_set_left() {
 
   BIT_CLR(*p_state, STAT_DIRR);
   BIT_SET(*p_state, STAT_DIRL);
-
 }
 void spr_set_right() {
   BIT_CLR(*p_state_a, STAT_LDIRL);
@@ -65,7 +64,6 @@ void spr_set_right() {
 
   BIT_CLR(*p_state, STAT_DIRL);
   BIT_SET(*p_state, STAT_DIRR);
-
 }
 
 unsigned char spr_move_up(void) {
@@ -135,7 +133,7 @@ unsigned char spr_move_down(void) {
 
 unsigned char spr_move_horizontal(void) {
 
-unsigned char l_ret;
+  unsigned char l_ret;
 
   if (BIT_CHK(*p_state, STAT_DIRR)) {
     l_ret = spr_move_right();
@@ -277,137 +275,7 @@ void spr_clear_scr() {
   intrinsic_ei();
 }
 
-void spr_page_map(void) {
-  unsigned char val;
-  unsigned int l_index;
 
-  // Read Player start screen on world map
-  l_index = 0;
-  while (l_index < 512) {
-    /* code */
-    intrinsic_di();
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-    IO_7FFD = 0x10 + 6;
-    val = scr_map06[l_index];
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-    IO_7FFD = 0x10 + 0;
-    intrinsic_ei();
-    scr_map[l_index] = val;
-    ++l_index;
-  }
-
-  /*
-    unsigned char v0;
-    unsigned char v1;
-    unsigned char vr;
-    unsigned char i;
-    unsigned char j;
-    unsigned char k;
-    unsigned int add_index;
-    unsigned int start_index;
-    unsigned char l_world;
-    unsigned char l_world_w;
-    unsigned char l_world_h;
-    unsigned char l_paper;
-    unsigned char l_scr;
-    unsigned char l_scr_map;
-
-    l_world = game_world;
-    l_scr = scr_curr;
-    l_scr_map = (l_world << 4) + l_scr;
-
-    k = 16;
-
-    spr_clear_scr();
-    intrinsic_di();
-    // Read Player start screen on world map
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-    IO_7FFD = 0x10 + 6;
-
-    if (l_scr == 255) {
-      l_scr = start_scr0[l_world];
-      l_scr_map = (l_world << 4) + l_scr;
-    }
-    l_paper = paper0[l_scr_map];
-    l_world_w = world0_w[l_world];
-    l_world_h = world0_h[l_world];
-
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-    IO_7FFD = 0x10 + 0;
-
-    // Calculate the current screen start index in the world map
-    j = 0;
-    start_index = 0;
-    add_index = 0;
-
-    while (j < l_scr_map) {
-      GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-      IO_7FFD = 0x10 + 6;
-      add_index = lenght0[j]; // TODO n LEVELS
-      GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-      IO_7FFD = 0x10 + 0;
-      start_index = start_index + add_index;
-      ++j;
-    }
-    intrinsic_ei();
-
-    intrinsic_di();
-    for (i = 0; i < GAME_SCR_MAX_INDEX; ++i) {
-
-      // Page in BANK 06 - Note that global variables are in page 0
-      GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-      IO_7FFD = 0x10 + 6;
-      v0 = world0[start_index + i];     // TODO n LEVELS
-      v1 = world0[start_index + i + 1]; // TODO n LEVELS
-      // Page in BANK 00
-      GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-      IO_7FFD = 0x10 + 0;
-
-      // REMEMBER OBJECT PICK
-      if (v0 < 128) {
-          scr_map[k + 1] = TILE_EMPTY;
-          scr_map[k] = game_match_back(k); // TILE_EMPTY;
-        ++k;
-      } else {
-        vr = v0 - 128; // Repeat counter Should be < 128!!
-
-        for (j = 0; j < vr; j++) {
-
-            scr_map[k + 1] = TILE_EMPTY;
-            scr_map[k] = game_match_back(k); // TILE_EMPTY;
-
-
-          ++k;
-          if (k >= GAME_SCR_MAX_INDEX) {
-            break;
-          }
-        }
-        ++i;
-      }
-      if (k >= GAME_SCR_MAX_INDEX) {
-        break;
-      }
-    }
-
-    scr_curr = l_scr;
-    map_width = l_world_w;
-    map_heigth = l_world_h;
-    map_paper = l_paper;
-
-    spr_init_effects();
-    if (map_paper_last != map_paper) {
-      spr_btile_paint_back();
-    }
-
-    intrinsic_ei();
-    NIRVANAP_start();
-    zx_print_ink(INK_YELLOW);
-    if (game_debug) {
-      zx_print_str(23, 12, "SCR:");
-      zx_print_chr(23, 12 + 4, scr_curr);
-    }
-    */
-}
 
 unsigned char spr_paint_player(void) {
   /* Parpadeo
@@ -542,15 +410,15 @@ void spr_back_repaint(void) {
   index1--;
   s_col1--;
   game_cell_paint();
-  //TODO PERFORMANCE
-  //if ( (s_lin0 >> 3) != 0 ) {
-    s_lin1 = s_lin1 + 8;
-    s_row1++;
-    index1 = index1 + 32;
-    game_cell_paint();
-    index1++;
-    s_col1++;
-    game_cell_paint();
+  // TODO PERFORMANCE
+  // if ( (s_lin0 >> 3) != 0 ) {
+  s_lin1 = s_lin1 + 8;
+  s_row1++;
+  index1 = index1 + 32;
+  game_cell_paint();
+  index1++;
+  s_col1++;
+  game_cell_paint();
   //}
 }
 
@@ -640,55 +508,55 @@ void spr_turn_horizontal(void) {
   } else {
     spr_set_right();
   }
-  //state[sprite] = *p_state;
+  // state[sprite] = *p_state;
   tile[sprite] = spr_tile(&sprite);
 }
 
 void spr_btile_paint_back() {
-/*
-  unsigned char f_tile;
-  unsigned char f_paper_c;
+  /*
+    unsigned char f_tile;
+    unsigned char f_paper_c;
 
-  f_tile = 0;
-  tmp_ui = 32;
-  map_paper_clr = map_paper | (map_paper >> 3);
-  while (tmp_ui < (32 + (48 * 12 * 20))) { // 12*20 btiles
-    if ((f_tile < 73 && f_tile != 13 && f_tile != 14) ||
-        (f_tile >
-         TILE_SPECIAL)) { // TODO AN ARRAY WILL BE A MORE ELEGANT SOLUTION
+    f_tile = 0;
+    tmp_ui = 32;
+    map_paper_clr = map_paper | (map_paper >> 3);
+    while (tmp_ui < (32 + (48 * 12 * 20))) { // 12*20 btiles
+      if ((f_tile < 73 && f_tile != 13 && f_tile != 14) ||
+          (f_tile >
+           TILE_SPECIAL)) { // TODO AN ARRAY WILL BE A MORE ELEGANT SOLUTION
 
-      // f_half = 0;
-      tmp0 = 0;
-      f_paper_c = map_paper_last;
+        // f_half = 0;
+        tmp0 = 0;
+        f_paper_c = map_paper_last;
 
-      if ((f_tile > 56 && f_tile < 65) || (f_tile > 16 && f_tile < 20)) {
-        if (map_paper == PAPER_RED) {
-          tmp0 = 16;
-          map_paper_last_a = map_paper_last;
+        if ((f_tile > 56 && f_tile < 65) || (f_tile > 16 && f_tile < 20)) {
+          if (map_paper == PAPER_RED) {
+            tmp0 = 16;
+            map_paper_last_a = map_paper_last;
+          }
+          if (map_paper_last == PAPER_RED) {
+            f_paper_c = map_paper_last_a;
+          }
         }
-        if (map_paper_last == PAPER_RED) {
-          f_paper_c = map_paper_last_a;
+
+        while (tmp0 < 16) {
+          tmp = PEEK(&btiles + tmp_ui + tmp0);
+          if ((tmp & 0x38) == f_paper_c) { // 00111000
+            tmp = tmp & 0xC7;              // 11000111
+            tmp = tmp | map_paper; // TODO we can hava a map array for ink to
+                                   // prevent using the same paper n ink
+            POKE(&btiles + tmp_ui + tmp0, tmp);
+          }
+          ++tmp0;
+          // if ( f_half & tmp0 == 8 ) tmp0 = 12;
         }
       }
-
-      while (tmp0 < 16) {
-        tmp = PEEK(&btiles + tmp_ui + tmp0);
-        if ((tmp & 0x38) == f_paper_c) { // 00111000
-          tmp = tmp & 0xC7;              // 11000111
-          tmp = tmp | map_paper; // TODO we can hava a map array for ink to
-                                 // prevent using the same paper n ink
-          POKE(&btiles + tmp_ui + tmp0, tmp);
-        }
-        ++tmp0;
-        // if ( f_half & tmp0 == 8 ) tmp0 = 12;
-      }
+      tmp_ui = tmp_ui + 48;
+      ++f_tile;
     }
-    tmp_ui = tmp_ui + 48;
-    ++f_tile;
-  }
-  map_paper_last = map_paper;
-  game_attribs();
-  */
+    map_paper_last = map_paper;
+    game_attribs();
+    */
 }
 
 void spr_flatten(void) {

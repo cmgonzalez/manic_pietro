@@ -43,7 +43,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0xFF;
+  scr_curr = 0;//0xFF;
   game_song_play = 1;
 
   // INTERRUPTS ARE DISABLED
@@ -106,20 +106,7 @@ void main(void) {
   while (1) {
 
 
-    /*Player Init*/
 
-    player_lives = GAME_START_LIVES;
-
-    player_score = 0;
-    player_coins = 0;
-
-    player_lin_scr = GAME_LIN_FLOOR - 24;
-    player_col_scr = 2;
-    game_round_up = 0;
-    game_over = 0;
-    dirs = 0x00;
-    map_paper = PAPER_BLACK;
-    spr_btile_paint_back();
     // MENU
     if (!game_debug) {
       menu_main();
@@ -136,8 +123,7 @@ void main(void) {
     //game_colour_message(12, 12, 12 + 9, 250, 0);
 
     //spr_clear_scr();
-    game_world = 0;
-    scr_curr = 0xFF;
+    
     for (i = 0; i <= SPR_P1; ++i){
       NIRVANAP_spriteT(i,0,0,0);
     }

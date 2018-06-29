@@ -34,7 +34,6 @@ extern unsigned char    spr_paint_player(void);
 extern unsigned char    spr_tile(unsigned char *f_sprite) __z88dk_fastcall;
 extern unsigned char    spr_tile_dir(unsigned char *f_tile, unsigned char *f_inc);
 extern void             spr_back_repaint(void);
-extern void             spr_page_map(void);
 extern void             spr_clear_scr(void);
 extern void             spr_add_anim( unsigned char f_lin, unsigned char f_col, unsigned char f_tile, unsigned char f_end, unsigned char f_loops );
 extern void             spr_play_anim(void);

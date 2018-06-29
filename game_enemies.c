@@ -219,8 +219,9 @@ void enemy_init(unsigned char f_lin, unsigned char f_col, unsigned char f_class,
   }
 
   // Out of sprites
+  sprite = 0xFF;
   if (f_sprite < SPR_P1) {
-
+    sprite = f_sprite;
     class[f_sprite] = f_class;
     sprite_speed[f_sprite] = sprite_base_speed[f_class];
 

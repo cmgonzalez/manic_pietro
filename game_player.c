@@ -113,7 +113,7 @@ void player_turn(void) {
 
 void player_collision() {
   // Left
-  if (colint[SPR_P1] < 3) {
+  //if (colint[SPR_P1] < 3) {
     index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1]);
     v0 = scr_map[index1];
     v0 = player_pick_deadly(v0);
@@ -123,10 +123,10 @@ void player_collision() {
     v0 = scr_map[index1];
     v0 = player_pick_deadly(v0);
     v0 = player_pick_item(v0, index1);
-  }
+  //}
 
   // Right
-  if (colint[SPR_P1] > 0) {
+  //if (colint[SPR_P1] > 0) {
     index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1] + 1);
     v0 = scr_map[index1];
     v0 = player_pick_deadly(v0);
@@ -136,8 +136,8 @@ void player_collision() {
     v0 = scr_map[index1];
     v0 = player_pick_deadly(v0);
     v0 = player_pick_item(v0, index1);
-  }
-
+  //}
+// Sprite Collision
   for (i = 0; i < SPR_P1; ++i) {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[SPR_P1]); // TODO INCLUDE COLINT FOR BETTER
@@ -151,6 +151,7 @@ void player_collision() {
       }
     }
   }
+
 }
 
 unsigned char player_move(void) {
@@ -364,11 +365,13 @@ void player_score_add(unsigned int f_score) __z88dk_fastcall {
 unsigned char player_pick_item(unsigned char l_val, int l_index) {
 
   if (l_val == TILE_OBJECT) {
-    audio_coin();
+
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
+    zx_print_chr(21,0,player_coins);
     zx_border(INK_YELLOW);
-    return 0;
+    audio_coin();
+    return TILE_EMPTY;
   }
   return l_val;
 }
@@ -386,15 +389,12 @@ unsigned char player_pick_deadly(unsigned char l_val) {
   return l_val;
 }
 
-
 unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
 
-
-    index1 = spr_calc_index(f_lin, f_col);
-    v0 = scr_map[index1];
-    index1 = spr_calc_index(f_lin, f_col + 1);
-    v1 = scr_map[index1];
-
+  index1 = spr_calc_index(f_lin, f_col);
+  v0 = scr_map[index1];
+  index1 = spr_calc_index(f_lin, f_col + 1);
+  v1 = scr_map[index1];
 
   if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
     BIT_SET(*p_state, STAT_CONVEYOR);
@@ -441,7 +441,6 @@ unsigned char player_check_floor1(unsigned char f_lin, unsigned char f_col) {
   v0 = scr_map[index1];
   v1 = scr_map[index1 + 1];
 
-  
   if (v0 == 0 && v1 == 0) {
     return 1;
   }
