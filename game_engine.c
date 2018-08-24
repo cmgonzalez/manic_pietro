@@ -46,13 +46,10 @@ void game_loop(void) {
 
   game_round_init();
 
-
   while (!game_over) {
     /*Player Init*/
 
-
     dirs = 0x00;
-
 
     while (!game_round_up && !game_over) {
 
@@ -72,7 +69,7 @@ void game_loop(void) {
         }
       }
 
-    game_rotate_attrib();
+      game_rotate_attrib();
 
       /*Each second aprox - update fps/score/phase left/phase advance*/
       if (game_check_time(&frame_time, TIME_EVENT)) {
@@ -85,7 +82,6 @@ void game_loop(void) {
 
       ++loop_count;
       ++fps;
-
 
       if (obj_count == player_coins) {
         game_over = 1;
@@ -156,10 +152,18 @@ void game_draw_map(void) {
         game_conveyor_col1 = index1 % 32; // TODO OPTIMIZE
 
         for (i = 0; i < (game_conveyor_col1 - game_conveyor_col0); ++i) {
-          conv0[i] = 'r';
-          conv1[i] = 'q';
-          conv2[i] = 'p';
-          conv3[i] = 'l';
+          if (game_conveyor_dir == DIR_LEFT) {
+            conv0[i] = 'r';
+            conv1[i] = 'q';
+            conv2[i] = 'p';
+            conv3[i] = 'l';
+          } else {
+            conv0[i] = 'l';
+            conv1[i] = 'p';
+            conv2[i] = 'q';
+            conv3[i] = 'r';
+          }
+
         }
         conv0[i] = 0;
         conv1[i] = 0;
@@ -169,15 +173,15 @@ void game_draw_map(void) {
       if (scr_map[index1] == TILE_CONVEYOR) {
         if (game_conveyor_col0 == 0) {
           game_conveyor_col0 = index1 % 32;      // TODO OPTIMIZE
-          game_conveyor_lin =  1+(index1 / 32); // TODO OPTIMIZE
-        }
+          game_conveyor_lin = 1 + (index1 / 32); // TODO OPTIMIZE
 
-        if (scr_map[index1 + 1]) {
-          game_conveyor_dir = DIR_RIGHT;
-        } else {
-          game_conveyor_dir = DIR_LEFT;
+          if (scr_map[index1 + 1]) {
+            game_conveyor_dir = DIR_LEFT;
+          } else {
+            game_conveyor_dir = DIR_RIGHT;
+          }
+          scr_map[index1 + 1] = TILE_CONVEYOR;
         }
-        scr_map[index1 + 1] == TILE_CONVEYOR;
       }
 
       game_cell_paint();
@@ -218,7 +222,9 @@ void game_cell_paint_index() {
 }
 
 void game_cell_paint() {
-  unsigned char *f_attrib;
+  //unsigned char *f_attrib;
+    game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  /*
   switch (scr_map[index1]) {
   case TILE_EMPTY:
     zx_print_str(s_row1, s_col1, "a");
@@ -283,6 +289,7 @@ void game_cell_paint() {
   }
 
   NIRVANAP_paintC(f_attrib, s_lin1, s_col1);
+  */
 }
 
 void game_end() {}
@@ -305,7 +312,7 @@ void game_print_footer(void) {
 
   if (game_fps_show) {
     /* phase osd bottom*/
-    zx_print_ink(INK_WHITE);
+    zx_print_ink(INK_WHITE | PAPER_BLACK);
     zx_print_str(23, 20, "LPS:");
   }
   game_update_stats();
@@ -371,6 +378,9 @@ void game_round_init(void) {
   player_coins = 0;
   game_conveyor_flag = 0;
 
+  //Fill top LINE
+
+
   /* Phase Draw Start */
   // spr_draw_clear();
   /*Draw Platforms*/
@@ -414,6 +424,12 @@ void game_round_init(void) {
   }
   audio_ingame();
   spr_btile_paint_back();
+
+  zx_print_ink(INK_RED | PAPER_RED);
+
+  zx_print_str(0,0,"                                ");
+  zx_border(INK_RED);
+  zx_print_ink(INK_WHITE | PAPER_BLACK);
 }
 
 void game_print_header(void) {
@@ -510,10 +526,9 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
 
 void game_rotate_attrib(void) {
 
-
-if (last_rotated > 7) {
-  last_rotated = 0;
-}
+  if (last_rotated > 7) {
+    last_rotated = 0;
+  }
 
   for (tmp_uc = last_rotated; tmp_uc < 8; ++tmp_uc) {
     if (obj_col[tmp_uc] > 0) {
@@ -528,23 +543,15 @@ if (last_rotated > 7) {
       attrib8[2] = attrib8[0];
       attrib8[3] = attrib8[0];
 
-      tmp_uc = 8; //Exit loop
+      tmp_uc = 8; // Exit loop
     } else {
       ++last_rotated;
     }
   }
-
-
 }
 
 void game_rotate_attrib_osd(void) {
-  /*
-  tmp_uc = attrib_osd[3];
-  attrib_osd[3] = attrib_osd[2];
-  attrib_osd[2] = attrib_osd[1];
-  attrib_osd[1] = attrib_osd[0];
-  attrib_osd[0] = tmp_uc;
-  */
+
   if (game_attrib_osd == 7) {
     game_attrib_osd = 1;
   }

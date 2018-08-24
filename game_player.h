@@ -23,8 +23,8 @@ extern unsigned char player_move(void);
 extern void          player_turn(void);
 extern unsigned char player_move_walk(void);
 extern void          player_score_add(unsigned int f_score) __z88dk_fastcall;
-extern unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col);
-extern unsigned char player_check_floor1(unsigned char f_lin, unsigned char f_col);
+extern unsigned char player_check_floor_jump(unsigned char f_lin, unsigned char f_col);
+extern unsigned char player_check_floor_walk(unsigned char f_lin, unsigned char f_col);
 extern unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col);
 
 extern unsigned char player_pick_item(unsigned char l_val, int l_index);

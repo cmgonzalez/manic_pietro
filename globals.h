@@ -360,7 +360,6 @@ extern unsigned char game_conveyor_flag;
 extern unsigned int curr_time;
 extern unsigned int frame_time;
 extern unsigned int anim_time;
-extern unsigned int rotate_time;
 extern unsigned char last_rotated;
 
 extern unsigned char spr_count;

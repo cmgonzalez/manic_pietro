@@ -51,7 +51,7 @@ void player_init(unsigned char f_lin, unsigned char f_col,
 void player_turn(void) {
   if (spr_chktime(&sprite)) {
 
-    zx_border(INK_BLACK); // TODO REMOVE ME ONLY FOR COLISION DETECTION
+    zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
     dirs = (joyfunc1)(&k1);
     /* Player initial Values */
     p_state = &state[SPR_P1];
@@ -113,31 +113,31 @@ void player_turn(void) {
 
 void player_collision() {
   // Left
-  //if (colint[SPR_P1] < 3) {
-    index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1]);
-    v0 = scr_map[index1];
-    v0 = player_pick_deadly(v0);
-    v0 = player_pick_item(v0, index1);
+  // if (colint[SPR_P1] < 3) {
+  index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1]);
+  v0 = scr_map[index1];
+  v0 = player_pick_deadly(v0);
+  v0 = player_pick_item(v0, index1);
 
-    index1 = spr_calc_index(lin[SPR_P1] + 14, col[SPR_P1]);
-    v0 = scr_map[index1];
-    v0 = player_pick_deadly(v0);
-    v0 = player_pick_item(v0, index1);
+  index1 = spr_calc_index(lin[SPR_P1] + 14, col[SPR_P1]);
+  v0 = scr_map[index1];
+  v0 = player_pick_deadly(v0);
+  v0 = player_pick_item(v0, index1);
   //}
 
   // Right
-  //if (colint[SPR_P1] > 0) {
-    index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1] + 1);
-    v0 = scr_map[index1];
-    v0 = player_pick_deadly(v0);
-    v0 = player_pick_item(v0, index1);
+  // if (colint[SPR_P1] > 0) {
+  index1 = spr_calc_index(lin[SPR_P1], col[SPR_P1] + 1);
+  v0 = scr_map[index1];
+  v0 = player_pick_deadly(v0);
+  v0 = player_pick_item(v0, index1);
 
-    index1 = spr_calc_index(lin[SPR_P1] + 14, col[SPR_P1] + 1);
-    v0 = scr_map[index1];
-    v0 = player_pick_deadly(v0);
-    v0 = player_pick_item(v0, index1);
+  index1 = spr_calc_index(lin[SPR_P1] + 14, col[SPR_P1] + 1);
+  v0 = scr_map[index1];
+  v0 = player_pick_deadly(v0);
+  v0 = player_pick_item(v0, index1);
   //}
-// Sprite Collision
+  // Sprite Collision
   for (i = 0; i < SPR_P1; ++i) {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[SPR_P1]); // TODO INCLUDE COLINT FOR BETTER
@@ -151,7 +151,6 @@ void player_collision() {
       }
     }
   }
-
 }
 
 unsigned char player_move(void) {
@@ -172,7 +171,7 @@ unsigned char player_move(void) {
 
 void player_move_gasta() {
   /* Check if the player have floor, and set fall if not */
-  if (player_check_floor1(lin[SPR_P1] + 16, col[SPR_P1])) {
+  if (player_check_floor_walk(lin[SPR_P1] + 16, col[SPR_P1])) {
     spr_move_horizontal();
     BIT_SET(*p_state, STAT_FALL);
     BIT_CLR(*p_state, STAT_DIRL);
@@ -236,19 +235,15 @@ unsigned char player_move_jump(void) {
     // Falling
     spr_set_down();
     // audio_golpe();
-
-    if (s_lin1 > GAME_LIN_FLOOR) {
-      s_lin1 = GAME_LIN_FLOOR;
+    if (s_lin1 > GAME_LIN_FLOOR - 24) {
+      s_lin1 = GAME_LIN_FLOOR - 24;
     }
-
-    // 7z80_delay_ms(50);
-    // if (game_check_map(s_lin1 + 16, col[SPR_P1]) ||
-    //  game_check_map(s_lin1 + 16, col[SPR_P1] + 1)) {
 
     if (s_lin1 - player_jump_top > 2) {
 
-      if (!player_check_floor(s_lin1 + 16, col[SPR_P1])) {
+      if (!player_check_floor_jump(lin[SPR_P1] + 16, col[SPR_P1])) {
         // Jump end
+
         tmp_uc = (s_lin1 >> 3) << 3;
 
         if (tmp_uc - s_lin1 <= 2) {
@@ -257,6 +252,7 @@ unsigned char player_move_jump(void) {
           BIT_CLR(*p_state, STAT_FALL);
           BIT_CLR(*p_state, STAT_JUMP);
           return 1;
+          ∫
         }
       }
     }
@@ -325,10 +321,17 @@ unsigned char player_move_walk(void) {
   } else {
     BIT_CLR(*p_state, STAT_DIRL);
     BIT_CLR(*p_state, STAT_DIRR);
+
     if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
 
-      BIT_SET(*p_state, STAT_DIRL); // TODO
-      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+      if (game_conveyor_dir == DIR_LEFT) {
+        BIT_SET(*p_state, STAT_DIRL);
+        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+
+      } else {
+        BIT_SET(*p_state, STAT_DIRR);
+        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+      }
 
       spr_move_horizontal();
     }
@@ -368,7 +371,7 @@ unsigned char player_pick_item(unsigned char l_val, int l_index) {
 
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
-    zx_print_chr(21,0,player_coins);
+    zx_print_chr(21, 0, player_coins);
     zx_border(INK_YELLOW);
     audio_coin();
     return TILE_EMPTY;
@@ -387,28 +390,6 @@ unsigned char player_pick_deadly(unsigned char l_val) {
     return 0;
   }
   return l_val;
-}
-
-unsigned char player_check_floor(unsigned char f_lin, unsigned char f_col) {
-
-  index1 = spr_calc_index(f_lin, f_col);
-  v0 = scr_map[index1];
-  index1 = spr_calc_index(f_lin, f_col + 1);
-  v1 = scr_map[index1];
-
-  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
-    BIT_SET(*p_state, STAT_CONVEYOR);
-  } else {
-    BIT_CLR(*p_state, STAT_CONVEYOR);
-  }
-
-  if (v0 >= TILE_FLOOR && v0 <= TILE_CONVEYOR) {
-    return 0;
-  }
-  if (v1 >= TILE_FLOOR && v1 <= TILE_CONVEYOR) {
-    return 0;
-  }
-  return 1;
 }
 
 unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
@@ -434,12 +415,42 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   return 0;
 }
 
-unsigned char player_check_floor1(unsigned char f_lin, unsigned char f_col) {
+unsigned char player_check_floor_jump(unsigned char f_lin,
+                                      unsigned char f_col) {
+
+  index1 = spr_calc_index(f_lin, f_col);
+  v0 = scr_map[index1];
+  index1 = spr_calc_index(f_lin, f_col + 1);
+  v1 = scr_map[index1];
+
+  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+    BIT_SET(*p_state, STAT_CONVEYOR);
+  } else {
+    BIT_CLR(*p_state, STAT_CONVEYOR);
+  }
+
+  if (v0 >= TILE_FLOOR && v0 <= TILE_CONVEYOR) {
+    return 0;
+  }
+  if (v1 >= TILE_FLOOR && v1 <= TILE_CONVEYOR) {
+    return 0;
+  }
+  return 1;
+}
+
+unsigned char player_check_floor_walk(unsigned char f_lin,
+                                      unsigned char f_col) {
 
   index1 = spr_calc_index(f_lin, f_col);
 
   v0 = scr_map[index1];
   v1 = scr_map[index1 + 1];
+
+  if (v0 == TILE_OBJECT)
+    v0 = TILE_EMPTY;
+
+  if (v1 == TILE_OBJECT)
+    v1 = TILE_EMPTY;
 
   if (v0 == 0 && v1 == 0) {
     return 1;

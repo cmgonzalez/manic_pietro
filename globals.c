@@ -175,7 +175,6 @@ unsigned char game_conveyor_flag;
 unsigned int curr_time;
 unsigned int frame_time;
 unsigned int anim_time;
-unsigned int rotate_time;
 unsigned char last_rotated;
 
 

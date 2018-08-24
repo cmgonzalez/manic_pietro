@@ -43,7 +43,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0;//0xFF;
+  scr_curr = 0; // 0xFF;
   game_song_play = 1;
 
   // INTERRUPTS ARE DISABLED
@@ -52,8 +52,8 @@ void main(void) {
   // ENABLE SOUND BASED ON DETECTED MODEL
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
-  game_gravity = 98;//GAME_GRAVITY;
-  player_vel_y0 = -690;//GAME_VELOCITY;
+  game_gravity = 98;    // GAME_GRAVITY;
+  player_vel_y0 = -690; // GAME_VELOCITY;
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
@@ -100,12 +100,11 @@ void main(void) {
                          // Shoots 2) 1 button: fire shoots, up jump , up+fire
                          // for ladders
 
-
   /*MAIN LOOP*/
   game_attribs();
+
+
   while (1) {
-
-
 
     // MENU
     if (!game_debug) {
@@ -115,24 +114,121 @@ void main(void) {
     // GAME
     game_loop();
     // GAME OVER
-    //spr_flatten();
-    //game_update_stats();
+    // spr_flatten();
+    // game_update_stats();
     zx_print_str(11, 12, "DEMO OVER");
     z80_delay_ms(250);
     game_over = 0; // Hack game_colour_message to render background
-    //game_colour_message(12, 12, 12 + 9, 250, 0);
+    // game_colour_message(12, 12, 12 + 9, 250, 0);
 
-    //spr_clear_scr();
-    
-    for (i = 0; i <= SPR_P1; ++i){
-      NIRVANAP_spriteT(i,0,0,0);
+    // spr_clear_scr();
+
+    for (i = 0; i <= SPR_P1; ++i) {
+      NIRVANAP_spriteT(i, 0, 0, 0);
     }
-    //game_cls();
+    // game_cls();
   }
 }
 
-void test_proc() {
-
-}
+void test_proc() {}
 
 unsigned char test_func() { return 0; }
+
+void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
+                       unsigned char f_col) {
+  unsigned char *f_byte;
+  unsigned char *f_byte_src;
+  unsigned char *f_byte_src0;
+  unsigned char f_spr16;
+  unsigned char *f_attrib_start;
+  /*
+    A quick note about the "btile" format:
+
+    Each "btile" represents a 16x16 image, using 8x2 attributes. It's very
+    similar to "ctiles" used in BIFROST* and ZXodus, except each tile is 48
+    bytes (instead of 64 bytes) and their attributes are stored vertically:
+    Byte 1: bitmap value for 1st pixel line, 1st column
+    Byte 2: bitmap value for 1st pixel line, 2nd column
+    Byte 3: bitmap value for 2nd pixel line, 1st column
+    Byte 4: bitmap value for 2nd pixel line, 2nd column
+    Byte 5: bitmap value for 3rd pixel line, 1st column
+    Byte 6: bitmap value for 3rd pixel line, 2nd column
+    ...
+    Byte 31: bitmap value at 16th pixel line, 1st column
+    Byte 32: bitmap value at 16th pixel line, 2nd column
+    Byte 33: attribute value for 1st and 2nd pixel line, 1st column
+    Byte 34: attribute value for 3rd and 4th pixel line, 1st column
+    Byte 35: attribute value for 5th and 6th pixel line, 1st column
+    ...
+    Byte 40: attribute value for 15th and 16th pixel line, 1st column
+    Byte 41: attribute value for 1st and 2nd pixel line, 2nd column
+    Byte 42: attribute value for 3rd and 4th pixel line, 2nd column
+    ...
+    Byte 48: attribute value for 15th and 16th pixel line, 2nd column
+
+    The ordering above looks somewhat unconventional, but there's a reason: it's
+    more convenient for the NIRVANA ENGINE this way, so it can be more compact
+    and efficient.
+  */
+  // Geometria ancho del btile (teorico) por ejemplo 8 btiles (16x16)
+
+  f_spr16 = f_spr8 >> 2;
+  f_spr8 = f_spr8 % 4;
+  f_byte_src0 = &btiles[0] + (48 * f_spr16);
+
+
+
+  if (f_spr8 == 0) {
+    f_attrib_start = f_byte_src0 + 32;
+    f_byte_src = f_byte_src0;
+  } else {
+    if (f_spr8 == 1) {
+      f_attrib_start = f_byte_src0 + 32 + 8;
+      f_byte_src = f_byte_src0 + 1;
+    } else {
+      if (f_spr8 == 2) {
+        f_attrib_start = f_byte_src0 + 32 + 4;
+        f_byte_src = f_byte_src0 + 16;
+      } else {
+        if (f_spr8 == 3) {
+          f_attrib_start = f_byte_src0 + 32 + 12;
+          f_byte_src = f_byte_src0 + 17;
+        }
+      }
+    }
+  }
+
+  attrib[0] = *f_attrib_start;
+  ++f_attrib_start;
+  attrib[1] = *f_attrib_start;
+  ++f_attrib_start;
+  attrib[2] = *f_attrib_start;
+  ++f_attrib_start;
+  attrib[3] = *f_attrib_start;
+
+  NIRVANAP_paintC(&attrib, f_lin + 8, f_col);
+
+  f_byte = zx_py2saddr(f_lin) + f_col;
+  *f_byte = *f_byte_src;
+  f_byte_src = f_byte_src + 2;
+  f_byte = zx_py2saddr(++f_lin) + f_col;
+  *f_byte = *f_byte_src;
+  f_byte_src = f_byte_src + 2;
+  f_byte = zx_py2saddr(++f_lin) + f_col;
+  *f_byte = *f_byte_src;
+  f_byte_src = f_byte_src + 2;
+  f_byte = zx_py2saddr(++f_lin) + f_col;
+  *f_byte = *f_byte_src;
+  f_byte_src = f_byte_src + 2;
+  f_byte = zx_py2saddr(++f_lin) + f_col;
+  *f_byte = *f_byte_src;
+  f_byte_src = f_byte_src + 2;
+  f_byte = zx_py2saddr(++f_lin) + f_col;
+  *f_byte = *f_byte_src;
+  f_byte_src = f_byte_src + 2;
+  f_byte = zx_py2saddr(++f_lin) + f_col;
+  *f_byte = *f_byte_src;
+  f_byte_src = f_byte_src + 2;
+  f_byte = zx_py2saddr(++f_lin) + f_col;
+  *f_byte = *f_byte_src;
+}
