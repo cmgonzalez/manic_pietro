@@ -362,6 +362,7 @@ void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
 }
 
 unsigned char spr_tile(unsigned char *f_sprite) __z88dk_fastcall {
+  //Search enemy class associated Values
 
   tmp0 = 0;
   while (tmp0 < GAME_TOTAL_CLASSES) {
@@ -375,7 +376,7 @@ unsigned char spr_tile(unsigned char *f_sprite) __z88dk_fastcall {
 }
 
 unsigned char spr_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {
-
+  
   if (BIT_CHK(*p_state, STAT_DIRR)) {
     return *f_tile;
   }
@@ -399,26 +400,32 @@ void spr_back_repaint(void) {
 
   s_row1 = (s_lin0 >> 3) + 1;
   s_col1 = s_col0;
-  game_cell_paint();
+  //game_cell_paint();
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
-  game_cell_paint();
+  //game_cell_paint();
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
-  game_cell_paint();
+  //game_cell_paint();
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1--;
   s_col1--;
-  game_cell_paint();
+  //game_cell_paint();
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   // TODO PERFORMANCE
   // if ( (s_lin0 >> 3) != 0 ) {
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
-  game_cell_paint();
+  //game_cell_paint();
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
-  game_cell_paint();
+  //game_cell_paint();
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   //}
 }
 

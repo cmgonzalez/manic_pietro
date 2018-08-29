@@ -54,7 +54,7 @@ Offsets 607 to 615: Spare
 #define TILE_FLOOR6                   8
 #define TILE_FLOOR7                   9
 #define TILE_WALL                     10
-#define TILE_CONVEYOR                 11
+#define TILE_CONVEYOR                 16
 #define TILE_DEADLY1                  12
 #define TILE_DEADLY2                  13
 #define TILE_OBJECT                   14
@@ -292,6 +292,7 @@ extern unsigned char game_conveyor_col1;
 extern unsigned char game_round_up;
 extern unsigned char game_control_mode;
 extern unsigned char menu_curr_sel;
+extern unsigned char game_tileset;
 
 
 extern unsigned int fps;
@@ -348,10 +349,7 @@ extern unsigned char attrib8[4];
 extern unsigned char *p_state;
 extern unsigned char *p_state_a;
 //TODO REVIEW 128 bytes! needs loop on final target without udg's
-extern unsigned char conv0[];
-extern unsigned char conv1[];
-extern unsigned char conv2[];
-extern unsigned char conv3[];
+extern unsigned char game_conveyor_tile;
 extern unsigned char game_conveyor_flag;
 
 

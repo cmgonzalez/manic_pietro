@@ -148,7 +148,7 @@ unsigned char attrib[4];
 unsigned char attrib_hl[4];
 unsigned char attrib_red[4];
 unsigned char attrib_osd[4];
-unsigned char game_attrib_osd;
+
 
 //TILE ATTRIB TODO REMOVE
 unsigned char attrib0[4];
@@ -165,11 +165,10 @@ unsigned char *p_state;
 unsigned char *p_state_a;
 
 //TODO REVIEW
-unsigned char conv0[31];
-unsigned char conv1[31];
-unsigned char conv2[31];
-unsigned char conv3[31];
+unsigned char game_conveyor_tile;
 unsigned char game_conveyor_flag;
+unsigned char game_attrib_osd;
+unsigned char game_tileset;
 
 
 unsigned int curr_time;

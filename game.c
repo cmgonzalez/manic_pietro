@@ -43,8 +43,9 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0; // 0xFF;
+  scr_curr = 1; // 0xFF;
   game_song_play = 1;
+  game_tileset = 1 * 8;
 
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -103,7 +104,6 @@ void main(void) {
   /*MAIN LOOP*/
   game_attribs();
 
-
   while (1) {
 
     // MENU
@@ -136,11 +136,7 @@ unsigned char test_func() { return 0; }
 
 void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
                        unsigned char f_col) {
-  unsigned char *f_byte;
-  unsigned char *f_byte_src;
-  unsigned char *f_byte_src0;
-  unsigned char f_spr16;
-  unsigned char *f_attrib_start;
+
   /*
     A quick note about the "btile" format:
 
@@ -171,31 +167,34 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
     and efficient.
   */
   // Geometria ancho del btile (teorico) por ejemplo 8 btiles (16x16)
+  unsigned char *f_byte;
+  unsigned char *f_byte_src;
+  unsigned char *f_byte_src0;
+  unsigned char f_spr16;
+  unsigned char f_lin1;
+  unsigned char *f_attrib_start;
 
   f_spr16 = f_spr8 >> 2;
   f_spr8 = f_spr8 % 4;
-  f_byte_src0 = &btiles[0] + (48 * f_spr16);
+  f_byte_src0 = &btiles[0] + (48 * (f_spr16 + game_tileset)) ;
 
-
-
-  if (f_spr8 == 0) {
-    f_attrib_start = f_byte_src0 + 32;
+  switch (f_spr8) {
+  case 0:
     f_byte_src = f_byte_src0;
-  } else {
-    if (f_spr8 == 1) {
-      f_attrib_start = f_byte_src0 + 32 + 8;
-      f_byte_src = f_byte_src0 + 1;
-    } else {
-      if (f_spr8 == 2) {
-        f_attrib_start = f_byte_src0 + 32 + 4;
-        f_byte_src = f_byte_src0 + 16;
-      } else {
-        if (f_spr8 == 3) {
-          f_attrib_start = f_byte_src0 + 32 + 12;
-          f_byte_src = f_byte_src0 + 17;
-        }
-      }
-    }
+    f_attrib_start = f_byte_src0 + 32;
+    break;
+  case 1:
+    f_byte_src = f_byte_src0 + 1;
+    f_attrib_start = f_byte_src0 + 32 + 8;
+    break;
+  case 2:
+    f_byte_src = f_byte_src0 + 16;
+    f_attrib_start = f_byte_src0 + 32 + 4;
+    break;
+  case 3:
+    f_byte_src = f_byte_src0 + 17;
+    f_attrib_start = f_byte_src0 + 32 + 12;
+    break;
   }
 
   attrib[0] = *f_attrib_start;
@@ -206,29 +205,13 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
   ++f_attrib_start;
   attrib[3] = *f_attrib_start;
 
-  NIRVANAP_paintC(&attrib, f_lin + 8, f_col);
+  NIRVANAP_paintC(&attrib, f_lin + 8, f_col); //TODO direct Nirvana Buffer poke
 
-  f_byte = zx_py2saddr(f_lin) + f_col;
-  *f_byte = *f_byte_src;
-  f_byte_src = f_byte_src + 2;
-  f_byte = zx_py2saddr(++f_lin) + f_col;
-  *f_byte = *f_byte_src;
-  f_byte_src = f_byte_src + 2;
-  f_byte = zx_py2saddr(++f_lin) + f_col;
-  *f_byte = *f_byte_src;
-  f_byte_src = f_byte_src + 2;
-  f_byte = zx_py2saddr(++f_lin) + f_col;
-  *f_byte = *f_byte_src;
-  f_byte_src = f_byte_src + 2;
-  f_byte = zx_py2saddr(++f_lin) + f_col;
-  *f_byte = *f_byte_src;
-  f_byte_src = f_byte_src + 2;
-  f_byte = zx_py2saddr(++f_lin) + f_col;
-  *f_byte = *f_byte_src;
-  f_byte_src = f_byte_src + 2;
-  f_byte = zx_py2saddr(++f_lin) + f_col;
-  *f_byte = *f_byte_src;
-  f_byte_src = f_byte_src + 2;
-  f_byte = zx_py2saddr(++f_lin) + f_col;
-  *f_byte = *f_byte_src;
+  f_lin1 = f_lin + 8;
+  while (f_lin < f_lin1) {
+    f_byte = zx_py2saddr(f_lin) + f_col;
+    *f_byte = *f_byte_src;
+    f_byte_src = f_byte_src + 2;
+    ++f_lin;
+  }
 }

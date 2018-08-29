@@ -39,7 +39,7 @@ void game_loop(void) {
   game_over = 0;
   game_round_up = 0;
   game_world = 0;
-  scr_curr = 0xFF;
+  //scr_curr = 0xFF;
   map_paper = PAPER_BLACK;
   player_lin_scr = GAME_LIN_FLOOR - 24;
   player_col_scr = 2;
@@ -138,6 +138,7 @@ void game_draw_map(void) {
   game_conveyor_lin = 0;
   game_conveyor_col0 = 0;
   game_conveyor_col1 = 0;
+  game_conveyor_tile = 17;
 
   while (index1 < GAME_SCR_MAX_INDEX) {
 
@@ -150,30 +151,11 @@ void game_draw_map(void) {
       if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
           scr_map[index1] != TILE_CONVEYOR) {
         game_conveyor_col1 = index1 % 32; // TODO OPTIMIZE
-
-        for (i = 0; i < (game_conveyor_col1 - game_conveyor_col0); ++i) {
-          if (game_conveyor_dir == DIR_LEFT) {
-            conv0[i] = 'r';
-            conv1[i] = 'q';
-            conv2[i] = 'p';
-            conv3[i] = 'l';
-          } else {
-            conv0[i] = 'l';
-            conv1[i] = 'p';
-            conv2[i] = 'q';
-            conv3[i] = 'r';
-          }
-
-        }
-        conv0[i] = 0;
-        conv1[i] = 0;
-        conv2[i] = 0;
-        conv3[i] = 0;
       }
       if (scr_map[index1] == TILE_CONVEYOR) {
         if (game_conveyor_col0 == 0) {
-          game_conveyor_col0 = index1 % 32;      // TODO OPTIMIZE
-          game_conveyor_lin = 1 + (index1 / 32); // TODO OPTIMIZE
+          game_conveyor_col0 = index1 % 32;          // TODO OPTIMIZE
+          game_conveyor_lin = 8 + (index1 / 32) * 8; // TODO OPTIMIZE
 
           if (scr_map[index1 + 1]) {
             game_conveyor_dir = DIR_LEFT;
@@ -184,7 +166,8 @@ void game_draw_map(void) {
         }
       }
 
-      game_cell_paint();
+      // game_cell_paint();
+      game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
     } else {
       switch (scr_map[index1]) {
       case 64: // GUARDIAN_HOR1
@@ -218,78 +201,13 @@ void game_cell_paint_index() {
   s_lin1 = (index1 / 32) * 8;
   s_row1 = (s_lin1 >> 3) + 1;
   s_lin1 = s_lin1 + 16;
-  game_cell_paint();
+  // game_cell_paint();
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
 }
 
 void game_cell_paint() {
-  //unsigned char *f_attrib;
-    game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
-  /*
-  switch (scr_map[index1]) {
-  case TILE_EMPTY:
-    zx_print_str(s_row1, s_col1, "a");
-    f_attrib = attrib0;
-    break;
-  case TILE_FLOOR:
-    zx_print_str(s_row1, s_col1, "b");
-    f_attrib = attrib1;
-    break;
-  case TILE_FLOOR0:
-    zx_print_str(s_row1, s_col1, "c");
-    f_attrib = attrib2;
-    break;
-  case TILE_FLOOR1:
-    zx_print_str(s_row1, s_col1, "d");
-    f_attrib = attrib2;
-    break;
-  case TILE_FLOOR2:
-    zx_print_str(s_row1, s_col1, "e");
-    f_attrib = attrib2;
-    break;
-  case TILE_FLOOR3:
-    zx_print_str(s_row1, s_col1, "f");
-    f_attrib = attrib2;
-    break;
-  case TILE_FLOOR4:
-    zx_print_str(s_row1, s_col1, "g");
-    f_attrib = attrib2;
-    break;
-  case TILE_FLOOR5:
-    zx_print_str(s_row1, s_col1, "h");
-    f_attrib = attrib2;
-    break;
-  case TILE_FLOOR6:
-    zx_print_str(s_row1, s_col1, "i");
-    f_attrib = attrib2;
-    break;
-  case TILE_FLOOR7:
-    zx_print_str(s_row1, s_col1, "j");
-    f_attrib = attrib2;
-    break;
-  case TILE_WALL:
-    zx_print_str(s_row1, s_col1, "k");
-    f_attrib = attrib4;
-    break;
-  case TILE_CONVEYOR:
-    zx_print_str(s_row1, s_col1, "l");
-    f_attrib = attrib5;
-    break;
-  case TILE_DEADLY1:
-    zx_print_str(s_row1, s_col1, "m");
-    f_attrib = attrib6;
-    break;
-  case TILE_DEADLY2:
-    zx_print_str(s_row1, s_col1, "n");
-    f_attrib = attrib7;
-    break;
-  case TILE_OBJECT:
-    zx_print_str(s_row1, s_col1, "o");
-    f_attrib = attrib8;
-    break;
-  }
 
-  NIRVANAP_paintC(f_attrib, s_lin1, s_col1);
-  */
+  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
 }
 
 void game_end() {}
@@ -348,24 +266,103 @@ void game_start_timer(void) {
 
 void game_anim_conveyor() {
 
-  switch (game_conveyor_flag) {
+  // zx_print_str(game_conveyor_lin, game_conveyor_col0, game_conveyor_tile);
+
+  if (game_conveyor_dir == DIR_LEFT) {
+    --game_conveyor_tile;
+    if (game_conveyor_tile < TILE_CONVEYOR) {
+      game_conveyor_tile = TILE_CONVEYOR + 3;
+    }
+  } else {
+    ++game_conveyor_tile;
+    if (game_conveyor_tile >= TILE_CONVEYOR + 4) {
+      game_conveyor_tile = TILE_CONVEYOR;
+    }
+  }
+  game_draw_conv();
+}
+
+void game_draw_conv() {
+  unsigned char *f_byte;
+  unsigned char *f_byte_src;
+  unsigned char *f_byte_src0;
+  unsigned char f_spr8;
+  unsigned char f_spr16;
+  unsigned char f_lin;
+  unsigned char f_col;
+  unsigned char f_lin1;
+  // unsigned char *f_attrib_start;
+  /*
+    A quick note about the "btile" format:
+
+    Each "btile" represents a 16x16 image, using 8x2 attributes. It's very
+    similar to "ctiles" used in BIFROST* and ZXodus, except each tile is 48
+    bytes (instead of 64 bytes) and their attributes are stored vertically:
+    Byte 1: bitmap value for 1st pixel line, 1st column
+    Byte 2: bitmap value for 1st pixel line, 2nd column
+    Byte 3: bitmap value for 2nd pixel line, 1st column
+    Byte 4: bitmap value for 2nd pixel line, 2nd column
+    Byte 5: bitmap value for 3rd pixel line, 1st column
+    Byte 6: bitmap value for 3rd pixel line, 2nd column
+    ...
+    Byte 31: bitmap value at 16th pixel line, 1st column
+    Byte 32: bitmap value at 16th pixel line, 2nd column
+    Byte 33: attribute value for 1st and 2nd pixel line, 1st column
+    Byte 34: attribute value for 3rd and 4th pixel line, 1st column
+    Byte 35: attribute value for 5th and 6th pixel line, 1st column
+    ...
+    Byte 40: attribute value for 15th and 16th pixel line, 1st column
+    Byte 41: attribute value for 1st and 2nd pixel line, 2nd column
+    Byte 42: attribute value for 3rd and 4th pixel line, 2nd column
+    ...
+    Byte 48: attribute value for 15th and 16th pixel line, 2nd column
+
+    The ordering above looks somewhat unconventional, but there's a reason: it's
+    more convenient for the NIRVANA ENGINE this way, so it can be more compact
+    and efficient.
+  */
+  // Geometria ancho del btile (teorico) por ejemplo 8 btiles (16x16)
+
+  f_spr16 = game_conveyor_tile >> 2;
+  f_spr8 = game_conveyor_tile % 4;
+  f_lin = game_conveyor_lin;
+  // f_col = game_conveyor_col0;
+
+
+  f_byte_src0 = &btiles[0] + (48 * (f_spr16 + game_tileset)) ;
+
+  switch (f_spr8) {
   case 0:
-    zx_print_str(game_conveyor_lin, game_conveyor_col0, conv0);
-    game_conveyor_flag = 1;
+    f_byte_src = f_byte_src0;
     break;
   case 1:
-    zx_print_str(game_conveyor_lin, game_conveyor_col0, conv1);
-    game_conveyor_flag = 2;
+    f_byte_src = f_byte_src0 + 1;
     break;
   case 2:
-    zx_print_str(game_conveyor_lin, game_conveyor_col0, conv2);
-    game_conveyor_flag = 3;
+    f_byte_src = f_byte_src0 + 16;
     break;
   case 3:
-    zx_print_str(game_conveyor_lin, game_conveyor_col0, conv3);
-    game_conveyor_flag = 0;
+    f_byte_src = f_byte_src0 + 17;
     break;
   }
+
+  f_lin1 = f_lin + 8;
+  while (f_lin < f_lin1) {
+    f_col = game_conveyor_col0;
+    f_byte = zx_py2saddr(f_lin) + f_col; // Calculate screen Line
+
+    while (f_col < game_conveyor_col1) {
+      *f_byte = *f_byte_src;
+      ++f_byte;
+      ++f_col;
+    }
+
+    f_byte_src = f_byte_src +
+                 2; // Increment btile by 2 to get next line of the 8x8 sprite
+    ++f_lin;        // Draw next line
+
+  }
+  NIRVANAP_halt();
 }
 void game_round_init(void) {
 
@@ -378,8 +375,7 @@ void game_round_init(void) {
   player_coins = 0;
   game_conveyor_flag = 0;
 
-  //Fill top LINE
-
+  // Fill top LINE
 
   /* Phase Draw Start */
   // spr_draw_clear();
@@ -427,7 +423,7 @@ void game_round_init(void) {
 
   zx_print_ink(INK_RED | PAPER_RED);
 
-  zx_print_str(0,0,"                                ");
+  zx_print_str(0, 0, "                                ");
   zx_border(INK_RED);
   zx_print_ink(INK_WHITE | PAPER_BLACK);
 }
@@ -616,9 +612,9 @@ void game_attribs() {
   attrib[3] = map_paper | BRIGHT | INK_WHITE;
 
   // ATTRIB HIGHLIGHT
-  attrib_hl[0] = map_paper | INK_BLACK | PAPER_YELLOW;
-  attrib_hl[1] = map_paper | INK_BLUE | PAPER_YELLOW;
-  attrib_hl[2] = map_paper | INK_MAGENTA | PAPER_YELLOW;
+  attrib_hl[0] = map_paper | INK_MAGENTA | PAPER_YELLOW;
+  attrib_hl[1] = map_paper | INK_BLACK | PAPER_YELLOW;
+  attrib_hl[2] = map_paper | INK_BLUE | PAPER_YELLOW;
   attrib_hl[3] = map_paper | INK_BLACK | PAPER_YELLOW;
 
   // ATTRIB OSD

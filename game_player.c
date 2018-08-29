@@ -241,19 +241,19 @@ unsigned char player_move_jump(void) {
 
     if (s_lin1 - player_jump_top > 2) {
 
-      if (!player_check_floor_jump(lin[SPR_P1] + 16, col[SPR_P1])) {
+
+      if (player_check_floor_jump(lin[SPR_P1] + 18, col[SPR_P1])) {
         // Jump end
 
         tmp_uc = (s_lin1 >> 3) << 3;
 
-        if (tmp_uc - s_lin1 <= 2) {
+
           lin[SPR_P1] = tmp_uc;
           player_vel_y = 0;
           BIT_CLR(*p_state, STAT_FALL);
           BIT_CLR(*p_state, STAT_JUMP);
           return 1;
-          ∫
-        }
+
       }
     }
 
@@ -420,8 +420,13 @@ unsigned char player_check_floor_jump(unsigned char f_lin,
 
   index1 = spr_calc_index(f_lin, f_col);
   v0 = scr_map[index1];
-  index1 = spr_calc_index(f_lin, f_col + 1);
-  v1 = scr_map[index1];
+  v1 = scr_map[index1+1];
+
+  if (v0 == TILE_OBJECT)
+    v0 = TILE_EMPTY;
+
+  if (v1 == TILE_OBJECT)
+    v1 = TILE_EMPTY;
 
   if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
     BIT_SET(*p_state, STAT_CONVEYOR);
@@ -429,10 +434,9 @@ unsigned char player_check_floor_jump(unsigned char f_lin,
     BIT_CLR(*p_state, STAT_CONVEYOR);
   }
 
-  if (v0 >= TILE_FLOOR && v0 <= TILE_CONVEYOR) {
-    return 0;
-  }
-  if (v1 >= TILE_FLOOR && v1 <= TILE_CONVEYOR) {
+
+  //if (v0 >= TILE_FLOOR && v0 <= TILE_CONVEYOR) {
+  if (v0 == TILE_EMPTY && v1 == TILE_EMPTY) {
     return 0;
   }
   return 1;
@@ -469,7 +473,8 @@ unsigned char player_check_floor_walk(unsigned char f_lin,
     s_lin1 = s_lin1 << 3;
     s_lin1 = s_lin1;
     s_row1 = (s_lin1 >> 3) + 1;
-    game_cell_paint();
+    //game_cell_paint();
+    game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   }
 
   if (v1 >= TILE_FLOOR0 && v1 <= TILE_FLOOR7) {
@@ -485,7 +490,8 @@ unsigned char player_check_floor_walk(unsigned char f_lin,
     s_lin1 = s_lin1 << 3;
     s_lin1 = s_lin1;
     s_row1 = (f_lin >> 3) + 1;
-    game_cell_paint();
+    //game_cell_paint();
+    game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   }
 
   if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
