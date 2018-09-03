@@ -44,8 +44,11 @@ void main(void) {
   game_fps_show = 1;
   game_world = 0;
   scr_curr = 1; // 0xFF;
+
   game_song_play = 1;
-  game_tileset = 1 * 8;
+  game_tileset = scr_curr * 8;
+
+
 
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -96,7 +99,7 @@ void main(void) {
   frame_time = zx_clock();
 
   menu_curr_sel = 1;
-  map_paper_last = PAPER_BLUE;
+  map_paper_last = PAPER_BLACK; //DEFAULT PAPER ON BTILE FILE
   game_control_mode = 2; // 0)2button - default 1) 1button: 1 Button UP+FIRE
                          // Shoots 2) 1 button: fire shoots, up jump , up+fire
                          // for ladders
@@ -133,6 +136,12 @@ void main(void) {
 void test_proc() {}
 
 unsigned char test_func() { return 0; }
+
+void game_copy_tile() {
+  //copy a btile from upper memory to first 48
+
+
+}
 
 void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
                        unsigned char f_col) {
@@ -208,6 +217,7 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
   NIRVANAP_paintC(&attrib, f_lin + 8, f_col); //TODO direct Nirvana Buffer poke
 
   f_lin1 = f_lin + 8;
+  //TODO can be optimized on div 8 rows, no need for each zx_py2addr
   while (f_lin < f_lin1) {
     f_byte = zx_py2saddr(f_lin) + f_col;
     *f_byte = *f_byte_src;

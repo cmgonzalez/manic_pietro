@@ -20,6 +20,13 @@
 
 #define GAME_ROWS                     10
 #define GAME_SCR_MAX_INDEX            512
+#define PLAYER                        0xFF
+
+
+
+#define PLAYER_SPEED                 4
+#define ENEMY_START_INDEX            64
+
 
 #define GAME_GRAVITY                  1
 #define GAME_VELOCITY                 -6
@@ -87,14 +94,7 @@ Offsets 607 to 615: Spare
 
 
 
-/* Enemies Class indexes */
-#define PLAYER                        0xFF
-#define GUARDIAN_HOR1                 1 //Different right / left sprite
-#define GUARDIAN_HOR2                 2 //Simetric Horizonal
-#define GUARDIAN_VER_UP               3 //
-#define GUARDIAN_VER_DOWN             4 //
-#define SKYLAB                        5 //
-#define EUGENE                        6 //
+
 
 
 #define GAME_TOTAL_CLASSES            6 //Total class of enemies
@@ -165,7 +165,7 @@ Offsets 607 to 615: Spare
 #define STAT_FALL                     1
 #define STAT_DIRR                     2
 #define STAT_DIRL                     3
-#define STAT_CONVEYOR                    4
+#define STAT_CONVEYOR                 4
 #define STAT_KILL                     5
 #define STAT_ANGRY                    6
 #define STAT_UPGR                     7
@@ -306,7 +306,7 @@ extern unsigned char game_fps_show;
 extern unsigned char player_hit_count;
 extern unsigned char player_jump_top;
 extern unsigned char player_killed;
-extern unsigned int player_kill_index;
+extern unsigned int  player_kill_index;
 
 extern unsigned char s_tile0;
 extern unsigned char s_tile1;
@@ -376,23 +376,25 @@ extern unsigned char game_start_scr;
 
 
 extern unsigned char screen_paper, screen_ink;
-extern unsigned char sprite_speed[];
-extern unsigned char sprite_base_speed[];
-extern unsigned char sprite_frames[];
-extern unsigned char spr_map_tile[];
 extern unsigned char spr_init[];
 
+extern unsigned char spr_tile[];
+extern unsigned char spr_speed[];
+extern unsigned char spr_frames[];
+extern unsigned char spr_kind[];
 extern unsigned char scr_map[];
 
 
 //extern unsigned char scr_obj0[];
 //extern unsigned char scr_obj1[];
-extern unsigned char sprite_kind[];
+
 
 
 //Bank 6 Level Data
 extern const unsigned char world0[];
 extern const unsigned char lenght0[];
+extern const unsigned char paper0[];
+extern const unsigned char start_scr0[];
 /*
 extern const unsigned char start_scr0[];
 extern const unsigned char lenght0[];
@@ -422,3 +424,4 @@ extern unsigned char map_paper_last_a;
 
 extern unsigned char key_map[];
 extern unsigned int scan_map[];
+extern const char *map_names[];

@@ -15,16 +15,16 @@
         along with Manic Pietro.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "game.h"
+#include "game_audio.h"
 #include "game_ay.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_player.h"
-#include "game_audio.h"
 #include "game_sprite.h"
 #include "game_zx.h"
 #include "macros.h"
-#include <arch/zx/nirvana+.h>
 #include <arch/zx.h>
+#include <arch/zx/nirvana+.h>
 #include <input.h>
 #include <stdlib.h>
 
@@ -33,8 +33,10 @@ void enemy_turn(void) {
   sprite = 0;
 
   while (sprite < SPR_P1) {
+
     s_class = class[sprite];
     if (s_class > 0 && spr_chktime(&sprite)) {
+
       s_lin0 = lin[sprite];
       s_col0 = col[sprite];
       p_state = &state[sprite];
@@ -47,10 +49,9 @@ void enemy_turn(void) {
   }
 }
 
-
 void enemy_move(void) {
 
-  switch (sprite_kind[s_class]) {
+  switch (spr_kind[sprite]) {
   case E_STATIC:
     enemy_static();
     break;
@@ -79,9 +80,9 @@ void enemy_gota() {
     }
   } else {
     colint[sprite]++;
-    if (colint[sprite] == sprite_frames[s_class]) {
+    if (colint[sprite] == spr_frames[sprite]) {
       // Respawn!
-      //lin[sprite] = (game_respawn_index[sprite] >> 3) << 4;
+      // lin[sprite] = (game_respawn_index[sprite] >> 3) << 4;
       colint[sprite] = 0;
     }
   }
@@ -93,13 +94,13 @@ void enemy_ghost() {
 
   if (s_col0 < col[SPR_P1]) {
     spr_set_right();
-    tile[sprite] = spr_tile(&sprite);
+    tile[sprite] = spr_get_tile(&sprite);
     spr_move_right();
     v = 1;
   }
   if (s_col0 > col[SPR_P1]) {
     spr_set_left();
-    tile[sprite] = spr_tile(&sprite);
+    tile[sprite] = spr_get_tile(&sprite);
     spr_move_left();
     v = 1;
   }
@@ -113,7 +114,7 @@ void enemy_ghost() {
     }
     if (v == 0 && s_lin0 != lin[sprite]) {
       ++colint[sprite];
-      if (colint[sprite] == sprite_frames[s_class]) {
+      if (colint[sprite] == spr_frames[sprite]) {
         colint[sprite] = 0;
       }
     }
@@ -126,7 +127,7 @@ void enemy_ghost() {
 void enemy_static() {
 
   ++colint[sprite];
-  if (colint[sprite] == sprite_frames[s_class]) {
+  if (colint[sprite] == spr_frames[sprite]) {
     colint[sprite] = 0;
   }
 }
@@ -134,34 +135,30 @@ void enemy_static() {
 void enemy_horizontal() {
   if (BIT_CHK(*p_state, STAT_DIRR)) {
     spr_move_right_f();
-    if (col[sprite] == value_b[sprite] && colint[sprite] == 3) { //HACK sprite_frames[sprite] - 1
+    if (col[sprite] == value_b[sprite] &&
+        colint[sprite] == 3) { // HACK spr_frames[sprite] - 1
       spr_set_left();
       state[sprite] = *p_state;
-      tile[sprite] = spr_tile(&sprite);
+      tile[sprite] = spr_get_tile(&sprite);
     }
   } else {
     spr_move_left_f();
     if (col[sprite] == value_a[sprite] && colint[sprite] == 0) {
       spr_set_right();
       state[sprite] = *p_state;
-      tile[sprite] = spr_tile(&sprite);
+      tile[sprite] = spr_get_tile(&sprite);
     }
   }
 }
 
-void enemy_vertical() {
+void enemy_vertical() {}
 
-}
-
-void enemy_walk(void) {
-
-}
+void enemy_walk(void) {}
 
 void enemy_kill(unsigned char f_sprite) __z88dk_fastcall {
   s_lin0 = lin[f_sprite];
   s_col0 = col[f_sprite];
   spr_destroy(f_sprite);
-
 }
 
 void enemy_avoid_fall() {
@@ -204,10 +201,11 @@ unsigned char enemy_avoid_dead() {
   return 0;
 }
 
-
-void enemy_init(unsigned char f_lin, unsigned char f_col, unsigned char f_class,
-                unsigned char f_dir) {
+void enemy_init(unsigned char f_lin, unsigned char f_col,
+                unsigned char f_index) {
   unsigned char f_sprite;
+  unsigned char f_dir;
+
   // Get the first available sprite
   f_sprite = 0;
   while (f_sprite < SPR_P1) {
@@ -221,27 +219,47 @@ void enemy_init(unsigned char f_lin, unsigned char f_col, unsigned char f_class,
   // Out of sprites
   sprite = 0xFF;
   if (f_sprite < SPR_P1) {
-    sprite = f_sprite;
-    class[f_sprite] = f_class;
-    sprite_speed[f_sprite] = sprite_base_speed[f_class];
 
+    tmp0 = 0;
+    while (tmp0 <= GAME_TOTAL_INDEX_CLASSES) {
+      tmp1 = tmp0 * 6; // Six variables on spr_init
+      if (spr_init[tmp1] == f_index) {
 
-    lin[f_sprite] = f_lin;
-    col[f_sprite] = f_col;
-    state[f_sprite] = 0;
-    state_a[f_sprite] = 0;
-    jump_lin[f_sprite] = 0;
-    colint[f_sprite] = 0;
-    if (f_dir == DIR_RIGHT) {
-      BIT_SET(state[f_sprite], STAT_DIRR);
+        tmp0 = 0xFF;
+      } else {
+        ++tmp0;
+      }
     }
-    if (f_dir == DIR_LEFT) {
-      BIT_SET(state[f_sprite], STAT_DIRL);
-      colint[f_sprite] = sprite_frames[f_class] - 1;
+    if (tmp0 == 0xFF) {
+      sprite = f_sprite;
+
+      class[f_sprite] = f_index; // spr_init[tmp1];
+      spr_tile[f_sprite] = spr_init[tmp1 + 1];
+      f_dir = spr_init[tmp1 + 2];
+      spr_frames[f_sprite] = spr_init[tmp1 + 3];
+      spr_speed[f_sprite] = spr_init[tmp1 + 4];
+      spr_kind[f_sprite] = spr_init[tmp1 + 5];
+
+      lin[f_sprite] = f_lin;
+      col[f_sprite] = f_col;
+      state[f_sprite] = 0;
+      state_a[f_sprite] = 0;
+      jump_lin[f_sprite] = 0;
+      colint[f_sprite] = 0;
+      if (f_dir == DIR_RIGHT) {
+        BIT_SET(state[f_sprite], STAT_DIRR);
+      }
+      if (f_dir == DIR_LEFT) {
+        BIT_SET(state[f_sprite], STAT_DIRL);
+        colint[f_sprite] = spr_frames[sprite] - 1;
+      }
+      p_state = &state[f_sprite];
+      p_state_a = &state_a[f_sprite];
+
+      tile[f_sprite] = spr_get_tile(&f_sprite);
+      spr_timer[f_sprite] = zx_clock();
+      last_time[f_sprite] = 0;
+      ++spr_count;
     }
-    tile[f_sprite] = spr_tile(&f_sprite);
-    spr_timer[f_sprite] = zx_clock();
-    last_time[f_sprite] = 0;
-    ++spr_count;
   }
 }

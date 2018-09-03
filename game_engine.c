@@ -39,7 +39,7 @@ void game_loop(void) {
   game_over = 0;
   game_round_up = 0;
   game_world = 0;
-  //scr_curr = 0xFF;
+  // scr_curr = 0xFF;
   map_paper = PAPER_BLACK;
   player_lin_scr = GAME_LIN_FLOOR - 24;
   player_col_scr = 2;
@@ -142,12 +142,13 @@ void game_draw_map(void) {
 
   while (index1 < GAME_SCR_MAX_INDEX) {
 
-    if (scr_map[index1] < 64) {
+    if (scr_map[index1] < ENEMY_START_INDEX) {
       if (scr_map[index1] == TILE_OBJECT) {
         obj_col[obj_count] = s_col1;
         obj_lin[obj_count] = s_lin1;
         ++obj_count;
       }
+      //DRAW CONVEYORS
       if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
           scr_map[index1] != TILE_CONVEYOR) {
         game_conveyor_col1 = index1 % 32; // TODO OPTIMIZE
@@ -169,18 +170,16 @@ void game_draw_map(void) {
       // game_cell_paint();
       game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
     } else {
-      switch (scr_map[index1]) {
-      case 64: // GUARDIAN_HOR1
-        enemy_init((index1 >> 5) << 3, index1 & 31, GUARDIAN_HOR1, DIR_RIGHT);
-        value_a[sprite] = scr_map[index1 + 32];
-        value_b[sprite] = scr_map[index1 + 33];
-        scr_map[index1] = TILE_EMPTY;
-        scr_map[index1 + 1] = TILE_EMPTY;
-        scr_map[index1 + 2] = TILE_EMPTY;
-        scr_map[index1 + 32] = TILE_EMPTY;
-        scr_map[index1 + 33] = TILE_EMPTY;
-        break;
-      }
+
+      enemy_init((index1 >> 5) << 3, index1 & 31, scr_map[index1]);
+      value_a[sprite] = scr_map[index1 + 32];
+      value_b[sprite] = scr_map[index1 + 33];
+      scr_map[index1] = TILE_EMPTY;
+      //Clear Adjancent tiles
+      scr_map[index1 + 1] = TILE_EMPTY;
+      scr_map[index1 + 2] = TILE_EMPTY;
+      scr_map[index1 + 32] = TILE_EMPTY;
+      scr_map[index1 + 33] = TILE_EMPTY;
     }
 
     ++index1;
@@ -212,19 +211,7 @@ void game_cell_paint() {
 
 void game_end() {}
 
-void game_add_enemy(unsigned char enemy_tile_index) __z88dk_fastcall {
 
-  tmp0 = 0;
-  while (tmp0 <= GAME_TOTAL_INDEX_CLASSES) {
-    tmp1 = tmp0 * 3;
-    if (spr_init[tmp1] == enemy_tile_index) {
-      enemy_init(s_lin1, s_col1, spr_init[tmp1 + 1], spr_init[tmp1 + 2]);
-      tmp0 = 0xFF;
-    } else {
-      ++tmp0;
-    }
-  }
-}
 
 void game_print_footer(void) {
 
@@ -328,8 +315,7 @@ void game_draw_conv() {
   f_lin = game_conveyor_lin;
   // f_col = game_conveyor_col0;
 
-
-  f_byte_src0 = &btiles[0] + (48 * (f_spr16 + game_tileset)) ;
+  f_byte_src0 = &btiles[0] + (48 * (f_spr16 + game_tileset));
 
   switch (f_spr8) {
   case 0:
@@ -360,7 +346,6 @@ void game_draw_conv() {
     f_byte_src = f_byte_src +
                  2; // Increment btile by 2 to get next line of the 8x8 sprite
     ++f_lin;        // Draw next line
-
   }
   NIRVANAP_halt();
 }
@@ -387,11 +372,13 @@ void game_round_init(void) {
   game_page_map();
   ay_reset();
   // audio_level_start();
+  spr_btile_paint_back();
+
   game_draw_map();
 
   game_paint_attrib(&attrib_hl, 0, 32, 144);
 
-  zx_print_str(17, 9, "CENTRAL CAVERN");
+  zx_print_str(17, 9, map_names[scr_curr]);
 
   game_paint_attrib(&attrib_red, 0, 10, 144 + 8);
   game_paint_attrib(&attrib_osd, 10, 32, 144 + 8);
@@ -419,7 +406,7 @@ void game_round_init(void) {
     game_colour_message(12, 6, 6 + tmp0, 200, 0);
   }
   audio_ingame();
-  spr_btile_paint_back();
+
 
   zx_print_ink(INK_RED | PAPER_RED);
 
@@ -521,7 +508,7 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
 }
 
 void game_rotate_attrib(void) {
-
+  //TODO PERFOMANCE (ASM)
   if (last_rotated > 7) {
     last_rotated = 0;
   }
@@ -534,7 +521,7 @@ void game_rotate_attrib(void) {
         game_attrib_osd = 1;
       }
       ++game_attrib_osd;
-      attrib8[0] = PAPER_BLACK | game_attrib_osd;
+      attrib8[0] = map_paper | game_attrib_osd;
       attrib8[1] = attrib8[0];
       attrib8[2] = attrib8[0];
       attrib8[3] = attrib8[0];
@@ -559,6 +546,7 @@ void game_rotate_attrib_osd(void) {
 }
 
 void game_attribs() {
+
   // TODO ESTO DEBE QUEDAR EN BANK6
   attrib0[0] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
   attrib0[1] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
@@ -659,10 +647,10 @@ void game_page_map(void) {
   IO_7FFD = 0x10 + 6;
 
   if (l_scr == 255) {
-    l_scr = 0; // start_scr0[l_world];
+    l_scr = start_scr0[l_world];
     l_scr_map = (l_world << 4) + l_scr;
   }
-  // l_paper = paper0[l_scr_map];
+  l_paper = paper0[l_scr_map];
   // l_world_w = world0_w[l_world];
   // l_world_h = world0_h[l_world];
 

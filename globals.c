@@ -20,7 +20,7 @@
 
 unsigned char spec128;
 
-//General Use VARIABLES
+// General Use VARIABLES
 unsigned char i;
 unsigned char v0;
 unsigned char v1;
@@ -45,7 +45,8 @@ unsigned char map_heigth;
 //###############################################################################################
 
 uint16_t (*joyfunc1)(udk_t *); // pointer to joystick function Player 1
-uint16_t (*joyfunc2)(udk_t *); // pointer to joystick function for game_control_mode
+uint16_t (*joyfunc2)(
+    udk_t *); // pointer to joystick function for game_control_mode
 udk_t k1;
 udk_t k2; // For game_control_mode 2B
 
@@ -58,9 +59,8 @@ unsigned char state_a[8]; // SPRITE STATES ALT SEE DEFINES UPPER BIT VALUES
 unsigned char value_a[8]; // SPRITE VALUE A MIN COL/LIN
 unsigned char value_b[8]; // SPRITE VALUE B MAX COL/LIN
 
-
-unsigned char tile[8];    // TILE
-unsigned char lin[8];     // LINE
+unsigned char tile[8]; // TILE
+unsigned char lin[8];  // LINE
 unsigned char tbuffer[7];
 
 // unsigned char lin_max[7];      // MAX LINE FOR VERTICAL ENEMIES
@@ -76,9 +76,8 @@ unsigned char obj_lin[8]; // object lin for HIGHLIGHT
 unsigned char obj_col[8]; // object col for HIGHLIGHT
 unsigned char obj_count;
 
-
 // PLAYER ONLY
-unsigned int player_score;    // SCORE
+unsigned int player_score; // SCORE
 unsigned char player_lives;
 unsigned char player_coins;
 signed int player_vel_y;
@@ -98,14 +97,11 @@ unsigned char player_lin_scr;
 unsigned char player_killed;
 unsigned int player_kill_index;
 
-
-
-unsigned int  player_hit_time;
+unsigned int player_hit_time;
 unsigned char player_hit;
 unsigned char player_jumpcount;
 
-
-signed int    game_gravity;
+signed int game_gravity;
 unsigned char game_world;
 unsigned char game_song_play;
 unsigned char game_song_play_start;
@@ -113,7 +109,6 @@ unsigned char game_conveyor_dir;
 unsigned char game_conveyor_lin;
 unsigned char game_conveyor_col0;
 unsigned char game_conveyor_col1;
-
 
 unsigned char game_round_up;
 unsigned char game_control_mode;
@@ -148,9 +143,7 @@ unsigned char attrib[4];
 unsigned char attrib_hl[4];
 unsigned char attrib_red[4];
 unsigned char attrib_osd[4];
-
-
-//TILE ATTRIB TODO REMOVE
+// TILE ATTRIB TODO REMOVE UNUSED
 unsigned char attrib0[4];
 unsigned char attrib1[4];
 unsigned char attrib2[4];
@@ -164,21 +157,18 @@ unsigned char attrib8[4];
 unsigned char *p_state;
 unsigned char *p_state_a;
 
-//TODO REVIEW
+// TODO REVIEW
 unsigned char game_conveyor_tile;
 unsigned char game_conveyor_flag;
 unsigned char game_attrib_osd;
 unsigned char game_tileset;
-
 
 unsigned int curr_time;
 unsigned int frame_time;
 unsigned int anim_time;
 unsigned char last_rotated;
 
-
 unsigned char anim_count;
-
 
 unsigned char spr_count;
 unsigned char sprite_curr_index;
@@ -215,69 +205,34 @@ unsigned char map_paper_clr;
 unsigned char map_paper_last;
 unsigned char map_paper_last_a;
 
-
-
 //###############################################################################################
 //# # # ENEMIES ANIMATION SPEEDS - INTERRUPTS VALUES 50HZ
 //# #
 //#
 //###############################################################################################
+/* Enemies Class indexes */
+#define PLAYER 0xFF
+#define GUARD1_RIGHT 1      // Different right / left sprite
+#define GUARDIAN_HOR2 2     // Simetric Horizonal
+#define GUARDIAN_VER_UP 3   //
+#define GUARDIAN_VER_DOWN 4 //
+#define SKYLAB 5            //
+#define EUGENE 6            //
 
-//Enemy intialization variables, based on index on map array, used along GAME_TOTAL_INDEX_CLASSES.
+// Enemy intialization variables, based on index on map array, used along
+// GAME_TOTAL_INDEX_CLASSES.
 unsigned char spr_init[] = {
-  //TILE INDEX ON MAP FILE, CLASS OF ENEMY TO CREATE, SPRITE DIRECTION IF APLLY
-  16, GUARDIAN_HOR1, DIR_LEFT,
-  17, GUARDIAN_HOR1, DIR_RIGHT,
-  18, GUARDIAN_HOR2, DIR_LEFT,
-  19, GUARDIAN_HOR2, DIR_RIGHT,
-  20, GUARDIAN_VER_UP, DIR_NONE,
-  21, GUARDIAN_VER_DOWN, DIR_NONE,
-  22, SKYLAB, DIR_NONE,
-  23, EUGENE, DIR_NONE,
+    // SPR INDEX, TILE INDEX, SPRITE DIRECTION, FRAMES, SPEED , KIND
+    64, 144, DIR_LEFT,  4, 4, E_HORIZONTAL, // ROBOT LEFT
+    65, 144, DIR_RIGHT, 4, 4, E_HORIZONTAL, // ROBOT RIGHT
+    66, 152, DIR_LEFT,  4, 4, E_HORIZONTAL,
+    67, 152, DIR_RIGHT, 4, 4, E_HORIZONTAL,
 };
 
-unsigned char sprite_kind[] = {
-  0,// PLAYER
-  E_HORIZONTAL,
-  E_HORIZONTAL,
-  E_VERTICAL,
-  E_VERTICAL,
-  E_GOTA,
-  E_EUGENE,
-};
-
-unsigned char sprite_speed[8];
-unsigned char sprite_base_speed[] = {
-    4,// PLAYER TODO PIETRO 2 - WILLY 4
-    4,// E_HORIZONTAL
-    4,// E_HORIZONTAL
-    2,// E_VERTICAL
-    2,// E_VERTICAL
-    2,// E_GOTA
-    2,// E_EUGENE
-};
-
-//Sprite tile and animation frames for init, used with GAME_TOTAL_CLASSES
-unsigned char spr_map_tile[] = {
-  //ENEMY Class     ,TILE INDEX ,DIR INC
-  GUARDIAN_HOR1     ,144        ,4, //TODO 144 WILLY 160 PIETRO
-  GUARDIAN_HOR2     ,144        ,4, //TODO 144 WILLY 160 PIETRO
-  GUARDIAN_VER_UP   ,148        ,4,
-  GUARDIAN_VER_DOWN ,152        ,4,
-  EUGENE            ,156        ,4,
-
-};
-
-unsigned char sprite_frames[] = { //TODO REPLACE CONSTANT WITH FIXED VALUES TO SIMPLIFY
-  4,// PLAYER
-  4,// GUARDIAN_HOR1
-  4,// GUARDIAN_HOR2
-  4,// GUARDIAN_VER_UP
-  4,// GUARDIAN_VER_DOWN
-  4,// SKYLAB
-  4,// EUGENE
-};
-
+unsigned char spr_tile[8];
+unsigned char spr_speed[8];
+unsigned char spr_frames[8];
+unsigned char spr_kind[8];
 
 unsigned char key_map[] = {
     13,  32,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  97,
@@ -298,5 +253,27 @@ unsigned int scan_map[] = {
     IN_KEY_SCANCODE_p,     IN_KEY_SCANCODE_q,     IN_KEY_SCANCODE_r,
     IN_KEY_SCANCODE_s,     IN_KEY_SCANCODE_t,     IN_KEY_SCANCODE_u,
     IN_KEY_SCANCODE_v,     IN_KEY_SCANCODE_w,     IN_KEY_SCANCODE_x,
-    IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z
+    IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z};
+
+const char *map_names[] = {
+    "Central Cavern",
+    "The Cold Room",
+    "Menagerie",
+    "Abandoned Uranium Workings",
+    "Eugene's Lair",
+    "Processing Plant",
+    "The Vat",
+    "Wacky Amoebatrons",
+    "The Endorian Forest",
+    "Attack of the Mutant Telephones",
+    "Ore Refinery",
+    "The Warehouse",
+    "Solar Power Generator",
+    "Amoebatrons Revenge",
+    "Miner Willy meets the Kong Beast",
+    "Return of the Alien Kong Beast",
+    "The Final Barrier",
+    "Skylab Landing Bay",
+    "The Bank",
+    "The Sixteenth Cavern",
 };

@@ -32,7 +32,8 @@ void player_init(unsigned char f_lin, unsigned char f_col,
                  unsigned char f_tile) {
   // COMMON SPRITE VARIABLES
   class[SPR_P1] = PLAYER;
-  sprite_speed[SPR_P1] = sprite_base_speed[0];
+  spr_speed[SPR_P1] = PLAYER_SPEED;
+  spr_frames[SPR_P1] = 4;
 
   tile[SPR_P1] = f_tile;
   lin[SPR_P1] = f_lin; //*SPRITELIN(SPR_P1);
@@ -43,6 +44,11 @@ void player_init(unsigned char f_lin, unsigned char f_col,
   jump_lin[SPR_P1] = f_lin;
   last_time[SPR_P1] = zx_clock();
   player_vel_y = 0;
+
+  spr_frames[SPR_P1] = 4;
+
+
+
   // PLAYER ONLY VARIABLES
   BIT_SET(*p_state_a, STAT_LDIRR);
   NIRVANAP_spriteT(SPR_P1, f_tile, f_lin + 16, f_col);
@@ -352,7 +358,7 @@ void player_1up() {
 }
 
 void player_tile(unsigned char f_tile, unsigned char f_inc) {
-  tile[SPR_P1] = spr_tile_dir(&f_tile, &f_inc);
+  tile[SPR_P1] = spr_get_tile_dir(&f_tile, &f_inc);
 }
 
 void player_score_add(unsigned int f_score) __z88dk_fastcall {

@@ -35,7 +35,7 @@ unsigned int spr_calc_index(unsigned char f_lin, unsigned char f_col) {
 }
 
 unsigned char spr_chktime(unsigned char *sprite) __z88dk_fastcall {
-  if (zx_clock() - last_time[*sprite] >= sprite_speed[*sprite]) {
+  if (zx_clock() - last_time[*sprite] >= spr_speed[*sprite]) {
     last_time[*sprite] = zx_clock();
     return 1;
   }
@@ -84,7 +84,7 @@ unsigned char spr_move_up(void) {
           return 1;
         }
       }
-      if (colint[sprite] == sprite_frames[sprite] - 1) {
+      if (colint[sprite] == spr_frames[sprite] - 1) {
         if (game_check_map(s_lin1, col[sprite] + 1)) {
           return 1;
         }
@@ -116,7 +116,7 @@ unsigned char spr_move_down(void) {
           return 1;
         }
       }
-      if (colint[sprite] == sprite_frames[sprite] - 1) {
+      if (colint[sprite] == spr_frames[sprite] - 1) {
         if (game_check_map(s_lin1, col[sprite] + 1)) {
           return 1;
         }
@@ -164,7 +164,7 @@ unsigned char spr_move_right_f(void) {
   f_col = &col[sprite];
 
   ++*f_colint;
-  if (*f_colint >= sprite_frames[s_class]) {
+  if (*f_colint >= spr_frames[sprite]) {
 
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
@@ -187,7 +187,7 @@ unsigned char spr_move_right(void) {
   f_col = &col[sprite];
 
   ++*f_colint;
-  if (*f_colint >= sprite_frames[s_class]) {
+  if (*f_colint >= spr_frames[sprite]) {
 
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
@@ -211,7 +211,7 @@ unsigned char spr_move_right(void) {
 
 unsigned char spr_move_left(void) {
   --colint[sprite];
-  if (colint[sprite] >= sprite_frames[s_class]) {
+  if (colint[sprite] >= spr_frames[sprite]) {
     s_lin1 = lin[sprite];
     if (col[sprite] > 0) {
 
@@ -220,7 +220,7 @@ unsigned char spr_move_left(void) {
         return 1;
       } else {
         --col[sprite];
-        colint[sprite] = sprite_frames[s_class] - 1;
+        colint[sprite] = spr_frames[sprite] - 1;
 
         if (col[sprite] == 255) {
           col[sprite] = 0;
@@ -234,11 +234,11 @@ unsigned char spr_move_left(void) {
 
 unsigned char spr_move_left_f(void) {
   --colint[sprite];
-  if (colint[sprite] >= sprite_frames[s_class]) {
+  if (colint[sprite] >= spr_frames[sprite]) {
     s_lin1 = lin[sprite];
     if (col[sprite] > 0) {
       --col[sprite];
-      colint[sprite] = sprite_frames[s_class] - 1;
+      colint[sprite] = spr_frames[sprite] - 1;
 
       if (col[sprite] == 255) {
         col[sprite] = 0;
@@ -361,22 +361,13 @@ void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
   state_a[f_sprite] = 0;
 }
 
-unsigned char spr_tile(unsigned char *f_sprite) __z88dk_fastcall {
+unsigned char spr_get_tile(unsigned char *f_sprite) __z88dk_fastcall {
   //Search enemy class associated Values
-
-  tmp0 = 0;
-  while (tmp0 < GAME_TOTAL_CLASSES) {
-    tmp1 = tmp0 * 3;
-    if (spr_map_tile[tmp1] == class[*f_sprite]) {
-      return spr_tile_dir(&spr_map_tile[tmp1 + 1], &spr_map_tile[tmp1 + 2]);
-    }
-    ++tmp0;
-  }
-  return 0;
+  return spr_get_tile_dir(&spr_tile[*f_sprite], &spr_frames[*f_sprite]);
 }
 
-unsigned char spr_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {
-  
+unsigned char spr_get_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {
+
   if (BIT_CHK(*p_state, STAT_DIRR)) {
     return *f_tile;
   }
@@ -516,11 +507,11 @@ void spr_turn_horizontal(void) {
     spr_set_right();
   }
   // state[sprite] = *p_state;
-  tile[sprite] = spr_tile(&sprite);
+  tile[sprite] = spr_get_tile(&sprite);
 }
 
 void spr_btile_paint_back() {
-  /*
+
     unsigned char f_tile;
     unsigned char f_paper_c;
 
@@ -528,14 +519,13 @@ void spr_btile_paint_back() {
     tmp_ui = 32;
     map_paper_clr = map_paper | (map_paper >> 3);
     while (tmp_ui < (32 + (48 * 12 * 20))) { // 12*20 btiles
-      if ((f_tile < 73 && f_tile != 13 && f_tile != 14) ||
-          (f_tile >
-           TILE_SPECIAL)) { // TODO AN ARRAY WILL BE A MORE ELEGANT SOLUTION
+      if (f_tile > 64 ) { // TODO AN ARRAY WILL BE A MORE ELEGANT SOLUTION
 
         // f_half = 0;
         tmp0 = 0;
         f_paper_c = map_paper_last;
 
+/*
         if ((f_tile > 56 && f_tile < 65) || (f_tile > 16 && f_tile < 20)) {
           if (map_paper == PAPER_RED) {
             tmp0 = 16;
@@ -545,14 +535,14 @@ void spr_btile_paint_back() {
             f_paper_c = map_paper_last_a;
           }
         }
-
+*/
         while (tmp0 < 16) {
-          tmp = PEEK(&btiles + tmp_ui + tmp0);
+          tmp = PEEK(&btiles + tmp_ui + tmp0); //TODO PERFOMANCE C POINTERS
           if ((tmp & 0x38) == f_paper_c) { // 00111000
             tmp = tmp & 0xC7;              // 11000111
             tmp = tmp | map_paper; // TODO we can hava a map array for ink to
                                    // prevent using the same paper n ink
-            POKE(&btiles + tmp_ui + tmp0, tmp);
+            POKE(&btiles + tmp_ui + tmp0, tmp); //TODO PERFOMANCE C POINTERS
           }
           ++tmp0;
           // if ( f_half & tmp0 == 8 ) tmp0 = 12;
@@ -561,9 +551,8 @@ void spr_btile_paint_back() {
       tmp_ui = tmp_ui + 48;
       ++f_tile;
     }
-    map_paper_last = map_paper;
+    map_paper_last = map_paper & !BRIGHT;
     game_attribs();
-    */
 }
 
 void spr_flatten(void) {
