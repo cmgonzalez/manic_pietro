@@ -60,7 +60,7 @@ void game_loop(void) {
       player_turn();
 
       /*Play animatios*/
-      if (game_check_time(&anim_time, TIME_ANIM)) {
+      if (game_check_time(&anim_time, 3)) {
         // TODO
         anim_time = zx_clock();
         // CONVEYOR ANIM TODO OPTIMIZE ONE FOR SCREEN
@@ -252,90 +252,24 @@ void game_start_timer(void) {
 }
 
 void game_anim_conveyor() {
-
-  // zx_print_str(game_conveyor_lin, game_conveyor_col0, game_conveyor_tile);
-
-  if (game_conveyor_dir == DIR_LEFT) {
-    --game_conveyor_tile;
-    if (game_conveyor_tile < TILE_CONVEYOR) {
-      game_conveyor_tile = TILE_CONVEYOR + 3;
-    }
-  } else {
-    ++game_conveyor_tile;
-    if (game_conveyor_tile >= TILE_CONVEYOR + 4) {
-      game_conveyor_tile = TILE_CONVEYOR;
-    }
-  }
-  game_draw_conv();
-}
-
-void game_draw_conv() {
   unsigned char *f_byte;
   unsigned char *f_byte_src;
-  unsigned char *f_byte_src0;
-  unsigned char f_spr8;
-  unsigned char f_spr16;
-  unsigned char f_lin;
+
   unsigned char f_col;
   unsigned char f_lin1;
-  // unsigned char *f_attrib_start;
-  /*
-    A quick note about the "btile" format:
 
-    Each "btile" represents a 16x16 image, using 8x2 attributes. It's very
-    similar to "ctiles" used in BIFROST* and ZXodus, except each tile is 48
-    bytes (instead of 64 bytes) and their attributes are stored vertically:
-    Byte 1: bitmap value for 1st pixel line, 1st column
-    Byte 2: bitmap value for 1st pixel line, 2nd column
-    Byte 3: bitmap value for 2nd pixel line, 1st column
-    Byte 4: bitmap value for 2nd pixel line, 2nd column
-    Byte 5: bitmap value for 3rd pixel line, 1st column
-    Byte 6: bitmap value for 3rd pixel line, 2nd column
-    ...
-    Byte 31: bitmap value at 16th pixel line, 1st column
-    Byte 32: bitmap value at 16th pixel line, 2nd column
-    Byte 33: attribute value for 1st and 2nd pixel line, 1st column
-    Byte 34: attribute value for 3rd and 4th pixel line, 1st column
-    Byte 35: attribute value for 5th and 6th pixel line, 1st column
-    ...
-    Byte 40: attribute value for 15th and 16th pixel line, 1st column
-    Byte 41: attribute value for 1st and 2nd pixel line, 2nd column
-    Byte 42: attribute value for 3rd and 4th pixel line, 2nd column
-    ...
-    Byte 48: attribute value for 15th and 16th pixel line, 2nd column
 
-    The ordering above looks somewhat unconventional, but there's a reason: it's
-    more convenient for the NIRVANA ENGINE this way, so it can be more compact
-    and efficient.
-  */
-  // Geometria ancho del btile (teorico) por ejemplo 8 btiles (16x16)
+  f_byte_src = &btiles[0] + ( 48 * 2 ); //TODO CALCULATE ONCE ALL THIS
+  i = game_conveyor_lin;
+  f_lin1 = i + 8;
+//Rotate
+*f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
+*f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
 
-  f_spr16 = game_conveyor_tile >> 2;
-  f_spr8 = game_conveyor_tile % 4;
-  f_lin = game_conveyor_lin;
-  // f_col = game_conveyor_col0;
 
-  f_byte_src0 = &btiles[0] + (48 * (f_spr16 + game_tileset));
-
-  switch (f_spr8) {
-  case 0:
-    f_byte_src = f_byte_src0;
-    break;
-  case 1:
-    f_byte_src = f_byte_src0 + 1;
-    break;
-  case 2:
-    f_byte_src = f_byte_src0 + 16;
-    break;
-  case 3:
-    f_byte_src = f_byte_src0 + 17;
-    break;
-  }
-
-  f_lin1 = f_lin + 8;
-  while (f_lin < f_lin1) {
+  while (i < f_lin1) {
     f_col = game_conveyor_col0;
-    f_byte = zx_py2saddr(f_lin) + f_col; // Calculate screen Line
+    f_byte = zx_py2saddr(i) + f_col; // Calculate screen Line
 
     while (f_col < game_conveyor_col1) {
       *f_byte = *f_byte_src;
@@ -343,16 +277,68 @@ void game_draw_conv() {
       ++f_col;
     }
 
-    f_byte_src = f_byte_src +
-                 2; // Increment btile by 2 to get next line of the 8x8 sprite
-    ++f_lin;        // Draw next line
+
+    f_byte_src = f_byte_src + 2; // Increment btile by 2 to get next line of the 8x8 sprite
+    i++;
+    if ( i == game_conveyor_lin + 2) {
+      *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
+      *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
+    }
   }
-  NIRVANAP_halt();
 }
+
+
+
 void game_round_init(void) {
+  unsigned const char *map_names[] = {
+      "Central Cavern",
+      "The Cold Room",
+      "Menagerie",
+      "Abandoned Uranium Workings",
+      "Eugene's Lair",
+      "Processing Plant",
+      "The Vat",
+      "Wacky Amoebatrons",
+      "The Endorian Forest",
+      "Attack of the Mutant Telephones",
+      "Ore Refinery",
+      "The Warehouse",
+      "Solar Power Generator",
+      "Amoebatrons Revenge",
+      "Miner Willy meets the Kong Beast",
+      "Return of the Alien Kong Beast",
+      "The Final Barrier",
+      "Skylab Landing Bay",
+      "The Bank",
+      "The Sixteenth Cavern",
+  };
+  unsigned const char map_lens[] = {
+    14,
+    13,
+    26,
+    13,
+    16,
+    7,
+    17,
+    19,
+    31,
+    12,
+    13,
+    19,
+    21,
+    19,
+    32,
+    30,
+    17,
+    18,
+    8,
+    20
+  };
 
   /* screen init */
   /*PHASE INIT*/
+
+
 
   loop_count = 0;
   zx_set_clock(0);
@@ -378,7 +364,16 @@ void game_round_init(void) {
 
   game_paint_attrib(&attrib_hl, 0, 32, 144);
 
-  zx_print_str(17, 9, map_names[scr_curr]);
+  i = 0;
+  tmp_ui = 0;
+  while( i < scr_curr ) {
+    tmp_ui = tmp_ui + map_lens[i];
+    ++i;
+
+  }
+
+
+  zx_print_str(17, (32 - map_lens[scr_curr]) >> 1, map_names[scr_curr] );
 
   game_paint_attrib(&attrib_red, 0, 10, 144 + 8);
   game_paint_attrib(&attrib_osd, 10, 32, 144 + 8);

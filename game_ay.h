@@ -14,6 +14,8 @@
    You should have received a copy of the GNU General Public License
    along with Manic Pietro.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+//TODO RENAME THIS IS NOT AY IT'S UPPER MEM
 #ifndef GAME_AY_H
 #define GAME_AY_H
 
@@ -44,12 +46,13 @@ extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 
 // AY Songs
 //BANK_3
-
+extern unsigned char hibtiles[];
 
 //BANK_4
-
 extern unsigned char ay_song_04_ingame[];
 extern unsigned char ay_song_04_ingame0[];
+
+
 
 //BANK_6
 extern unsigned char ay_song_06_lotr_lose_a_life[];

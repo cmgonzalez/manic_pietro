@@ -1,18 +1,18 @@
 /*
-   This file is part of Zombie Castle.
+   This file is part of Manic Pietro.
 
-   Zombie Castle is free software: you can redistribute it and/or modify
+   Manic Pietro is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
 
-   Zombie Castle is distributed in the hope that it will be useful,
+   Manic Pietro is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with Zombie Castle.  If not, see <http://www.gnu.org/licenses/>.
+   along with Manic Pietro.  If not, see <http://www.gnu.org/licenses/>.
  */
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -25,7 +25,7 @@
 
 
 #define PLAYER_SPEED                 4
-#define ENEMY_START_INDEX            64
+#define ENEMY_START_INDEX            64 //INDEX OF START OF ENEMY ON MAP ARRAY
 
 
 #define GAME_GRAVITY                  1
@@ -49,23 +49,45 @@ Offsets 589 to 597: Nasty 1
 Offsets 598 to 606: Nasty 2
 Offsets 607 to 615: Spare
 */
+/* NUEVO MAPA
+0  VACIO
+1  PLATAFORM
+2  PLATAFORM CRUMBLING
+3  BRICK
+4  CONVEYOR
+5  DEADLY 1
+6  DEADLY 2
+7  ??? DEADLY 3 ??? SPIDER WEB
+8  LLAVE
+9  ???
+10 PLATAFORMA 1
+11 PLATAFORMA 2
+12 PLATAFORMA 3
+14 PLATAFORMA 4
+12 PLATAFORMA 5
+14 PLATAFORMA 6
+14 PLATAFORMA 7
+15 ???
+*/
 
 #define TILE_EMPTY                    0
 #define TILE_FLOOR                    1
 #define TILE_FLOOR0                   2
-#define TILE_FLOOR1                   3
-#define TILE_FLOOR2                   4
-#define TILE_FLOOR3                   5
-#define TILE_FLOOR4                   6
-#define TILE_FLOOR5                   7
-#define TILE_FLOOR6                   8
-#define TILE_FLOOR7                   9
-#define TILE_WALL                     10
-#define TILE_CONVEYOR                 16
-#define TILE_DEADLY1                  12
-#define TILE_DEADLY2                  13
-#define TILE_OBJECT                   14
+#define TILE_WALL                     3
+#define TILE_CONVEYOR                 4
+#define TILE_DEADLY1                  5
+#define TILE_DEADLY2                  6
+#define TILE_DEADLY3                  7
+#define TILE_OBJECT                   8
 
+
+#define TILE_FLOOR1                   9
+#define TILE_FLOOR2                   10
+#define TILE_FLOOR3                   11
+#define TILE_FLOOR4                   12
+#define TILE_FLOOR5                   13
+#define TILE_FLOOR6                   14
+#define TILE_FLOOR7                   15
 
 
 #define TILE_WALL1                   62
@@ -126,7 +148,7 @@ Offsets 607 to 615: Spare
 
 /* Player 1 tiles */
 
-#define TILE_P1_RIGHT                 96 //96 Willy 112 Pietro
+#define TILE_P1_RIGHT                 8
 #define TILE_P1_LEN                   4 //LEN OF PLAYER SPRITES FOR EACH DIRECTION
 
 
@@ -317,12 +339,14 @@ extern unsigned char s_col1;
 extern unsigned char s_row1;
 extern unsigned char s_class;
 extern unsigned int loop_count;
+extern unsigned int index_tmp;
 extern unsigned int index0;
 extern unsigned int index1;
 extern unsigned char tmp;
 extern unsigned char tmp0;
 extern unsigned char tmp1;
 extern unsigned char tmp_uc;
+extern unsigned char draw8_voffset;
 extern signed char tmp_sc;
 extern unsigned int tmp_ui;
 extern unsigned char enemies;
@@ -376,7 +400,7 @@ extern unsigned char game_start_scr;
 
 
 extern unsigned char screen_paper, screen_ink;
-extern unsigned char spr_init[];
+extern const unsigned char spr_init[];
 
 extern unsigned char spr_tile[];
 extern unsigned char spr_speed[];
@@ -407,7 +431,7 @@ extern unsigned char scr_curr;
 extern unsigned char map_width;
 extern unsigned char map_heigth;
 
-extern unsigned char anim_lin[8];
+extern unsigned char anim_lin[8]; //TODO REMOVE ANIM?
 extern unsigned char anim_col[8];
 extern unsigned char anim_tile[8];
 extern unsigned char anim_int[8];
@@ -422,6 +446,7 @@ extern unsigned char map_paper_clr;
 extern unsigned char map_paper_last;
 extern unsigned char map_paper_last_a;
 
-extern unsigned char key_map[];
+extern const unsigned char key_map[];
 extern unsigned int scan_map[];
-extern const char *map_names[];
+//extern unsigned char *map_names[];
+//extern const unsigned char map_lens[];

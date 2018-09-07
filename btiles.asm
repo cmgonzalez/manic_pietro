@@ -4,4 +4,4 @@ PUBLIC _btiles
 
 _btiles:
 
-   BINARY "game.btile"
+   BINARY "game_lowmem.btile"

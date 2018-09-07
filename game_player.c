@@ -466,38 +466,46 @@ unsigned char player_check_floor_walk(unsigned char f_lin,
     return 1;
   }
 
-  // GASTA BRICK TODO OPTIMIZE CODE
-  if (v0 >= TILE_FLOOR0 && v0 <= TILE_FLOOR7) {
+  i = TILE_EMPTY;
 
-    if (v0 < TILE_FLOOR6) {
-      scr_map[index1] = v0 + 1;
-    } else {
-      scr_map[index1] = TILE_EMPTY;
-    }
+  if (v0 == TILE_FLOOR0 || v0 >= TILE_FLOOR1) {
+    i = v0;
     s_col1 = f_col;
+    index_tmp = index1;
+  }
+
+
+  if (v1 == TILE_FLOOR0 || v1 >= TILE_FLOOR1) {
+    i = v0;
+    s_col1 = f_col+1;
+    index_tmp = index1+1;
+  }
+  // GASTA BRICK TODO OPTIMIZE CODE
+
+  if (i) {
+
+    if (i == TILE_FLOOR0) {
+      scr_map[index_tmp] = TILE_FLOOR1;
+      draw8_voffset = 1;
+    } else {
+
+      if (i == TILE_FLOOR7) {
+        scr_map[index_tmp] == TILE_EMPTY;
+        draw8_voffset = 0;
+      } else {
+        scr_map[index_tmp] = i + 1;
+        draw8_voffset =  TILE_FLOOR7 - i;
+      }
+    }
+
+
     s_lin1 = f_lin >> 3;
     s_lin1 = s_lin1 << 3;
     s_lin1 = s_lin1;
     s_row1 = (s_lin1 >> 3) + 1;
     //game_cell_paint();
-    game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
-  }
-
-  if (v1 >= TILE_FLOOR0 && v1 <= TILE_FLOOR7) {
-    ++index1;
-    if (v1 < TILE_FLOOR6) {
-      scr_map[index1] = v1 + 1;
-    } else {
-      scr_map[index1] = TILE_EMPTY;
-    }
-
-    s_col1 = f_col + 1;
-    s_lin1 = f_lin >> 3;
-    s_lin1 = s_lin1 << 3;
-    s_lin1 = s_lin1;
-    s_row1 = (f_lin >> 3) + 1;
-    //game_cell_paint();
-    game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+    game_sprite_draw8(scr_map[index_tmp], s_row1 << 3, s_col1);
+    draw8_voffset = 0;
   }
 
   if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {

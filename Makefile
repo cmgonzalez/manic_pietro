@@ -33,7 +33,7 @@ sna: game_scr.bin game_scr.asm game.font $(OUTS)
 	grep code_compiler_size game.map
 
 loader.tap: src_tap/loader.bas
-	src_tap/bas2tap -sZombie -a10 src_tap/loader.bas loader.tap
+	src_tap/bas2tap -sMPietro -a10 src_tap/loader.bas loader.tap
 
 game_scr.bin: src_tap/game_scr.bin
 	cp src_tap/game_scr.bin game_scr.bin

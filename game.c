@@ -35,6 +35,7 @@
 
 void main(void) {
   unsigned int counter;
+
   // DEBUG
   zx_border(INK_BLACK);
   z80_delay_ms(666);
@@ -43,12 +44,10 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 1; // 0xFF;
+  scr_curr = 1;// 0xFF;
 
   game_song_play = 1;
   game_tileset = scr_curr * 8;
-
-
 
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -58,6 +57,7 @@ void main(void) {
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
   game_gravity = 98;    // GAME_GRAVITY;
   player_vel_y0 = -690; // GAME_VELOCITY;
+  draw8_voffset = 0;
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
@@ -99,7 +99,7 @@ void main(void) {
   frame_time = zx_clock();
 
   menu_curr_sel = 1;
-  map_paper_last = PAPER_BLACK; //DEFAULT PAPER ON BTILE FILE
+  map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
   game_control_mode = 2; // 0)2button - default 1) 1button: 1 Button UP+FIRE
                          // Shoots 2) 1 button: fire shoots, up jump , up+fire
                          // for ladders
@@ -138,9 +138,20 @@ void test_proc() {}
 unsigned char test_func() { return 0; }
 
 void game_copy_tile() {
-  //copy a btile from upper memory to first 48
+  // copy a btile from upper memory to first 48
+  unsigned char btile[48];
+  unsigned char i;
 
-
+  GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
+  IO_7FFD = 0x10 + 6;
+  i = 0;
+  while (i < 48) {
+    btile[i] = btile[i];
+    ++i;
+  }
+  // Page in BANK 00
+  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
+  IO_7FFD = 0x10 + 0;
 }
 
 void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
@@ -183,9 +194,20 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
   unsigned char f_lin1;
   unsigned char *f_attrib_start;
 
-  f_spr16 = f_spr8 >> 2;
-  f_spr8 = f_spr8 % 4;
-  f_byte_src0 = &btiles[0] + (48 * (f_spr16 + game_tileset)) ;
+  if (f_spr8 < 16) {
+    f_spr16 =
+        f_spr8 >>
+        1; // si es mayor que 16 puedo sacar los graficos de la segunda linea
+    f_spr8 = f_spr8 % 2;
+  } else {
+    f_spr8 = f_spr8 - 16;
+    f_spr16 =
+        f_spr8 >>
+        1; // si es mayor que 16 puedo sacar los graficos de la segunda linea
+    f_spr8 = 2 + (f_spr8 % 2);
+  }
+
+  f_byte_src0 = &btiles[0] + (48 * f_spr16);
 
   switch (f_spr8) {
   case 0:
@@ -214,12 +236,12 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
   ++f_attrib_start;
   attrib[3] = *f_attrib_start;
 
-  NIRVANAP_paintC(&attrib, f_lin + 8, f_col); //TODO direct Nirvana Buffer poke
+  NIRVANAP_paintC(&attrib, f_lin + 8 + ( (draw8_voffset >> 1) << 1), f_col); // TODO direct Nirvana Buffer poke
 
   f_lin1 = f_lin + 8;
-  //TODO can be optimized on div 8 rows, no need for each zx_py2addr
+  // TODO can be optimized on div 8 rows, no need for each zx_py2addr
   while (f_lin < f_lin1) {
-    f_byte = zx_py2saddr(f_lin) + f_col;
+    f_byte = zx_py2saddr(f_lin + draw8_voffset ) + f_col;
     *f_byte = *f_byte_src;
     f_byte_src = f_byte_src + 2;
     ++f_lin;

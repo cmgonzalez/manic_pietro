@@ -202,7 +202,7 @@ unsigned char enemy_avoid_dead() {
 }
 
 void enemy_init(unsigned char f_lin, unsigned char f_col,
-                unsigned char f_index) {
+                unsigned char f_class) {
   unsigned char f_sprite;
   unsigned char f_dir;
 
@@ -210,56 +210,49 @@ void enemy_init(unsigned char f_lin, unsigned char f_col,
   f_sprite = 0;
   while (f_sprite < SPR_P1) {
     if (class[f_sprite] == 0) {
+      tmp0 = 0;
+      while (tmp0 <= (GAME_TOTAL_INDEX_CLASSES * 6)) {
+
+        if (spr_init[tmp0] == f_class) {
+          // Class Found!
+          sprite = f_sprite;
+
+          class[f_sprite] = f_class; // spr_init[tmp1];
+          spr_tile[f_sprite] = spr_init[tmp0 + 1];
+          f_dir = spr_init[tmp1 + 2];
+          spr_frames[f_sprite] = spr_init[tmp0 + 3];
+          spr_speed[f_sprite] = spr_init[tmp0 + 4];
+          spr_kind[f_sprite] = spr_init[tmp0 + 5];
+
+          lin[f_sprite] = f_lin;
+          col[f_sprite] = f_col;
+          state[f_sprite] = 0;
+          state_a[f_sprite] = 0;
+          jump_lin[f_sprite] = 0;
+          colint[f_sprite] = 0;
+          if (f_dir == DIR_RIGHT) {
+            BIT_SET(state[f_sprite], STAT_DIRR);
+          }
+          if (f_dir == DIR_LEFT) {
+            BIT_SET(state[f_sprite], STAT_DIRL);
+            colint[f_sprite] = spr_frames[sprite] - 1;
+          }
+          p_state = &state[f_sprite];
+          p_state_a = &state_a[f_sprite];
+
+          tile[f_sprite] = spr_get_tile(&f_sprite);
+          spr_timer[f_sprite] = zx_clock();
+          last_time[f_sprite] = 0;
+          ++spr_count;
+          break;
+        } else {
+          // increment
+          tmp0 = tmp0 + 6; // Six variables on spr_init
+        }
+      }
       break;
     } else {
       f_sprite++;
-    }
-  }
-
-  // Out of sprites
-  sprite = 0xFF;
-  if (f_sprite < SPR_P1) {
-
-    tmp0 = 0;
-    while (tmp0 <= GAME_TOTAL_INDEX_CLASSES) {
-      tmp1 = tmp0 * 6; // Six variables on spr_init
-      if (spr_init[tmp1] == f_index) {
-
-        tmp0 = 0xFF;
-      } else {
-        ++tmp0;
-      }
-    }
-    if (tmp0 == 0xFF) {
-      sprite = f_sprite;
-
-      class[f_sprite] = f_index; // spr_init[tmp1];
-      spr_tile[f_sprite] = spr_init[tmp1 + 1];
-      f_dir = spr_init[tmp1 + 2];
-      spr_frames[f_sprite] = spr_init[tmp1 + 3];
-      spr_speed[f_sprite] = spr_init[tmp1 + 4];
-      spr_kind[f_sprite] = spr_init[tmp1 + 5];
-
-      lin[f_sprite] = f_lin;
-      col[f_sprite] = f_col;
-      state[f_sprite] = 0;
-      state_a[f_sprite] = 0;
-      jump_lin[f_sprite] = 0;
-      colint[f_sprite] = 0;
-      if (f_dir == DIR_RIGHT) {
-        BIT_SET(state[f_sprite], STAT_DIRR);
-      }
-      if (f_dir == DIR_LEFT) {
-        BIT_SET(state[f_sprite], STAT_DIRL);
-        colint[f_sprite] = spr_frames[sprite] - 1;
-      }
-      p_state = &state[f_sprite];
-      p_state_a = &state_a[f_sprite];
-
-      tile[f_sprite] = spr_get_tile(&f_sprite);
-      spr_timer[f_sprite] = zx_clock();
-      last_time[f_sprite] = 0;
-      ++spr_count;
     }
   }
 }

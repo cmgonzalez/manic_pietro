@@ -129,12 +129,17 @@ unsigned char s_col1;
 unsigned char s_row1;
 unsigned char s_class;
 unsigned int loop_count;
+
+unsigned int index_tmp;
 unsigned int index0;
 unsigned int index1;
+
 unsigned char tmp;
 unsigned char tmp0;
 unsigned char tmp1;
 unsigned char tmp_uc;
+unsigned char draw8_voffset;
+
 signed char tmp_sc;
 unsigned int tmp_ui;
 unsigned char enemies;
@@ -221,12 +226,13 @@ unsigned char map_paper_last_a;
 
 // Enemy intialization variables, based on index on map array, used along
 // GAME_TOTAL_INDEX_CLASSES.
-unsigned char spr_init[] = {
+const unsigned char spr_init[] = {
     // SPR INDEX, TILE INDEX, SPRITE DIRECTION, FRAMES, SPEED , KIND
-    64, 144, DIR_LEFT,  4, 4, E_HORIZONTAL, // ROBOT LEFT
-    65, 144, DIR_RIGHT, 4, 4, E_HORIZONTAL, // ROBOT RIGHT
-    66, 152, DIR_LEFT,  4, 4, E_HORIZONTAL,
-    67, 152, DIR_RIGHT, 4, 4, E_HORIZONTAL,
+    64, 16, DIR_LEFT, 4, 4, E_HORIZONTAL,  // ROBOT LEFT TODO ESTO DEBE
+                                           // APUNTAR AL INDICE DEL TILE EN
+                                           // HIMEM
+    65, 16, DIR_RIGHT, 4, 4, E_HORIZONTAL, // ROBOT RIGHT
+    66, 24, DIR_LEFT, 4, 4, E_HORIZONTAL, 67, 24, DIR_RIGHT, 4, 4, E_HORIZONTAL,
 };
 
 unsigned char spr_tile[8];
@@ -234,7 +240,7 @@ unsigned char spr_speed[8];
 unsigned char spr_frames[8];
 unsigned char spr_kind[8];
 
-unsigned char key_map[] = {
+const unsigned char key_map[] = {
     13,  32,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  97,
     98,  99,  100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
     111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
@@ -254,26 +260,3 @@ unsigned int scan_map[] = {
     IN_KEY_SCANCODE_s,     IN_KEY_SCANCODE_t,     IN_KEY_SCANCODE_u,
     IN_KEY_SCANCODE_v,     IN_KEY_SCANCODE_w,     IN_KEY_SCANCODE_x,
     IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z};
-
-const char *map_names[] = {
-    "Central Cavern",
-    "The Cold Room",
-    "Menagerie",
-    "Abandoned Uranium Workings",
-    "Eugene's Lair",
-    "Processing Plant",
-    "The Vat",
-    "Wacky Amoebatrons",
-    "The Endorian Forest",
-    "Attack of the Mutant Telephones",
-    "Ore Refinery",
-    "The Warehouse",
-    "Solar Power Generator",
-    "Amoebatrons Revenge",
-    "Miner Willy meets the Kong Beast",
-    "Return of the Alien Kong Beast",
-    "The Final Barrier",
-    "Skylab Landing Bay",
-    "The Bank",
-    "The Sixteenth Cavern",
-};

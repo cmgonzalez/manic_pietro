@@ -8,7 +8,7 @@ set "CFLAGS=-SO3 --max-allocs-per-node200000 --opt-code-size --list"
 
 @rem MAKE BASIC LOADER
 echo Creating Basic Loader.
-src_tap\bas2tap -sZombie -a10 src_tap\loader.bas loader.tap 1>nul
+src_tap\bas2tap -sMPietro -a10 src_tap\loader.bas loader.tap 1>nul
 
 @rem COPY SCREEN$
 echo Copying Loading Screen.

@@ -275,8 +275,6 @@ void spr_clear_scr() {
   intrinsic_ei();
 }
 
-
-
 unsigned char spr_paint_player(void) {
   /* Parpadeo
     if (player_hit) {
@@ -362,7 +360,7 @@ void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
 }
 
 unsigned char spr_get_tile(unsigned char *f_sprite) __z88dk_fastcall {
-  //Search enemy class associated Values
+  // Search enemy class associated Values
   return spr_get_tile_dir(&spr_tile[*f_sprite], &spr_frames[*f_sprite]);
 }
 
@@ -391,31 +389,31 @@ void spr_back_repaint(void) {
 
   s_row1 = (s_lin0 >> 3) + 1;
   s_col1 = s_col0;
-  //game_cell_paint();
+  // game_cell_paint();
   game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
-  //game_cell_paint();
+  // game_cell_paint();
   game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
-  //game_cell_paint();
+  // game_cell_paint();
   game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1--;
   s_col1--;
-  //game_cell_paint();
+  // game_cell_paint();
   game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   // TODO PERFORMANCE
   // if ( (s_lin0 >> 3) != 0 ) {
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
-  //game_cell_paint();
+  // game_cell_paint();
   game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
-  //game_cell_paint();
+  // game_cell_paint();
   game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   //}
 }
@@ -511,48 +509,41 @@ void spr_turn_horizontal(void) {
 }
 
 void spr_btile_paint_back() {
+  unsigned char *f_char;
 
-    unsigned char f_tile;
-    unsigned char f_paper_c;
+  tmp_ui = 0;
+  map_paper_clr = map_paper | (map_paper >> 3);
 
-    f_tile = 0;
-    tmp_ui = 32;
-    map_paper_clr = map_paper | (map_paper >> 3);
-    while (tmp_ui < (32 + (48 * 12 * 20))) { // 12*20 btiles
-      if (f_tile > 64 ) { // TODO AN ARRAY WILL BE A MORE ELEGANT SOLUTION
+  while (index0 < (48 * 9 * 8)) { // 12*20 btiles
 
-        // f_half = 0;
-        tmp0 = 0;
-        f_paper_c = map_paper_last;
+    i = 0;
+
+    // Internal
+    while (i < 16) {
+      //tmp = PEEK(&btiles + tmp_ui + tmp0); // TODO PERFOMANCE C POINTERS
+      f_char = &btiles[0] + index0 + i + 32;
+      if ( (*f_char & 0x38) == map_paper_last ) {   // 00111000
+        *f_char = *f_char & 0xC7;                   // 11000111
+        *f_char = *f_char | map_paper;
+      }
 
 /*
-        if ((f_tile > 56 && f_tile < 65) || (f_tile > 16 && f_tile < 20)) {
-          if (map_paper == PAPER_RED) {
-            tmp0 = 16;
-            map_paper_last_a = map_paper_last;
-          }
-          if (map_paper_last == PAPER_RED) {
-            f_paper_c = map_paper_last_a;
-          }
-        }
-*/
-        while (tmp0 < 16) {
-          tmp = PEEK(&btiles + tmp_ui + tmp0); //TODO PERFOMANCE C POINTERS
-          if ((tmp & 0x38) == f_paper_c) { // 00111000
-            tmp = tmp & 0xC7;              // 11000111
-            tmp = tmp | map_paper; // TODO we can hava a map array for ink to
-                                   // prevent using the same paper n ink
-            POKE(&btiles + tmp_ui + tmp0, tmp); //TODO PERFOMANCE C POINTERS
-          }
-          ++tmp0;
-          // if ( f_half & tmp0 == 8 ) tmp0 = 12;
-        }
+      if ((tmp & 0x38) == map_paper_last) {     // 00111000
+        tmp = tmp & 0xC7;                  // 11000111
+        tmp = tmp | map_paper; // TODO we can hava a map array for ink to
+                               // prevent using the same paper n ink
+        POKE(&btiles + tmp_ui + tmp0, tmp); // TODO PERFOMANCE C POINTERS
       }
-      tmp_ui = tmp_ui + 48;
-      ++f_tile;
+*/
+      ++i;
+      // if ( f_half & tmp0 == 8 ) tmp0 = 12;
     }
-    map_paper_last = map_paper & !BRIGHT;
-    game_attribs();
+
+    index0 = index0 + 48;
+
+  }
+  map_paper_last = map_paper & !BRIGHT;
+  game_attribs();
 }
 
 void spr_flatten(void) {
