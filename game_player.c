@@ -47,8 +47,6 @@ void player_init(unsigned char f_lin, unsigned char f_col,
 
   spr_frames[SPR_P1] = 4;
 
-
-
   // PLAYER ONLY VARIABLES
   BIT_SET(*p_state_a, STAT_LDIRR);
   NIRVANAP_spriteT(SPR_P1, f_tile, f_lin + 16, f_col);
@@ -168,22 +166,20 @@ unsigned char player_move(void) {
   } else {
     /* Walk Handling */
     player_move_walk();
-    player_move_gasta();
+    /* Check if the player have floor, and set fall if not */
+    if (player_check_floor_walk(lin[SPR_P1] + 16, col[SPR_P1]) &&
+        player_check_floor_walk(lin[SPR_P1] + 16, col[SPR_P1] + 1)) {
+      spr_move_horizontal();
+      BIT_SET(*p_state, STAT_FALL);
+      BIT_CLR(*p_state, STAT_DIRL);
+      BIT_CLR(*p_state, STAT_DIRR);
+    }
   }
   /* Paint Player Sprite */
   spr_paint_player();
   return 0;
 }
 
-void player_move_gasta() {
-  /* Check if the player have floor, and set fall if not */
-  if (player_check_floor_walk(lin[SPR_P1] + 16, col[SPR_P1])) {
-    spr_move_horizontal();
-    BIT_SET(*p_state, STAT_FALL);
-    BIT_CLR(*p_state, STAT_DIRL);
-    BIT_CLR(*p_state, STAT_DIRR);
-  }
-}
 
 unsigned char player_check_input(void) {
 
@@ -247,19 +243,19 @@ unsigned char player_move_jump(void) {
 
     if (s_lin1 - player_jump_top > 2) {
 
-
-      if (player_check_floor_jump(lin[SPR_P1] + 18, col[SPR_P1])) {
+      if (
+          player_check_floor_jump(lin[SPR_P1] + 18, col[SPR_P1]     ) ||
+          player_check_floor_jump(lin[SPR_P1] + 18, col[SPR_P1] + 1 )
+        ) {
         // Jump end
 
         tmp_uc = (s_lin1 >> 3) << 3;
 
-
-          lin[SPR_P1] = tmp_uc;
-          player_vel_y = 0;
-          BIT_CLR(*p_state, STAT_FALL);
-          BIT_CLR(*p_state, STAT_JUMP);
-          return 1;
-
+        lin[SPR_P1] = tmp_uc;
+        player_vel_y = 0;
+        BIT_CLR(*p_state, STAT_FALL);
+        BIT_CLR(*p_state, STAT_JUMP);
+        return 1;
       }
     }
 
@@ -399,7 +395,7 @@ unsigned char player_pick_deadly(unsigned char l_val) {
 }
 
 unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
-
+//TODO OPTIMIZA LIKE CHECK FLOOR JUMP/WALK
   if (colint[SPR_P1] < 3) {
     index1 = spr_calc_index(f_lin, f_col);
     v0 = scr_map[index1];
@@ -426,25 +422,19 @@ unsigned char player_check_floor_jump(unsigned char f_lin,
 
   index1 = spr_calc_index(f_lin, f_col);
   v0 = scr_map[index1];
-  v1 = scr_map[index1+1];
 
-  if (v0 == TILE_OBJECT)
-    v0 = TILE_EMPTY;
 
-  if (v1 == TILE_OBJECT)
-    v1 = TILE_EMPTY;
+  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 || v0 == TILE_DEADLY2) {
+    return 0;
+  }
 
-  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+
+  if (v0 == TILE_CONVEYOR ) {
     BIT_SET(*p_state, STAT_CONVEYOR);
   } else {
     BIT_CLR(*p_state, STAT_CONVEYOR);
   }
 
-
-  //if (v0 >= TILE_FLOOR && v0 <= TILE_CONVEYOR) {
-  if (v0 == TILE_EMPTY && v1 == TILE_EMPTY) {
-    return 0;
-  }
   return 1;
 }
 
@@ -454,61 +444,33 @@ unsigned char player_check_floor_walk(unsigned char f_lin,
   index1 = spr_calc_index(f_lin, f_col);
 
   v0 = scr_map[index1];
-  v1 = scr_map[index1 + 1];
 
-  if (v0 == TILE_OBJECT)
-    v0 = TILE_EMPTY;
-
-  if (v1 == TILE_OBJECT)
-    v1 = TILE_EMPTY;
-
-  if (v0 == 0 && v1 == 0) {
+  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 || v0 == TILE_DEADLY2) {
     return 1;
   }
 
-  i = TILE_EMPTY;
-
-  if (v0 == TILE_FLOOR0 || v0 >= TILE_FLOOR1) {
-    i = v0;
+  if (v0 == TILE_CRUMB0 || v0 >= TILE_CRUMB1 ) { //TODO CAUTION!
     s_col1 = f_col;
-    index_tmp = index1;
-  }
 
-
-  if (v1 == TILE_FLOOR0 || v1 >= TILE_FLOOR1) {
-    i = v0;
-    s_col1 = f_col+1;
-    index_tmp = index1+1;
-  }
-  // GASTA BRICK TODO OPTIMIZE CODE
-
-  if (i) {
-
-    if (i == TILE_FLOOR0) {
-      scr_map[index_tmp] = TILE_FLOOR1;
-      draw8_voffset = 1;
+    if (v0 == TILE_CRUMB0) {
+      scr_map[index1] = TILE_CRUMB1;
     } else {
-
-      if (i == TILE_FLOOR7) {
-        scr_map[index_tmp] == TILE_EMPTY;
-        draw8_voffset = 0;
-      } else {
-        scr_map[index_tmp] = i + 1;
-        draw8_voffset =  TILE_FLOOR7 - i;
+      ++scr_map[index1];
+      if (scr_map[index1] > TILE_CRUMB7) {
+        scr_map[index1] = TILE_EMPTY;
       }
     }
 
-
+    // GASTA BRICK TODO OPTIMIZE CODE
     s_lin1 = f_lin >> 3;
     s_lin1 = s_lin1 << 3;
     s_lin1 = s_lin1;
     s_row1 = (s_lin1 >> 3) + 1;
-    //game_cell_paint();
-    game_sprite_draw8(scr_map[index_tmp], s_row1 << 3, s_col1);
-    draw8_voffset = 0;
+    // game_cell_paint();
+    game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
   }
 
-  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+  if (v0 == TILE_CONVEYOR) {
     BIT_SET(*p_state, STAT_CONVEYOR);
   } else {
     BIT_CLR(*p_state, STAT_CONVEYOR);

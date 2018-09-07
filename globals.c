@@ -138,7 +138,6 @@ unsigned char tmp;
 unsigned char tmp0;
 unsigned char tmp1;
 unsigned char tmp_uc;
-unsigned char draw8_voffset;
 
 signed char tmp_sc;
 unsigned int tmp_ui;

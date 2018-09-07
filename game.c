@@ -57,7 +57,7 @@ void main(void) {
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
   game_gravity = 98;    // GAME_GRAVITY;
   player_vel_y0 = -690; // GAME_VELOCITY;
-  draw8_voffset = 0;
+
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
@@ -236,12 +236,12 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
   ++f_attrib_start;
   attrib[3] = *f_attrib_start;
 
-  NIRVANAP_paintC(&attrib, f_lin + 8 + ( (draw8_voffset >> 1) << 1), f_col); // TODO direct Nirvana Buffer poke
+  NIRVANAP_paintC(&attrib, f_lin + 8, f_col); // TODO direct Nirvana Buffer poke
 
   f_lin1 = f_lin + 8;
   // TODO can be optimized on div 8 rows, no need for each zx_py2addr
   while (f_lin < f_lin1) {
-    f_byte = zx_py2saddr(f_lin + draw8_voffset ) + f_col;
+    f_byte = zx_py2saddr( f_lin ) + f_col;
     *f_byte = *f_byte_src;
     f_byte_src = f_byte_src + 2;
     ++f_lin;

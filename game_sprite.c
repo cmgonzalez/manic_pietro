@@ -514,33 +514,22 @@ void spr_btile_paint_back() {
   tmp_ui = 0;
   map_paper_clr = map_paper | (map_paper >> 3);
 
+  index0 = 48;
   while (index0 < (48 * 9 * 8)) { // 12*20 btiles
 
     i = 0;
 
     // Internal
     while (i < 16) {
-      //tmp = PEEK(&btiles + tmp_ui + tmp0); // TODO PERFOMANCE C POINTERS
       f_char = &btiles[0] + index0 + i + 32;
-      if ( (*f_char & 0x38) == map_paper_last ) {   // 00111000
-        *f_char = *f_char & 0xC7;                   // 11000111
+      if ((*f_char & 0x38) == map_paper_last) { // 00111000
+        *f_char = *f_char & 0xC7;               // 11000111
         *f_char = *f_char | map_paper;
       }
-
-/*
-      if ((tmp & 0x38) == map_paper_last) {     // 00111000
-        tmp = tmp & 0xC7;                  // 11000111
-        tmp = tmp | map_paper; // TODO we can hava a map array for ink to
-                               // prevent using the same paper n ink
-        POKE(&btiles + tmp_ui + tmp0, tmp); // TODO PERFOMANCE C POINTERS
-      }
-*/
       ++i;
-      // if ( f_half & tmp0 == 8 ) tmp0 = 12;
     }
 
     index0 = index0 + 48;
-
   }
   map_paper_last = map_paper & !BRIGHT;
   game_attribs();

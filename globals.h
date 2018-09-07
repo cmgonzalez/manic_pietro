@@ -72,22 +72,20 @@ Offsets 607 to 615: Spare
 
 #define TILE_EMPTY                    0
 #define TILE_FLOOR                    1
-#define TILE_FLOOR0                   2
+#define TILE_CRUMB0                   2
 #define TILE_WALL                     3
 #define TILE_CONVEYOR                 4
 #define TILE_DEADLY1                  5
 #define TILE_DEADLY2                  6
 #define TILE_DEADLY3                  7
 #define TILE_OBJECT                   8
-
-
-#define TILE_FLOOR1                   9
-#define TILE_FLOOR2                   10
-#define TILE_FLOOR3                   11
-#define TILE_FLOOR4                   12
-#define TILE_FLOOR5                   13
-#define TILE_FLOOR6                   14
-#define TILE_FLOOR7                   15
+#define TILE_CRUMB1                   9
+#define TILE_CRUMB2                   10
+#define TILE_CRUMB3                   11
+#define TILE_CRUMB4                   12
+#define TILE_CRUMB5                   13
+#define TILE_CRUMB6                   14
+#define TILE_CRUMB7                   15
 
 
 #define TILE_WALL1                   62
@@ -346,7 +344,6 @@ extern unsigned char tmp;
 extern unsigned char tmp0;
 extern unsigned char tmp1;
 extern unsigned char tmp_uc;
-extern unsigned char draw8_voffset;
 extern signed char tmp_sc;
 extern unsigned int tmp_ui;
 extern unsigned char enemies;
