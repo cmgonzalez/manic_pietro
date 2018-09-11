@@ -286,7 +286,12 @@ unsigned char player_move_walk(void) {
         BIT_CLR(*p_state, STAT_DIRR);
 
         if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
-          spr_set_left();
+          if (game_conveyor_dir == DIR_LEFT) {
+            spr_set_left();
+          }
+          if (game_conveyor_dir == DIR_RIGHT) {
+            spr_set_right();  
+          }
         } else {
 
           if (dirs & IN_STICK_LEFT) {

@@ -514,14 +514,14 @@ void spr_btile_paint_back() {
   tmp_ui = 0;
   map_paper_clr = map_paper | (map_paper >> 3);
 
-  index0 = 48;
+  index0 = 48*8;
   while (index0 < (48 * 9 * 8)) { // 12*20 btiles
 
     i = 0;
 
     // Internal
     while (i < 16) {
-      f_char = &btiles[0] + index0 + i + 32;
+      f_char = &btiles[0] + index0 + i + 32; //TODO SPEED UP INC MEMORY ADDRESS
       if ((*f_char & 0x38) == map_paper_last) { // 00111000
         *f_char = *f_char & 0xC7;               // 11000111
         *f_char = *f_char | map_paper;

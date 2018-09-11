@@ -16,7 +16,7 @@
 
 
         Manic Pietro - Cristian Gonzalez - cmgonzalez@gmail.com
-*/
+ */
 
 #include "game.h"
 #include "game_audio.h"
@@ -44,7 +44,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 1;// 0xFF;
+  scr_curr = 2;//0xFF;
 
   game_song_play = 1;
   game_tileset = scr_curr * 8;
@@ -57,7 +57,6 @@ void main(void) {
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
   game_gravity = 98;    // GAME_GRAVITY;
   player_vel_y0 = -690; // GAME_VELOCITY;
-
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
@@ -158,34 +157,34 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
                        unsigned char f_col) {
 
   /*
-    A quick note about the "btile" format:
+     A quick note about the "btile" format:
 
-    Each "btile" represents a 16x16 image, using 8x2 attributes. It's very
-    similar to "ctiles" used in BIFROST* and ZXodus, except each tile is 48
-    bytes (instead of 64 bytes) and their attributes are stored vertically:
-    Byte 1: bitmap value for 1st pixel line, 1st column
-    Byte 2: bitmap value for 1st pixel line, 2nd column
-    Byte 3: bitmap value for 2nd pixel line, 1st column
-    Byte 4: bitmap value for 2nd pixel line, 2nd column
-    Byte 5: bitmap value for 3rd pixel line, 1st column
-    Byte 6: bitmap value for 3rd pixel line, 2nd column
-    ...
-    Byte 31: bitmap value at 16th pixel line, 1st column
-    Byte 32: bitmap value at 16th pixel line, 2nd column
-    Byte 33: attribute value for 1st and 2nd pixel line, 1st column
-    Byte 34: attribute value for 3rd and 4th pixel line, 1st column
-    Byte 35: attribute value for 5th and 6th pixel line, 1st column
-    ...
-    Byte 40: attribute value for 15th and 16th pixel line, 1st column
-    Byte 41: attribute value for 1st and 2nd pixel line, 2nd column
-    Byte 42: attribute value for 3rd and 4th pixel line, 2nd column
-    ...
-    Byte 48: attribute value for 15th and 16th pixel line, 2nd column
+     Each "btile" represents a 16x16 image, using 8x2 attributes. It's very
+     similar to "ctiles" used in BIFROST* and ZXodus, except each tile is 48
+     bytes (instead of 64 bytes) and their attributes are stored vertically:
+     Byte 1: bitmap value for 1st pixel line, 1st column
+     Byte 2: bitmap value for 1st pixel line, 2nd column
+     Byte 3: bitmap value for 2nd pixel line, 1st column
+     Byte 4: bitmap value for 2nd pixel line, 2nd column
+     Byte 5: bitmap value for 3rd pixel line, 1st column
+     Byte 6: bitmap value for 3rd pixel line, 2nd column
+     ...
+     Byte 31: bitmap value at 16th pixel line, 1st column
+     Byte 32: bitmap value at 16th pixel line, 2nd column
+     Byte 33: attribute value for 1st and 2nd pixel line, 1st column
+     Byte 34: attribute value for 3rd and 4th pixel line, 1st column
+     Byte 35: attribute value for 5th and 6th pixel line, 1st column
+     ...
+     Byte 40: attribute value for 15th and 16th pixel line, 1st column
+     Byte 41: attribute value for 1st and 2nd pixel line, 2nd column
+     Byte 42: attribute value for 3rd and 4th pixel line, 2nd column
+     ...
+     Byte 48: attribute value for 15th and 16th pixel line, 2nd column
 
-    The ordering above looks somewhat unconventional, but there's a reason: it's
-    more convenient for the NIRVANA ENGINE this way, so it can be more compact
-    and efficient.
-  */
+     The ordering above looks somewhat unconventional, but there's a reason:
+     it's more convenient for the NIRVANA ENGINE this way, so it can be more
+     compact and efficient.
+   */
   // Geometria ancho del btile (teorico) por ejemplo 8 btiles (16x16)
   unsigned char *f_byte;
   unsigned char *f_byte_src;
@@ -241,7 +240,7 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
   f_lin1 = f_lin + 8;
   // TODO can be optimized on div 8 rows, no need for each zx_py2addr
   while (f_lin < f_lin1) {
-    f_byte = zx_py2saddr( f_lin ) + f_col;
+    f_byte = zx_py2saddr(f_lin) + f_col;
     *f_byte = *f_byte_src;
     f_byte_src = f_byte_src + 2;
     ++f_lin;

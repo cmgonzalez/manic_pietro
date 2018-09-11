@@ -227,11 +227,12 @@ unsigned char map_paper_last_a;
 // GAME_TOTAL_INDEX_CLASSES.
 const unsigned char spr_init[] = {
     // SPR INDEX, TILE INDEX, SPRITE DIRECTION, FRAMES, SPEED , KIND
-    64, 16, DIR_LEFT, 4, 4, E_HORIZONTAL,  // ROBOT LEFT TODO ESTO DEBE
-                                           // APUNTAR AL INDICE DEL TILE EN
-                                           // HIMEM
+    64, 16, DIR_LEFT , 4, 4, E_HORIZONTAL, // ROBOT LEFT TODO ESTO DEBE APUNTAR AL INDICE DEL TILE EN                                            // HIMEM
     65, 16, DIR_RIGHT, 4, 4, E_HORIZONTAL, // ROBOT RIGHT
-    66, 24, DIR_LEFT, 4, 4, E_HORIZONTAL, 67, 24, DIR_RIGHT, 4, 4, E_HORIZONTAL,
+    66, 24, DIR_LEFT , 4, 4, E_HORIZONTAL,
+    67, 24, DIR_RIGHT, 4, 4, E_HORIZONTAL,
+    68, 32, DIR_LEFT , 4, 4, E_HORIZONTAL,
+    69, 32, DIR_RIGHT, 4, 4, E_HORIZONTAL,
 };
 
 unsigned char spr_tile[8];

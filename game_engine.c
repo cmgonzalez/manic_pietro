@@ -148,7 +148,7 @@ void game_draw_map(void) {
         obj_lin[obj_count] = s_lin1;
         ++obj_count;
       }
-      //DRAW CONVEYORS
+      // DRAW CONVEYORS
       if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
           scr_map[index1] != TILE_CONVEYOR) {
         game_conveyor_col1 = index1 % 32; // TODO OPTIMIZE
@@ -172,10 +172,11 @@ void game_draw_map(void) {
     } else {
 
       enemy_init((index1 >> 5) << 3, index1 & 31, scr_map[index1]);
+
       value_a[sprite] = scr_map[index1 + 32];
       value_b[sprite] = scr_map[index1 + 33];
       scr_map[index1] = TILE_EMPTY;
-      //Clear Adjancent tiles
+      // Clear Adjancent tiles
       scr_map[index1 + 1] = TILE_EMPTY;
       scr_map[index1 + 2] = TILE_EMPTY;
       scr_map[index1 + 32] = TILE_EMPTY;
@@ -191,6 +192,7 @@ void game_draw_map(void) {
     }
   }
   NIRVANAP_start();
+  NIRVANAP_halt();
   game_update_stats();
 }
 
@@ -210,8 +212,6 @@ void game_cell_paint() {
 }
 
 void game_end() {}
-
-
 
 void game_print_footer(void) {
 
@@ -258,14 +258,12 @@ void game_anim_conveyor() {
   unsigned char f_col;
   unsigned char f_lin1;
 
-
-  f_byte_src = &btiles[0] + ( 48 * 2 ); //TODO CALCULATE ONCE ALL THIS
+  f_byte_src = &btiles[0] + (48 * 2); // TODO CALCULATE ONCE ALL THIS
   i = game_conveyor_lin;
   f_lin1 = i + 8;
-//Rotate
-*f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
-*f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
-
+  // Rotate
+  *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
+  *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
 
   while (i < f_lin1) {
     f_col = game_conveyor_col0;
@@ -277,17 +275,15 @@ void game_anim_conveyor() {
       ++f_col;
     }
 
-
-    f_byte_src = f_byte_src + 2; // Increment btile by 2 to get next line of the 8x8 sprite
+    f_byte_src = f_byte_src +
+                 2; // Increment btile by 2 to get next line of the 8x8 sprite
     i++;
-    if ( i == game_conveyor_lin + 2) {
+    if (i == game_conveyor_lin + 2) {
       *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
       *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
     }
   }
 }
-
-
 
 void game_round_init(void) {
   unsigned const char *map_names[] = {
@@ -312,33 +308,11 @@ void game_round_init(void) {
       "The Bank",
       "The Sixteenth Cavern",
   };
-  unsigned const char map_lens[] = {
-    14,
-    13,
-    26,
-    13,
-    16,
-    7,
-    17,
-    19,
-    31,
-    12,
-    13,
-    19,
-    21,
-    19,
-    32,
-    30,
-    17,
-    18,
-    8,
-    20
-  };
+  unsigned const char map_lens[] = {14, 13, 9, 13, 16, 7,  17, 19, 31, 12,
+                                    13, 19, 21, 19, 32, 30, 17, 18, 8,  20};
 
   /* screen init */
   /*PHASE INIT*/
-
-
 
   loop_count = 0;
   zx_set_clock(0);
@@ -355,9 +329,10 @@ void game_round_init(void) {
   spr_init_effects();
   game_print_header();
   game_print_footer();
-  game_page_map();
+
   ay_reset();
-  // audio_level_start();
+
+  game_page_map();
   spr_btile_paint_back();
 
   game_draw_map();
@@ -366,14 +341,12 @@ void game_round_init(void) {
 
   i = 0;
   tmp_ui = 0;
-  while( i < scr_curr ) {
+  while (i < scr_curr) {
     tmp_ui = tmp_ui + map_lens[i];
     ++i;
-
   }
 
-
-  zx_print_str(17, (32 - map_lens[scr_curr]) >> 1, map_names[scr_curr] );
+  zx_print_str(17, (32 - map_lens[scr_curr]) >> 1, map_names[scr_curr]);
 
   game_paint_attrib(&attrib_red, 0, 10, 144 + 8);
   game_paint_attrib(&attrib_osd, 10, 32, 144 + 8);
@@ -401,7 +374,6 @@ void game_round_init(void) {
     game_colour_message(12, 6, 6 + tmp0, 200, 0);
   }
   audio_ingame();
-
 
   zx_print_ink(INK_RED | PAPER_RED);
 
@@ -503,7 +475,7 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
 }
 
 void game_rotate_attrib(void) {
-  //TODO PERFOMANCE (ASM)
+  // TODO PERFOMANCE (ASM)
   if (last_rotated > 7) {
     last_rotated = 0;
   }
@@ -620,6 +592,8 @@ void game_page_map(void) {
   unsigned int li;
   unsigned int lj;
   unsigned int lk;
+  unsigned int l_start;
+
   unsigned int add_index;
   unsigned int start_index;
   unsigned char l_world;
@@ -629,14 +603,18 @@ void game_page_map(void) {
   unsigned char l_scr;
   unsigned char l_scr_map;
 
+  // btile page
+  unsigned char l_btile[48];
+
+  // Clear Screen
+  spr_clear_scr();
+
+  intrinsic_di();
+  // Get Map from Bank 6
   l_world = game_world;
   l_scr = scr_curr;
   l_scr_map = (l_world << 4) + l_scr;
 
-  lk = 0;
-
-  spr_clear_scr();
-  intrinsic_di();
   // Read Player start screen on world map
   GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
   IO_7FFD = 0x10 + 6;
@@ -652,8 +630,152 @@ void game_page_map(void) {
   GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
   IO_7FFD = 0x10 + 0;
 
+  // Get Background btiles from Bank 3
+
+  lk = 0;
+  l_start = (l_scr >> 1) * 48 * 4;
+
+  while (lk < 48 * 5) {
+    GLOBAL_ZX_PORT_7FFD = 0x10 + 3;
+    IO_7FFD = 0x10 + 3;
+    li = 0;
+    while (li < 48) {
+      l_btile[li] = hibtiles[l_start + li + lk];
+      ++li;
+    }
+    GLOBAL_ZX_PORT_7FFD =
+        0x10 +
+        0; // TODO SPEED UP BANK3? (WHICH BANK IS THE BEST -> BTILE LOW MEM
+    IO_7FFD = 0x10 + 0;
+    // Store btile
+
+    if ((l_scr % 2) == 0) {
+
+      // Pixels
+      li = 0;
+      while (li < 16) {
+        btiles[li + lk] = l_btile[li];
+        ++li;
+      }
+      // Atribs 1 column
+      li = 32;
+      while (li < 36) {
+        btiles[li + lk] = l_btile[li];
+        ++li;
+      }
+      // Atribs 2 column
+      li = 40;
+      while (li < 44) {
+        btiles[li + lk] = l_btile[li];
+        ++li;
+      }
+    } else {
+
+      // Pixels
+      li = 0;
+      while (li < 16) {
+        btiles[li + lk] = l_btile[li + 16];
+        ++li;
+      }
+      // Atribs 1 column
+      li = 32;
+      while (li < 36) {
+        btiles[li + lk] = l_btile[li + 4];
+        ++li;
+      }
+      // Atribs 2 column
+      li = 40;
+      while (li < 44) {
+        btiles[li + lk] = l_btile[li + 4];
+        ++li;
+      }
+    }
+
+    lk = lk + 48; // Next btile
+  }
+  // Clear Key n Crumb
+  // Clear all
+  li = 192;
+  while (li < 384) {
+    btiles[li] = 0;
+    ++li;
+  }
+  // Paint Paper
+  lk = 192 + 32;
+  while (lk < 384) {
+    li = 0;
+    while (li < 16) {
+      btiles[lk + li] = l_paper;
+      ++li;
+    }
+    lk = lk + 48;
+  }
+  // Move Key
+  li = 0;
+  while (li < 16) {
+    btiles[192 + li] = btiles[li];
+    li = li + 2;
+  }
+  // Clear Empty Tile
+  li = 0;
+  while (li < 16) {
+    btiles[li] = 0;
+    li = li + 2;
+  }
+  // TODO Optimize Draw Crumb mover llave al ultimo tile y asi aplicar un loop
+
+  // Pixels
+  btiles[192 + 3] = btiles[48 + 0];
+  btiles[192 + 5] = btiles[48 + 2];
+  btiles[192 + 7] = btiles[48 + 4];
+  btiles[192 + 9] = btiles[48 + 6];
+  btiles[192 + 11] = btiles[48 + 8];
+  btiles[192 + 13] = btiles[48 + 10];
+  // Atribs
+  btiles[192 + 40] = btiles[48 + 32];
+  btiles[192 + 41] = btiles[48 + 33];
+  btiles[192 + 42] = btiles[48 + 34];
+  btiles[192 + 43] = btiles[48 + 35];
+  // Pixels
+  btiles[240 + 4] = btiles[48 + 0];
+  btiles[240 + 6] = btiles[48 + 2];
+  btiles[240 + 8] = btiles[48 + 4];
+  btiles[240 + 10] = btiles[48 + 6];
+  btiles[240 + 12] = btiles[48 + 8];
+  // Atribs
+  btiles[240 + 33] = btiles[48 + 32];
+  btiles[240 + 34] = btiles[48 + 33];
+  btiles[240 + 35] = btiles[48 + 34];
+  // Pixels
+  btiles[240 + 7] = btiles[48 + 0];
+  btiles[240 + 9] = btiles[48 + 2];
+  btiles[240 + 11] = btiles[48 + 4];
+  btiles[240 + 13] = btiles[48 + 6];
+  // Atribs
+  btiles[240 + 41] = btiles[48 + 32];
+  btiles[240 + 42] = btiles[48 + 33];
+  btiles[240 + 43] = btiles[48 + 34];
+  // Pixels
+  btiles[288 + 8] = btiles[48 + 0];
+  btiles[288 + 10] = btiles[48 + 2];
+  btiles[288 + 12] = btiles[48 + 4];
+  // Atribs
+  btiles[288 + 34] = btiles[48 + 32];
+  btiles[288 + 35] = btiles[48 + 33];
+  // Pixels
+  btiles[288 + 11] = btiles[48 + 0];
+  btiles[288 + 13] = btiles[48 + 2];
+  // Atribs
+  btiles[288 + 42] = btiles[48 + 32];
+  btiles[288 + 43] = btiles[48 + 33];
+  // Pixels
+  btiles[336 + 12] = btiles[48 + 0];
+  // Atribs
+  btiles[336 + 35] = btiles[48 + 32];
   // Calculate the current screen start index in the world map
   lj = 0;
+  lk = 0;
+
   start_index = 0;
   add_index = 0;
 
