@@ -67,12 +67,17 @@ void game_loop(void) {
         if (game_conveyor_col0 > 0) {
           game_anim_conveyor();
         }
+        // game_rotate_attrib_osd();
+        // game_paint_attrib(&attrib_osd, 0, 32, 144);
+
       }
 
       game_rotate_attrib();
 
       /*Each second aprox - update fps/score/phase left/phase advance*/
       if (game_check_time(&frame_time, TIME_EVENT)) {
+
+
         frame_time = zx_clock();
         // intrinsic_halt();
         if (game_fps_show)
@@ -90,12 +95,6 @@ void game_loop(void) {
     }
     if (game_round_up) {
       game_round_up = 0;
-      game_world++;
-      scr_curr = 255;
-      player_lin_scr = 0;
-      player_col_scr = 0;
-      player_col_scr = 2;
-      player_lin_scr = 128;
       game_round_init();
     }
   }
@@ -170,17 +169,31 @@ void game_draw_map(void) {
       // game_cell_paint();
       game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
     } else {
+      if (scr_map[index1] < 120) {
+        enemy_init((index1 >> 5) << 3, index1 & 31, scr_map[index1]);
 
-      enemy_init((index1 >> 5) << 3, index1 & 31, scr_map[index1]);
+        value_a[sprite] = scr_map[index1 + 32];
+        value_b[sprite] = scr_map[index1 + 33];
+        scr_map[index1] = TILE_EMPTY;
+        // Clear Adjancent tiles
+        scr_map[index1] = TILE_EMPTY;
+        scr_map[index1 + 1] = TILE_EMPTY; //NO USE
+        scr_map[index1 + 32] = TILE_EMPTY;
+        scr_map[index1 + 33] = TILE_EMPTY;
+      } else {
+        // Willy
+        if (scr_map[index1] == 127) {
+          player_lin_scr = s_lin1 - 16;
+          player_col_scr = s_col1;
+          scr_map[index1] = TILE_EMPTY;
+        }
 
-      value_a[sprite] = scr_map[index1 + 32];
-      value_b[sprite] = scr_map[index1 + 33];
-      scr_map[index1] = TILE_EMPTY;
-      // Clear Adjancent tiles
-      scr_map[index1 + 1] = TILE_EMPTY;
-      scr_map[index1 + 2] = TILE_EMPTY;
-      scr_map[index1 + 32] = TILE_EMPTY;
-      scr_map[index1 + 33] = TILE_EMPTY;
+        // 126 Exit
+        if (scr_map[index1] == 127) {
+          // TODO EXIT
+          scr_map[index1] = TILE_EMPTY;
+        }
+      }
     }
 
     ++index1;
@@ -262,8 +275,13 @@ void game_anim_conveyor() {
   i = game_conveyor_lin;
   f_lin1 = i + 8;
   // Rotate
-  *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
-  *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
+  if (game_conveyor_dir == DIR_LEFT) {
+    *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
+    *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
+  } else {
+    *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
+    *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
+  }
 
   while (i < f_lin1) {
     f_col = game_conveyor_col0;
@@ -279,8 +297,13 @@ void game_anim_conveyor() {
                  2; // Increment btile by 2 to get next line of the 8x8 sprite
     i++;
     if (i == game_conveyor_lin + 2) {
-      *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
-      *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
+      if (game_conveyor_dir == DIR_LEFT) {
+        *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
+        *f_byte_src = (*f_byte_src << 7) | (*f_byte_src >> 1);
+      } else {
+        *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
+        *f_byte_src = (*f_byte_src << 1) | (*f_byte_src >> 7);
+      }
     }
   }
 }
@@ -308,7 +331,7 @@ void game_round_init(void) {
       "The Bank",
       "The Sixteenth Cavern",
   };
-  unsigned const char map_lens[] = {14, 13, 9, 13, 16, 7,  17, 19, 31, 12,
+  unsigned const char map_lens[] = {14, 13, 9,  26, 16, 7,  17, 19, 31, 12,
                                     13, 19, 21, 19, 32, 30, 17, 18, 8,  20};
 
   /* screen init */
@@ -337,7 +360,7 @@ void game_round_init(void) {
 
   game_draw_map();
 
-  game_paint_attrib(&attrib_hl, 0, 32, 144);
+  game_paint_attrib(&attrib_osd, 0, 32, 144);
 
   i = 0;
   tmp_ui = 0;
@@ -346,11 +369,13 @@ void game_round_init(void) {
     ++i;
   }
 
+  zx_print_ink(INK_BLACK | PAPER_YELLOW);
+  zx_print_str(17, 0, "                                ");
   zx_print_str(17, (32 - map_lens[scr_curr]) >> 1, map_names[scr_curr]);
-
-  game_paint_attrib(&attrib_red, 0, 10, 144 + 8);
-  game_paint_attrib(&attrib_osd, 10, 32, 144 + 8);
-  zx_print_str(18, 0, "AIR ----------------------------");
+  zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
+  zx_print_str(18, 0, "AIR ------");
+  zx_print_ink(INK_WHITE | PAPER_GREEN | BRIGHT);
+  zx_print_str(18, 10, "----------------------");
   zx_print_ink(INK_YELLOW);
 
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
@@ -419,8 +444,10 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
 
 void game_paint_attrib(unsigned char *f_attrib[], char f_start,
                        unsigned char f_end, unsigned char f_lin) {
+
   for (tmp_uc = f_start; tmp_uc < f_end; ++tmp_uc) {
     NIRVANAP_paintC(f_attrib, f_lin, tmp_uc);
+    // TODO REMOVE PAINTC
   }
 }
 
@@ -483,15 +510,15 @@ void game_rotate_attrib(void) {
   for (tmp_uc = last_rotated; tmp_uc < 8; ++tmp_uc) {
     if (obj_col[tmp_uc] > 0) {
       last_rotated = tmp_uc + 1;
-      NIRVANAP_paintC(attrib8, obj_lin[tmp_uc], obj_col[tmp_uc]);
+      NIRVANAP_paintC(attrib_key, obj_lin[tmp_uc], obj_col[tmp_uc]);
       if (game_attrib_osd == 7) {
         game_attrib_osd = 1;
       }
       ++game_attrib_osd;
-      attrib8[0] = map_paper | game_attrib_osd;
-      attrib8[1] = attrib8[0];
-      attrib8[2] = attrib8[0];
-      attrib8[3] = attrib8[0];
+      attrib_key[0] = map_paper | game_attrib_osd;
+      attrib_key[1] = attrib_key[0];
+      attrib_key[2] = attrib_key[0];
+      attrib_key[3] = attrib_key[0];
 
       tmp_uc = 8; // Exit loop
     } else {
@@ -506,10 +533,11 @@ void game_rotate_attrib_osd(void) {
     game_attrib_osd = 1;
   }
   ++game_attrib_osd;
-  attrib_osd[0] = PAPER_BLACK | game_attrib_osd;
-  attrib_osd[1] = attrib_osd[0];
-  attrib_osd[2] = attrib_osd[0];
-  attrib_osd[3] = attrib_osd[0];
+  tmp = attrib_osd[0];
+  attrib_osd[0] = attrib_osd[3];
+  attrib_osd[1] = attrib_osd[2];
+  attrib_osd[2] = attrib_osd[1];
+  attrib_osd[3] = tmp;
 }
 
 void game_attribs() {
@@ -555,10 +583,10 @@ void game_attribs() {
   attrib7[2] = map_paper | BRIGHT | INK_CYAN;
   attrib7[3] = map_paper | BRIGHT | INK_WHITE;
 
-  attrib8[0] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
-  attrib8[1] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
-  attrib8[2] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
-  attrib8[3] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib_key[0] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
+  attrib_key[1] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
+  attrib_key[2] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
+  attrib_key[3] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
 
   // ATTRIB NORMAL
   attrib[0] = map_paper | BRIGHT | INK_WHITE;
@@ -573,10 +601,10 @@ void game_attribs() {
   attrib_hl[3] = map_paper | INK_BLACK | PAPER_YELLOW;
 
   // ATTRIB OSD
-  attrib_osd[0] = map_paper | INK_WHITE | PAPER_GREEN;
-  attrib_osd[1] = map_paper | INK_WHITE | PAPER_GREEN;
-  attrib_osd[2] = map_paper | INK_WHITE | PAPER_GREEN;
-  attrib_osd[3] = map_paper | INK_WHITE | PAPER_GREEN;
+  attrib_osd[0] = PAPER_YELLOW | INK_BLACK | BRIGHT;
+  attrib_osd[1] = PAPER_YELLOW | INK_BLUE | BRIGHT;
+  attrib_osd[2] = PAPER_YELLOW | INK_BLUE | BRIGHT;
+  attrib_osd[3] = PAPER_YELLOW | INK_MAGENTA | BRIGHT;
 
   attrib_red[0] = map_paper | INK_WHITE | PAPER_RED;
   attrib_red[1] = map_paper | INK_WHITE | PAPER_RED;
@@ -643,9 +671,8 @@ void game_page_map(void) {
       l_btile[li] = hibtiles[l_start + li + lk];
       ++li;
     }
-    GLOBAL_ZX_PORT_7FFD =
-        0x10 +
-        0; // TODO SPEED UP BANK3? (WHICH BANK IS THE BEST -> BTILE LOW MEM
+    // TODO SPEED UP BANK3? (WHICH BANK IS THE BEST -> BTILE LOW MEM
+    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
     IO_7FFD = 0x10 + 0;
     // Store btile
 
@@ -705,7 +732,7 @@ void game_page_map(void) {
   while (lk < 384) {
     li = 0;
     while (li < 16) {
-      btiles[lk + li] = l_paper;
+      btiles[lk + li] = INK_WHITE | l_paper;
       ++li;
     }
     lk = lk + 48;
@@ -773,6 +800,7 @@ void game_page_map(void) {
   // Atribs
   btiles[336 + 35] = btiles[48 + 32];
   // Calculate the current screen start index in the world map
+
   lj = 0;
   lk = 0;
 

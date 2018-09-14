@@ -86,13 +86,6 @@ void menu_main() {
       // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 2;
       break;
-    case 6: // CONTROL
-      ++game_control_mode;
-      if (game_control_mode > 2) {
-        game_control_mode = 0;
-      }
-      menu_main_print();
-      break;
     case 0:
       intrinsic_halt();
       game_cls();
@@ -138,18 +131,6 @@ void menu_main_print(void) {
   zx_print_str(s_row, s_col, "5 DEFINE");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
   ++s_row;
-  zx_print_str(s_row, s_col, "6 CONTROL");
-  switch (game_control_mode) {
-  case 0:
-    zx_print_str(s_row, s_col + 10, "2B ");
-    break;
-  case 1:
-    zx_print_str(s_row, s_col + 10, "1BA");
-    break;
-  case 2:
-    zx_print_str(s_row, s_col + 10, "1BB");
-    break;
-  }
   game_paint_attrib(&attrib, s_col, s_col_e + 4, (s_row << 3) + 8);
   s_row = s_row + 2;
   zx_print_str(s_row, s_col, "0 START");
@@ -166,24 +147,14 @@ void menu_redefine() {
   for (tmp0 = 8; tmp0 < 14; ++tmp0)
     game_paint_attrib(&attrib, 10, 16, (tmp0 << 3) + 8);
 
-  zx_print_str(8, 10, "UP");
-  k1.up = menu_define_key();
-  zx_print_str(9, 10, "DOWN");
-  k1.down = menu_define_key();
+  
   zx_print_str(10, 10, "LEFT");
   k1.left = menu_define_key();
   zx_print_str(11, 10, "RIGHT");
   k1.right = menu_define_key();
-  if (game_control_mode == 0) {
-    zx_print_str(12, 10, "JUMP");
-    k1.fire = menu_define_key();
+  zx_print_str(12, 10, "JUMP");
+  k1.fire = menu_define_key();
 
-    zx_print_str(13, 10, "FIRE");
-    k2.fire = menu_define_key();
-  } else {
-    zx_print_str(12, 10, "FIRE");
-    k1.fire = menu_define_key();
-  }
 
   game_fill_row(12, 32);
   menu_main_print();

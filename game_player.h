@@ -34,6 +34,7 @@ extern unsigned char player_pick_deadly(unsigned char l_val);
 extern void          player_tile( unsigned char f_tile, unsigned char f_inc );
 extern unsigned char player_move_jump(void);
 extern void          player_lost_life(void);
+extern void          player_use_floor( unsigned char f_inc );
 
 
 #endif

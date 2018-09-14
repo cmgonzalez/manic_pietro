@@ -48,7 +48,6 @@ uint16_t (*joyfunc1)(udk_t *); // pointer to joystick function Player 1
 uint16_t (*joyfunc2)(
     udk_t *); // pointer to joystick function for game_control_mode
 udk_t k1;
-udk_t k2; // For game_control_mode 2B
 
 unsigned char dirs;
 
@@ -111,7 +110,6 @@ unsigned char game_conveyor_col0;
 unsigned char game_conveyor_col1;
 
 unsigned char game_round_up;
-unsigned char game_control_mode;
 unsigned char menu_curr_sel;
 
 unsigned int fps;
@@ -156,7 +154,7 @@ unsigned char attrib4[4];
 unsigned char attrib5[4];
 unsigned char attrib6[4];
 unsigned char attrib7[4];
-unsigned char attrib8[4];
+unsigned char attrib_key[4];
 
 unsigned char *p_state;
 unsigned char *p_state_a;
@@ -227,12 +225,16 @@ unsigned char map_paper_last_a;
 // GAME_TOTAL_INDEX_CLASSES.
 const unsigned char spr_init[] = {
     // SPR INDEX, TILE INDEX, SPRITE DIRECTION, FRAMES, SPEED , KIND
-    64, 16, DIR_LEFT , 4, 4, E_HORIZONTAL, // ROBOT LEFT TODO ESTO DEBE APUNTAR AL INDICE DEL TILE EN                                            // HIMEM
-    65, 16, DIR_RIGHT, 4, 4, E_HORIZONTAL, // ROBOT RIGHT
-    66, 24, DIR_LEFT , 4, 4, E_HORIZONTAL,
+    64, 16, DIR_LEFT , 4, 4, E_HORIZONTAL, // ROBOT
+    65, 16, DIR_RIGHT, 4, 4, E_HORIZONTAL,
+    66, 24, DIR_LEFT , 4, 4, E_HORIZONTAL, // PENGUIN
     67, 24, DIR_RIGHT, 4, 4, E_HORIZONTAL,
-    68, 32, DIR_LEFT , 4, 4, E_HORIZONTAL,
+    68, 32, DIR_LEFT , 4, 4, E_HORIZONTAL, // CHICKEN
     69, 32, DIR_RIGHT, 4, 4, E_HORIZONTAL,
+    70, 40, DIR_LEFT , 4, 4, E_HORIZONTAL, // FOCA
+    71, 40, DIR_RIGHT, 4, 4, E_HORIZONTAL,
+    72, 48, DIR_LEFT , 4, 4, E_HORIZONTAL, // WATER
+    73, 48, DIR_RIGHT, 4, 4, E_HORIZONTAL,
 };
 
 unsigned char spr_tile[8];

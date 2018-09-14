@@ -35,26 +35,50 @@ void player_init(unsigned char f_lin, unsigned char f_col,
   spr_speed[SPR_P1] = PLAYER_SPEED;
   spr_frames[SPR_P1] = 4;
 
-  tile[SPR_P1] = f_tile;
   lin[SPR_P1] = f_lin; //*SPRITELIN(SPR_P1);
   col[SPR_P1] = f_col; //*SPRITECOL(SPR_P1);
-  colint[SPR_P1] = 0;
+
   state[SPR_P1] = 0;
   state_a[SPR_P1] = 0;
   jump_lin[SPR_P1] = f_lin;
   last_time[SPR_P1] = zx_clock();
   player_vel_y = 0;
-
+  colint[SPR_P1] = 0;
   spr_frames[SPR_P1] = 4;
 
   // PLAYER ONLY VARIABLES
-  BIT_SET(*p_state_a, STAT_LDIRR);
-  NIRVANAP_spriteT(SPR_P1, f_tile, f_lin + 16, f_col);
+  if (f_col < 16) {
+    BIT_SET(*p_state, STAT_DIRR);
+    BIT_SET(*p_state_a, STAT_LDIRR);
+    tile[SPR_P1] = f_tile;
+  } else {
+    colint[SPR_P1] = 3;
+    BIT_SET(*p_state, STAT_DIRL);
+    BIT_SET(*p_state_a, STAT_LDIRL);
+    tile[SPR_P1] = f_tile + spr_frames[SPR_P1];
+  }
 }
 
 void player_turn(void) {
+  unsigned char c;
   if (spr_chktime(&sprite)) {
 
+    c = in_inkey();
+
+    if (c == 49) { // 1
+      --scr_curr;
+      game_round_up = 1;
+      if (scr_curr == 255) {
+        scr_curr = 19;
+      }
+    }
+    if (c == 50) { // 2
+      ++scr_curr;
+      game_round_up = 1;
+      if (scr_curr == 20) {
+        scr_curr = 0;
+      }
+    }
     zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
     dirs = (joyfunc1)(&k1);
     /* Player initial Values */
@@ -157,18 +181,42 @@ void player_collision() {
   }
 }
 
+unsigned char player_get_floor() {
+  index1 = spr_calc_index(lin[SPR_P1] + 16, col[SPR_P1]);
+
+
+  i = 0;
+  while (i < 16) {
+    v0 = scr_map[index1];
+    v1 = scr_map[index1 + 1];
+    if (
+          (v0 == TILE_EMPTY  || v0 == TILE_OBJECT  || v0 == TILE_DEADLY1 || v0 == TILE_DEADLY2) &&
+          (v1 == TILE_EMPTY  || v1 == TILE_OBJECT  || v1 == TILE_DEADLY1 || v1 == TILE_DEADLY2)
+        ) {
+      index1 = index1 + 32;
+      ++i;
+    } else {
+      return ( (index1 >> 5) << 3) - 16; // /32 *8 -16 Optimizar
+    }
+  }
+  return GAME_LIN_FLOOR - 24;
+}
+
 unsigned char player_move(void) {
 
+
   if (BIT_CHK(*p_state, STAT_JUMP) || BIT_CHK(*p_state, STAT_FALL)) {
-    /* Jump Handling */
+
     player_move_jump();
     spr_move_horizontal();
   } else {
     /* Walk Handling */
     player_move_walk();
+
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor_walk(lin[SPR_P1] + 16, col[SPR_P1]) &&
         player_check_floor_walk(lin[SPR_P1] + 16, col[SPR_P1] + 1)) {
+
       spr_move_horizontal();
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
@@ -179,7 +227,6 @@ unsigned char player_move(void) {
   spr_paint_player();
   return 0;
 }
-
 
 unsigned char player_check_input(void) {
 
@@ -218,7 +265,10 @@ unsigned char player_move_jump(void) {
 
   s_lin1 = lin[SPR_P1] + s_lin1;
 
+
+
   if (val_yc <= 0) {
+
     // Asending
     spr_set_up();
     if (s_lin1 > GAME_LIN_FLOOR) {
@@ -235,34 +285,26 @@ unsigned char player_move_jump(void) {
     player_jump_top = s_lin1;
   } else {
     // Falling
+    v0 = player_get_floor();
+
+    if (
+        (s_lin1 > GAME_LIN_FLOOR - 24) || //Out of screen
+         s_lin1 >= v0 && //Have floor
+         v0 >= s_lin0 //Is below
+       ) {
+
+      // Jump end
+      lin[SPR_P1] = v0;
+      player_vel_y = 0;
+      BIT_CLR(*p_state, STAT_FALL);
+      BIT_CLR(*p_state, STAT_JUMP);
+      return 0;
+    }
     spr_set_down();
-    // audio_golpe();
-    if (s_lin1 > GAME_LIN_FLOOR - 24) {
-      s_lin1 = GAME_LIN_FLOOR - 24;
-    }
-
-    if (s_lin1 - player_jump_top > 2) {
-
-      if (
-          player_check_floor_jump(lin[SPR_P1] + 18, col[SPR_P1]     ) ||
-          player_check_floor_jump(lin[SPR_P1] + 18, col[SPR_P1] + 1 )
-        ) {
-        // Jump end
-
-        tmp_uc = (s_lin1 >> 3) << 3;
-
-        lin[SPR_P1] = tmp_uc;
-        player_vel_y = 0;
-        BIT_CLR(*p_state, STAT_FALL);
-        BIT_CLR(*p_state, STAT_JUMP);
-        return 1;
-      }
-    }
-
     lin[SPR_P1] = s_lin1;
   }
 
-  return 0;
+  return 1;
 }
 
 unsigned char player_move_walk(void) {
@@ -290,7 +332,7 @@ unsigned char player_move_walk(void) {
             spr_set_left();
           }
           if (game_conveyor_dir == DIR_RIGHT) {
-            spr_set_right();  
+            spr_set_right();
           }
         } else {
 
@@ -378,7 +420,6 @@ unsigned char player_pick_item(unsigned char l_val, int l_index) {
 
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
-    zx_print_chr(21, 0, player_coins);
     zx_border(INK_YELLOW);
     audio_coin();
     return TILE_EMPTY;
@@ -400,7 +441,7 @@ unsigned char player_pick_deadly(unsigned char l_val) {
 }
 
 unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
-//TODO OPTIMIZA LIKE CHECK FLOOR JUMP/WALK
+  // TODO OPTIMIZA LIKE CHECK FLOOR JUMP/WALK
   if (colint[SPR_P1] < 3) {
     index1 = spr_calc_index(f_lin, f_col);
     v0 = scr_map[index1];
@@ -425,16 +466,15 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
 unsigned char player_check_floor_jump(unsigned char f_lin,
                                       unsigned char f_col) {
 
-  index1 = spr_calc_index(f_lin, f_col);
+  index1 = spr_calc_index(f_lin + 18, f_col);
   v0 = scr_map[index1];
 
-
-  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 || v0 == TILE_DEADLY2) {
+  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
+      v0 == TILE_DEADLY2) {
     return 0;
   }
 
-
-  if (v0 == TILE_CONVEYOR ) {
+  if (v0 == TILE_CONVEYOR) {
     BIT_SET(*p_state, STAT_CONVEYOR);
   } else {
     BIT_CLR(*p_state, STAT_CONVEYOR);
@@ -450,11 +490,12 @@ unsigned char player_check_floor_walk(unsigned char f_lin,
 
   v0 = scr_map[index1];
 
-  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 || v0 == TILE_DEADLY2) {
+  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
+      v0 == TILE_DEADLY2) {
     return 1;
   }
 
-  if (v0 == TILE_CRUMB0 || v0 >= TILE_CRUMB1 ) { //TODO CAUTION!
+  if (v0 == TILE_CRUMB0 || v0 >= TILE_CRUMB1) { // TODO CAUTION!
     s_col1 = f_col;
 
     if (v0 == TILE_CRUMB0) {

@@ -44,7 +44,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 2;//0xFF;
+  scr_curr = 0xFF;
 
   game_song_play = 1;
   game_tileset = scr_curr * 8;
@@ -66,11 +66,6 @@ void main(void) {
   k1.up = IN_KEY_SCANCODE_q;   // must be defined otherwise up is always true
   k1.down = IN_KEY_SCANCODE_a; // must be defined otherwise down is always true
 
-  k2.left = IN_KEY_SCANCODE_DISABLE;
-  k2.right = IN_KEY_SCANCODE_DISABLE;
-  k2.up = IN_KEY_SCANCODE_DISABLE;
-  k2.down = IN_KEY_SCANCODE_DISABLE;
-  k2.fire = IN_KEY_SCANCODE_SPACE;
 
   // Wait for Keypress and Randomize //
   /* Default Values for menu */
@@ -99,12 +94,7 @@ void main(void) {
 
   menu_curr_sel = 1;
   map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
-  game_control_mode = 2; // 0)2button - default 1) 1button: 1 Button UP+FIRE
-                         // Shoots 2) 1 button: fire shoots, up jump , up+fire
-                         // for ladders
 
-  /*MAIN LOOP*/
-  game_attribs();
 
   while (1) {
 

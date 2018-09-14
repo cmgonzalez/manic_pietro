@@ -88,6 +88,7 @@ Offsets 607 to 615: Spare
 #define TILE_CRUMB7                   15
 
 
+
 #define TILE_WALL1                   62
 #define TILE_WALL2                   63
 #define TILE_WALL3                   64
@@ -251,7 +252,6 @@ extern unsigned char btiles[];
 extern uint16_t (*joyfunc1)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
 extern uint16_t (*joyfunc2)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
 extern udk_t k1;
-extern udk_t k2;
 
 
 extern unsigned char dirs;
@@ -310,7 +310,6 @@ extern unsigned char game_conveyor_col1;
 
 
 extern unsigned char game_round_up;
-extern unsigned char game_control_mode;
 extern unsigned char menu_curr_sel;
 extern unsigned char game_tileset;
 
@@ -364,7 +363,7 @@ extern unsigned char attrib4[4];
 extern unsigned char attrib5[4];
 extern unsigned char attrib6[4];
 extern unsigned char attrib7[4];
-extern unsigned char attrib8[4];
+extern unsigned char attrib_key[4];
 
 
 extern unsigned char *p_state;

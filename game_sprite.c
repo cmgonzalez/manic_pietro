@@ -192,7 +192,7 @@ unsigned char spr_move_right(void) {
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
 
-      if (game_check_map(s_lin1 + 14, *f_col + 2)) {
+      if (game_check_map(s_lin1, *f_col + 2) || game_check_map(s_lin1 + 14, *f_col + 2)) {
         --*f_colint;
         return 1;
       } else {
@@ -215,7 +215,7 @@ unsigned char spr_move_left(void) {
     s_lin1 = lin[sprite];
     if (col[sprite] > 0) {
 
-      if (game_check_map(s_lin1 + 14, col[sprite] - 1)) {
+      if (game_check_map(s_lin1, col[sprite] - 1) || game_check_map(s_lin1 + 14, col[sprite] - 1)) {
         ++colint[sprite];
         return 1;
       } else {
@@ -531,7 +531,7 @@ void spr_btile_paint_back() {
 
     index0 = index0 + 48;
   }
-  map_paper_last = map_paper & !BRIGHT;
+  map_paper_last = map_paper;
   game_attribs();
 }
 
