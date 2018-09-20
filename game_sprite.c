@@ -191,8 +191,16 @@ unsigned char spr_move_right(void) {
 
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
-
-      if (game_check_map(s_lin1, *f_col + 2) || game_check_map(s_lin1 + 14, *f_col + 2)) {
+      s_col1 = *f_col + 2;
+      if (s_lin1 % 8 == 0) {
+        v0 = game_check_map(s_lin1, s_col1) ||
+             game_check_map(s_lin1 + 8, s_col1);
+      } else {
+        v0 = game_check_map(s_lin1, s_col1) ||
+             game_check_map(s_lin1 + 8, s_col1) ||
+             game_check_map(s_lin1 + 16, s_col1);
+      }
+      if (v0) {
         --*f_colint;
         return 1;
       } else {
@@ -209,13 +217,62 @@ unsigned char spr_move_right(void) {
   return 0;
 }
 
+
+unsigned char spr_move_left(void) {
+  unsigned char *f_colint;
+  unsigned char *f_col;
+  f_colint = &colint[sprite];
+  f_col = &col[sprite];
+
+  --*f_colint;
+  if (*f_colint >= spr_frames[sprite]) {
+
+    s_lin1 = lin[sprite];
+    if (*f_col < 31) {
+      s_col1 = *f_col - 1;
+      if (s_lin1 % 8 == 0) {
+        v0 = game_check_map(s_lin1, s_col1) ||
+             game_check_map(s_lin1 + 8, s_col1);
+      } else {
+        v0 = game_check_map(s_lin1, s_col1) ||
+             game_check_map(s_lin1 + 8, s_col1) ||
+             game_check_map(s_lin1 + 16, s_col1);
+      }
+      if (v0) {
+        ++*f_colint;
+        return 1;
+      } else {
+        --*f_col;
+        *f_colint = spr_frames[sprite] - 1;;
+        if (*f_col == 255) {
+          *f_col = 0;
+          return 1;
+        }
+      }
+    }
+  }
+
+  return 0;
+}
+/*
 unsigned char spr_move_left(void) {
   --colint[sprite];
   if (colint[sprite] >= spr_frames[sprite]) {
     s_lin1 = lin[sprite];
     if (col[sprite] > 0) {
 
-      if (game_check_map(s_lin1, col[sprite] - 1) || game_check_map(s_lin1 + 14, col[sprite] - 1)) {
+      s_col1 = col[sprite] - 1;
+      if (s_lin1 % 8 == 0) {
+        v0 = game_check_map(s_lin1, s_col1) ||
+             game_check_map(s_lin1 + 8, s_col1);
+      } else
+         {
+          v0 = game_check_map(s_lin1, s_col1) ||
+               game_check_map(s_lin1 + 8, s_col1) ||
+               game_check_map(s_lin1 + 16, s_col1);
+        }
+
+      if (v0) {
         ++colint[sprite];
         return 1;
       } else {
@@ -231,7 +288,7 @@ unsigned char spr_move_left(void) {
   }
   return 0;
 }
-
+*/
 unsigned char spr_move_left_f(void) {
   --colint[sprite];
   if (colint[sprite] >= spr_frames[sprite]) {
@@ -514,14 +571,14 @@ void spr_btile_paint_back() {
   tmp_ui = 0;
   map_paper_clr = map_paper | (map_paper >> 3);
 
-  index0 = 48*8;
+  index0 = 48 * 8;
   while (index0 < (48 * 9 * 8)) { // 12*20 btiles
 
     i = 0;
 
     // Internal
     while (i < 16) {
-      f_char = &btiles[0] + index0 + i + 32; //TODO SPEED UP INC MEMORY ADDRESS
+      f_char = &btiles[0] + index0 + i + 32; // TODO SPEED UP INC MEMORY ADDRESS
       if ((*f_char & 0x38) == map_paper_last) { // 00111000
         *f_char = *f_char & 0xC7;               // 11000111
         *f_char = *f_char | map_paper;

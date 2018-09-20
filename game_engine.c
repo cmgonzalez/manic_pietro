@@ -69,14 +69,12 @@ void game_loop(void) {
         }
         // game_rotate_attrib_osd();
         // game_paint_attrib(&attrib_osd, 0, 32, 144);
-
       }
 
       game_rotate_attrib();
 
       /*Each second aprox - update fps/score/phase left/phase advance*/
       if (game_check_time(&frame_time, TIME_EVENT)) {
-
 
         frame_time = zx_clock();
         // intrinsic_halt();
@@ -177,7 +175,7 @@ void game_draw_map(void) {
         scr_map[index1] = TILE_EMPTY;
         // Clear Adjancent tiles
         scr_map[index1] = TILE_EMPTY;
-        scr_map[index1 + 1] = TILE_EMPTY; //NO USE
+        scr_map[index1 + 1] = TILE_EMPTY; // NO USE
         scr_map[index1 + 32] = TILE_EMPTY;
         scr_map[index1 + 33] = TILE_EMPTY;
       } else {
@@ -543,45 +541,6 @@ void game_rotate_attrib_osd(void) {
 void game_attribs() {
 
   // TODO ESTO DEBE QUEDAR EN BANK6
-  attrib0[0] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
-  attrib0[1] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
-  attrib0[2] = map_paper | BRIGHT | INK_BLUE | PAPER_BLACK;
-  attrib0[3] = map_paper | BRIGHT | INK_MAGENTA | PAPER_BLACK;
-
-  attrib1[0] = map_paper | INK_RED;
-  attrib1[1] = map_paper | BRIGHT | INK_RED;
-  attrib1[2] = map_paper | INK_MAGENTA;
-  attrib1[3] = map_paper | BRIGHT | INK_MAGENTA;
-
-  attrib2[0] = map_paper | INK_RED;
-  attrib2[1] = map_paper | BRIGHT | INK_RED;
-  attrib2[2] = map_paper | INK_MAGENTA;
-  attrib2[3] = map_paper | BRIGHT | INK_MAGENTA;
-
-  attrib3[0] = map_paper | BRIGHT | INK_RED;
-  attrib3[1] = map_paper | INK_RED;
-  attrib3[2] = map_paper | INK_MAGENTA;
-  attrib3[3] = map_paper | BRIGHT | INK_MAGENTA;
-
-  attrib4[0] = map_paper | BRIGHT | INK_WHITE | PAPER_RED;
-  attrib4[1] = map_paper | BRIGHT | INK_YELLOW | PAPER_RED;
-  attrib4[2] = map_paper | BRIGHT | INK_WHITE | PAPER_RED;
-  attrib4[3] = map_paper | BRIGHT | INK_YELLOW | PAPER_RED;
-
-  attrib5[0] = map_paper | BRIGHT | INK_GREEN;
-  attrib5[1] = map_paper | BRIGHT | INK_GREEN;
-  attrib5[2] = map_paper | BRIGHT | INK_CYAN;
-  attrib5[3] = map_paper | BRIGHT | INK_CYAN;
-  // TILE_DEADLY1
-  attrib6[0] = map_paper | BRIGHT | INK_YELLOW;
-  attrib6[1] = map_paper | BRIGHT | INK_GREEN;
-  attrib6[2] = map_paper | BRIGHT | INK_GREEN;
-  attrib6[3] = map_paper | BRIGHT | INK_GREEN;
-  // TILE_DEADLY2
-  attrib7[0] = map_paper | BRIGHT | INK_BLUE;
-  attrib7[1] = map_paper | INK_CYAN;
-  attrib7[2] = map_paper | BRIGHT | INK_CYAN;
-  attrib7[3] = map_paper | BRIGHT | INK_WHITE;
 
   attrib_key[0] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
   attrib_key[1] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
@@ -749,58 +708,86 @@ void game_page_map(void) {
     btiles[li] = 0;
     li = li + 2;
   }
+
+  // CRUMB 1
+  btiles[192 +  5] = btiles[48 +  0];
+  btiles[192 +  7] = btiles[48 +  2];
+  btiles[192 +  9] = btiles[48 +  4];
+  btiles[192 + 11] = btiles[48 +  6];
+  btiles[192 + 13] = btiles[48 +  8];
+  btiles[192 + 15] = btiles[48 + 10];
+  // Atribs
+  btiles[192 + 41] = btiles[48 + 32];
+  btiles[192 + 42] = btiles[48 + 33];
+  btiles[192 + 43] = btiles[48 + 34];
+  // CRUMB 2
+  btiles[240 + 10] = btiles[48 + 0];
+  btiles[240 + 12] = btiles[48 + 2];
+  btiles[240 + 14] = btiles[48 + 4];
+  btiles[240 + 16] = btiles[48 + 6];
+  // Atribs
+  btiles[240 + 34] = btiles[48 + 32];
+  btiles[240 + 35] = btiles[48 + 33];
+  // CRUMB 3
+  // Pixels
+  btiles[240 + 13] = btiles[48 + 0];
+  btiles[240 + 15] = btiles[48 + 2];
+  // Atribs
+  btiles[240 + 43] = btiles[48 + 32];
+
+
   // TODO Optimize Draw Crumb mover llave al ultimo tile y asi aplicar un loop
-
-  // Pixels
-  btiles[192 + 3] = btiles[48 + 0];
-  btiles[192 + 5] = btiles[48 + 2];
-  btiles[192 + 7] = btiles[48 + 4];
-  btiles[192 + 9] = btiles[48 + 6];
-  btiles[192 + 11] = btiles[48 + 8];
-  btiles[192 + 13] = btiles[48 + 10];
-  // Atribs
-  btiles[192 + 40] = btiles[48 + 32];
-  btiles[192 + 41] = btiles[48 + 33];
-  btiles[192 + 42] = btiles[48 + 34];
-  btiles[192 + 43] = btiles[48 + 35];
-  // Pixels
-  btiles[240 + 4] = btiles[48 + 0];
-  btiles[240 + 6] = btiles[48 + 2];
-  btiles[240 + 8] = btiles[48 + 4];
-  btiles[240 + 10] = btiles[48 + 6];
-  btiles[240 + 12] = btiles[48 + 8];
-  // Atribs
-  btiles[240 + 33] = btiles[48 + 32];
-  btiles[240 + 34] = btiles[48 + 33];
-  btiles[240 + 35] = btiles[48 + 34];
-  // Pixels
-  btiles[240 + 7] = btiles[48 + 0];
-  btiles[240 + 9] = btiles[48 + 2];
-  btiles[240 + 11] = btiles[48 + 4];
-  btiles[240 + 13] = btiles[48 + 6];
-  // Atribs
-  btiles[240 + 41] = btiles[48 + 32];
-  btiles[240 + 42] = btiles[48 + 33];
-  btiles[240 + 43] = btiles[48 + 34];
-  // Pixels
-  btiles[288 + 8] = btiles[48 + 0];
-  btiles[288 + 10] = btiles[48 + 2];
-  btiles[288 + 12] = btiles[48 + 4];
-  // Atribs
-  btiles[288 + 34] = btiles[48 + 32];
-  btiles[288 + 35] = btiles[48 + 33];
-  // Pixels
-  btiles[288 + 11] = btiles[48 + 0];
-  btiles[288 + 13] = btiles[48 + 2];
-  // Atribs
-  btiles[288 + 42] = btiles[48 + 32];
-  btiles[288 + 43] = btiles[48 + 33];
-  // Pixels
-  btiles[336 + 12] = btiles[48 + 0];
-  // Atribs
-  btiles[336 + 35] = btiles[48 + 32];
-  // Calculate the current screen start index in the world map
-
+  /* 1 PX but with more tiles...
+    // Pixels
+    btiles[192 + 3] = btiles[48 + 0];
+    btiles[192 + 5] = btiles[48 + 2];
+    btiles[192 + 7] = btiles[48 + 4];
+    btiles[192 + 9] = btiles[48 + 6];
+    btiles[192 + 11] = btiles[48 + 8];
+    btiles[192 + 13] = btiles[48 + 10];
+    // Atribs
+    btiles[192 + 40] = btiles[48 + 32];
+    btiles[192 + 41] = btiles[48 + 33];
+    btiles[192 + 42] = btiles[48 + 34];
+    btiles[192 + 43] = btiles[48 + 35];
+    // Pixels
+    btiles[240 + 4] = btiles[48 + 0];
+    btiles[240 + 6] = btiles[48 + 2];
+    btiles[240 + 8] = btiles[48 + 4];
+    btiles[240 + 10] = btiles[48 + 6];
+    btiles[240 + 12] = btiles[48 + 8];
+    // Atribs
+    btiles[240 + 33] = btiles[48 + 32];
+    btiles[240 + 34] = btiles[48 + 33];
+    btiles[240 + 35] = btiles[48 + 34];
+    // Pixels
+    btiles[240 + 7] = btiles[48 + 0];
+    btiles[240 + 9] = btiles[48 + 2];
+    btiles[240 + 11] = btiles[48 + 4];
+    btiles[240 + 13] = btiles[48 + 6];
+    // Atribs
+    btiles[240 + 41] = btiles[48 + 32];
+    btiles[240 + 42] = btiles[48 + 33];
+    btiles[240 + 43] = btiles[48 + 34];
+    // Pixels
+    btiles[288 + 8] = btiles[48 + 0];
+    btiles[288 + 10] = btiles[48 + 2];
+    btiles[288 + 12] = btiles[48 + 4];
+    // Atribs
+    btiles[288 + 34] = btiles[48 + 32];
+    btiles[288 + 35] = btiles[48 + 33];
+    // Pixels
+    btiles[288 + 11] = btiles[48 + 0];
+    btiles[288 + 13] = btiles[48 + 2];
+    // Atribs
+    btiles[288 + 42] = btiles[48 + 32];
+    btiles[288 + 43] = btiles[48 + 33];
+    // Pixels
+    btiles[336 + 12] = btiles[48 + 0];
+    // Atribs
+    btiles[336 + 35] = btiles[48 + 32];
+    // Calculate the current screen start index in the world map
+  */
   lj = 0;
   lk = 0;
 

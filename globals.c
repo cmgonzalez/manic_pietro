@@ -83,13 +83,9 @@ signed int player_vel_y;
 signed int player_vel_y0;
 signed char player_vel_inc;
 
-unsigned char player_keys[4];
-unsigned char player_hit_count;
 unsigned char player_jump_top;
 // PLAYER ATTRIBUTES
 // Maximun Mana n Vitality
-unsigned char player_max_mana;
-unsigned char player_max_vita;
 
 unsigned char player_col_scr;
 unsigned char player_lin_scr;
@@ -146,14 +142,6 @@ unsigned char attrib_hl[4];
 unsigned char attrib_red[4];
 unsigned char attrib_osd[4];
 // TILE ATTRIB TODO REMOVE UNUSED
-unsigned char attrib0[4];
-unsigned char attrib1[4];
-unsigned char attrib2[4];
-unsigned char attrib3[4];
-unsigned char attrib4[4];
-unsigned char attrib5[4];
-unsigned char attrib6[4];
-unsigned char attrib7[4];
 unsigned char attrib_key[4];
 
 unsigned char *p_state;
@@ -235,6 +223,7 @@ const unsigned char spr_init[] = {
     71, 40, DIR_RIGHT, 4, 4, E_HORIZONTAL,
     72, 48, DIR_LEFT , 4, 4, E_HORIZONTAL, // WATER
     73, 48, DIR_RIGHT, 4, 4, E_HORIZONTAL,
+    0,0,0,0,0,0,
 };
 
 unsigned char spr_tile[8];

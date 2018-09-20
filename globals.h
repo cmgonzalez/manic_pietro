@@ -82,17 +82,10 @@ Offsets 607 to 615: Spare
 #define TILE_CRUMB1                   9
 #define TILE_CRUMB2                   10
 #define TILE_CRUMB3                   11
-#define TILE_CRUMB4                   12
-#define TILE_CRUMB5                   13
-#define TILE_CRUMB6                   14
-#define TILE_CRUMB7                   15
-
-
 
 #define TILE_WALL1                   62
 #define TILE_WALL2                   63
 #define TILE_WALL3                   64
-
 
 #define TILE_WORLD_EXIT               57
 #define TILE_BACKGROUND_S             0  //START OF BACKGROUND
@@ -282,11 +275,9 @@ extern signed int  player_vel_y;
 extern signed int  player_vel_y0;
 extern signed char  player_vel_inc;
 
-extern unsigned char player_keys[4];
+
 //PLAYER ATTRIBUTES
 
-extern unsigned char player_max_mana;
-extern unsigned char player_max_vita;
 
 
 
@@ -322,7 +313,6 @@ extern unsigned char sprite;
 extern unsigned char game_debug;
 extern unsigned char game_fps_show;
 
-extern unsigned char player_hit_count;
 extern unsigned char player_jump_top;
 extern unsigned char player_killed;
 extern unsigned int  player_kill_index;
@@ -355,14 +345,6 @@ extern unsigned char attrib_red[4];
 
 
 //TILE ATTRIB
-extern unsigned char attrib0[4];
-extern unsigned char attrib1[4];
-extern unsigned char attrib2[4];
-extern unsigned char attrib3[4];
-extern unsigned char attrib4[4];
-extern unsigned char attrib5[4];
-extern unsigned char attrib6[4];
-extern unsigned char attrib7[4];
 extern unsigned char attrib_key[4];
 
 
