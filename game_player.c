@@ -57,14 +57,14 @@ void player_init(unsigned char f_lin, unsigned char f_col,
     BIT_SET(*p_state_a, STAT_LDIRL);
     tile[GAME_INDEX_P1] = f_tile + spr_frames[GAME_INDEX_P1];
   }
-  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
+  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16,
+                   col[GAME_INDEX_P1]);
 }
 
 void player_turn(void) {
   unsigned char c;
   sprite = GAME_INDEX_P1;
   if (spr_chktime(&sprite)) {
-
 
     c = in_inkey();
 
@@ -82,7 +82,7 @@ void player_turn(void) {
         scr_curr = 0;
       }
     }
-    //zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
+    // zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
     dirs = (joyfunc1)(&k1);
     /* Player initial Values */
     p_state = &state[GAME_INDEX_P1];
@@ -104,8 +104,9 @@ void player_turn(void) {
         player_lost_life();
       }
     }
-    //Level UP
-    if ( obj_count == 0xFF && col[GAME_INDEX_P1] == game_exit_col && lin[GAME_INDEX_P1] == game_exit_lin - 16 ) {
+    // Level UP
+    if (obj_count == 0xFF && col[GAME_INDEX_P1] == game_exit_col &&
+        lin[GAME_INDEX_P1] == game_exit_lin - 16) {
       ++scr_curr;
       game_round_up = 1;
     }
@@ -122,10 +123,9 @@ unsigned char player_move(void) {
     /* Walk Handling */
 
     player_move_walk();
-    BIT_CLR(*p_state, STAT_CONVEYOR);
 
     /* Check if the player have floor, and set fall if not */
-    if (player_check_floor_walk(0) && player_check_floor_walk(1)) {
+    if (player_check_floor(0) && player_check_floor(1)) {
 
       spr_move_horizontal();
       BIT_SET(*p_state, STAT_FALL);
@@ -269,6 +269,15 @@ unsigned char player_move_walk(void) {
 
     return 1;
   } else {
+    // CONVEYOR DETECTION
+    BIT_CLR(*p_state, STAT_CONVEYOR);
+    index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1] + 1);
+    if (scr_map[index1] == TILE_CONVEYOR ||
+        scr_map[index1 + 1] == TILE_CONVEYOR) {
+      zx_border(INK_RED);
+      BIT_SET(*p_state, STAT_CONVEYOR);
+    }
+
     BIT_CLR(*p_state, STAT_DIRL);
     BIT_CLR(*p_state, STAT_DIRR);
 
@@ -293,7 +302,6 @@ void player_collision() {
   // Left
   // if (colint[GAME_INDEX_P1] < 3) {
   BIT_CLR(*p_state, STAT_ONEXIT);
-  BIT_CLR(*p_state, STAT_CONVEYOR);
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1], col[GAME_INDEX_P1]);
   v0 = scr_map[index1];
@@ -302,24 +310,11 @@ void player_collision() {
 
   v0 = player_pick_item(v0, index1);
 
-
-  //CONVEYOR DETECTION
-  v0 = scr_map[index1 + 64];
-  if (v0 == TILE_CONVEYOR) {
-    BIT_SET(*p_state, STAT_CONVEYOR);
-  }
-
-  v0 = scr_map[index1 + 65];
-  if (v0 == TILE_CONVEYOR) {
-    BIT_SET(*p_state, STAT_CONVEYOR);
-  }
-
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 14, col[GAME_INDEX_P1]);
   v0 = scr_map[index1];
   v0 = player_pick_deadly(v0);
   v0 = player_pick_exit(v0);
   v0 = player_pick_item(v0, index1);
-
 
   // Right
   // if (colint[GAME_INDEX_P1] > 0) {
@@ -339,7 +334,7 @@ void player_collision() {
   for (i = 0; i < GAME_INDEX_P1; ++i) {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[GAME_INDEX_P1]); // TODO INCLUDE COLINT FOR BETTER
-                                      // PRECISION
+                                             // PRECISION
       if (v0 < 2) {
         v1 = abs(lin[i] - lin[GAME_INDEX_P1]);
         if (v1 < 16) {
@@ -361,7 +356,7 @@ unsigned char player_get_floor() {
     if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
          v0 == TILE_DEADLY2 || v0 >= TILE_EXIT0) &&
         (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY1 ||
-         v1 == TILE_DEADLY2|| v1 >= TILE_EXIT0)) {
+         v1 == TILE_DEADLY2 || v1 >= TILE_EXIT0)) {
       index1 = index1 + 32;
       ++i;
     } else {
@@ -468,7 +463,7 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   return 0;
 }
 
-unsigned char player_check_floor_walk(unsigned char f_inc) {
+unsigned char player_check_floor(unsigned char f_inc) {
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1] + f_inc);
 
@@ -478,7 +473,6 @@ unsigned char player_check_floor_walk(unsigned char f_inc) {
       v0 == TILE_DEADLY2) {
     return 1;
   }
-
 
   if (v0 == TILE_CRUMB0 ||
       (v0 >= TILE_CRUMB1 && v0 <= TILE_CRUMB3)) { // TODO CAUTION!
@@ -500,10 +494,6 @@ unsigned char player_check_floor_walk(unsigned char f_inc) {
     game_sprite_draw8(scr_map[index1], s_row1, s_col1);
   }
 
-  if (v0 == TILE_CONVEYOR) {
-    BIT_SET(*p_state, STAT_CONVEYOR);
-  }
-
   return 0;
 }
 
@@ -517,16 +507,18 @@ void player_lost_life() {
 
     if (player_kill_index != 0xFFFF) {
       index1 = player_kill_index;
-      NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16,
-                       col[GAME_INDEX_P1]);
+      NIRVANAP_spriteT(NIRV_SPRITE_P1,
+                       tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1],
+                       lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
       NIRVANAP_halt();
       NIRVANAP_spriteT(NIRV_SPRITE_P1, 0, 0, 0);
       NIRVANAP_halt();
       game_cell_paint_index();
       NIRVANAP_halt();
     } else {
-      NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16,
-                       col[GAME_INDEX_P1]);
+      NIRVANAP_spriteT(NIRV_SPRITE_P1,
+                       tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1],
+                       lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
       NIRVANAP_halt();
       NIRVANAP_spriteT(NIRV_SPRITE_P1, 0, 0, 0);
       NIRVANAP_halt();
@@ -539,7 +531,6 @@ void player_lost_life() {
   s_lin0 = lin[GAME_INDEX_P1];
   s_col0 = col[GAME_INDEX_P1];
   spr_init_effects();
-
 
   // Player lost life
   if (!game_inf_lives) {
