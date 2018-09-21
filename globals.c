@@ -52,27 +52,27 @@ udk_t k1;
 unsigned char dirs;
 
 // SPRITES GAME ARRAYS
-unsigned char class[8];   // CLASS OF SPRITE
-unsigned char state[8];   // SPRITE STATES SEE DEFINES UPPER BIT VALUES
-unsigned char state_a[8]; // SPRITE STATES ALT SEE DEFINES UPPER BIT VALUES
-unsigned char value_a[8]; // SPRITE VALUE A MIN COL/LIN
-unsigned char value_b[8]; // SPRITE VALUE B MAX COL/LIN
+unsigned char class[GAME_MAX_SPRITES];   // CLASS OF SPRITE
+unsigned char state[GAME_MAX_SPRITES];   // SPRITE STATES SEE DEFINES UPPER BIT VALUES
+unsigned char state_a[GAME_MAX_SPRITES]; // SPRITE STATES ALT SEE DEFINES UPPER BIT VALUES
+unsigned char value_a[GAME_MAX_SPRITES]; // SPRITE VALUE A MIN COL/LIN
+unsigned char value_b[GAME_MAX_SPRITES]; // SPRITE VALUE B MAX COL/LIN
 
-unsigned char tile[8]; // TILE
-unsigned char lin[8];  // LINE
+unsigned char tile[GAME_MAX_SPRITES]; // TILE
+unsigned char lin[GAME_MAX_SPRITES];  // LINE
 unsigned char tbuffer[7];
 
 // unsigned char lin_max[7];      // MAX LINE FOR VERTICAL ENEMIES
 // unsigned char lin_min[7];      // MIN LINE FOR VERTICAL ENEMIES
 
-unsigned char col[8];      // COLUMN
-unsigned char colint[8];   // INTERNAL COLUMN/TILE INCREMENT
-unsigned int spr_timer[8]; // SPRITE GENERAL TIMER MILISECONDS
-unsigned int last_time[8]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
-unsigned char jump_lin[8]; // START JUMP LINE
+unsigned char col[GAME_MAX_SPRITES];      // COLUMN
+unsigned char colint[GAME_MAX_SPRITES];   // INTERNAL COLUMN/TILE INCREMENT
+unsigned int spr_timer[GAME_MAX_SPRITES]; // SPRITE GENERAL TIMER MILISECONDS
+unsigned int last_time[GAME_MAX_SPRITES]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
+unsigned char jump_lin[GAME_MAX_SPRITES]; // START JUMP LINE
 
-unsigned char obj_lin[8]; // object lin for HIGHLIGHT
-unsigned char obj_col[8]; // object col for HIGHLIGHT
+unsigned char obj_lin[GAME_MAX_SPRITES]; // object lin for HIGHLIGHT
+unsigned char obj_col[GAME_MAX_SPRITES]; // object col for HIGHLIGHT
 unsigned char obj_count;
 
 // PLAYER ONLY
@@ -91,6 +91,7 @@ unsigned char player_col_scr;
 unsigned char player_lin_scr;
 unsigned char player_killed;
 unsigned int player_kill_index;
+unsigned char nirv_sprite_index;
 
 unsigned int player_hit_time;
 unsigned char player_hit;
@@ -104,6 +105,8 @@ unsigned char game_conveyor_dir;
 unsigned char game_conveyor_lin;
 unsigned char game_conveyor_col0;
 unsigned char game_conveyor_col1;
+unsigned char game_exit_col;
+unsigned char game_exit_lin;
 
 unsigned char game_round_up;
 unsigned char menu_curr_sel;
@@ -139,7 +142,6 @@ unsigned char enemies;
 unsigned char zx_val_asm;
 unsigned char attrib[4];
 unsigned char attrib_hl[4];
-unsigned char attrib_red[4];
 unsigned char attrib_osd[4];
 // TILE ATTRIB TODO REMOVE UNUSED
 unsigned char attrib_key[4];
@@ -163,13 +165,12 @@ unsigned char anim_count;
 unsigned char spr_count;
 unsigned char sprite_curr_index;
 // ANIMATIONS
-unsigned char anim_lin[8];
-unsigned char anim_col[8];
-unsigned char anim_tile[8];
-unsigned char anim_int[8];
-unsigned char anim_end[8];
-unsigned char anim_loop[8];
-unsigned char anim_respanwn[8];
+unsigned char anim_lin[GAME_MAX_SPRITES];
+unsigned char anim_col[GAME_MAX_SPRITES];
+unsigned char anim_tile[GAME_MAX_SPRITES];
+unsigned char anim_int[GAME_MAX_SPRITES];
+unsigned char anim_end[GAME_MAX_SPRITES];
+unsigned char anim_loop[GAME_MAX_SPRITES];
 
 //###############################################################################################
 //# # # GAME VARIABLES
@@ -200,14 +201,7 @@ unsigned char map_paper_last_a;
 //# #
 //#
 //###############################################################################################
-/* Enemies Class indexes */
-#define PLAYER 0xFF
-#define GUARD1_RIGHT 1      // Different right / left sprite
-#define GUARDIAN_HOR2 2     // Simetric Horizonal
-#define GUARDIAN_VER_UP 3   //
-#define GUARDIAN_VER_DOWN 4 //
-#define SKYLAB 5            //
-#define EUGENE 6            //
+
 
 // Enemy intialization variables, based on index on map array, used along
 // GAME_TOTAL_INDEX_CLASSES.
@@ -226,10 +220,10 @@ const unsigned char spr_init[] = {
     0,0,0,0,0,0,
 };
 
-unsigned char spr_tile[8];
-unsigned char spr_speed[8];
-unsigned char spr_frames[8];
-unsigned char spr_kind[8];
+unsigned char spr_tile[GAME_MAX_SPRITES];
+unsigned char spr_speed[GAME_MAX_SPRITES];
+unsigned char spr_frames[GAME_MAX_SPRITES];
+unsigned char spr_kind[GAME_MAX_SPRITES];
 
 const unsigned char key_map[] = {
     13,  32,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  97,

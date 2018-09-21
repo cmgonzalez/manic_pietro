@@ -28,6 +28,7 @@ extern unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col)
 
 extern unsigned char player_pick_item(unsigned char l_val, int l_index);
 extern unsigned char player_pick_deadly(unsigned char l_val);
+extern unsigned char player_pick_exit(unsigned char l_val);
 
 
 extern void          player_tile( unsigned char f_tile, unsigned char f_inc );

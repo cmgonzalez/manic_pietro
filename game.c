@@ -44,7 +44,8 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0xFF;
+  scr_curr = 0;
+  nirv_sprite_index = 0;
 
   game_song_play = 1;
   game_tileset = scr_curr * 8;
@@ -115,7 +116,7 @@ void main(void) {
 
     // spr_clear_scr();
 
-    for (i = 0; i <= SPR_P1; ++i) {
+    for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
       NIRVANAP_spriteT(i, 0, 0, 0);
     }
     // game_cls();
@@ -184,15 +185,17 @@ void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
   unsigned char *f_attrib_start;
 
   if (f_spr8 < 16) {
+    // si es mayor que 16 puedo sacar los graficos de la segunda linea
     f_spr16 =
         f_spr8 >>
-        1; // si es mayor que 16 puedo sacar los graficos de la segunda linea
+        1;
     f_spr8 = f_spr8 % 2;
   } else {
+    // si es mayor que 16 puedo sacar los graficos de la segunda linea
     f_spr8 = f_spr8 - 16;
     f_spr16 =
         f_spr8 >>
-        1; // si es mayor que 16 puedo sacar los graficos de la segunda linea
+        1;
     f_spr8 = 2 + (f_spr8 % 2);
   }
 

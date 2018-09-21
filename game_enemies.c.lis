@@ -203,1564 +203,1433 @@
 200   0000              ;--------------------------------------------------------
 201   0000              ; Public variables in this module
 202   0000              ;--------------------------------------------------------
-203   0000              	GLOBAL _enemy_ghost
-204   0000              	GLOBAL _enemy_gota
-205   0000              	GLOBAL _enemy_turn
-206   0000              	GLOBAL _enemy_move
-207   0000              	GLOBAL _enemy_static
-208   0000              	GLOBAL _enemy_horizontal
-209   0000              	GLOBAL _enemy_vertical
-210   0000              	GLOBAL _enemy_walk
-211   0000              	GLOBAL _enemy_kill
-212   0000              	GLOBAL _enemy_avoid_fall
-213   0000              	GLOBAL _enemy_avoid_dead
-214   0000              	GLOBAL _enemy_init
-215   0000              ;--------------------------------------------------------
-216   0000              ; Externals used
-217   0000              ;--------------------------------------------------------
-218   0000              	GLOBAL _ulltoa_callee
-219   0000              	GLOBAL _ulltoa
-220   0000              	GLOBAL _strtoull_callee
-221   0000              	GLOBAL _strtoull
-222   0000              	GLOBAL _strtoll_callee
-223   0000              	GLOBAL _strtoll
-224   0000              	GLOBAL _lltoa_callee
-225   0000              	GLOBAL _lltoa
-226   0000              	GLOBAL _llabs_callee
-227   0000              	GLOBAL _llabs
-228   0000              	GLOBAL __lldivu__callee
-229   0000              	GLOBAL __lldivu_
-230   0000              	GLOBAL __lldiv__callee
-231   0000              	GLOBAL __lldiv_
-232   0000              	GLOBAL _atoll_callee
-233   0000              	GLOBAL _atoll
-234   0000              	GLOBAL _realloc_unlocked_callee
-235   0000              	GLOBAL _realloc_unlocked
-236   0000              	GLOBAL _malloc_unlocked_fastcall
-237   0000              	GLOBAL _malloc_unlocked
-238   0000              	GLOBAL _free_unlocked_fastcall
-239   0000              	GLOBAL _free_unlocked
-240   0000              	GLOBAL _calloc_unlocked_callee
-241   0000              	GLOBAL _calloc_unlocked
-242   0000              	GLOBAL _aligned_alloc_unlocked_callee
-243   0000              	GLOBAL _aligned_alloc_unlocked
-244   0000              	GLOBAL _realloc_callee
-245   0000              	GLOBAL _realloc
-246   0000              	GLOBAL _malloc_fastcall
-247   0000              	GLOBAL _malloc
-248   0000              	GLOBAL _free_fastcall
-249   0000              	GLOBAL _free
-250   0000              	GLOBAL _calloc_callee
-251   0000              	GLOBAL _calloc
-252   0000              	GLOBAL _aligned_alloc_callee
-253   0000              	GLOBAL _aligned_alloc
-254   0000              	GLOBAL _utoa_callee
-255   0000              	GLOBAL _utoa
-256   0000              	GLOBAL _ultoa_callee
-257   0000              	GLOBAL _ultoa
-258   0000              	GLOBAL _system_fastcall
-259   0000              	GLOBAL _system
-260   0000              	GLOBAL _strtoul_callee
-261   0000              	GLOBAL _strtoul
-262   0000              	GLOBAL _strtol_callee
-263   0000              	GLOBAL _strtol
-264   0000              	GLOBAL _strtof_callee
-265   0000              	GLOBAL _strtof
-266   0000              	GLOBAL _strtod_callee
-267   0000              	GLOBAL _strtod
-268   0000              	GLOBAL _srand_fastcall
-269   0000              	GLOBAL _srand
-270   0000              	GLOBAL _rand
-271   0000              	GLOBAL _quick_exit_fastcall
-272   0000              	GLOBAL _quick_exit
-273   0000              	GLOBAL _qsort_callee
-274   0000              	GLOBAL _qsort
-275   0000              	GLOBAL _ltoa_callee
-276   0000              	GLOBAL _ltoa
-277   0000              	GLOBAL _labs_fastcall
-278   0000              	GLOBAL _labs
-279   0000              	GLOBAL _itoa_callee
-280   0000              	GLOBAL _itoa
-281   0000              	GLOBAL _ftoh_callee
-282   0000              	GLOBAL _ftoh
-283   0000              	GLOBAL _ftog_callee
-284   0000              	GLOBAL _ftog
-285   0000              	GLOBAL _ftoe_callee
-286   0000              	GLOBAL _ftoe
-287   0000              	GLOBAL _ftoa_callee
-288   0000              	GLOBAL _ftoa
-289   0000              	GLOBAL _exit_fastcall
-290   0000              	GLOBAL _exit
-291   0000              	GLOBAL _dtoh_callee
-292   0000              	GLOBAL _dtoh
-293   0000              	GLOBAL _dtog_callee
-294   0000              	GLOBAL _dtog
-295   0000              	GLOBAL _dtoe_callee
-296   0000              	GLOBAL _dtoe
-297   0000              	GLOBAL _dtoa_callee
-298   0000              	GLOBAL _dtoa
-299   0000              	GLOBAL _bsearch_callee
-300   0000              	GLOBAL _bsearch
-301   0000              	GLOBAL _atol_fastcall
-302   0000              	GLOBAL _atol
-303   0000              	GLOBAL _atoi_fastcall
-304   0000              	GLOBAL _atoi
-305   0000              	GLOBAL _atof_fastcall
-306   0000              	GLOBAL _atof
-307   0000              	GLOBAL _atexit_fastcall
-308   0000              	GLOBAL _atexit
-309   0000              	GLOBAL _at_quick_exit_fastcall
-310   0000              	GLOBAL _at_quick_exit
-311   0000              	GLOBAL _abs_fastcall
-312   0000              	GLOBAL _abs
-313   0000              	GLOBAL _abort
-314   0000              	GLOBAL __strtou__callee
-315   0000              	GLOBAL __strtou_
-316   0000              	GLOBAL __strtoi__callee
-317   0000              	GLOBAL __strtoi_
-318   0000              	GLOBAL __random_uniform_xor_8__fastcall
-319   0000              	GLOBAL __random_uniform_xor_8_
-320   0000              	GLOBAL __random_uniform_xor_32__fastcall
-321   0000              	GLOBAL __random_uniform_xor_32_
-322   0000              	GLOBAL __random_uniform_cmwc_8__fastcall
-323   0000              	GLOBAL __random_uniform_cmwc_8_
-324   0000              	GLOBAL __shellsort__callee
-325   0000              	GLOBAL __shellsort_
-326   0000              	GLOBAL __quicksort__callee
-327   0000              	GLOBAL __quicksort_
-328   0000              	GLOBAL __insertion_sort__callee
-329   0000              	GLOBAL __insertion_sort_
-330   0000              	GLOBAL __ldivu__callee
-331   0000              	GLOBAL __ldivu_
-332   0000              	GLOBAL __ldiv__callee
-333   0000              	GLOBAL __ldiv_
-334   0000              	GLOBAL __divu__callee
-335   0000              	GLOBAL __divu_
-336   0000              	GLOBAL __div__callee
-337   0000              	GLOBAL __div_
-338   0000              	GLOBAL _NIRVANAP_drawTW_raw_callee
-339   0000              	GLOBAL _NIRVANAP_drawTW_raw
-340   0000              	GLOBAL _NIRVANAP_drawTW_callee
-341   0000              	GLOBAL _NIRVANAP_drawTW
-342   0000              	GLOBAL _NIRVANAP_drawW_raw_callee
-343   0000              	GLOBAL _NIRVANAP_drawW_raw
-344   0000              	GLOBAL _NIRVANAP_drawW_callee
-345   0000              	GLOBAL _NIRVANAP_drawW
-346   0000              	GLOBAL _NIRVANAP_spriteT_callee
-347   0000              	GLOBAL _NIRVANAP_spriteT
-348   0000              	GLOBAL _NIRVANAP_fillC_callee
-349   0000              	GLOBAL _NIRVANAP_fillC
-350   0000              	GLOBAL _NIRVANAP_readC_callee
-351   0000              	GLOBAL _NIRVANAP_readC
-352   0000              	GLOBAL _NIRVANAP_paintC_callee
-353   0000              	GLOBAL _NIRVANAP_paintC
-354   0000              	GLOBAL _NIRVANAP_printC_callee
-355   0000              	GLOBAL _NIRVANAP_printC
-356   0000              	GLOBAL _NIRVANAP_fillT_raw_callee
-357   0000              	GLOBAL _NIRVANAP_fillT_raw
-358   0000              	GLOBAL _NIRVANAP_fillT_callee
-359   0000              	GLOBAL _NIRVANAP_fillT
-360   0000              	GLOBAL _NIRVANAP_drawT_raw_callee
-361   0000              	GLOBAL _NIRVANAP_drawT_raw
-362   0000              	GLOBAL _NIRVANAP_drawT_callee
-363   0000              	GLOBAL _NIRVANAP_drawT
-364   0000              	GLOBAL _NIRVANAP_stop
-365   0000              	GLOBAL _NIRVANAP_start
-366   0000              	GLOBAL _zx_print_str
-367   0000              	GLOBAL _zx_print_int
-368   0000              	GLOBAL _zx_print_chr
-369   0000              	GLOBAL _zx_print_bonus_time
-370   0000              	GLOBAL _zx_isr
-371   0000              	GLOBAL _z80_otdr_callee
-372   0000              	GLOBAL _z80_otdr
-373   0000              	GLOBAL _z80_otir_callee
-374   0000              	GLOBAL _z80_otir
-375   0000              	GLOBAL _z80_outp_callee
-376   0000              	GLOBAL _z80_outp
-377   0000              	GLOBAL _z80_indr_callee
-378   0000              	GLOBAL _z80_indr
-379   0000              	GLOBAL _z80_inir_callee
-380   0000              	GLOBAL _z80_inir
-381   0000              	GLOBAL _z80_inp_fastcall
-382   0000              	GLOBAL _z80_inp
-383   0000              	GLOBAL _z80_set_int_state_fastcall
-384   0000              	GLOBAL _z80_set_int_state
-385   0000              	GLOBAL _z80_get_int_state
-386   0000              	GLOBAL _z80_delay_tstate_fastcall
-387   0000              	GLOBAL _z80_delay_tstate
-388   0000              	GLOBAL _z80_delay_ms_fastcall
-389   0000              	GLOBAL _z80_delay_ms
-390   0000              	GLOBAL _im2_remove_generic_callback_callee
-391   0000              	GLOBAL _im2_remove_generic_callback
-392   0000              	GLOBAL _im2_prepend_generic_callback_callee
-393   0000              	GLOBAL _im2_prepend_generic_callback
-394   0000              	GLOBAL _im2_append_generic_callback_callee
-395   0000              	GLOBAL _im2_append_generic_callback
-396   0000              	GLOBAL _im2_create_generic_isr_8080_callee
-397   0000              	GLOBAL _im2_create_generic_isr_8080
-398   0000              	GLOBAL _im2_create_generic_isr_callee
-399   0000              	GLOBAL _im2_create_generic_isr
-400   0000              	GLOBAL _im2_install_isr_callee
-401   0000              	GLOBAL _im2_install_isr
-402   0000              	GLOBAL _im2_init_fastcall
-403   0000              	GLOBAL _im2_init
-404   0000              	GLOBAL _intrinsic_swap_word_32_fastcall
-405   0000              	GLOBAL _intrinsic_swap_word_32
-406   0000              	GLOBAL _intrinsic_swap_endian_32_fastcall
-407   0000              	GLOBAL _intrinsic_swap_endian_32
-408   0000              	GLOBAL _intrinsic_swap_endian_16_fastcall
-409   0000              	GLOBAL _intrinsic_swap_endian_16
-410   0000              	GLOBAL _intrinsic_return_de
-411   0000              	GLOBAL _intrinsic_return_bc
-412   0000              	GLOBAL _intrinsic_exx
-413   0000              	GLOBAL _intrinsic_ex_de_hl
-414   0000              	GLOBAL _intrinsic_nop
-415   0000              	GLOBAL _intrinsic_im_2
-416   0000              	GLOBAL _intrinsic_im_1
-417   0000              	GLOBAL _intrinsic_im_0
-418   0000              	GLOBAL _intrinsic_retn
-419   0000              	GLOBAL _intrinsic_reti
-420   0000              	GLOBAL _intrinsic_halt
-421   0000              	GLOBAL _intrinsic_ei
-422   0000              	GLOBAL _intrinsic_di
-423   0000              	GLOBAL _intrinsic_stub
-424   0000              	GLOBAL _intrinsic_ini
-425   0000              	GLOBAL _intrinsic_outi
-426   0000              	GLOBAL _intrinsic_ldi
-427   0000              	GLOBAL _zx_pattern_fill_callee
-428   0000              	GLOBAL _zx_pattern_fill
-429   0000              	GLOBAL _zx_saddrpup_fastcall
-430   0000              	GLOBAL _zx_saddrpup
-431   0000              	GLOBAL _zx_saddrpright_callee
-432   0000              	GLOBAL _zx_saddrpright
-433   0000              	GLOBAL _zx_saddrpleft_callee
-434   0000              	GLOBAL _zx_saddrpleft
-435   0000              	GLOBAL _zx_saddrpdown_fastcall
-436   0000              	GLOBAL _zx_saddrpdown
-437   0000              	GLOBAL _zx_saddrcup_fastcall
-438   0000              	GLOBAL _zx_saddrcup
-439   0000              	GLOBAL _zx_saddrcright_fastcall
-440   0000              	GLOBAL _zx_saddrcright
-441   0000              	GLOBAL _zx_saddrcleft_fastcall
-442   0000              	GLOBAL _zx_saddrcleft
-443   0000              	GLOBAL _zx_saddrcdown_fastcall
-444   0000              	GLOBAL _zx_saddrcdown
-445   0000              	GLOBAL _zx_saddr2py_fastcall
-446   0000              	GLOBAL _zx_saddr2py
-447   0000              	GLOBAL _zx_saddr2px_fastcall
-448   0000              	GLOBAL _zx_saddr2px
-449   0000              	GLOBAL _zx_saddr2cy_fastcall
-450   0000              	GLOBAL _zx_saddr2cy
-451   0000              	GLOBAL _zx_saddr2cx_fastcall
-452   0000              	GLOBAL _zx_saddr2cx
-453   0000              	GLOBAL _zx_saddr2aaddr_fastcall
-454   0000              	GLOBAL _zx_saddr2aaddr
-455   0000              	GLOBAL _zx_py2saddr_fastcall
-456   0000              	GLOBAL _zx_py2saddr
-457   0000              	GLOBAL _zx_py2aaddr_fastcall
-458   0000              	GLOBAL _zx_py2aaddr
-459   0000              	GLOBAL _zx_pxy2saddr_callee
-460   0000              	GLOBAL _zx_pxy2saddr
-461   0000              	GLOBAL _zx_pxy2aaddr_callee
-462   0000              	GLOBAL _zx_pxy2aaddr
-463   0000              	GLOBAL _zx_px2bitmask_fastcall
-464   0000              	GLOBAL _zx_px2bitmask
-465   0000              	GLOBAL _zx_cy2saddr_fastcall
-466   0000              	GLOBAL _zx_cy2saddr
-467   0000              	GLOBAL _zx_cy2aaddr_fastcall
-468   0000              	GLOBAL _zx_cy2aaddr
-469   0000              	GLOBAL _zx_cxy2saddr_callee
-470   0000              	GLOBAL _zx_cxy2saddr
-471   0000              	GLOBAL _zx_cxy2aaddr_callee
-472   0000              	GLOBAL _zx_cxy2aaddr
-473   0000              	GLOBAL _zx_bitmask2px_fastcall
-474   0000              	GLOBAL _zx_bitmask2px
-475   0000              	GLOBAL _zx_aaddrcup_fastcall
-476   0000              	GLOBAL _zx_aaddrcup
-477   0000              	GLOBAL _zx_aaddrcright_fastcall
-478   0000              	GLOBAL _zx_aaddrcright
-479   0000              	GLOBAL _zx_aaddrcleft_fastcall
-480   0000              	GLOBAL _zx_aaddrcleft
-481   0000              	GLOBAL _zx_aaddrcdown_fastcall
-482   0000              	GLOBAL _zx_aaddrcdown
-483   0000              	GLOBAL _zx_aaddr2saddr_fastcall
-484   0000              	GLOBAL _zx_aaddr2saddr
-485   0000              	GLOBAL _zx_aaddr2py_fastcall
-486   0000              	GLOBAL _zx_aaddr2py
-487   0000              	GLOBAL _zx_aaddr2px_fastcall
-488   0000              	GLOBAL _zx_aaddr2px
-489   0000              	GLOBAL _zx_aaddr2cy_fastcall
-490   0000              	GLOBAL _zx_aaddr2cy
-491   0000              	GLOBAL _zx_aaddr2cx_fastcall
-492   0000              	GLOBAL _zx_aaddr2cx
-493   0000              	GLOBAL _zx_visit_wc_pix_callee
-494   0000              	GLOBAL _zx_visit_wc_pix
-495   0000              	GLOBAL _zx_visit_wc_attr_callee
-496   0000              	GLOBAL _zx_visit_wc_attr
-497   0000              	GLOBAL _zx_scroll_wc_up_pix_callee
-498   0000              	GLOBAL _zx_scroll_wc_up_pix
-499   0000              	GLOBAL _zx_scroll_wc_up_attr_callee
-500   0000              	GLOBAL _zx_scroll_wc_up_attr
-501   0000              	GLOBAL _zx_scroll_wc_up_callee
-502   0000              	GLOBAL _zx_scroll_wc_up
-503   0000              	GLOBAL _zx_scroll_up_pix_callee
-504   0000              	GLOBAL _zx_scroll_up_pix
-505   0000              	GLOBAL _zx_scroll_up_attr_callee
-506   0000              	GLOBAL _zx_scroll_up_attr
-507   0000              	GLOBAL _zx_scroll_up_callee
-508   0000              	GLOBAL _zx_scroll_up
-509   0000              	GLOBAL _zx_cls_wc_pix_callee
-510   0000              	GLOBAL _zx_cls_wc_pix
-511   0000              	GLOBAL _zx_cls_wc_attr_callee
-512   0000              	GLOBAL _zx_cls_wc_attr
-513   0000              	GLOBAL _zx_cls_wc_callee
-514   0000              	GLOBAL _zx_cls_wc
-515   0000              	GLOBAL _zx_cls_pix_fastcall
-516   0000              	GLOBAL _zx_cls_pix
-517   0000              	GLOBAL _zx_cls_attr_fastcall
-518   0000              	GLOBAL _zx_cls_attr
-519   0000              	GLOBAL _zx_cls_fastcall
-520   0000              	GLOBAL _zx_cls
-521   0000              	GLOBAL _zx_border_fastcall
-522   0000              	GLOBAL _zx_border
-523   0000              	GLOBAL _zx_tape_verify_block_callee
-524   0000              	GLOBAL _zx_tape_verify_block
-525   0000              	GLOBAL _zx_tape_save_block_callee
-526   0000              	GLOBAL _zx_tape_save_block
-527   0000              	GLOBAL _zx_tape_load_block_callee
-528   0000              	GLOBAL _zx_tape_load_block
-529   0000              	GLOBAL _spr_destroy
-530   0000              	GLOBAL _spr_unflattenP1
-531   0000              	GLOBAL _spr_flatten
-532   0000              	GLOBAL _spr_btile_paint_back
-533   0000              	GLOBAL _spr_init_effects
-534   0000              	GLOBAL _spr_turn_horizontal
-535   0000              	GLOBAL _spr_play_anim
-536   0000              	GLOBAL _spr_add_anim
-537   0000              	GLOBAL _spr_clear_scr
-538   0000              	GLOBAL _spr_back_repaint
-539   0000              	GLOBAL _spr_get_tile_dir
-540   0000              	GLOBAL _spr_get_tile
-541   0000              	GLOBAL _spr_paint_player
-542   0000              	GLOBAL _spr_paint
-543   0000              	GLOBAL _spr_move_left
-544   0000              	GLOBAL _spr_move_right
-545   0000              	GLOBAL _spr_move_left_f
-546   0000              	GLOBAL _spr_move_right_f
-547   0000              	GLOBAL _spr_move_horizontal
-548   0000              	GLOBAL _spr_move_down
-549   0000              	GLOBAL _spr_move_up
-550   0000              	GLOBAL _spr_set_right
-551   0000              	GLOBAL _spr_set_left
-552   0000              	GLOBAL _spr_set_down
-553   0000              	GLOBAL _spr_set_up
-554   0000              	GLOBAL _spr_calc_index
-555   0000              	GLOBAL _spr_chktime
-556   0000              	GLOBAL _player_lost_life
-557   0000              	GLOBAL _player_move_jump
-558   0000              	GLOBAL _player_tile
+203   0000              	GLOBAL _enemy_gota
+204   0000              	GLOBAL _enemy_turn
+205   0000              	GLOBAL _enemy_move
+206   0000              	GLOBAL _enemy_static
+207   0000              	GLOBAL _enemy_horizontal
+208   0000              	GLOBAL _enemy_vertical
+209   0000              	GLOBAL _enemy_walk
+210   0000              	GLOBAL _enemy_kill
+211   0000              	GLOBAL _enemy_avoid_fall
+212   0000              	GLOBAL _enemy_avoid_dead
+213   0000              	GLOBAL _enemy_init
+214   0000              ;--------------------------------------------------------
+215   0000              ; Externals used
+216   0000              ;--------------------------------------------------------
+217   0000              	GLOBAL _ulltoa_callee
+218   0000              	GLOBAL _ulltoa
+219   0000              	GLOBAL _strtoull_callee
+220   0000              	GLOBAL _strtoull
+221   0000              	GLOBAL _strtoll_callee
+222   0000              	GLOBAL _strtoll
+223   0000              	GLOBAL _lltoa_callee
+224   0000              	GLOBAL _lltoa
+225   0000              	GLOBAL _llabs_callee
+226   0000              	GLOBAL _llabs
+227   0000              	GLOBAL __lldivu__callee
+228   0000              	GLOBAL __lldivu_
+229   0000              	GLOBAL __lldiv__callee
+230   0000              	GLOBAL __lldiv_
+231   0000              	GLOBAL _atoll_callee
+232   0000              	GLOBAL _atoll
+233   0000              	GLOBAL _realloc_unlocked_callee
+234   0000              	GLOBAL _realloc_unlocked
+235   0000              	GLOBAL _malloc_unlocked_fastcall
+236   0000              	GLOBAL _malloc_unlocked
+237   0000              	GLOBAL _free_unlocked_fastcall
+238   0000              	GLOBAL _free_unlocked
+239   0000              	GLOBAL _calloc_unlocked_callee
+240   0000              	GLOBAL _calloc_unlocked
+241   0000              	GLOBAL _aligned_alloc_unlocked_callee
+242   0000              	GLOBAL _aligned_alloc_unlocked
+243   0000              	GLOBAL _realloc_callee
+244   0000              	GLOBAL _realloc
+245   0000              	GLOBAL _malloc_fastcall
+246   0000              	GLOBAL _malloc
+247   0000              	GLOBAL _free_fastcall
+248   0000              	GLOBAL _free
+249   0000              	GLOBAL _calloc_callee
+250   0000              	GLOBAL _calloc
+251   0000              	GLOBAL _aligned_alloc_callee
+252   0000              	GLOBAL _aligned_alloc
+253   0000              	GLOBAL _utoa_callee
+254   0000              	GLOBAL _utoa
+255   0000              	GLOBAL _ultoa_callee
+256   0000              	GLOBAL _ultoa
+257   0000              	GLOBAL _system_fastcall
+258   0000              	GLOBAL _system
+259   0000              	GLOBAL _strtoul_callee
+260   0000              	GLOBAL _strtoul
+261   0000              	GLOBAL _strtol_callee
+262   0000              	GLOBAL _strtol
+263   0000              	GLOBAL _strtof_callee
+264   0000              	GLOBAL _strtof
+265   0000              	GLOBAL _strtod_callee
+266   0000              	GLOBAL _strtod
+267   0000              	GLOBAL _srand_fastcall
+268   0000              	GLOBAL _srand
+269   0000              	GLOBAL _rand
+270   0000              	GLOBAL _quick_exit_fastcall
+271   0000              	GLOBAL _quick_exit
+272   0000              	GLOBAL _qsort_callee
+273   0000              	GLOBAL _qsort
+274   0000              	GLOBAL _ltoa_callee
+275   0000              	GLOBAL _ltoa
+276   0000              	GLOBAL _labs_fastcall
+277   0000              	GLOBAL _labs
+278   0000              	GLOBAL _itoa_callee
+279   0000              	GLOBAL _itoa
+280   0000              	GLOBAL _ftoh_callee
+281   0000              	GLOBAL _ftoh
+282   0000              	GLOBAL _ftog_callee
+283   0000              	GLOBAL _ftog
+284   0000              	GLOBAL _ftoe_callee
+285   0000              	GLOBAL _ftoe
+286   0000              	GLOBAL _ftoa_callee
+287   0000              	GLOBAL _ftoa
+288   0000              	GLOBAL _exit_fastcall
+289   0000              	GLOBAL _exit
+290   0000              	GLOBAL _dtoh_callee
+291   0000              	GLOBAL _dtoh
+292   0000              	GLOBAL _dtog_callee
+293   0000              	GLOBAL _dtog
+294   0000              	GLOBAL _dtoe_callee
+295   0000              	GLOBAL _dtoe
+296   0000              	GLOBAL _dtoa_callee
+297   0000              	GLOBAL _dtoa
+298   0000              	GLOBAL _bsearch_callee
+299   0000              	GLOBAL _bsearch
+300   0000              	GLOBAL _atol_fastcall
+301   0000              	GLOBAL _atol
+302   0000              	GLOBAL _atoi_fastcall
+303   0000              	GLOBAL _atoi
+304   0000              	GLOBAL _atof_fastcall
+305   0000              	GLOBAL _atof
+306   0000              	GLOBAL _atexit_fastcall
+307   0000              	GLOBAL _atexit
+308   0000              	GLOBAL _at_quick_exit_fastcall
+309   0000              	GLOBAL _at_quick_exit
+310   0000              	GLOBAL _abs_fastcall
+311   0000              	GLOBAL _abs
+312   0000              	GLOBAL _abort
+313   0000              	GLOBAL __strtou__callee
+314   0000              	GLOBAL __strtou_
+315   0000              	GLOBAL __strtoi__callee
+316   0000              	GLOBAL __strtoi_
+317   0000              	GLOBAL __random_uniform_xor_8__fastcall
+318   0000              	GLOBAL __random_uniform_xor_8_
+319   0000              	GLOBAL __random_uniform_xor_32__fastcall
+320   0000              	GLOBAL __random_uniform_xor_32_
+321   0000              	GLOBAL __random_uniform_cmwc_8__fastcall
+322   0000              	GLOBAL __random_uniform_cmwc_8_
+323   0000              	GLOBAL __shellsort__callee
+324   0000              	GLOBAL __shellsort_
+325   0000              	GLOBAL __quicksort__callee
+326   0000              	GLOBAL __quicksort_
+327   0000              	GLOBAL __insertion_sort__callee
+328   0000              	GLOBAL __insertion_sort_
+329   0000              	GLOBAL __ldivu__callee
+330   0000              	GLOBAL __ldivu_
+331   0000              	GLOBAL __ldiv__callee
+332   0000              	GLOBAL __ldiv_
+333   0000              	GLOBAL __divu__callee
+334   0000              	GLOBAL __divu_
+335   0000              	GLOBAL __div__callee
+336   0000              	GLOBAL __div_
+337   0000              	GLOBAL _NIRVANAP_drawTW_raw_callee
+338   0000              	GLOBAL _NIRVANAP_drawTW_raw
+339   0000              	GLOBAL _NIRVANAP_drawTW_callee
+340   0000              	GLOBAL _NIRVANAP_drawTW
+341   0000              	GLOBAL _NIRVANAP_drawW_raw_callee
+342   0000              	GLOBAL _NIRVANAP_drawW_raw
+343   0000              	GLOBAL _NIRVANAP_drawW_callee
+344   0000              	GLOBAL _NIRVANAP_drawW
+345   0000              	GLOBAL _NIRVANAP_spriteT_callee
+346   0000              	GLOBAL _NIRVANAP_spriteT
+347   0000              	GLOBAL _NIRVANAP_fillC_callee
+348   0000              	GLOBAL _NIRVANAP_fillC
+349   0000              	GLOBAL _NIRVANAP_readC_callee
+350   0000              	GLOBAL _NIRVANAP_readC
+351   0000              	GLOBAL _NIRVANAP_paintC_callee
+352   0000              	GLOBAL _NIRVANAP_paintC
+353   0000              	GLOBAL _NIRVANAP_printC_callee
+354   0000              	GLOBAL _NIRVANAP_printC
+355   0000              	GLOBAL _NIRVANAP_fillT_raw_callee
+356   0000              	GLOBAL _NIRVANAP_fillT_raw
+357   0000              	GLOBAL _NIRVANAP_fillT_callee
+358   0000              	GLOBAL _NIRVANAP_fillT
+359   0000              	GLOBAL _NIRVANAP_drawT_raw_callee
+360   0000              	GLOBAL _NIRVANAP_drawT_raw
+361   0000              	GLOBAL _NIRVANAP_drawT_callee
+362   0000              	GLOBAL _NIRVANAP_drawT
+363   0000              	GLOBAL _NIRVANAP_stop
+364   0000              	GLOBAL _NIRVANAP_start
+365   0000              	GLOBAL _zx_print_str
+366   0000              	GLOBAL _zx_print_int
+367   0000              	GLOBAL _zx_print_chr
+368   0000              	GLOBAL _zx_isr
+369   0000              	GLOBAL _z80_otdr_callee
+370   0000              	GLOBAL _z80_otdr
+371   0000              	GLOBAL _z80_otir_callee
+372   0000              	GLOBAL _z80_otir
+373   0000              	GLOBAL _z80_outp_callee
+374   0000              	GLOBAL _z80_outp
+375   0000              	GLOBAL _z80_indr_callee
+376   0000              	GLOBAL _z80_indr
+377   0000              	GLOBAL _z80_inir_callee
+378   0000              	GLOBAL _z80_inir
+379   0000              	GLOBAL _z80_inp_fastcall
+380   0000              	GLOBAL _z80_inp
+381   0000              	GLOBAL _z80_set_int_state_fastcall
+382   0000              	GLOBAL _z80_set_int_state
+383   0000              	GLOBAL _z80_get_int_state
+384   0000              	GLOBAL _z80_delay_tstate_fastcall
+385   0000              	GLOBAL _z80_delay_tstate
+386   0000              	GLOBAL _z80_delay_ms_fastcall
+387   0000              	GLOBAL _z80_delay_ms
+388   0000              	GLOBAL _im2_remove_generic_callback_callee
+389   0000              	GLOBAL _im2_remove_generic_callback
+390   0000              	GLOBAL _im2_prepend_generic_callback_callee
+391   0000              	GLOBAL _im2_prepend_generic_callback
+392   0000              	GLOBAL _im2_append_generic_callback_callee
+393   0000              	GLOBAL _im2_append_generic_callback
+394   0000              	GLOBAL _im2_create_generic_isr_8080_callee
+395   0000              	GLOBAL _im2_create_generic_isr_8080
+396   0000              	GLOBAL _im2_create_generic_isr_callee
+397   0000              	GLOBAL _im2_create_generic_isr
+398   0000              	GLOBAL _im2_install_isr_callee
+399   0000              	GLOBAL _im2_install_isr
+400   0000              	GLOBAL _im2_init_fastcall
+401   0000              	GLOBAL _im2_init
+402   0000              	GLOBAL _intrinsic_swap_word_32_fastcall
+403   0000              	GLOBAL _intrinsic_swap_word_32
+404   0000              	GLOBAL _intrinsic_swap_endian_32_fastcall
+405   0000              	GLOBAL _intrinsic_swap_endian_32
+406   0000              	GLOBAL _intrinsic_swap_endian_16_fastcall
+407   0000              	GLOBAL _intrinsic_swap_endian_16
+408   0000              	GLOBAL _intrinsic_return_de
+409   0000              	GLOBAL _intrinsic_return_bc
+410   0000              	GLOBAL _intrinsic_exx
+411   0000              	GLOBAL _intrinsic_ex_de_hl
+412   0000              	GLOBAL _intrinsic_nop
+413   0000              	GLOBAL _intrinsic_im_2
+414   0000              	GLOBAL _intrinsic_im_1
+415   0000              	GLOBAL _intrinsic_im_0
+416   0000              	GLOBAL _intrinsic_retn
+417   0000              	GLOBAL _intrinsic_reti
+418   0000              	GLOBAL _intrinsic_halt
+419   0000              	GLOBAL _intrinsic_ei
+420   0000              	GLOBAL _intrinsic_di
+421   0000              	GLOBAL _intrinsic_stub
+422   0000              	GLOBAL _intrinsic_ini
+423   0000              	GLOBAL _intrinsic_outi
+424   0000              	GLOBAL _intrinsic_ldi
+425   0000              	GLOBAL _zx_pattern_fill_callee
+426   0000              	GLOBAL _zx_pattern_fill
+427   0000              	GLOBAL _zx_saddrpup_fastcall
+428   0000              	GLOBAL _zx_saddrpup
+429   0000              	GLOBAL _zx_saddrpright_callee
+430   0000              	GLOBAL _zx_saddrpright
+431   0000              	GLOBAL _zx_saddrpleft_callee
+432   0000              	GLOBAL _zx_saddrpleft
+433   0000              	GLOBAL _zx_saddrpdown_fastcall
+434   0000              	GLOBAL _zx_saddrpdown
+435   0000              	GLOBAL _zx_saddrcup_fastcall
+436   0000              	GLOBAL _zx_saddrcup
+437   0000              	GLOBAL _zx_saddrcright_fastcall
+438   0000              	GLOBAL _zx_saddrcright
+439   0000              	GLOBAL _zx_saddrcleft_fastcall
+440   0000              	GLOBAL _zx_saddrcleft
+441   0000              	GLOBAL _zx_saddrcdown_fastcall
+442   0000              	GLOBAL _zx_saddrcdown
+443   0000              	GLOBAL _zx_saddr2py_fastcall
+444   0000              	GLOBAL _zx_saddr2py
+445   0000              	GLOBAL _zx_saddr2px_fastcall
+446   0000              	GLOBAL _zx_saddr2px
+447   0000              	GLOBAL _zx_saddr2cy_fastcall
+448   0000              	GLOBAL _zx_saddr2cy
+449   0000              	GLOBAL _zx_saddr2cx_fastcall
+450   0000              	GLOBAL _zx_saddr2cx
+451   0000              	GLOBAL _zx_saddr2aaddr_fastcall
+452   0000              	GLOBAL _zx_saddr2aaddr
+453   0000              	GLOBAL _zx_py2saddr_fastcall
+454   0000              	GLOBAL _zx_py2saddr
+455   0000              	GLOBAL _zx_py2aaddr_fastcall
+456   0000              	GLOBAL _zx_py2aaddr
+457   0000              	GLOBAL _zx_pxy2saddr_callee
+458   0000              	GLOBAL _zx_pxy2saddr
+459   0000              	GLOBAL _zx_pxy2aaddr_callee
+460   0000              	GLOBAL _zx_pxy2aaddr
+461   0000              	GLOBAL _zx_px2bitmask_fastcall
+462   0000              	GLOBAL _zx_px2bitmask
+463   0000              	GLOBAL _zx_cy2saddr_fastcall
+464   0000              	GLOBAL _zx_cy2saddr
+465   0000              	GLOBAL _zx_cy2aaddr_fastcall
+466   0000              	GLOBAL _zx_cy2aaddr
+467   0000              	GLOBAL _zx_cxy2saddr_callee
+468   0000              	GLOBAL _zx_cxy2saddr
+469   0000              	GLOBAL _zx_cxy2aaddr_callee
+470   0000              	GLOBAL _zx_cxy2aaddr
+471   0000              	GLOBAL _zx_bitmask2px_fastcall
+472   0000              	GLOBAL _zx_bitmask2px
+473   0000              	GLOBAL _zx_aaddrcup_fastcall
+474   0000              	GLOBAL _zx_aaddrcup
+475   0000              	GLOBAL _zx_aaddrcright_fastcall
+476   0000              	GLOBAL _zx_aaddrcright
+477   0000              	GLOBAL _zx_aaddrcleft_fastcall
+478   0000              	GLOBAL _zx_aaddrcleft
+479   0000              	GLOBAL _zx_aaddrcdown_fastcall
+480   0000              	GLOBAL _zx_aaddrcdown
+481   0000              	GLOBAL _zx_aaddr2saddr_fastcall
+482   0000              	GLOBAL _zx_aaddr2saddr
+483   0000              	GLOBAL _zx_aaddr2py_fastcall
+484   0000              	GLOBAL _zx_aaddr2py
+485   0000              	GLOBAL _zx_aaddr2px_fastcall
+486   0000              	GLOBAL _zx_aaddr2px
+487   0000              	GLOBAL _zx_aaddr2cy_fastcall
+488   0000              	GLOBAL _zx_aaddr2cy
+489   0000              	GLOBAL _zx_aaddr2cx_fastcall
+490   0000              	GLOBAL _zx_aaddr2cx
+491   0000              	GLOBAL _zx_visit_wc_pix_callee
+492   0000              	GLOBAL _zx_visit_wc_pix
+493   0000              	GLOBAL _zx_visit_wc_attr_callee
+494   0000              	GLOBAL _zx_visit_wc_attr
+495   0000              	GLOBAL _zx_scroll_wc_up_pix_callee
+496   0000              	GLOBAL _zx_scroll_wc_up_pix
+497   0000              	GLOBAL _zx_scroll_wc_up_attr_callee
+498   0000              	GLOBAL _zx_scroll_wc_up_attr
+499   0000              	GLOBAL _zx_scroll_wc_up_callee
+500   0000              	GLOBAL _zx_scroll_wc_up
+501   0000              	GLOBAL _zx_scroll_up_pix_callee
+502   0000              	GLOBAL _zx_scroll_up_pix
+503   0000              	GLOBAL _zx_scroll_up_attr_callee
+504   0000              	GLOBAL _zx_scroll_up_attr
+505   0000              	GLOBAL _zx_scroll_up_callee
+506   0000              	GLOBAL _zx_scroll_up
+507   0000              	GLOBAL _zx_cls_wc_pix_callee
+508   0000              	GLOBAL _zx_cls_wc_pix
+509   0000              	GLOBAL _zx_cls_wc_attr_callee
+510   0000              	GLOBAL _zx_cls_wc_attr
+511   0000              	GLOBAL _zx_cls_wc_callee
+512   0000              	GLOBAL _zx_cls_wc
+513   0000              	GLOBAL _zx_cls_pix_fastcall
+514   0000              	GLOBAL _zx_cls_pix
+515   0000              	GLOBAL _zx_cls_attr_fastcall
+516   0000              	GLOBAL _zx_cls_attr
+517   0000              	GLOBAL _zx_cls_fastcall
+518   0000              	GLOBAL _zx_cls
+519   0000              	GLOBAL _zx_border_fastcall
+520   0000              	GLOBAL _zx_border
+521   0000              	GLOBAL _zx_tape_verify_block_callee
+522   0000              	GLOBAL _zx_tape_verify_block
+523   0000              	GLOBAL _zx_tape_save_block_callee
+524   0000              	GLOBAL _zx_tape_save_block
+525   0000              	GLOBAL _zx_tape_load_block_callee
+526   0000              	GLOBAL _zx_tape_load_block
+527   0000              	GLOBAL _spr_destroy
+528   0000              	GLOBAL _spr_unflattenP1
+529   0000              	GLOBAL _spr_flatten
+530   0000              	GLOBAL _spr_btile_paint_back
+531   0000              	GLOBAL _spr_init_effects
+532   0000              	GLOBAL _spr_turn_horizontal
+533   0000              	GLOBAL _spr_play_anim
+534   0000              	GLOBAL _spr_add_anim
+535   0000              	GLOBAL _spr_clear_scr
+536   0000              	GLOBAL _spr_back_repaint
+537   0000              	GLOBAL _spr_get_tile_dir
+538   0000              	GLOBAL _spr_get_tile
+539   0000              	GLOBAL _spr_paint_player
+540   0000              	GLOBAL _spr_paint
+541   0000              	GLOBAL _spr_move_left
+542   0000              	GLOBAL _spr_move_right
+543   0000              	GLOBAL _spr_move_left_f
+544   0000              	GLOBAL _spr_move_right_f
+545   0000              	GLOBAL _spr_move_horizontal
+546   0000              	GLOBAL _spr_move_down
+547   0000              	GLOBAL _spr_move_up
+548   0000              	GLOBAL _spr_set_right
+549   0000              	GLOBAL _spr_set_left
+550   0000              	GLOBAL _spr_set_down
+551   0000              	GLOBAL _spr_set_up
+552   0000              	GLOBAL _spr_calc_index
+553   0000              	GLOBAL _spr_chktime
+554   0000              	GLOBAL _player_use_floor
+555   0000              	GLOBAL _player_lost_life
+556   0000              	GLOBAL _player_move_jump
+557   0000              	GLOBAL _player_tile
+558   0000              	GLOBAL _player_pick_exit
 559   0000              	GLOBAL _player_pick_deadly
 560   0000              	GLOBAL _player_pick_item
 561   0000              	GLOBAL _player_check_ceil
 562   0000              	GLOBAL _player_check_floor_walk
-563   0000              	GLOBAL _player_check_floor_jump
-564   0000              	GLOBAL _player_score_add
-565   0000              	GLOBAL _player_move_walk
-566   0000              	GLOBAL _player_turn
-567   0000              	GLOBAL _player_move
-568   0000              	GLOBAL _player_check_input
-569   0000              	GLOBAL _player_init
-570   0000              	GLOBAL _game_page_map
-571   0000              	GLOBAL _game_attribs
-572   0000              	GLOBAL _game_print_header
-573   0000              	GLOBAL _game_check_time
-574   0000              	GLOBAL _game_rotate_attrib_osd
-575   0000              	GLOBAL _game_rotate_attrib
-576   0000              	GLOBAL _game_colour_message
-577   0000              	GLOBAL _game_paint_attrib
-578   0000              	GLOBAL _game_print_score
-579   0000              	GLOBAL _game_cell_paint_index
-580   0000              	GLOBAL _game_cell_paint
-581   0000              	GLOBAL _game_check_cell
-582   0000              	GLOBAL _game_check_map
-583   0000              	GLOBAL _game_loop
-584   0000              	GLOBAL _game_round_init
-585   0000              	GLOBAL _game_start_timer
-586   0000              	GLOBAL _game_update_stats
-587   0000              	GLOBAL _game_print_footer
-588   0000              	GLOBAL _game_fill_row
-589   0000              	GLOBAL _game_cls
-590   0000              	GLOBAL _game_fps
-591   0000              	GLOBAL _game_draw_map
-592   0000              	GLOBAL _ay_reset
-593   0000              	GLOBAL _ay_song_stop
-594   0000              	GLOBAL _ay_song_play
-595   0000              	GLOBAL _ay_fx_stop
-596   0000              	GLOBAL _ay_fx_play
-597   0000              	GLOBAL _ay_is_playing
-598   0000              	GLOBAL _audio_levelup
-599   0000              	GLOBAL _audio_menu
-600   0000              	GLOBAL _audio_game_end
-601   0000              	GLOBAL _audio_level_complete
-602   0000              	GLOBAL _audio_level_start
-603   0000              	GLOBAL _audio_lotr_lose_a_life
-604   0000              	GLOBAL _audio_puerta
-605   0000              	GLOBAL _audio_sin_mana
-606   0000              	GLOBAL _audio_magic1
-607   0000              	GLOBAL _audio_coin
-608   0000              	GLOBAL _audio_golpe
-609   0000              	GLOBAL _audio_salto
-610   0000              	GLOBAL _audio_efecto
-611   0000              	GLOBAL _audio_disparo_fire
-612   0000              	GLOBAL _audio_disparo_axe
-613   0000              	GLOBAL _audio_disparo2
-614   0000              	GLOBAL _audio_disparo1
-615   0000              	GLOBAL _audio_explosion1
-616   0000              	GLOBAL _audio_explosion
-617   0000              	GLOBAL _audio_ingame
-618   0000              	GLOBAL _game_sprite_draw8
-619   0000              	GLOBAL _test_func
-620   0000              	GLOBAL _test_proc
-621   0000              	GLOBAL _in_mouse_kempston_wheel_delta
-622   0000              	GLOBAL _in_mouse_kempston_wheel
-623   0000              	GLOBAL _in_mouse_kempston_callee
-624   0000              	GLOBAL _in_mouse_kempston
-625   0000              	GLOBAL _in_mouse_kempston_setpos_callee
-626   0000              	GLOBAL _in_mouse_kempston_setpos
-627   0000              	GLOBAL _in_mouse_kempston_reset
-628   0000              	GLOBAL _in_mouse_kempston_init
-629   0000              	GLOBAL _in_mouse_amx_wheel_delta
-630   0000              	GLOBAL _in_mouse_amx_wheel
-631   0000              	GLOBAL _in_mouse_amx_callee
-632   0000              	GLOBAL _in_mouse_amx
-633   0000              	GLOBAL _in_mouse_amx_setpos_callee
-634   0000              	GLOBAL _in_mouse_amx_setpos
-635   0000              	GLOBAL _in_mouse_amx_reset
-636   0000              	GLOBAL _in_mouse_amx_init_callee
-637   0000              	GLOBAL _in_mouse_amx_init
-638   0000              	GLOBAL _in_stick_sinclair2
-639   0000              	GLOBAL _in_stick_sinclair1
-640   0000              	GLOBAL _in_stick_kempston
-641   0000              	GLOBAL _in_stick_fuller
-642   0000              	GLOBAL _in_stick_cursor
-643   0000              	GLOBAL _in_stick_keyboard_fastcall
-644   0000              	GLOBAL _in_stick_keyboard
-645   0000              	GLOBAL _in_wait_nokey
-646   0000              	GLOBAL _in_wait_key
-647   0000              	GLOBAL _in_test_key
-648   0000              	GLOBAL _in_pause_fastcall
-649   0000              	GLOBAL _in_pause
-650   0000              	GLOBAL _in_key_scancode_fastcall
-651   0000              	GLOBAL _in_key_scancode
-652   0000              	GLOBAL _in_key_pressed_fastcall
-653   0000              	GLOBAL _in_key_pressed
-654   0000              	GLOBAL _in_inkey
-655   0000              	GLOBAL _NIRVANAP_CHAR_TABLE
-656   0000              	GLOBAL _NIRVANAP_WIDE_IMAGES
-657   0000              	GLOBAL _NIRVANAP_TILE_IMAGES
-658   0000              	GLOBAL _NIRVANAP_HOLE
-659   0000              	GLOBAL _NIRVANAP_ISR_HOOK
-660   0000              	GLOBAL _scan_map
-661   0000              	GLOBAL _map_paper_last_a
-662   0000              	GLOBAL _map_paper_last
-663   0000              	GLOBAL _map_paper_clr
-664   0000              	GLOBAL _map_paper
-665   0000              	GLOBAL _anim_count
-666   0000              	GLOBAL _anim_respanwn
-667   0000              	GLOBAL _anim_loop
-668   0000              	GLOBAL _anim_end
-669   0000              	GLOBAL _anim_int
-670   0000              	GLOBAL _anim_tile
-671   0000              	GLOBAL _anim_col
-672   0000              	GLOBAL _anim_lin
-673   0000              	GLOBAL _map_heigth
-674   0000              	GLOBAL _map_width
-675   0000              	GLOBAL _scr_curr
-676   0000              	GLOBAL _scr_map
-677   0000              	GLOBAL _spr_kind
-678   0000              	GLOBAL _spr_frames
-679   0000              	GLOBAL _spr_speed
-680   0000              	GLOBAL _spr_tile
-681   0000              	GLOBAL _screen_ink
-682   0000              	GLOBAL _screen_paper
-683   0000              	GLOBAL _game_start_scr
-684   0000              	GLOBAL _game_score_top
-685   0000              	GLOBAL _player_coins
-686   0000              	GLOBAL _player_lives
-687   0000              	GLOBAL _game_over
-688   0000              	GLOBAL _game_sound
-689   0000              	GLOBAL _game_inf_lives
-690   0000              	GLOBAL _game_inmune
-691   0000              	GLOBAL _sprite_curr_index
-692   0000              	GLOBAL _spr_count
-693   0000              	GLOBAL _last_rotated
-694   0000              	GLOBAL _anim_time
-695   0000              	GLOBAL _frame_time
-696   0000              	GLOBAL _curr_time
-697   0000              	GLOBAL _game_conveyor_flag
-698   0000              	GLOBAL _game_conveyor_tile
-699   0000              	GLOBAL _p_state_a
-700   0000              	GLOBAL _p_state
-701   0000              	GLOBAL _attrib_key
-702   0000              	GLOBAL _attrib7
-703   0000              	GLOBAL _attrib6
-704   0000              	GLOBAL _attrib5
-705   0000              	GLOBAL _attrib4
-706   0000              	GLOBAL _attrib3
-707   0000              	GLOBAL _attrib2
-708   0000              	GLOBAL _attrib1
-709   0000              	GLOBAL _attrib0
-710   0000              	GLOBAL _attrib_red
-711   0000              	GLOBAL _game_attrib_osd
-712   0000              	GLOBAL _attrib_osd
-713   0000              	GLOBAL _attrib_hl
-714   0000              	GLOBAL _attrib
-715   0000              	GLOBAL _zx_val_asm
-716   0000              	GLOBAL _enemies
-717   0000              	GLOBAL _tmp_ui
-718   0000              	GLOBAL _tmp_sc
-719   0000              	GLOBAL _tmp_uc
-720   0000              	GLOBAL _tmp1
-721   0000              	GLOBAL _tmp0
-722   0000              	GLOBAL _tmp
-723   0000              	GLOBAL _index1
-724   0000              	GLOBAL _index0
-725   0000              	GLOBAL _index_tmp
-726   0000              	GLOBAL _loop_count
-727   0000              	GLOBAL _s_class
-728   0000              	GLOBAL _s_row1
-729   0000              	GLOBAL _s_col1
-730   0000              	GLOBAL _s_col0
-731   0000              	GLOBAL _s_lin1
-732   0000              	GLOBAL _s_lin0
-733   0000              	GLOBAL _s_tile1
-734   0000              	GLOBAL _s_tile0
-735   0000              	GLOBAL _player_kill_index
-736   0000              	GLOBAL _player_killed
-737   0000              	GLOBAL _player_jump_top
-738   0000              	GLOBAL _player_hit_count
-739   0000              	GLOBAL _game_fps_show
-740   0000              	GLOBAL _game_debug
-741   0000              	GLOBAL _sprite
-742   0000              	GLOBAL _fps
-743   0000              	GLOBAL _game_tileset
-744   0000              	GLOBAL _menu_curr_sel
-745   0000              	GLOBAL _game_round_up
-746   0000              	GLOBAL _game_conveyor_col1
-747   0000              	GLOBAL _game_conveyor_col0
-748   0000              	GLOBAL _game_conveyor_lin
-749   0000              	GLOBAL _game_conveyor_dir
-750   0000              	GLOBAL _game_song_play_start
-751   0000              	GLOBAL _game_song_play
-752   0000              	GLOBAL _game_world
-753   0000              	GLOBAL _game_gravity
-754   0000              	GLOBAL _player_jumpcount
-755   0000              	GLOBAL _player_hit
-756   0000              	GLOBAL _player_hit_time
-757   0000              	GLOBAL _player_lin_scr
-758   0000              	GLOBAL _player_col_scr
-759   0000              	GLOBAL _player_max_vita
-760   0000              	GLOBAL _player_max_mana
-761   0000              	GLOBAL _player_keys
-762   0000              	GLOBAL _player_vel_inc
-763   0000              	GLOBAL _player_vel_y0
-764   0000              	GLOBAL _player_vel_y
-765   0000              	GLOBAL _player_score
-766   0000              	GLOBAL _last_time
-767   0000              	GLOBAL _obj_count
-768   0000              	GLOBAL _obj_col
-769   0000              	GLOBAL _obj_lin
-770   0000              	GLOBAL _spr_timer
-771   0000              	GLOBAL _jump_lin
-772   0000              	GLOBAL _colint
-773   0000              	GLOBAL _col
-774   0000              	GLOBAL _tbuffer
-775   0000              	GLOBAL _lin
-776   0000              	GLOBAL _tile
-777   0000              	GLOBAL _value_b
-778   0000              	GLOBAL _value_a
-779   0000              	GLOBAL _state_a
-780   0000              	GLOBAL _state
-781   0000              	GLOBAL _class
-782   0000              	GLOBAL _dirs
-783   0000              	GLOBAL _k1
-784   0000              	GLOBAL _joyfunc2
-785   0000              	GLOBAL _joyfunc1
-786   0000              	GLOBAL _btiles
-787   0000              	GLOBAL _v3
-788   0000              	GLOBAL _v2
-789   0000              	GLOBAL _v1
-790   0000              	GLOBAL _v0
-791   0000              	GLOBAL _i
-792   0000              	GLOBAL _spec128
-793   0000              	GLOBAL _GLOBAL_ZX_PORT_7FFD
-794   0000              	GLOBAL _GLOBAL_ZX_PORT_1FFD
-795   0000              	GLOBAL _GLOBAL_ZX_PORT_FE
-796   0000              	GLOBAL _ay_fx_06_disparo_fire
-797   0000              	GLOBAL _ay_fx_06_disparo_axe
-798   0000              	GLOBAL _ay_fx_06_explosion1
-799   0000              	GLOBAL _ay_fx_06_efecto
-800   0000              	GLOBAL _ay_fx_06_disparo2
-801   0000              	GLOBAL _ay_fx_06_disparo1
-802   0000              	GLOBAL _ay_fx_06_levelup
-803   0000              	GLOBAL _ay_fx_06_magic
-804   0000              	GLOBAL _ay_fx_06_sin_mana
-805   0000              	GLOBAL _ay_fx_06_salto
-806   0000              	GLOBAL _ay_fx_06_puerta
-807   0000              	GLOBAL _ay_fx_06_magic1
-808   0000              	GLOBAL _ay_fx_06_golpe
-809   0000              	GLOBAL _ay_fx_06_explosion
-810   0000              	GLOBAL _ay_fx_06_dano_por_toque
-811   0000              	GLOBAL _ay_fx_06_coin
-812   0000              	GLOBAL _ay_song_06_lotr_level_start
-813   0000              	GLOBAL _ay_song_06_lotr_level_complete
-814   0000              	GLOBAL _ay_song_06_lotr_lose_a_life
-815   0000              	GLOBAL _ay_song_04_ingame0
-816   0000              	GLOBAL _ay_song_04_ingame
-817   0000              	GLOBAL _hibtiles
-818   0000              	GLOBAL _key_map
-819   0000              	GLOBAL _start_scr0
-820   0000              	GLOBAL _paper0
-821   0000              	GLOBAL _lenght0
-822   0000              	GLOBAL _world0
-823   0000              	GLOBAL _spr_init
+563   0000              	GLOBAL _player_score_add
+564   0000              	GLOBAL _player_move_walk
+565   0000              	GLOBAL _player_turn
+566   0000              	GLOBAL _player_move
+567   0000              	GLOBAL _player_check_input
+568   0000              	GLOBAL _player_init
+569   0000              	GLOBAL _game_page_map
+570   0000              	GLOBAL _game_attribs
+571   0000              	GLOBAL _game_print_header
+572   0000              	GLOBAL _game_check_time
+573   0000              	GLOBAL _game_rotate_attrib_osd
+574   0000              	GLOBAL _game_rotate_attrib
+575   0000              	GLOBAL _game_colour_message
+576   0000              	GLOBAL _game_paint_attrib
+577   0000              	GLOBAL _game_print_score
+578   0000              	GLOBAL _game_cell_paint_index
+579   0000              	GLOBAL _game_cell_paint
+580   0000              	GLOBAL _game_check_cell
+581   0000              	GLOBAL _game_check_map
+582   0000              	GLOBAL _game_loop
+583   0000              	GLOBAL _game_round_init
+584   0000              	GLOBAL _game_start_timer
+585   0000              	GLOBAL _game_update_stats
+586   0000              	GLOBAL _game_print_footer
+587   0000              	GLOBAL _game_fill_row
+588   0000              	GLOBAL _game_cls
+589   0000              	GLOBAL _game_fps
+590   0000              	GLOBAL _game_draw_map
+591   0000              	GLOBAL _ay_reset
+592   0000              	GLOBAL _ay_song_stop
+593   0000              	GLOBAL _ay_song_play
+594   0000              	GLOBAL _ay_fx_stop
+595   0000              	GLOBAL _ay_fx_play
+596   0000              	GLOBAL _ay_is_playing
+597   0000              	GLOBAL _audio_levelup
+598   0000              	GLOBAL _audio_menu
+599   0000              	GLOBAL _audio_game_end
+600   0000              	GLOBAL _audio_level_complete
+601   0000              	GLOBAL _audio_level_start
+602   0000              	GLOBAL _audio_lotr_lose_a_life
+603   0000              	GLOBAL _audio_puerta
+604   0000              	GLOBAL _audio_sin_mana
+605   0000              	GLOBAL _audio_magic1
+606   0000              	GLOBAL _audio_coin
+607   0000              	GLOBAL _audio_golpe
+608   0000              	GLOBAL _audio_salto
+609   0000              	GLOBAL _audio_efecto
+610   0000              	GLOBAL _audio_disparo_fire
+611   0000              	GLOBAL _audio_disparo_axe
+612   0000              	GLOBAL _audio_disparo2
+613   0000              	GLOBAL _audio_disparo1
+614   0000              	GLOBAL _audio_explosion1
+615   0000              	GLOBAL _audio_explosion
+616   0000              	GLOBAL _audio_ingame
+617   0000              	GLOBAL _game_sprite_draw8
+618   0000              	GLOBAL _test_func
+619   0000              	GLOBAL _test_proc
+620   0000              	GLOBAL _in_mouse_kempston_wheel_delta
+621   0000              	GLOBAL _in_mouse_kempston_wheel
+622   0000              	GLOBAL _in_mouse_kempston_callee
+623   0000              	GLOBAL _in_mouse_kempston
+624   0000              	GLOBAL _in_mouse_kempston_setpos_callee
+625   0000              	GLOBAL _in_mouse_kempston_setpos
+626   0000              	GLOBAL _in_mouse_kempston_reset
+627   0000              	GLOBAL _in_mouse_kempston_init
+628   0000              	GLOBAL _in_mouse_amx_wheel_delta
+629   0000              	GLOBAL _in_mouse_amx_wheel
+630   0000              	GLOBAL _in_mouse_amx_callee
+631   0000              	GLOBAL _in_mouse_amx
+632   0000              	GLOBAL _in_mouse_amx_setpos_callee
+633   0000              	GLOBAL _in_mouse_amx_setpos
+634   0000              	GLOBAL _in_mouse_amx_reset
+635   0000              	GLOBAL _in_mouse_amx_init_callee
+636   0000              	GLOBAL _in_mouse_amx_init
+637   0000              	GLOBAL _in_stick_sinclair2
+638   0000              	GLOBAL _in_stick_sinclair1
+639   0000              	GLOBAL _in_stick_kempston
+640   0000              	GLOBAL _in_stick_fuller
+641   0000              	GLOBAL _in_stick_cursor
+642   0000              	GLOBAL _in_stick_keyboard_fastcall
+643   0000              	GLOBAL _in_stick_keyboard
+644   0000              	GLOBAL _in_wait_nokey
+645   0000              	GLOBAL _in_wait_key
+646   0000              	GLOBAL _in_test_key
+647   0000              	GLOBAL _in_pause_fastcall
+648   0000              	GLOBAL _in_pause
+649   0000              	GLOBAL _in_key_scancode_fastcall
+650   0000              	GLOBAL _in_key_scancode
+651   0000              	GLOBAL _in_key_pressed_fastcall
+652   0000              	GLOBAL _in_key_pressed
+653   0000              	GLOBAL _in_inkey
+654   0000              	GLOBAL _NIRVANAP_CHAR_TABLE
+655   0000              	GLOBAL _NIRVANAP_WIDE_IMAGES
+656   0000              	GLOBAL _NIRVANAP_TILE_IMAGES
+657   0000              	GLOBAL _NIRVANAP_HOLE
+658   0000              	GLOBAL _NIRVANAP_ISR_HOOK
+659   0000              	GLOBAL _scan_map
+660   0000              	GLOBAL _map_paper_last_a
+661   0000              	GLOBAL _map_paper_last
+662   0000              	GLOBAL _map_paper_clr
+663   0000              	GLOBAL _map_paper
+664   0000              	GLOBAL _anim_count
+665   0000              	GLOBAL _anim_loop
+666   0000              	GLOBAL _anim_end
+667   0000              	GLOBAL _anim_int
+668   0000              	GLOBAL _anim_tile
+669   0000              	GLOBAL _anim_col
+670   0000              	GLOBAL _anim_lin
+671   0000              	GLOBAL _map_heigth
+672   0000              	GLOBAL _map_width
+673   0000              	GLOBAL _scr_curr
+674   0000              	GLOBAL _scr_map
+675   0000              	GLOBAL _spr_kind
+676   0000              	GLOBAL _spr_frames
+677   0000              	GLOBAL _spr_speed
+678   0000              	GLOBAL _spr_tile
+679   0000              	GLOBAL _screen_ink
+680   0000              	GLOBAL _screen_paper
+681   0000              	GLOBAL _game_start_scr
+682   0000              	GLOBAL _game_score_top
+683   0000              	GLOBAL _player_coins
+684   0000              	GLOBAL _player_lives
+685   0000              	GLOBAL _game_over
+686   0000              	GLOBAL _game_sound
+687   0000              	GLOBAL _game_inf_lives
+688   0000              	GLOBAL _game_inmune
+689   0000              	GLOBAL _sprite_curr_index
+690   0000              	GLOBAL _spr_count
+691   0000              	GLOBAL _last_rotated
+692   0000              	GLOBAL _anim_time
+693   0000              	GLOBAL _frame_time
+694   0000              	GLOBAL _curr_time
+695   0000              	GLOBAL _game_conveyor_flag
+696   0000              	GLOBAL _game_conveyor_tile
+697   0000              	GLOBAL _p_state_a
+698   0000              	GLOBAL _p_state
+699   0000              	GLOBAL _attrib_key
+700   0000              	GLOBAL _game_attrib_osd
+701   0000              	GLOBAL _attrib_osd
+702   0000              	GLOBAL _attrib_hl
+703   0000              	GLOBAL _attrib
+704   0000              	GLOBAL _zx_val_asm
+705   0000              	GLOBAL _enemies
+706   0000              	GLOBAL _tmp_ui
+707   0000              	GLOBAL _tmp_sc
+708   0000              	GLOBAL _tmp_uc
+709   0000              	GLOBAL _tmp1
+710   0000              	GLOBAL _tmp0
+711   0000              	GLOBAL _tmp
+712   0000              	GLOBAL _index1
+713   0000              	GLOBAL _index0
+714   0000              	GLOBAL _index_tmp
+715   0000              	GLOBAL _loop_count
+716   0000              	GLOBAL _s_class
+717   0000              	GLOBAL _s_row1
+718   0000              	GLOBAL _s_col1
+719   0000              	GLOBAL _s_col0
+720   0000              	GLOBAL _s_lin1
+721   0000              	GLOBAL _s_lin0
+722   0000              	GLOBAL _s_tile1
+723   0000              	GLOBAL _s_tile0
+724   0000              	GLOBAL _nirv_sprite_index
+725   0000              	GLOBAL _player_kill_index
+726   0000              	GLOBAL _player_killed
+727   0000              	GLOBAL _player_jump_top
+728   0000              	GLOBAL _game_fps_show
+729   0000              	GLOBAL _game_debug
+730   0000              	GLOBAL _sprite
+731   0000              	GLOBAL _fps
+732   0000              	GLOBAL _game_tileset
+733   0000              	GLOBAL _menu_curr_sel
+734   0000              	GLOBAL _game_round_up
+735   0000              	GLOBAL _game_exit_lin
+736   0000              	GLOBAL _game_exit_col
+737   0000              	GLOBAL _game_conveyor_col1
+738   0000              	GLOBAL _game_conveyor_col0
+739   0000              	GLOBAL _game_conveyor_lin
+740   0000              	GLOBAL _game_conveyor_dir
+741   0000              	GLOBAL _game_song_play_start
+742   0000              	GLOBAL _game_song_play
+743   0000              	GLOBAL _game_world
+744   0000              	GLOBAL _game_gravity
+745   0000              	GLOBAL _player_jumpcount
+746   0000              	GLOBAL _player_hit
+747   0000              	GLOBAL _player_hit_time
+748   0000              	GLOBAL _player_lin_scr
+749   0000              	GLOBAL _player_col_scr
+750   0000              	GLOBAL _player_vel_inc
+751   0000              	GLOBAL _player_vel_y0
+752   0000              	GLOBAL _player_vel_y
+753   0000              	GLOBAL _player_score
+754   0000              	GLOBAL _tbuffer
+755   0000              	GLOBAL _obj_count
+756   0000              	GLOBAL _obj_col
+757   0000              	GLOBAL _obj_lin
+758   0000              	GLOBAL _spr_timer
+759   0000              	GLOBAL _last_time
+760   0000              	GLOBAL _jump_lin
+761   0000              	GLOBAL _colint
+762   0000              	GLOBAL _col
+763   0000              	GLOBAL _lin
+764   0000              	GLOBAL _tile
+765   0000              	GLOBAL _value_b
+766   0000              	GLOBAL _value_a
+767   0000              	GLOBAL _state_a
+768   0000              	GLOBAL _state
+769   0000              	GLOBAL _class
+770   0000              	GLOBAL _dirs
+771   0000              	GLOBAL _k1
+772   0000              	GLOBAL _joyfunc2
+773   0000              	GLOBAL _joyfunc1
+774   0000              	GLOBAL _btiles
+775   0000              	GLOBAL _v3
+776   0000              	GLOBAL _v2
+777   0000              	GLOBAL _v1
+778   0000              	GLOBAL _v0
+779   0000              	GLOBAL _i
+780   0000              	GLOBAL _spec128
+781   0000              	GLOBAL _GLOBAL_ZX_PORT_7FFD
+782   0000              	GLOBAL _GLOBAL_ZX_PORT_1FFD
+783   0000              	GLOBAL _GLOBAL_ZX_PORT_FE
+784   0000              	GLOBAL _ay_fx_06_disparo_fire
+785   0000              	GLOBAL _ay_fx_06_disparo_axe
+786   0000              	GLOBAL _ay_fx_06_explosion1
+787   0000              	GLOBAL _ay_fx_06_efecto
+788   0000              	GLOBAL _ay_fx_06_disparo2
+789   0000              	GLOBAL _ay_fx_06_disparo1
+790   0000              	GLOBAL _ay_fx_06_levelup
+791   0000              	GLOBAL _ay_fx_06_magic
+792   0000              	GLOBAL _ay_fx_06_sin_mana
+793   0000              	GLOBAL _ay_fx_06_salto
+794   0000              	GLOBAL _ay_fx_06_puerta
+795   0000              	GLOBAL _ay_fx_06_magic1
+796   0000              	GLOBAL _ay_fx_06_golpe
+797   0000              	GLOBAL _ay_fx_06_explosion
+798   0000              	GLOBAL _ay_fx_06_dano_por_toque
+799   0000              	GLOBAL _ay_fx_06_coin
+800   0000              	GLOBAL _ay_song_06_lotr_level_start
+801   0000              	GLOBAL _ay_song_06_lotr_level_complete
+802   0000              	GLOBAL _ay_song_06_lotr_lose_a_life
+803   0000              	GLOBAL _ay_song_04_ingame0
+804   0000              	GLOBAL _ay_song_04_ingame
+805   0000              	GLOBAL _hibtiles
+806   0000              	GLOBAL _key_map
+807   0000              	GLOBAL _start_scr0
+808   0000              	GLOBAL _paper0
+809   0000              	GLOBAL _lenght0
+810   0000              	GLOBAL _world0
+811   0000              	GLOBAL _spr_init
+812   0000              ;--------------------------------------------------------
+813   0000              ; special function registers
+814   0000              ;--------------------------------------------------------
+815   0000              defc _IO_FE	=	0x00fe
+816   0000              defc _IO_1FFD	=	0x1ffd
+817   0000              defc _IO_7FFD	=	0x7ffd
+818   0000              ;--------------------------------------------------------
+819   0000              ; ram data
+820   0000              ;--------------------------------------------------------
+821   0000              	SECTION bss_compiler
+822   0000              ;--------------------------------------------------------
+823   0000              ; ram data
 824   0000              ;--------------------------------------------------------
-825   0000              ; special function registers
-826   0000              ;--------------------------------------------------------
-827   0000              defc _IO_FE	=	0x00fe
-828   0000              defc _IO_1FFD	=	0x1ffd
-829   0000              defc _IO_7FFD	=	0x7ffd
-830   0000              ;--------------------------------------------------------
-831   0000              ; ram data
-832   0000              ;--------------------------------------------------------
-833   0000              	SECTION bss_compiler
-834   0000              ;--------------------------------------------------------
-835   0000              ; ram data
-836   0000              ;--------------------------------------------------------
-837   0000              
-838   0000              IF 0
-839   0000              
-840   0000              ; .area _INITIALIZED removed by z88dk
-841   0000              
-842   0000              
-843   0000              ENDIF
-844   0000              
+825   0000              
+826   0000              IF 0
+827   0000              
+828   0000              ; .area _INITIALIZED removed by z88dk
+829   0000              
+830   0000              
+831   0000              ENDIF
+832   0000              
+833   0000              ;--------------------------------------------------------
+834   0000              ; absolute external ram data
+835   0000              ;--------------------------------------------------------
+836   0000              	SECTION IGNORE
+837   0000              ;--------------------------------------------------------
+838   0000              ; global & static initialisations
+839   0000              ;--------------------------------------------------------
+840   0000              	SECTION code_crt_init
+841   0000              ;--------------------------------------------------------
+842   0000              ; Home
+843   0000              ;--------------------------------------------------------
+844   0000              	SECTION IGNORE
 845   0000              ;--------------------------------------------------------
-846   0000              ; absolute external ram data
+846   0000              ; code
 847   0000              ;--------------------------------------------------------
-848   0000              	SECTION IGNORE
-849   0000              ;--------------------------------------------------------
-850   0000              ; global & static initialisations
-851   0000              ;--------------------------------------------------------
-852   0000              	SECTION code_crt_init
-853   0000              ;--------------------------------------------------------
-854   0000              ; Home
-855   0000              ;--------------------------------------------------------
-856   0000              	SECTION IGNORE
-857   0000              ;--------------------------------------------------------
-858   0000              ; code
-859   0000              ;--------------------------------------------------------
-860   0000              	SECTION code_compiler
-861   0000              ;	---------------------------------
-862   0000              ; Function enemy_turn
-863   0000              ; ---------------------------------
-864   0000              _enemy_turn:
-865   0000  21 00 00    	ld	hl,_sprite
-866   0003  36 00       	ld	(hl),0x00
-867   0005              l_enemy_turn_00104:
-868   0005  21 00 00    	ld	hl,_sprite
-869   0008  7E          	ld	a, (hl)
-870   0009  D6 07       	sub	a,0x07
-871   000B  30 67       	jr	NC,l_enemy_turn_00107
-872   000D  4E          	ld	c,(hl)
-873   000E  06 00       	ld	b,0x00
-874   0010  21 00 00    	ld	hl,_class
-875   0013  09          	add	hl,bc
-876   0014  7E          	ld	a,(hl)
-877   0015  32 00 00    	ld	(_s_class),a
-878   0018  B7          	or	a, a
-879   0019  28 53       	jr	Z,l_enemy_turn_00102
-880   001B  21 00 00    	ld	hl,_sprite
-881   001E  CD 00 00    	call	_spr_chktime
-882   0021  7D          	ld	a, l
-883   0022  B7          	or	a, a
-884   0023  28 49       	jr	Z,l_enemy_turn_00102
-885   0025  2A 00 00    	ld	hl,(_sprite)
-886   0028  26 00       	ld	h,0x00
-887   002A  01 00 00    	ld	bc,_lin
-888   002D  09          	add	hl,bc
-889   002E  7E          	ld	a,(hl)
-890   002F  32 00 00    	ld	(_s_lin0),a
-891   0032  2A 00 00    	ld	hl,(_sprite)
-892   0035  26 00       	ld	h,0x00
-893   0037  01 00 00    	ld	bc,_col
-894   003A  09          	add	hl,bc
-895   003B  7E          	ld	a,(hl)
-896   003C  32 00 00    	ld	(_s_col0),a
-897   003F  2A 00 00    	ld	hl,(_sprite)
-898   0042  26 00       	ld	h,0x00
-899   0044  01 00 00    	ld	bc,_state
-900   0047  09          	add	hl,bc
-901   0048  22 00 00    	ld	(_p_state),hl
-902   004B  2A 00 00    	ld	hl,(_sprite)
-903   004E  26 00       	ld	h,0x00
-904   0050  01 00 00    	ld	bc,_state_a
-905   0053  09          	add	hl,bc
-906   0054  22 00 00    	ld	(_p_state_a),hl
-907   0057  CD 75 00    	call	_enemy_move
-908   005A  CD 00 00    	call	_spr_paint
-909   005D  2A 00 00    	ld	hl,(_sprite)
-910   0060  26 00       	ld	h,0x00
-911   0062  29          	add	hl,hl
-912   0063  01 00 00    	ld	bc,_last_time
-913   0066  09          	add	hl,bc
-914   0067  ED 5B 00 00 	ld	de,(_curr_time)
-915   006B  73          	ld	(hl),e
-916   006C  23          	inc	hl
-917   006D  72          	ld	(hl),d
-918   006E              l_enemy_turn_00102:
-919   006E  21 00 00    	ld	hl,_sprite
-920   0071  34          	inc	(hl)
-921   0072  18 91       	jr	l_enemy_turn_00104
-922   0074              l_enemy_turn_00107:
-923   0074  C9          	ret
-924   0075              	SECTION code_compiler
-925   0075              ;	---------------------------------
-926   0075              ; Function enemy_move
-927   0075              ; ---------------------------------
-928   0075              _enemy_move:
-929   0075  2A 00 00    	ld	hl,(_sprite)
-930   0078  26 00       	ld	h,0x00
-931   007A  01 00 00    	ld	bc,_spr_kind
-932   007D  09          	add	hl,bc
-933   007E  4E          	ld	c,(hl)
-934   007F  3E 06       	ld	a,0x06
-935   0081  91          	sub	a, c
-936   0082  38 3A       	jr	C,l_enemy_move_00108
-937   0084  06 00       	ld	b,0x00
-938   0086  21 8D 00    	ld	hl,l_enemy_move_00114
-939   0089  09          	add	hl, bc
-940   008A  09          	add	hl, bc
-941   008B  09          	add	hl, bc
-942   008C  E9          	jp	(hl)
-943   008D              l_enemy_move_00114:
-944   008D  C3 BE 00    	jp	l_enemy_move_00108
-945   0090  C3 A7 00    	jp	l_enemy_move_00102
-946   0093  C3 B1 00    	jp	l_enemy_move_00104
-947   0096  C3 AC 00    	jp	l_enemy_move_00103
-948   0099  C3 A2 00    	jp	l_enemy_move_00101
-949   009C  C3 B6 00    	jp	l_enemy_move_00105
-950   009F  C3 BB 00    	jp	l_enemy_move_00106
-951   00A2              l_enemy_move_00101:
-952   00A2  CD E0 01    	call	_enemy_static
-953   00A5  18 17       	jr	l_enemy_move_00108
-954   00A7              l_enemy_move_00102:
-955   00A7  CD 12 02    	call	_enemy_horizontal
-956   00AA  18 12       	jr	l_enemy_move_00108
-957   00AC              l_enemy_move_00103:
-958   00AC  CD 12 02    	call	_enemy_horizontal
-959   00AF  18 0D       	jr	l_enemy_move_00108
-960   00B1              l_enemy_move_00104:
-961   00B1  CD 00 00    	call	_enemy_vertical
-962   00B4  18 08       	jr	l_enemy_move_00108
-963   00B6              l_enemy_move_00105:
-964   00B6  CD 0D 01    	call	_enemy_ghost
-965   00B9  18 03       	jr	l_enemy_move_00108
-966   00BB              l_enemy_move_00106:
-967   00BB  CD BF 00    	call	_enemy_gota
-968   00BE              l_enemy_move_00108:
-969   00BE  C9          	ret
-970   00BF              	SECTION code_compiler
-971   00BF              ;	---------------------------------
-972   00BF              ; Function enemy_gota
-973   00BF              ; ---------------------------------
-974   00BF              _enemy_gota:
-975   00BF  CD 00 00    	call	___sdcc_enter_ix
-976   00C2  3B          	dec	sp
-977   00C3  2A 00 00    	ld	hl,(_sprite)
-978   00C6  26 00       	ld	h,0x00
-979   00C8  01 00 00    	ld	bc,_colint
-980   00CB  09          	add	hl,bc
-981   00CC  7E          	ld	a,(hl)
-982   00CD  B7          	or	a,a
-983   00CE  4D          	ld	c,l
-984   00CF  44          	ld	b,h
-985   00D0  20 14       	jr	NZ,l_enemy_gota_00106
-986   00D2  CD 00 00    	call	_spr_move_down
-987   00D5  7D          	ld	a, l
-988   00D6  B7          	or	a, a
-989   00D7  28 30       	jr	Z,l_enemy_gota_00108
-990   00D9  2A 00 00    	ld	hl,(_sprite)
-991   00DC  26 00       	ld	h,0x00
-992   00DE  01 00 00    	ld	bc,_colint
-993   00E1  09          	add	hl,bc
-994   00E2  36 01       	ld	(hl),0x01
-995   00E4  18 23       	jr	l_enemy_gota_00108
-996   00E6              l_enemy_gota_00106:
-997   00E6  3C          	inc	a
-998   00E7  02          	ld	(bc), a
-999   00E8  2A 00 00    	ld	hl,(_sprite)
-1000  00EB  26 00       	ld	h,0x00
-1001  00ED  01 00 00    	ld	bc,_colint
-1002  00F0  09          	add	hl,bc
-1003  00F1  7E          	ld	a,(hl)
-1004  00F2  4D          	ld	c,l
-1005  00F3  44          	ld	b,h
-1006  00F4  21 00 00    	ld	hl,_sprite
-1007  00F7  DD 77 FF    	ld	(ix-1),a
-1008  00FA  5E          	ld	e,(hl)
-1009  00FB  16 00       	ld	d,0x00
-1010  00FD  21 00 00    	ld	hl,_spr_frames
-1011  0100  19          	add	hl,de
-1012  0101  DD 7E FF    	ld	a,(ix-1)
-1013  0104  96          	sub	a,(hl)
-1014  0105  20 02       	jr	NZ,l_enemy_gota_00108
-1015  0107  AF          	xor	a, a
-1016  0108  02          	ld	(bc), a
-1017  0109              l_enemy_gota_00108:
-1018  0109  33          	inc	sp
-1019  010A  DD E1       	pop	ix
-1020  010C  C9          	ret
-1021  010D              	SECTION code_compiler
-1022  010D              ;	---------------------------------
-1023  010D              ; Function enemy_ghost
-1024  010D              ; ---------------------------------
-1025  010D              _enemy_ghost:
-1026  010D  CD 00 00    	call	___sdcc_enter_ix
-1027  0110  3B          	dec	sp
-1028  0111  0E 00       	ld	c,0x00
-1029  0113  21 07 00    	ld	hl,+(_col + 0x0007)
-1030  0116  46          	ld	b, (hl)
-1031  0117  3A 00 00    	ld	a,(_s_col0)
-1032  011A  90          	sub	a, b
-1033  011B  30 1D       	jr	NC,l_enemy_ghost_00102
-1034  011D  CD 00 00    	call	_spr_set_right
-1035  0120  3A 00 00    	ld	a,(_sprite)
-1036  0123  C6 00       	add	a,+((_tile) & 0xFF)
-1037  0125  5F          	ld	e,a
-1038  0126  3E 00       	ld	a,+((_tile) / 256)
-1039  0128  CE 00       	adc	a,0x00
-1040  012A  57          	ld	d,a
-1041  012B  D5          	push	de
-1042  012C  21 00 00    	ld	hl,_sprite
-1043  012F  CD 00 00    	call	_spr_get_tile
-1044  0132  D1          	pop	de
-1045  0133  7D          	ld	a,l
-1046  0134  12          	ld	(de), a
-1047  0135  CD 00 00    	call	_spr_move_right
-1048  0138  0E 01       	ld	c,0x01
-1049  013A              l_enemy_ghost_00102:
-1050  013A  3A 07 00    	ld	a,(_col + 0x0007)
-1051  013D  21 00 00    	ld	hl,_s_col0
-1052  0140  96          	sub	a, (hl)
-1053  0141  30 1B       	jr	NC,l_enemy_ghost_00104
-1054  0143  CD 00 00    	call	_spr_set_left
-1055  0146  2A 00 00    	ld	hl,(_sprite)
-1056  0149  26 00       	ld	h,0x00
-1057  014B  01 00 00    	ld	bc,_tile
-1058  014E  09          	add	hl,bc
-1059  014F  E5          	push	hl
-1060  0150  21 00 00    	ld	hl,_sprite
-1061  0153  CD 00 00    	call	_spr_get_tile
-1062  0156  C1          	pop	bc
-1063  0157  7D          	ld	a,l
-1064  0158  02          	ld	(bc), a
-1065  0159  CD 00 00    	call	_spr_move_left
-1066  015C  0E 01       	ld	c,0x01
-1067  015E              l_enemy_ghost_00104:
-1068  015E  2A 00 00    	ld	hl,(_sprite)
-1069  0161  26 00       	ld	h,0x00
-1070  0163  11 00 00    	ld	de,_col
-1071  0166  19          	add	hl,de
-1072  0167  46          	ld	b, (hl)
-1073  0168  3A 00 00    	ld	a,(_s_col0)
-1074  016B  90          	sub	a, b
-1075  016C  20 5E       	jr	NZ,l_enemy_ghost_00115
-1076  016E  3A 07 00    	ld	a,(_lin + 0x0007)
-1077  0171  47          	ld	b,a
-1078  0172  21 00 00    	ld	hl,_s_lin0
-1079  0175  96          	sub	a, (hl)
-1080  0176  30 05       	jr	NC,l_enemy_ghost_00106
-1081  0178  C5          	push	bc
-1082  0179  CD 00 00    	call	_spr_move_up
-1083  017C  C1          	pop	bc
-1084  017D              l_enemy_ghost_00106:
-1085  017D  21 07 00    	ld	hl,+(_lin + 0x0007)
-1086  0180  46          	ld	b, (hl)
-1087  0181  3A 00 00    	ld	a,(_s_lin0)
-1088  0184  90          	sub	a, b
-1089  0185  30 05       	jr	NC,l_enemy_ghost_00108
-1090  0187  C5          	push	bc
-1091  0188  CD 00 00    	call	_spr_move_down
-1092  018B  C1          	pop	bc
-1093  018C              l_enemy_ghost_00108:
-1094  018C  79          	ld	a, c
-1095  018D  B7          	or	a, a
-1096  018E  20 4C       	jr	NZ,l_enemy_ghost_00117
-1097  0190  2A 00 00    	ld	hl,(_sprite)
-1098  0193  26 00       	ld	h,0x00
-1099  0195  01 00 00    	ld	bc,_lin
-1100  0198  09          	add	hl,bc
-1101  0199  4E          	ld	c,(hl)
-1102  019A  3A 00 00    	ld	a,(_s_lin0)
-1103  019D  91          	sub	a, c
-1104  019E  28 3C       	jr	Z,l_enemy_ghost_00117
-1105  01A0  01 00 00    	ld	bc,_colint+0
-1106  01A3  79          	ld	a, c
-1107  01A4  21 00 00    	ld	hl,_sprite
-1108  01A7  86          	add	a, (hl)
-1109  01A8  5F          	ld	e, a
-1110  01A9  78          	ld	a, b
-1111  01AA  CE 00       	adc	a,0x00
-1112  01AC  57          	ld	d, a
-1113  01AD  1A          	ld	a, (de)
-1114  01AE  3C          	inc	a
-1115  01AF  12          	ld	(de), a
-1116  01B0  79          	ld	a, c
-1117  01B1  86          	add	a, (hl)
-1118  01B2  4F          	ld	c, a
-1119  01B3  78          	ld	a, b
-1120  01B4  CE 00       	adc	a,0x00
-1121  01B6  47          	ld	b, a
-1122  01B7  0A          	ld	a, (bc)
-1123  01B8  DD 77 FF    	ld	(ix-1),a
-1124  01BB  5E          	ld	e,(hl)
-1125  01BC  16 00       	ld	d,0x00
-1126  01BE  21 00 00    	ld	hl,_spr_frames
-1127  01C1  19          	add	hl,de
-1128  01C2  DD 7E FF    	ld	a,(ix-1)
-1129  01C5  96          	sub	a,(hl)
-1130  01C6  20 14       	jr	NZ,l_enemy_ghost_00117
-1131  01C8  AF          	xor	a, a
-1132  01C9  02          	ld	(bc), a
-1133  01CA  18 10       	jr	l_enemy_ghost_00117
-1134  01CC              l_enemy_ghost_00115:
-1135  01CC  CD 00 00    	call	_spr_back_repaint
-1136  01CF  2A 00 00    	ld	hl,(_sprite)
-1137  01D2  26 00       	ld	h,0x00
-1138  01D4  01 00 00    	ld	bc,_col
-1139  01D7  09          	add	hl,bc
-1140  01D8  7E          	ld	a,(hl)
-1141  01D9  32 00 00    	ld	(_s_col0),a
-1142  01DC              l_enemy_ghost_00117:
-1143  01DC  33          	inc	sp
-1144  01DD  DD E1       	pop	ix
-1145  01DF  C9          	ret
-1146  01E0              	SECTION code_compiler
-1147  01E0              ;	---------------------------------
-1148  01E0              ; Function enemy_static
-1149  01E0              ; ---------------------------------
-1150  01E0              _enemy_static:
-1151  01E0  CD 00 00    	call	___sdcc_enter_ix
-1152  01E3  3B          	dec	sp
-1153  01E4  01 00 00    	ld	bc,_colint+0
-1154  01E7  79          	ld	a, c
-1155  01E8  21 00 00    	ld	hl,_sprite
-1156  01EB  86          	add	a, (hl)
-1157  01EC  5F          	ld	e, a
-1158  01ED  78          	ld	a, b
-1159  01EE  CE 00       	adc	a,0x00
-1160  01F0  57          	ld	d, a
-1161  01F1  1A          	ld	a, (de)
-1162  01F2  3C          	inc	a
-1163  01F3  12          	ld	(de), a
-1164  01F4  79          	ld	a, c
-1165  01F5  86          	add	a, (hl)
-1166  01F6  4F          	ld	c, a
-1167  01F7  78          	ld	a, b
-1168  01F8  CE 00       	adc	a,0x00
-1169  01FA  47          	ld	b, a
-1170  01FB  0A          	ld	a, (bc)
-1171  01FC  DD 77 FF    	ld	(ix-1),a
-1172  01FF  5E          	ld	e,(hl)
-1173  0200  16 00       	ld	d,0x00
-1174  0202  21 00 00    	ld	hl,_spr_frames
-1175  0205  19          	add	hl,de
-1176  0206  DD 7E FF    	ld	a,(ix-1)
-1177  0209  96          	sub	a,(hl)
-1178  020A  20 02       	jr	NZ,l_enemy_static_00103
-1179  020C  AF          	xor	a, a
-1180  020D  02          	ld	(bc), a
-1181  020E              l_enemy_static_00103:
-1182  020E  33          	inc	sp
-1183  020F  DD E1       	pop	ix
-1184  0211  C9          	ret
-1185  0212              	SECTION code_compiler
-1186  0212              ;	---------------------------------
-1187  0212              ; Function enemy_horizontal
-1188  0212              ; ---------------------------------
-1189  0212              _enemy_horizontal:
-1190  0212  2A 00 00    	ld	hl,(_p_state)
-1191  0215  CB 56       	bit	2,(hl)
-1192  0217  28 56       	jr	Z,l_enemy_horizontal_00110
-1193  0219  CD 00 00    	call	_spr_move_right_f
-1194  021C  2A 00 00    	ld	hl,(_sprite)
-1195  021F  26 00       	ld	h,0x00
-1196  0221  01 00 00    	ld	bc,_col
-1197  0224  09          	add	hl,bc
-1198  0225  4E          	ld	c, (hl)
-1199  0226  2A 00 00    	ld	hl,(_sprite)
-1200  0229  26 00       	ld	h,0x00
-1201  022B  11 00 00    	ld	de,_value_b
-1202  022E  19          	add	hl,de
-1203  022F  7E          	ld	a,(hl)
-1204  0230  91          	sub	a,c
-1205  0231  20 0F       	jr	NZ,l_enemy_horizontal_00104
-1206  0233  3A 00 00    	ld	a,(_sprite)
-1207  0236  5F          	ld	e,a
-1208  0237  16 00       	ld	d,0x00
-1209  0239  21 00 00    	ld	hl,_colint
-1210  023C  19          	add	hl,de
-1211  023D  7E          	ld	a,(hl)
-1212  023E  D6 03       	sub	a,0x03
-1213  0240  28 05       	jr	Z,l_enemy_horizontal_00101
-1214  0242              l_enemy_horizontal_00104:
-1215  0242  3E 1E       	ld	a,0x1e
-1216  0244  91          	sub	a, c
-1217  0245  30 7B       	jr	NC,l_enemy_horizontal_00112
-1218  0247              l_enemy_horizontal_00101:
-1219  0247  CD 00 00    	call	_spr_set_left
-1220  024A  2A 00 00    	ld	hl,(_sprite)
-1221  024D  26 00       	ld	h,0x00
-1222  024F  01 00 00    	ld	bc,_state
-1223  0252  09          	add	hl,bc
-1224  0253  4D          	ld	c,l
-1225  0254  44          	ld	b,h
-1226  0255  2A 00 00    	ld	hl,(_p_state)
-1227  0258  7E          	ld	a,(hl)
-1228  0259  02          	ld	(bc),a
-1229  025A  2A 00 00    	ld	hl,(_sprite)
-1230  025D  26 00       	ld	h,0x00
-1231  025F  01 00 00    	ld	bc,_tile
-1232  0262  09          	add	hl,bc
-1233  0263  E5          	push	hl
-1234  0264  21 00 00    	ld	hl,_sprite
-1235  0267  CD 00 00    	call	_spr_get_tile
-1236  026A  C1          	pop	bc
-1237  026B  7D          	ld	a,l
-1238  026C  02          	ld	(bc), a
-1239  026D  18 53       	jr	l_enemy_horizontal_00112
-1240  026F              l_enemy_horizontal_00110:
-1241  026F  CD 00 00    	call	_spr_move_left_f
-1242  0272  2A 00 00    	ld	hl,(_sprite)
-1243  0275  26 00       	ld	h,0x00
-1244  0277  01 00 00    	ld	bc,_col
-1245  027A  09          	add	hl,bc
-1246  027B  4E          	ld	c, (hl)
-1247  027C  2A 00 00    	ld	hl,(_sprite)
-1248  027F  26 00       	ld	h,0x00
-1249  0281  11 00 00    	ld	de,_value_a
-1250  0284  19          	add	hl,de
-1251  0285  7E          	ld	a,(hl)
-1252  0286  91          	sub	a,c
-1253  0287  20 0E       	jr	NZ,l_enemy_horizontal_00108
-1254  0289  3A 00 00    	ld	a,(_sprite)
-1255  028C  5F          	ld	e,a
-1256  028D  16 00       	ld	d,0x00
-1257  028F  21 00 00    	ld	hl,_colint
-1258  0292  19          	add	hl,de
-1259  0293  7E          	ld	a,(hl)
-1260  0294  B7          	or	a, a
-1261  0295  28 05       	jr	Z,l_enemy_horizontal_00105
-1262  0297              l_enemy_horizontal_00108:
-1263  0297  79          	ld	a, c
-1264  0298  D6 02       	sub	a,0x02
-1265  029A  30 26       	jr	NC,l_enemy_horizontal_00112
-1266  029C              l_enemy_horizontal_00105:
-1267  029C  CD 00 00    	call	_spr_set_right
-1268  029F  2A 00 00    	ld	hl,(_sprite)
-1269  02A2  26 00       	ld	h,0x00
-1270  02A4  01 00 00    	ld	bc,_state
-1271  02A7  09          	add	hl,bc
-1272  02A8  4D          	ld	c,l
-1273  02A9  44          	ld	b,h
-1274  02AA  2A 00 00    	ld	hl,(_p_state)
-1275  02AD  7E          	ld	a,(hl)
-1276  02AE  02          	ld	(bc),a
-1277  02AF  2A 00 00    	ld	hl,(_sprite)
-1278  02B2  26 00       	ld	h,0x00
-1279  02B4  01 00 00    	ld	bc,_tile
-1280  02B7  09          	add	hl,bc
-1281  02B8  E5          	push	hl
-1282  02B9  21 00 00    	ld	hl,_sprite
-1283  02BC  CD 00 00    	call	_spr_get_tile
-1284  02BF  C1          	pop	bc
-1285  02C0  7D          	ld	a,l
-1286  02C1  02          	ld	(bc), a
-1287  02C2              l_enemy_horizontal_00112:
-1288  02C2  C9          	ret
-1289  02C3              	SECTION code_compiler
-1290  02C3              ;	---------------------------------
-1291  02C3              ; Function enemy_vertical is a stub
-1292  02C3              ; ---------------------------------
-1293  02C3              EXTERN l_ret
-1294  02C3              defc _enemy_vertical = l_ret
-1295  02C3              	SECTION code_compiler
-1296  02C3              ;	---------------------------------
-1297  02C3              ; Function enemy_walk is a stub
-1298  02C3              ; ---------------------------------
-1299  02C3              EXTERN l_ret
-1300  02C3              defc _enemy_walk = l_ret
-1301  02C3              	SECTION code_compiler
-1302  02C3              ;	---------------------------------
-1303  02C3              ; Function enemy_kill
-1304  02C3              ; ---------------------------------
-1305  02C3              _enemy_kill:
-1306  02C3  4D          	ld	c,l
-1307  02C4  11 00 00    	ld	de,_lin+0
-1308  02C7  26 00       	ld	h,0x00
-1309  02C9  19          	add	hl, de
-1310  02CA  7E          	ld	a, (hl)
-1311  02CB  32 00 00    	ld	(_s_lin0),a
-1312  02CE  11 00 00    	ld	de,_col+0
-1313  02D1  69          	ld	l,c
-1314  02D2  26 00       	ld	h,0x00
-1315  02D4  19          	add	hl, de
-1316  02D5  7E          	ld	a, (hl)
-1317  02D6  32 00 00    	ld	(_s_col0),a
-1318  02D9  69          	ld	l, c
-1319  02DA  C3 00 00    	jp  _spr_destroy
-1320  02DD              	SECTION code_compiler
-1321  02DD              ;	---------------------------------
-1322  02DD              ; Function enemy_avoid_fall
-1323  02DD              ; ---------------------------------
-1324  02DD              _enemy_avoid_fall:
-1325  02DD  2A 00 00    	ld	hl,(_p_state)
-1326  02E0  CB 56       	bit	2,(hl)
-1327  02E2  28 24       	jr	Z,l_enemy_avoid_fall_00102
-1328  02E4  2A 00 00    	ld	hl,(_sprite)
-1329  02E7  26 00       	ld	h,0x00
-1330  02E9  01 00 00    	ld	bc,_col
-1331  02EC  09          	add	hl,bc
-1332  02ED  7E          	ld	a,(hl)
-1333  02EE  C6 02       	add	a,0x02
-1334  02F0  57          	ld	d,a
-1335  02F1  2A 00 00    	ld	hl,(_sprite)
-1336  02F4  26 00       	ld	h,0x00
-1337  02F6  01 00 00    	ld	bc,_lin
-1338  02F9  09          	add	hl,bc
-1339  02FA  7E          	ld	a,(hl)
-1340  02FB  C6 10       	add	a,0x10
-1341  02FD  5F          	ld	e, a
-1342  02FE  D5          	push	de
-1343  02FF  CD 00 00    	call	_spr_calc_index
-1344  0302  F1          	pop	af
-1345  0303  22 00 00    	ld	(_index1),hl
-1346  0306  18 23       	jr	l_enemy_avoid_fall_00103
-1347  0308              l_enemy_avoid_fall_00102:
-1348  0308  2A 00 00    	ld	hl,(_sprite)
-1349  030B  26 00       	ld	h,0x00
-1350  030D  01 00 00    	ld	bc,_col
-1351  0310  09          	add	hl,bc
-1352  0311  7E          	ld	a,(hl)
-1353  0312  C6 FE       	add	a,-0x02
-1354  0314  47          	ld	b,a
-1355  0315  3A 00 00    	ld	a,(_sprite)
-1356  0318  5F          	ld	e,a
-1357  0319  16 00       	ld	d,0x00
-1358  031B  21 00 00    	ld	hl,_lin
-1359  031E  19          	add	hl,de
-1360  031F  7E          	ld	a,(hl)
-1361  0320  C6 10       	add	a,0x10
-1362  0322  4F          	ld	c,a
-1363  0323  C5          	push	bc
-1364  0324  CD 00 00    	call	_spr_calc_index
-1365  0327  F1          	pop	af
-1366  0328  22 00 00    	ld	(_index1),hl
-1367  032B              l_enemy_avoid_fall_00103:
-1368  032B  01 00 00    	ld	bc,_scr_map
-1369  032E  2A 00 00    	ld	hl,(_index1)
-1370  0331  09          	add	hl,bc
-1371  0332  7E          	ld	a,(hl)
-1372  0333  D6 01       	sub	a,0x01
-1373  0335  D0          	ret	NC
-1374  0336  C3 00 00    	jp  _spr_turn_horizontal
-1375  0339              	SECTION code_compiler
-1376  0339              ;	---------------------------------
-1377  0339              ; Function enemy_avoid_dead
-1378  0339              ; ---------------------------------
-1379  0339              _enemy_avoid_dead:
-1380  0339  2A 00 00    	ld	hl,(_sprite)
-1381  033C  26 00       	ld	h,0x00
-1382  033E  01 00 00    	ld	bc,_col
-1383  0341  09          	add	hl,bc
-1384  0342  56          	ld	d, (hl)
-1385  0343  2A 00 00    	ld	hl,(_sprite)
-1386  0346  26 00       	ld	h,0x00
-1387  0348  01 00 00    	ld	bc,_lin
-1388  034B  09          	add	hl,bc
-1389  034C  5E          	ld	e, (hl)
-1390  034D  D5          	push	de
-1391  034E  CD 00 00    	call	_spr_calc_index
-1392  0351  F1          	pop	af
-1393  0352  22 00 00    	ld	(_index1),hl
-1394  0355  2A 00 00    	ld	hl,(_p_state)
-1395  0358  CB 56       	bit	2,(hl)
-1396  035A  28 0A       	jr	Z,l_enemy_avoid_dead_00102
-1397  035C  21 00 00    	ld	hl,_index1
-1398  035F  34          	inc	(hl)
-1399  0360  20 0B       	jr	NZ,l_enemy_avoid_dead_00103
-1400  0362  23          	inc	hl
-1401  0363  34          	inc	(hl)
-1402  0364  18 07       	jr	l_enemy_avoid_dead_00103
-1403  0366              l_enemy_avoid_dead_00102:
-1404  0366  2A 00 00    	ld	hl,(_index1)
-1405  0369  2B          	dec	hl
-1406  036A  22 00 00    	ld	(_index1),hl
-1407  036D              l_enemy_avoid_dead_00103:
-1408  036D  01 00 00    	ld	bc,_scr_map+0
-1409  0370  2A 00 00    	ld	hl,(_index1)
-1410  0373  09          	add	hl,bc
-1411  0374  7E          	ld	a,(hl)
-1412  0375  21 00 00    	ld	hl,_tmp0
-1413  0378  77          	ld	(hl), a
-1414  0379  3E 2F       	ld	a,0x2f
-1415  037B  96          	sub	a, (hl)
-1416  037C  30 0C       	jr	NC,l_enemy_avoid_dead_00105
-1417  037E  7E          	ld	a, (hl)
-1418  037F  D6 01       	sub	a,0x01
-1419  0381  30 07       	jr	NC,l_enemy_avoid_dead_00105
-1420  0383  CD 00 00    	call	_spr_turn_horizontal
-1421  0386  2E 01       	ld	l,0x01
-1422  0388  18 23       	jr	l_enemy_avoid_dead_00110
-1423  038A              l_enemy_avoid_dead_00105:
-1424  038A  2A 00 00    	ld	hl,(_index1)
-1425  038D  11 10 00    	ld	de,0x0010
-1426  0390  19          	add	hl,de
-1427  0391  22 00 00    	ld	(_index1),hl
-1428  0394  09          	add	hl,bc
-1429  0395  7E          	ld	a,(hl)
-1430  0396  21 00 00    	ld	hl,_tmp0
-1431  0399  77          	ld	(hl), a
-1432  039A  3E 2F       	ld	a,0x2f
-1433  039C  96          	sub	a, (hl)
-1434  039D  30 0C       	jr	NC,l_enemy_avoid_dead_00108
-1435  039F  7E          	ld	a, (hl)
-1436  03A0  D6 01       	sub	a,0x01
-1437  03A2  30 07       	jr	NC,l_enemy_avoid_dead_00108
-1438  03A4  CD 00 00    	call	_spr_turn_horizontal
-1439  03A7  2E 01       	ld	l,0x01
-1440  03A9  18 02       	jr	l_enemy_avoid_dead_00110
-1441  03AB              l_enemy_avoid_dead_00108:
-1442  03AB  2E 00       	ld	l,0x00
-1443  03AD              l_enemy_avoid_dead_00110:
-1444  03AD  C9          	ret
-1445  03AE              	SECTION code_compiler
-1446  03AE              ;	---------------------------------
-1447  03AE              ; Function enemy_init
-1448  03AE              ; ---------------------------------
-1449  03AE              _enemy_init:
-1450  03AE  CD 00 00    	call	___sdcc_enter_ix
-1451  03B1  F5          	push	af
-1452  03B2  F5          	push	af
-1453  03B3  F5          	push	af
-1454  03B4  3B          	dec	sp
-1455  03B5  DD 36 FB 00 	ld	(ix-5),0x00
-1456  03B9  DD 36 FA 00 	ld	(ix-6),0x00
-1457  03BD              l_enemy_init_00114:
-1458  03BD  DD 7E FA    	ld	a,(ix-6)
-1459  03C0  D6 07       	sub	a,0x07
-1460  03C2  D2 4B 06    	jp	NC, l_enemy_init_00117
-1461  03C5  3E 00       	ld	a, +((_class) & 0xFF)
-1462  03C7  DD 86 FA    	add	a,(ix-6)
-1463  03CA  4F          	ld	c, a
-1464  03CB  3E 00       	ld	a, +((_class) / 256)
-1465  03CD  CE 00       	adc	a,0x00
-1466  03CF  47          	ld	b, a
-1467  03D0  0A          	ld	a, (bc)
-1468  03D1  B7          	or	a, a
-1469  03D2  C2 3F 06    	jp	NZ, l_enemy_init_00112
-1470  03D5  21 00 00    	ld	hl,_tmp0
-1471  03D8  36 00       	ld	(hl),0x00
-1472  03DA              l_enemy_init_00108:
-1473  03DA  3E 30       	ld	a,0x30
-1474  03DC  21 00 00    	ld	hl,_tmp0
-1475  03DF  96          	sub	a, (hl)
-1476  03E0  DA 4B 06    	jp	C, l_enemy_init_00117
-1477  03E3  4E          	ld	c,(hl)
-1478  03E4  06 00       	ld	b,0x00
-1479  03E6  21 00 00    	ld	hl,_spr_init
-1480  03E9  09          	add	hl,bc
-1481  03EA  DD 7E 06    	ld	a,(ix+6)
-1482  03ED  96          	sub	a,(hl)
-1483  03EE  C2 35 06    	jp	NZ,l_enemy_init_00106
-1484  03F1  DD 7E FB    	ld	a,(ix-5)
-1485  03F4  32 00 00    	ld	(_sprite),a
-1486  03F7  C6 00       	add	a,+((_class) & 0xFF)
-1487  03F9  DD 77 FE    	ld	(ix-2),a
-1488  03FC  6F          	ld	l,a
-1489  03FD  3E 00       	ld	a,+((_class) / 256)
-1490  03FF  CE 00       	adc	a,0x00
-1491  0401  DD 77 FF    	ld	(ix-1),a
-1492  0404  67          	ld	h,a
-1493  0405  DD 7E 06    	ld	a,(ix+6)
-1494  0408  77          	ld	(hl), a
-1495  0409  3E 00       	ld	a, +((_spr_tile) & 0xFF)
-1496  040B  21 00 00    	ld	hl,_sprite
-1497  040E  86          	add	a, (hl)
-1498  040F  DD 77 FE    	ld	(ix-2),a
-1499  0412  3E 00       	ld	a, +((_spr_tile) / 256)
-1500  0414  CE 00       	adc	a,0x00
-1501  0416  DD 77 FF    	ld	(ix-1),a
-1502  0419  3A 00 00    	ld	a,(_tmp0)
-1503  041C  DD 77 FC    	ld	(ix-4),a
-1504  041F  DD 36 FD 00 	ld	(ix-3),0x00
-1505  0423  DD 34 FC    	inc	(ix-4)
-1506  0426  20 03       	jr	NZ,l_enemy_init_00153
-1507  0428  DD 34 FD    	inc	(ix-3)
-1508  042B              l_enemy_init_00153:
-1509  042B  DD 6E FC    	ld	l,(ix-4)
-1510  042E  DD 66 FD    	ld	h,(ix-3)
-1511  0431  01 00 00    	ld	bc,_spr_init
-1512  0434  09          	add	hl,bc
-1513  0435  DD 75 FC    	ld	(ix-4),l
-1514  0438  DD 74 FD    	ld	(ix-3),h
-1515  043B  7E          	ld	a, (hl)
-1516  043C  DD 77 FC    	ld	(ix-4),a
-1517  043F  DD 6E FE    	ld	l,(ix-2)
-1518  0442  DD 66 FF    	ld	h,(ix-1)
-1519  0445  DD 7E FC    	ld	a,(ix-4)
-1520  0448  77          	ld	(hl), a
-1521  0449  3A 00 00    	ld	a,(_tmp0)
-1522  044C  DD 77 FC    	ld	(ix-4),a
-1523  044F  DD 36 FD 00 	ld	(ix-3),0x00
-1524  0453  C6 02       	add	a,0x02
-1525  0455  DD 77 FE    	ld	(ix-2),a
-1526  0458  6F          	ld	l,a
-1527  0459  DD 7E FD    	ld	a,(ix-3)
-1528  045C  CE 00       	adc	a,0x00
-1529  045E  DD 77 FF    	ld	(ix-1),a
-1530  0461  67          	ld	h,a
-1531  0462  01 00 00    	ld	bc,_spr_init
-1532  0465  09          	add	hl,bc
-1533  0466  DD 75 FE    	ld	(ix-2),l
-1534  0469  DD 74 FF    	ld	(ix-1),h
-1535  046C  7E          	ld	a, (hl)
-1536  046D  DD 77 F9    	ld	(ix-7),a
-1537  0470  3E 00       	ld	a, +((_spr_frames) & 0xFF)
-1538  0472  21 00 00    	ld	hl,_sprite
-1539  0475  86          	add	a, (hl)
-1540  0476  DD 77 FE    	ld	(ix-2),a
-1541  0479  3E 00       	ld	a, +((_spr_frames) / 256)
-1542  047B  CE 00       	adc	a,0x00
-1543  047D  DD 77 FF    	ld	(ix-1),a
-1544  0480  DD 6E FC    	ld	l,(ix-4)
-1545  0483  DD 66 FD    	ld	h,(ix-3)
-1546  0486  11 03 00    	ld	de,0x0003
-1547  0489  19          	add	hl,de
-1548  048A  DD 75 FC    	ld	(ix-4),l
-1549  048D  DD 74 FD    	ld	(ix-3),h
-1550  0490  01 00 00    	ld	bc,_spr_init
-1551  0493  09          	add	hl,bc
-1552  0494  DD 75 FC    	ld	(ix-4),l
-1553  0497  DD 74 FD    	ld	(ix-3),h
-1554  049A  7E          	ld	a, (hl)
-1555  049B  DD 77 FC    	ld	(ix-4),a
-1556  049E  DD 6E FE    	ld	l,(ix-2)
-1557  04A1  DD 66 FF    	ld	h,(ix-1)
-1558  04A4  DD 7E FC    	ld	a,(ix-4)
-1559  04A7  77          	ld	(hl), a
-1560  04A8  3E 00       	ld	a, +((_spr_speed) & 0xFF)
-1561  04AA  21 00 00    	ld	hl,_sprite
-1562  04AD  86          	add	a, (hl)
-1563  04AE  DD 77 FC    	ld	(ix-4),a
-1564  04B1  3E 00       	ld	a, +((_spr_speed) / 256)
-1565  04B3  CE 00       	adc	a,0x00
-1566  04B5  DD 77 FD    	ld	(ix-3),a
-1567  04B8  3A 00 00    	ld	a,(_tmp0)
-1568  04BB  DD 77 FE    	ld	(ix-2),a
-1569  04BE  DD 36 FF 00 	ld	(ix-1),0x00
-1570  04C2  C6 04       	add	a,0x04
-1571  04C4  DD 77 FE    	ld	(ix-2),a
-1572  04C7  6F          	ld	l,a
-1573  04C8  DD 7E FF    	ld	a,(ix-1)
-1574  04CB  CE 00       	adc	a,0x00
-1575  04CD  DD 77 FF    	ld	(ix-1),a
-1576  04D0  67          	ld	h,a
-1577  04D1  01 00 00    	ld	bc,_spr_init
-1578  04D4  09          	add	hl,bc
-1579  04D5  DD 75 FE    	ld	(ix-2),l
-1580  04D8  DD 74 FF    	ld	(ix-1),h
-1581  04DB  7E          	ld	a, (hl)
-1582  04DC  DD 77 FE    	ld	(ix-2),a
-1583  04DF  DD 6E FC    	ld	l,(ix-4)
-1584  04E2  DD 66 FD    	ld	h,(ix-3)
-1585  04E5  DD 7E FE    	ld	a,(ix-2)
-1586  04E8  77          	ld	(hl), a
-1587  04E9  3E 00       	ld	a, +((_spr_kind) & 0xFF)
-1588  04EB  21 00 00    	ld	hl,_sprite
-1589  04EE  86          	add	a, (hl)
-1590  04EF  DD 77 FC    	ld	(ix-4),a
-1591  04F2  3E 00       	ld	a, +((_spr_kind) / 256)
-1592  04F4  CE 00       	adc	a,0x00
-1593  04F6  DD 77 FD    	ld	(ix-3),a
-1594  04F9  3A 00 00    	ld	a,(_tmp0)
-1595  04FC  DD 77 FE    	ld	(ix-2),a
-1596  04FF  DD 36 FF 00 	ld	(ix-1),0x00
-1597  0503  C6 05       	add	a,0x05
-1598  0505  DD 77 FE    	ld	(ix-2),a
-1599  0508  6F          	ld	l,a
-1600  0509  DD 7E FF    	ld	a,(ix-1)
-1601  050C  CE 00       	adc	a,0x00
-1602  050E  DD 77 FF    	ld	(ix-1),a
-1603  0511  67          	ld	h,a
-1604  0512  01 00 00    	ld	bc,_spr_init
-1605  0515  09          	add	hl,bc
-1606  0516  DD 75 FE    	ld	(ix-2),l
-1607  0519  DD 74 FF    	ld	(ix-1),h
-1608  051C  7E          	ld	a, (hl)
-1609  051D  DD 77 FE    	ld	(ix-2),a
-1610  0520  DD 6E FC    	ld	l,(ix-4)
-1611  0523  DD 66 FD    	ld	h,(ix-3)
-1612  0526  DD 7E FE    	ld	a,(ix-2)
-1613  0529  77          	ld	(hl), a
-1614  052A  2A 00 00    	ld	hl,(_sprite)
-1615  052D  26 00       	ld	h,0x00
-1616  052F  01 00 00    	ld	bc,_lin
-1617  0532  09          	add	hl,bc
-1618  0533  4D          	ld	c,l
-1619  0534  44          	ld	b,h
-1620  0535  21 00 00    	ld	hl,_sprite
-1621  0538  DD 7E 04    	ld	a,(ix+4)
-1622  053B  02          	ld	(bc), a
-1623  053C  3E 00       	ld	a, +((_col) & 0xFF)
-1624  053E  86          	add	a, (hl)
-1625  053F  4F          	ld	c, a
-1626  0540  3E 00       	ld	a, +((_col) / 256)
-1627  0542  CE 00       	adc	a,0x00
-1628  0544  47          	ld	b, a
-1629  0545  DD 7E 05    	ld	a,(ix+5)
-1630  0548  02          	ld	(bc), a
-1631  0549  3E 00       	ld	a, +((_state) & 0xFF)
-1632  054B  86          	add	a, (hl)
-1633  054C  4F          	ld	c, a
-1634  054D  3E 00       	ld	a, +((_state) / 256)
-1635  054F  CE 00       	adc	a,0x00
-1636  0551  47          	ld	b, a
-1637  0552  AF          	xor	a, a
-1638  0553  02          	ld	(bc), a
-1639  0554  3E 00       	ld	a, +((_state_a) & 0xFF)
-1640  0556  86          	add	a, (hl)
-1641  0557  4F          	ld	c, a
-1642  0558  3E 00       	ld	a, +((_state_a) / 256)
-1643  055A  CE 00       	adc	a,0x00
-1644  055C  47          	ld	b, a
-1645  055D  AF          	xor	a, a
-1646  055E  02          	ld	(bc), a
-1647  055F  3E 00       	ld	a, +((_jump_lin) & 0xFF)
-1648  0561  86          	add	a, (hl)
-1649  0562  DD 77 FC    	ld	(ix-4),a
-1650  0565  6F          	ld	l,a
-1651  0566  3E 00       	ld	a,+((_jump_lin) / 256)
-1652  0568  CE 00       	adc	a,0x00
-1653  056A  DD 77 FD    	ld	(ix-3),a
-1654  056D  67          	ld	h,a
-1655  056E  36 00       	ld	(hl),0x00
-1656  0570  3E 00       	ld	a, +((_colint) & 0xFF)
-1657  0572  21 00 00    	ld	hl,_sprite
-1658  0575  86          	add	a, (hl)
-1659  0576  DD 77 FC    	ld	(ix-4),a
-1660  0579  6F          	ld	l,a
-1661  057A  3E 00       	ld	a,+((_colint) / 256)
-1662  057C  CE 00       	adc	a,0x00
-1663  057E  DD 77 FD    	ld	(ix-3),a
-1664  0581  67          	ld	h,a
-1665  0582  36 00       	ld	(hl),0x00
-1666  0584  DD 7E F9    	ld	a,(ix-7)
-1667  0587  3D          	dec	a
-1668  0588  20 03       	jr	NZ,l_enemy_init_00102
-1669  058A  CD 00 00    	call	_spr_set_right
-1670  058D              l_enemy_init_00102:
-1671  058D  DD 7E F9    	ld	a,(ix-7)
-1672  0590  3C          	inc	a
-1673  0591  20 03       	jr	NZ,l_enemy_init_00104
-1674  0593  CD 00 00    	call	_spr_set_left
-1675  0596              l_enemy_init_00104:
-1676  0596  3E 00       	ld	a, +((_state) & 0xFF)
-1677  0598  21 00 00    	ld	hl,_sprite
-1678  059B  86          	add	a, (hl)
-1679  059C  DD 77 FC    	ld	(ix-4),a
-1680  059F  6F          	ld	l,a
-1681  05A0  3E 00       	ld	a,+((_state) / 256)
-1682  05A2  CE 00       	adc	a,0x00
-1683  05A4  DD 77 FD    	ld	(ix-3),a
-1684  05A7  67          	ld	h,a
-1685  05A8  22 00 00    	ld	(_p_state),hl
-1686  05AB  3E 00       	ld	a,+((_state_a) & 0xFF)
-1687  05AD  21 00 00    	ld	hl,_sprite
-1688  05B0  86          	add	a, (hl)
-1689  05B1  DD 77 FC    	ld	(ix-4),a
-1690  05B4  6F          	ld	l,a
-1691  05B5  3E 00       	ld	a,+((_state_a) / 256)
-1692  05B7  CE 00       	adc	a,0x00
-1693  05B9  DD 77 FD    	ld	(ix-3),a
-1694  05BC  67          	ld	h,a
-1695  05BD  22 00 00    	ld	(_p_state_a),hl
-1696  05C0  3E 00       	ld	a,+((_tile) & 0xFF)
-1697  05C2  21 00 00    	ld	hl,_sprite
-1698  05C5  86          	add	a, (hl)
-1699  05C6  DD 77 FC    	ld	(ix-4),a
-1700  05C9  3E 00       	ld	a, +((_tile) / 256)
-1701  05CB  CE 00       	adc	a,0x00
-1702  05CD  DD 77 FD    	ld	(ix-3),a
-1703  05D0  21 00 00    	ld	hl,_sprite
-1704  05D3  CD 00 00    	call	_spr_get_tile
-1705  05D6  DD 75 FE    	ld	(ix-2),l
-1706  05D9  DD 6E FC    	ld	l,(ix-4)
-1707  05DC  DD 66 FD    	ld	h,(ix-3)
-1708  05DF  DD 7E FE    	ld	a,(ix-2)
-1709  05E2  77          	ld	(hl), a
-1710  05E3  2A 00 00    	ld	hl,(_sprite)
-1711  05E6  26 00       	ld	h,0x00
-1712  05E8  29          	add	hl,hl
-1713  05E9  DD 75 FC    	ld	(ix-4),l
-1714  05EC  DD 74 FD    	ld	(ix-3),h
-1715  05EF  3E 00       	ld	a,+((_spr_timer) & 0xFF)
-1716  05F1  85          	add	a,l
-1717  05F2  DD 77 FC    	ld	(ix-4),a
-1718  05F5  3E 00       	ld	a, +((_spr_timer) / 256)
-1719  05F7  DD 8E FD    	adc	a,(ix-3)
-1720  05FA  DD 77 FD    	ld	(ix-3),a
-1721  05FD  2A 00 00    	ld	hl,(_curr_time)
-1722  0600  DD 74 FF    	ld	(ix-1),h
-1723  0603  DD 75 FE    	ld	(ix-2),l
-1724  0606  DD 6E FC    	ld	l,(ix-4)
-1725  0609  DD 66 FD    	ld	h,(ix-3)
-1726  060C  DD 7E FE    	ld	a,(ix-2)
-1727  060F  77          	ld	(hl), a
-1728  0610  23          	inc	hl
-1729  0611  DD 7E FF    	ld	a,(ix-1)
-1730  0614  77          	ld	(hl), a
-1731  0615  2A 00 00    	ld	hl,(_sprite)
-1732  0618  26 00       	ld	h,0x00
-1733  061A  29          	add	hl,hl
-1734  061B  DD 75 FC    	ld	(ix-4),l
-1735  061E  DD 74 FD    	ld	(ix-3),h
-1736  0621  01 00 00    	ld	bc,_last_time
-1737  0624  09          	add	hl,bc
-1738  0625  DD 75 FC    	ld	(ix-4),l
-1739  0628  DD 74 FD    	ld	(ix-3),h
-1740  062B  AF          	xor	a, a
-1741  062C  77          	ld	(hl), a
-1742  062D  23          	inc	hl
-1743  062E  77          	ld	(hl), a
-1744  062F  21 00 00    	ld	hl,_spr_count
-1745  0632  34          	inc	(hl)
-1746  0633  18 16       	jr	l_enemy_init_00117
-1747  0635              l_enemy_init_00106:
-1748  0635  21 00 00    	ld	hl,_tmp0
-1749  0638  7E          	ld	a, (hl)
-1750  0639  C6 06       	add	a,0x06
-1751  063B  77          	ld	(hl), a
-1752  063C  C3 DA 03    	jp	l_enemy_init_00108
-1753  063F              l_enemy_init_00112:
-1754  063F  DD 34 FA    	inc	(ix-6)
-1755  0642  DD 7E FA    	ld	a,(ix-6)
-1756  0645  DD 77 FB    	ld	(ix-5),a
-1757  0648  C3 BD 03    	jp	l_enemy_init_00114
-1758  064B              l_enemy_init_00117:
-1759  064B  DD F9       	ld	sp, ix
-1760  064D  DD E1       	pop	ix
-1761  064F  C9          	ret
-1762  0650              	SECTION IGNORE
-1763  0000              
+848   0000              	SECTION code_compiler
+849   0000              ;	---------------------------------
+850   0000              ; Function enemy_turn
+851   0000              ; ---------------------------------
+852   0000              _enemy_turn:
+853   0000  21 00 00    	ld	hl,_sprite
+854   0003  36 00       	ld	(hl),0x00
+855   0005  21 00 00    	ld	hl,_nirv_sprite_index
+856   0008  36 00       	ld	(hl),0x00
+857   000A              l_enemy_turn_00107:
+858   000A  3A 00 00    	ld	a,(_sprite)
+859   000D  21 00 00    	ld	hl,_spr_count
+860   0010  96          	sub	a, (hl)
+861   0011  D2 98 00    	jp	NC, l_enemy_turn_00110
+862   0014  2A 00 00    	ld	hl,(_sprite)
+863   0017  26 00       	ld	h,0x00
+864   0019  01 00 00    	ld	bc,_class
+865   001C  09          	add	hl,bc
+866   001D  7E          	ld	a,(hl)
+867   001E  32 00 00    	ld	(_s_class),a
+868   0021  B7          	or	a, a
+869   0022  28 60       	jr	Z,l_enemy_turn_00104
+870   0024  21 00 00    	ld	hl,_sprite
+871   0027  CD 00 00    	call	_spr_chktime
+872   002A  7D          	ld	a, l
+873   002B  B7          	or	a, a
+874   002C  28 56       	jr	Z,l_enemy_turn_00104
+875   002E  2A 00 00    	ld	hl,(_sprite)
+876   0031  26 00       	ld	h,0x00
+877   0033  01 00 00    	ld	bc,_lin
+878   0036  09          	add	hl,bc
+879   0037  7E          	ld	a,(hl)
+880   0038  32 00 00    	ld	(_s_lin0),a
+881   003B  2A 00 00    	ld	hl,(_sprite)
+882   003E  26 00       	ld	h,0x00
+883   0040  01 00 00    	ld	bc,_col
+884   0043  09          	add	hl,bc
+885   0044  7E          	ld	a,(hl)
+886   0045  32 00 00    	ld	(_s_col0),a
+887   0048  2A 00 00    	ld	hl,(_sprite)
+888   004B  26 00       	ld	h,0x00
+889   004D  01 00 00    	ld	bc,_tile
+890   0050  09          	add	hl,bc
+891   0051  7E          	ld	a,(hl)
+892   0052  32 00 00    	ld	(_s_tile0),a
+893   0055  2A 00 00    	ld	hl,(_sprite)
+894   0058  26 00       	ld	h,0x00
+895   005A  01 00 00    	ld	bc,_state
+896   005D  09          	add	hl,bc
+897   005E  22 00 00    	ld	(_p_state),hl
+898   0061  2A 00 00    	ld	hl,(_sprite)
+899   0064  26 00       	ld	h,0x00
+900   0066  01 00 00    	ld	bc,_state_a
+901   0069  09          	add	hl,bc
+902   006A  22 00 00    	ld	(_p_state_a),hl
+903   006D  CD 99 00    	call	_enemy_move
+904   0070  CD 00 00    	call	_spr_paint
+905   0073  2A 00 00    	ld	hl,(_sprite)
+906   0076  26 00       	ld	h,0x00
+907   0078  29          	add	hl,hl
+908   0079  01 00 00    	ld	bc,_last_time
+909   007C  09          	add	hl,bc
+910   007D  ED 5B 00 00 	ld	de,(_curr_time)
+911   0081  73          	ld	(hl),e
+912   0082  23          	inc	hl
+913   0083  72          	ld	(hl),d
+914   0084              l_enemy_turn_00104:
+915   0084  21 00 00    	ld	hl,_sprite
+916   0087  34          	inc	(hl)
+917   0088  21 00 00    	ld	hl,_nirv_sprite_index
+918   008B  34          	inc	(hl)
+919   008C  3E 07       	ld	a,0x07
+920   008E  96          	sub	a, (hl)
+921   008F  D2 0A 00    	jp	NC, l_enemy_turn_00107
+922   0092  36 00       	ld	(hl),0x00
+923   0094  76          	halt
+924   0095  C3 0A 00    	jp	l_enemy_turn_00107
+925   0098              l_enemy_turn_00110:
+926   0098  C9          	ret
+927   0099              	SECTION code_compiler
+928   0099              ;	---------------------------------
+929   0099              ; Function enemy_move
+930   0099              ; ---------------------------------
+931   0099              _enemy_move:
+932   0099  2A 00 00    	ld	hl,(_sprite)
+933   009C  26 00       	ld	h,0x00
+934   009E  01 00 00    	ld	bc,_spr_kind
+935   00A1  09          	add	hl,bc
+936   00A2  7E          	ld	a,(hl)
+937   00A3  FE 01       	cp	a,0x01
+938   00A5  28 17       	jr	Z,l_enemy_move_00102
+939   00A7  FE 02       	cp	a,0x02
+940   00A9  28 1D       	jr	Z,l_enemy_move_00104
+941   00AB  FE 03       	cp	a,0x03
+942   00AD  28 14       	jr	Z,l_enemy_move_00103
+943   00AF  FE 04       	cp	a,0x04
+944   00B1  28 06       	jr	Z,l_enemy_move_00101
+945   00B3  D6 06       	sub	a,0x06
+946   00B5  28 16       	jr	Z,l_enemy_move_00105
+947   00B7  18 17       	jr	l_enemy_move_00107
+948   00B9              l_enemy_move_00101:
+949   00B9  CD 1F 01    	call	_enemy_static
+950   00BC  18 12       	jr	l_enemy_move_00107
+951   00BE              l_enemy_move_00102:
+952   00BE  CD 51 01    	call	_enemy_horizontal
+953   00C1  18 0D       	jr	l_enemy_move_00107
+954   00C3              l_enemy_move_00103:
+955   00C3  CD 51 01    	call	_enemy_horizontal
+956   00C6  18 08       	jr	l_enemy_move_00107
+957   00C8              l_enemy_move_00104:
+958   00C8  CD 00 00    	call	_enemy_vertical
+959   00CB  18 03       	jr	l_enemy_move_00107
+960   00CD              l_enemy_move_00105:
+961   00CD  CD D1 00    	call	_enemy_gota
+962   00D0              l_enemy_move_00107:
+963   00D0  C9          	ret
+964   00D1              	SECTION code_compiler
+965   00D1              ;	---------------------------------
+966   00D1              ; Function enemy_gota
+967   00D1              ; ---------------------------------
+968   00D1              _enemy_gota:
+969   00D1  CD 00 00    	call	___sdcc_enter_ix
+970   00D4  3B          	dec	sp
+971   00D5  2A 00 00    	ld	hl,(_sprite)
+972   00D8  26 00       	ld	h,0x00
+973   00DA  01 00 00    	ld	bc,_colint
+974   00DD  09          	add	hl,bc
+975   00DE  7E          	ld	a,(hl)
+976   00DF  B7          	or	a,a
+977   00E0  4D          	ld	c,l
+978   00E1  44          	ld	b,h
+979   00E2  20 14       	jr	NZ,l_enemy_gota_00106
+980   00E4  CD 00 00    	call	_spr_move_down
+981   00E7  7D          	ld	a, l
+982   00E8  B7          	or	a, a
+983   00E9  28 30       	jr	Z,l_enemy_gota_00108
+984   00EB  2A 00 00    	ld	hl,(_sprite)
+985   00EE  26 00       	ld	h,0x00
+986   00F0  01 00 00    	ld	bc,_colint
+987   00F3  09          	add	hl,bc
+988   00F4  36 01       	ld	(hl),0x01
+989   00F6  18 23       	jr	l_enemy_gota_00108
+990   00F8              l_enemy_gota_00106:
+991   00F8  3C          	inc	a
+992   00F9  02          	ld	(bc), a
+993   00FA  2A 00 00    	ld	hl,(_sprite)
+994   00FD  26 00       	ld	h,0x00
+995   00FF  01 00 00    	ld	bc,_colint
+996   0102  09          	add	hl,bc
+997   0103  7E          	ld	a,(hl)
+998   0104  4D          	ld	c,l
+999   0105  44          	ld	b,h
+1000  0106  21 00 00    	ld	hl,_sprite
+1001  0109  DD 77 FF    	ld	(ix-1),a
+1002  010C  5E          	ld	e,(hl)
+1003  010D  16 00       	ld	d,0x00
+1004  010F  21 00 00    	ld	hl,_spr_frames
+1005  0112  19          	add	hl,de
+1006  0113  DD 7E FF    	ld	a,(ix-1)
+1007  0116  96          	sub	a,(hl)
+1008  0117  20 02       	jr	NZ,l_enemy_gota_00108
+1009  0119  AF          	xor	a, a
+1010  011A  02          	ld	(bc), a
+1011  011B              l_enemy_gota_00108:
+1012  011B  33          	inc	sp
+1013  011C  DD E1       	pop	ix
+1014  011E  C9          	ret
+1015  011F              	SECTION code_compiler
+1016  011F              ;	---------------------------------
+1017  011F              ; Function enemy_static
+1018  011F              ; ---------------------------------
+1019  011F              _enemy_static:
+1020  011F  CD 00 00    	call	___sdcc_enter_ix
+1021  0122  3B          	dec	sp
+1022  0123  01 00 00    	ld	bc,_colint+0
+1023  0126  79          	ld	a, c
+1024  0127  21 00 00    	ld	hl,_sprite
+1025  012A  86          	add	a, (hl)
+1026  012B  5F          	ld	e, a
+1027  012C  78          	ld	a, b
+1028  012D  CE 00       	adc	a,0x00
+1029  012F  57          	ld	d, a
+1030  0130  1A          	ld	a, (de)
+1031  0131  3C          	inc	a
+1032  0132  12          	ld	(de), a
+1033  0133  79          	ld	a, c
+1034  0134  86          	add	a, (hl)
+1035  0135  4F          	ld	c, a
+1036  0136  78          	ld	a, b
+1037  0137  CE 00       	adc	a,0x00
+1038  0139  47          	ld	b, a
+1039  013A  0A          	ld	a, (bc)
+1040  013B  DD 77 FF    	ld	(ix-1),a
+1041  013E  5E          	ld	e,(hl)
+1042  013F  16 00       	ld	d,0x00
+1043  0141  21 00 00    	ld	hl,_spr_frames
+1044  0144  19          	add	hl,de
+1045  0145  DD 7E FF    	ld	a,(ix-1)
+1046  0148  96          	sub	a,(hl)
+1047  0149  20 02       	jr	NZ,l_enemy_static_00103
+1048  014B  AF          	xor	a, a
+1049  014C  02          	ld	(bc), a
+1050  014D              l_enemy_static_00103:
+1051  014D  33          	inc	sp
+1052  014E  DD E1       	pop	ix
+1053  0150  C9          	ret
+1054  0151              	SECTION code_compiler
+1055  0151              ;	---------------------------------
+1056  0151              ; Function enemy_horizontal
+1057  0151              ; ---------------------------------
+1058  0151              _enemy_horizontal:
+1059  0151  2A 00 00    	ld	hl,(_p_state)
+1060  0154  CB 56       	bit	2,(hl)
+1061  0156  28 56       	jr	Z,l_enemy_horizontal_00110
+1062  0158  CD 00 00    	call	_spr_move_right_f
+1063  015B  2A 00 00    	ld	hl,(_sprite)
+1064  015E  26 00       	ld	h,0x00
+1065  0160  01 00 00    	ld	bc,_col
+1066  0163  09          	add	hl,bc
+1067  0164  4E          	ld	c, (hl)
+1068  0165  2A 00 00    	ld	hl,(_sprite)
+1069  0168  26 00       	ld	h,0x00
+1070  016A  11 00 00    	ld	de,_value_b
+1071  016D  19          	add	hl,de
+1072  016E  7E          	ld	a,(hl)
+1073  016F  91          	sub	a,c
+1074  0170  20 0F       	jr	NZ,l_enemy_horizontal_00104
+1075  0172  3A 00 00    	ld	a,(_sprite)
+1076  0175  5F          	ld	e,a
+1077  0176  16 00       	ld	d,0x00
+1078  0178  21 00 00    	ld	hl,_colint
+1079  017B  19          	add	hl,de
+1080  017C  7E          	ld	a,(hl)
+1081  017D  D6 03       	sub	a,0x03
+1082  017F  28 05       	jr	Z,l_enemy_horizontal_00101
+1083  0181              l_enemy_horizontal_00104:
+1084  0181  3E 1E       	ld	a,0x1e
+1085  0183  91          	sub	a, c
+1086  0184  30 7B       	jr	NC,l_enemy_horizontal_00112
+1087  0186              l_enemy_horizontal_00101:
+1088  0186  CD 00 00    	call	_spr_set_left
+1089  0189  2A 00 00    	ld	hl,(_sprite)
+1090  018C  26 00       	ld	h,0x00
+1091  018E  01 00 00    	ld	bc,_state
+1092  0191  09          	add	hl,bc
+1093  0192  4D          	ld	c,l
+1094  0193  44          	ld	b,h
+1095  0194  2A 00 00    	ld	hl,(_p_state)
+1096  0197  7E          	ld	a,(hl)
+1097  0198  02          	ld	(bc),a
+1098  0199  2A 00 00    	ld	hl,(_sprite)
+1099  019C  26 00       	ld	h,0x00
+1100  019E  01 00 00    	ld	bc,_tile
+1101  01A1  09          	add	hl,bc
+1102  01A2  E5          	push	hl
+1103  01A3  21 00 00    	ld	hl,_sprite
+1104  01A6  CD 00 00    	call	_spr_get_tile
+1105  01A9  C1          	pop	bc
+1106  01AA  7D          	ld	a,l
+1107  01AB  02          	ld	(bc), a
+1108  01AC  18 53       	jr	l_enemy_horizontal_00112
+1109  01AE              l_enemy_horizontal_00110:
+1110  01AE  CD 00 00    	call	_spr_move_left_f
+1111  01B1  2A 00 00    	ld	hl,(_sprite)
+1112  01B4  26 00       	ld	h,0x00
+1113  01B6  01 00 00    	ld	bc,_col
+1114  01B9  09          	add	hl,bc
+1115  01BA  4E          	ld	c, (hl)
+1116  01BB  2A 00 00    	ld	hl,(_sprite)
+1117  01BE  26 00       	ld	h,0x00
+1118  01C0  11 00 00    	ld	de,_value_a
+1119  01C3  19          	add	hl,de
+1120  01C4  7E          	ld	a,(hl)
+1121  01C5  91          	sub	a,c
+1122  01C6  20 0E       	jr	NZ,l_enemy_horizontal_00108
+1123  01C8  3A 00 00    	ld	a,(_sprite)
+1124  01CB  5F          	ld	e,a
+1125  01CC  16 00       	ld	d,0x00
+1126  01CE  21 00 00    	ld	hl,_colint
+1127  01D1  19          	add	hl,de
+1128  01D2  7E          	ld	a,(hl)
+1129  01D3  B7          	or	a, a
+1130  01D4  28 05       	jr	Z,l_enemy_horizontal_00105
+1131  01D6              l_enemy_horizontal_00108:
+1132  01D6  3E 01       	ld	a,0x01
+1133  01D8  91          	sub	a, c
+1134  01D9  38 26       	jr	C,l_enemy_horizontal_00112
+1135  01DB              l_enemy_horizontal_00105:
+1136  01DB  CD 00 00    	call	_spr_set_right
+1137  01DE  2A 00 00    	ld	hl,(_sprite)
+1138  01E1  26 00       	ld	h,0x00
+1139  01E3  01 00 00    	ld	bc,_state
+1140  01E6  09          	add	hl,bc
+1141  01E7  4D          	ld	c,l
+1142  01E8  44          	ld	b,h
+1143  01E9  2A 00 00    	ld	hl,(_p_state)
+1144  01EC  7E          	ld	a,(hl)
+1145  01ED  02          	ld	(bc),a
+1146  01EE  2A 00 00    	ld	hl,(_sprite)
+1147  01F1  26 00       	ld	h,0x00
+1148  01F3  01 00 00    	ld	bc,_tile
+1149  01F6  09          	add	hl,bc
+1150  01F7  E5          	push	hl
+1151  01F8  21 00 00    	ld	hl,_sprite
+1152  01FB  CD 00 00    	call	_spr_get_tile
+1153  01FE  C1          	pop	bc
+1154  01FF  7D          	ld	a,l
+1155  0200  02          	ld	(bc), a
+1156  0201              l_enemy_horizontal_00112:
+1157  0201  C9          	ret
+1158  0202              	SECTION code_compiler
+1159  0202              ;	---------------------------------
+1160  0202              ; Function enemy_vertical is a stub
+1161  0202              ; ---------------------------------
+1162  0202              EXTERN l_ret
+1163  0202              defc _enemy_vertical = l_ret
+1164  0202              	SECTION code_compiler
+1165  0202              ;	---------------------------------
+1166  0202              ; Function enemy_walk is a stub
+1167  0202              ; ---------------------------------
+1168  0202              EXTERN l_ret
+1169  0202              defc _enemy_walk = l_ret
+1170  0202              	SECTION code_compiler
+1171  0202              ;	---------------------------------
+1172  0202              ; Function enemy_kill
+1173  0202              ; ---------------------------------
+1174  0202              _enemy_kill:
+1175  0202  4D          	ld	c,l
+1176  0203  11 00 00    	ld	de,_lin+0
+1177  0206  26 00       	ld	h,0x00
+1178  0208  19          	add	hl, de
+1179  0209  7E          	ld	a, (hl)
+1180  020A  32 00 00    	ld	(_s_lin0),a
+1181  020D  11 00 00    	ld	de,_col+0
+1182  0210  69          	ld	l,c
+1183  0211  26 00       	ld	h,0x00
+1184  0213  19          	add	hl, de
+1185  0214  7E          	ld	a, (hl)
+1186  0215  32 00 00    	ld	(_s_col0),a
+1187  0218  69          	ld	l, c
+1188  0219  C3 00 00    	jp  _spr_destroy
+1189  021C              	SECTION code_compiler
+1190  021C              ;	---------------------------------
+1191  021C              ; Function enemy_avoid_fall
+1192  021C              ; ---------------------------------
+1193  021C              _enemy_avoid_fall:
+1194  021C  2A 00 00    	ld	hl,(_p_state)
+1195  021F  CB 56       	bit	2,(hl)
+1196  0221  28 24       	jr	Z,l_enemy_avoid_fall_00102
+1197  0223  2A 00 00    	ld	hl,(_sprite)
+1198  0226  26 00       	ld	h,0x00
+1199  0228  01 00 00    	ld	bc,_col
+1200  022B  09          	add	hl,bc
+1201  022C  7E          	ld	a,(hl)
+1202  022D  C6 02       	add	a,0x02
+1203  022F  57          	ld	d,a
+1204  0230  2A 00 00    	ld	hl,(_sprite)
+1205  0233  26 00       	ld	h,0x00
+1206  0235  01 00 00    	ld	bc,_lin
+1207  0238  09          	add	hl,bc
+1208  0239  7E          	ld	a,(hl)
+1209  023A  C6 10       	add	a,0x10
+1210  023C  5F          	ld	e, a
+1211  023D  D5          	push	de
+1212  023E  CD 00 00    	call	_spr_calc_index
+1213  0241  F1          	pop	af
+1214  0242  22 00 00    	ld	(_index1),hl
+1215  0245  18 23       	jr	l_enemy_avoid_fall_00103
+1216  0247              l_enemy_avoid_fall_00102:
+1217  0247  2A 00 00    	ld	hl,(_sprite)
+1218  024A  26 00       	ld	h,0x00
+1219  024C  01 00 00    	ld	bc,_col
+1220  024F  09          	add	hl,bc
+1221  0250  7E          	ld	a,(hl)
+1222  0251  C6 FE       	add	a,-0x02
+1223  0253  47          	ld	b,a
+1224  0254  3A 00 00    	ld	a,(_sprite)
+1225  0257  5F          	ld	e,a
+1226  0258  16 00       	ld	d,0x00
+1227  025A  21 00 00    	ld	hl,_lin
+1228  025D  19          	add	hl,de
+1229  025E  7E          	ld	a,(hl)
+1230  025F  C6 10       	add	a,0x10
+1231  0261  4F          	ld	c,a
+1232  0262  C5          	push	bc
+1233  0263  CD 00 00    	call	_spr_calc_index
+1234  0266  F1          	pop	af
+1235  0267  22 00 00    	ld	(_index1),hl
+1236  026A              l_enemy_avoid_fall_00103:
+1237  026A  01 00 00    	ld	bc,_scr_map
+1238  026D  2A 00 00    	ld	hl,(_index1)
+1239  0270  09          	add	hl,bc
+1240  0271  7E          	ld	a,(hl)
+1241  0272  D6 01       	sub	a,0x01
+1242  0274  D0          	ret	NC
+1243  0275  C3 00 00    	jp  _spr_turn_horizontal
+1244  0278              	SECTION code_compiler
+1245  0278              ;	---------------------------------
+1246  0278              ; Function enemy_avoid_dead
+1247  0278              ; ---------------------------------
+1248  0278              _enemy_avoid_dead:
+1249  0278  2A 00 00    	ld	hl,(_sprite)
+1250  027B  26 00       	ld	h,0x00
+1251  027D  01 00 00    	ld	bc,_col
+1252  0280  09          	add	hl,bc
+1253  0281  56          	ld	d, (hl)
+1254  0282  2A 00 00    	ld	hl,(_sprite)
+1255  0285  26 00       	ld	h,0x00
+1256  0287  01 00 00    	ld	bc,_lin
+1257  028A  09          	add	hl,bc
+1258  028B  5E          	ld	e, (hl)
+1259  028C  D5          	push	de
+1260  028D  CD 00 00    	call	_spr_calc_index
+1261  0290  F1          	pop	af
+1262  0291  22 00 00    	ld	(_index1),hl
+1263  0294  2A 00 00    	ld	hl,(_p_state)
+1264  0297  CB 56       	bit	2,(hl)
+1265  0299  28 0A       	jr	Z,l_enemy_avoid_dead_00102
+1266  029B  21 00 00    	ld	hl,_index1
+1267  029E  34          	inc	(hl)
+1268  029F  20 0B       	jr	NZ,l_enemy_avoid_dead_00103
+1269  02A1  23          	inc	hl
+1270  02A2  34          	inc	(hl)
+1271  02A3  18 07       	jr	l_enemy_avoid_dead_00103
+1272  02A5              l_enemy_avoid_dead_00102:
+1273  02A5  2A 00 00    	ld	hl,(_index1)
+1274  02A8  2B          	dec	hl
+1275  02A9  22 00 00    	ld	(_index1),hl
+1276  02AC              l_enemy_avoid_dead_00103:
+1277  02AC  01 00 00    	ld	bc,_scr_map+0
+1278  02AF  2A 00 00    	ld	hl,(_index1)
+1279  02B2  09          	add	hl,bc
+1280  02B3  7E          	ld	a,(hl)
+1281  02B4  21 00 00    	ld	hl,_tmp0
+1282  02B7  77          	ld	(hl), a
+1283  02B8  3E 2F       	ld	a,0x2f
+1284  02BA  96          	sub	a, (hl)
+1285  02BB  30 0C       	jr	NC,l_enemy_avoid_dead_00105
+1286  02BD  7E          	ld	a, (hl)
+1287  02BE  D6 01       	sub	a,0x01
+1288  02C0  30 07       	jr	NC,l_enemy_avoid_dead_00105
+1289  02C2  CD 00 00    	call	_spr_turn_horizontal
+1290  02C5  2E 01       	ld	l,0x01
+1291  02C7  18 23       	jr	l_enemy_avoid_dead_00110
+1292  02C9              l_enemy_avoid_dead_00105:
+1293  02C9  2A 00 00    	ld	hl,(_index1)
+1294  02CC  11 10 00    	ld	de,0x0010
+1295  02CF  19          	add	hl,de
+1296  02D0  22 00 00    	ld	(_index1),hl
+1297  02D3  09          	add	hl,bc
+1298  02D4  7E          	ld	a,(hl)
+1299  02D5  21 00 00    	ld	hl,_tmp0
+1300  02D8  77          	ld	(hl), a
+1301  02D9  3E 2F       	ld	a,0x2f
+1302  02DB  96          	sub	a, (hl)
+1303  02DC  30 0C       	jr	NC,l_enemy_avoid_dead_00108
+1304  02DE  7E          	ld	a, (hl)
+1305  02DF  D6 01       	sub	a,0x01
+1306  02E1  30 07       	jr	NC,l_enemy_avoid_dead_00108
+1307  02E3  CD 00 00    	call	_spr_turn_horizontal
+1308  02E6  2E 01       	ld	l,0x01
+1309  02E8  18 02       	jr	l_enemy_avoid_dead_00110
+1310  02EA              l_enemy_avoid_dead_00108:
+1311  02EA  2E 00       	ld	l,0x00
+1312  02EC              l_enemy_avoid_dead_00110:
+1313  02EC  C9          	ret
+1314  02ED              	SECTION code_compiler
+1315  02ED              ;	---------------------------------
+1316  02ED              ; Function enemy_init
+1317  02ED              ; ---------------------------------
+1318  02ED              _enemy_init:
+1319  02ED  CD 00 00    	call	___sdcc_enter_ix
+1320  02F0  F5          	push	af
+1321  02F1  F5          	push	af
+1322  02F2  F5          	push	af
+1323  02F3  3B          	dec	sp
+1324  02F4  DD 36 FF 00 	ld	(ix-1),0x00
+1325  02F8  DD 36 FA 00 	ld	(ix-6),0x00
+1326  02FC              l_enemy_init_00114:
+1327  02FC  DD 7E FA    	ld	a,(ix-6)
+1328  02FF  D6 0F       	sub	a,0x0f
+1329  0301  D2 8A 05    	jp	NC, l_enemy_init_00117
+1330  0304  3E 00       	ld	a, +((_class) & 0xFF)
+1331  0306  DD 86 FA    	add	a,(ix-6)
+1332  0309  4F          	ld	c, a
+1333  030A  3E 00       	ld	a, +((_class) / 256)
+1334  030C  CE 00       	adc	a,0x00
+1335  030E  47          	ld	b, a
+1336  030F  0A          	ld	a, (bc)
+1337  0310  B7          	or	a, a
+1338  0311  C2 7E 05    	jp	NZ, l_enemy_init_00112
+1339  0314  21 00 00    	ld	hl,_tmp0
+1340  0317  36 00       	ld	(hl),0x00
+1341  0319              l_enemy_init_00108:
+1342  0319  3E 30       	ld	a,0x30
+1343  031B  21 00 00    	ld	hl,_tmp0
+1344  031E  96          	sub	a, (hl)
+1345  031F  DA 8A 05    	jp	C, l_enemy_init_00117
+1346  0322  4E          	ld	c,(hl)
+1347  0323  06 00       	ld	b,0x00
+1348  0325  21 00 00    	ld	hl,_spr_init
+1349  0328  09          	add	hl,bc
+1350  0329  DD 7E 06    	ld	a,(ix+6)
+1351  032C  96          	sub	a,(hl)
+1352  032D  C2 74 05    	jp	NZ,l_enemy_init_00106
+1353  0330  DD 7E FF    	ld	a,(ix-1)
+1354  0333  32 00 00    	ld	(_sprite),a
+1355  0336  C6 00       	add	a,+((_class) & 0xFF)
+1356  0338  DD 77 FD    	ld	(ix-3),a
+1357  033B  6F          	ld	l,a
+1358  033C  3E 00       	ld	a,+((_class) / 256)
+1359  033E  CE 00       	adc	a,0x00
+1360  0340  DD 77 FE    	ld	(ix-2),a
+1361  0343  67          	ld	h,a
+1362  0344  DD 7E 06    	ld	a,(ix+6)
+1363  0347  77          	ld	(hl), a
+1364  0348  3E 00       	ld	a, +((_spr_tile) & 0xFF)
+1365  034A  21 00 00    	ld	hl,_sprite
+1366  034D  86          	add	a, (hl)
+1367  034E  DD 77 FD    	ld	(ix-3),a
+1368  0351  3E 00       	ld	a, +((_spr_tile) / 256)
+1369  0353  CE 00       	adc	a,0x00
+1370  0355  DD 77 FE    	ld	(ix-2),a
+1371  0358  3A 00 00    	ld	a,(_tmp0)
+1372  035B  DD 77 FB    	ld	(ix-5),a
+1373  035E  DD 36 FC 00 	ld	(ix-4),0x00
+1374  0362  DD 34 FB    	inc	(ix-5)
+1375  0365  20 03       	jr	NZ,l_enemy_init_00153
+1376  0367  DD 34 FC    	inc	(ix-4)
+1377  036A              l_enemy_init_00153:
+1378  036A  DD 6E FB    	ld	l,(ix-5)
+1379  036D  DD 66 FC    	ld	h,(ix-4)
+1380  0370  01 00 00    	ld	bc,_spr_init
+1381  0373  09          	add	hl,bc
+1382  0374  DD 75 FB    	ld	(ix-5),l
+1383  0377  DD 74 FC    	ld	(ix-4),h
+1384  037A  7E          	ld	a, (hl)
+1385  037B  DD 77 FB    	ld	(ix-5),a
+1386  037E  DD 6E FD    	ld	l,(ix-3)
+1387  0381  DD 66 FE    	ld	h,(ix-2)
+1388  0384  DD 7E FB    	ld	a,(ix-5)
+1389  0387  77          	ld	(hl), a
+1390  0388  3A 00 00    	ld	a,(_tmp0)
+1391  038B  DD 77 FB    	ld	(ix-5),a
+1392  038E  DD 36 FC 00 	ld	(ix-4),0x00
+1393  0392  C6 02       	add	a,0x02
+1394  0394  DD 77 FD    	ld	(ix-3),a
+1395  0397  6F          	ld	l,a
+1396  0398  DD 7E FC    	ld	a,(ix-4)
+1397  039B  CE 00       	adc	a,0x00
+1398  039D  DD 77 FE    	ld	(ix-2),a
+1399  03A0  67          	ld	h,a
+1400  03A1  01 00 00    	ld	bc,_spr_init
+1401  03A4  09          	add	hl,bc
+1402  03A5  DD 75 FD    	ld	(ix-3),l
+1403  03A8  DD 74 FE    	ld	(ix-2),h
+1404  03AB  7E          	ld	a, (hl)
+1405  03AC  DD 77 F9    	ld	(ix-7),a
+1406  03AF  3E 00       	ld	a, +((_spr_frames) & 0xFF)
+1407  03B1  21 00 00    	ld	hl,_sprite
+1408  03B4  86          	add	a, (hl)
+1409  03B5  DD 77 FD    	ld	(ix-3),a
+1410  03B8  3E 00       	ld	a, +((_spr_frames) / 256)
+1411  03BA  CE 00       	adc	a,0x00
+1412  03BC  DD 77 FE    	ld	(ix-2),a
+1413  03BF  DD 6E FB    	ld	l,(ix-5)
+1414  03C2  DD 66 FC    	ld	h,(ix-4)
+1415  03C5  11 03 00    	ld	de,0x0003
+1416  03C8  19          	add	hl,de
+1417  03C9  DD 75 FB    	ld	(ix-5),l
+1418  03CC  DD 74 FC    	ld	(ix-4),h
+1419  03CF  01 00 00    	ld	bc,_spr_init
+1420  03D2  09          	add	hl,bc
+1421  03D3  DD 75 FB    	ld	(ix-5),l
+1422  03D6  DD 74 FC    	ld	(ix-4),h
+1423  03D9  7E          	ld	a, (hl)
+1424  03DA  DD 77 FB    	ld	(ix-5),a
+1425  03DD  DD 6E FD    	ld	l,(ix-3)
+1426  03E0  DD 66 FE    	ld	h,(ix-2)
+1427  03E3  DD 7E FB    	ld	a,(ix-5)
+1428  03E6  77          	ld	(hl), a
+1429  03E7  3E 00       	ld	a, +((_spr_speed) & 0xFF)
+1430  03E9  21 00 00    	ld	hl,_sprite
+1431  03EC  86          	add	a, (hl)
+1432  03ED  DD 77 FB    	ld	(ix-5),a
+1433  03F0  3E 00       	ld	a, +((_spr_speed) / 256)
+1434  03F2  CE 00       	adc	a,0x00
+1435  03F4  DD 77 FC    	ld	(ix-4),a
+1436  03F7  3A 00 00    	ld	a,(_tmp0)
+1437  03FA  DD 77 FD    	ld	(ix-3),a
+1438  03FD  DD 36 FE 00 	ld	(ix-2),0x00
+1439  0401  C6 04       	add	a,0x04
+1440  0403  DD 77 FD    	ld	(ix-3),a
+1441  0406  6F          	ld	l,a
+1442  0407  DD 7E FE    	ld	a,(ix-2)
+1443  040A  CE 00       	adc	a,0x00
+1444  040C  DD 77 FE    	ld	(ix-2),a
+1445  040F  67          	ld	h,a
+1446  0410  01 00 00    	ld	bc,_spr_init
+1447  0413  09          	add	hl,bc
+1448  0414  DD 75 FD    	ld	(ix-3),l
+1449  0417  DD 74 FE    	ld	(ix-2),h
+1450  041A  7E          	ld	a, (hl)
+1451  041B  DD 77 FD    	ld	(ix-3),a
+1452  041E  DD 6E FB    	ld	l,(ix-5)
+1453  0421  DD 66 FC    	ld	h,(ix-4)
+1454  0424  DD 7E FD    	ld	a,(ix-3)
+1455  0427  77          	ld	(hl), a
+1456  0428  3E 00       	ld	a, +((_spr_kind) & 0xFF)
+1457  042A  21 00 00    	ld	hl,_sprite
+1458  042D  86          	add	a, (hl)
+1459  042E  DD 77 FB    	ld	(ix-5),a
+1460  0431  3E 00       	ld	a, +((_spr_kind) / 256)
+1461  0433  CE 00       	adc	a,0x00
+1462  0435  DD 77 FC    	ld	(ix-4),a
+1463  0438  3A 00 00    	ld	a,(_tmp0)
+1464  043B  DD 77 FD    	ld	(ix-3),a
+1465  043E  DD 36 FE 00 	ld	(ix-2),0x00
+1466  0442  C6 05       	add	a,0x05
+1467  0444  DD 77 FD    	ld	(ix-3),a
+1468  0447  6F          	ld	l,a
+1469  0448  DD 7E FE    	ld	a,(ix-2)
+1470  044B  CE 00       	adc	a,0x00
+1471  044D  DD 77 FE    	ld	(ix-2),a
+1472  0450  67          	ld	h,a
+1473  0451  01 00 00    	ld	bc,_spr_init
+1474  0454  09          	add	hl,bc
+1475  0455  DD 75 FD    	ld	(ix-3),l
+1476  0458  DD 74 FE    	ld	(ix-2),h
+1477  045B  7E          	ld	a, (hl)
+1478  045C  DD 77 FD    	ld	(ix-3),a
+1479  045F  DD 6E FB    	ld	l,(ix-5)
+1480  0462  DD 66 FC    	ld	h,(ix-4)
+1481  0465  DD 7E FD    	ld	a,(ix-3)
+1482  0468  77          	ld	(hl), a
+1483  0469  2A 00 00    	ld	hl,(_sprite)
+1484  046C  26 00       	ld	h,0x00
+1485  046E  01 00 00    	ld	bc,_lin
+1486  0471  09          	add	hl,bc
+1487  0472  4D          	ld	c,l
+1488  0473  44          	ld	b,h
+1489  0474  21 00 00    	ld	hl,_sprite
+1490  0477  DD 7E 04    	ld	a,(ix+4)
+1491  047A  02          	ld	(bc), a
+1492  047B  3E 00       	ld	a, +((_col) & 0xFF)
+1493  047D  86          	add	a, (hl)
+1494  047E  4F          	ld	c, a
+1495  047F  3E 00       	ld	a, +((_col) / 256)
+1496  0481  CE 00       	adc	a,0x00
+1497  0483  47          	ld	b, a
+1498  0484  DD 7E 05    	ld	a,(ix+5)
+1499  0487  02          	ld	(bc), a
+1500  0488  3E 00       	ld	a, +((_state) & 0xFF)
+1501  048A  86          	add	a, (hl)
+1502  048B  4F          	ld	c, a
+1503  048C  3E 00       	ld	a, +((_state) / 256)
+1504  048E  CE 00       	adc	a,0x00
+1505  0490  47          	ld	b, a
+1506  0491  AF          	xor	a, a
+1507  0492  02          	ld	(bc), a
+1508  0493  3E 00       	ld	a, +((_state_a) & 0xFF)
+1509  0495  86          	add	a, (hl)
+1510  0496  4F          	ld	c, a
+1511  0497  3E 00       	ld	a, +((_state_a) / 256)
+1512  0499  CE 00       	adc	a,0x00
+1513  049B  47          	ld	b, a
+1514  049C  AF          	xor	a, a
+1515  049D  02          	ld	(bc), a
+1516  049E  3E 00       	ld	a, +((_jump_lin) & 0xFF)
+1517  04A0  86          	add	a, (hl)
+1518  04A1  DD 77 FB    	ld	(ix-5),a
+1519  04A4  6F          	ld	l,a
+1520  04A5  3E 00       	ld	a,+((_jump_lin) / 256)
+1521  04A7  CE 00       	adc	a,0x00
+1522  04A9  DD 77 FC    	ld	(ix-4),a
+1523  04AC  67          	ld	h,a
+1524  04AD  36 00       	ld	(hl),0x00
+1525  04AF  3E 00       	ld	a, +((_colint) & 0xFF)
+1526  04B1  21 00 00    	ld	hl,_sprite
+1527  04B4  86          	add	a, (hl)
+1528  04B5  DD 77 FB    	ld	(ix-5),a
+1529  04B8  6F          	ld	l,a
+1530  04B9  3E 00       	ld	a,+((_colint) / 256)
+1531  04BB  CE 00       	adc	a,0x00
+1532  04BD  DD 77 FC    	ld	(ix-4),a
+1533  04C0  67          	ld	h,a
+1534  04C1  36 00       	ld	(hl),0x00
+1535  04C3  DD 7E F9    	ld	a,(ix-7)
+1536  04C6  3D          	dec	a
+1537  04C7  20 03       	jr	NZ,l_enemy_init_00102
+1538  04C9  CD 00 00    	call	_spr_set_right
+1539  04CC              l_enemy_init_00102:
+1540  04CC  DD 7E F9    	ld	a,(ix-7)
+1541  04CF  3C          	inc	a
+1542  04D0  20 03       	jr	NZ,l_enemy_init_00104
+1543  04D2  CD 00 00    	call	_spr_set_left
+1544  04D5              l_enemy_init_00104:
+1545  04D5  3E 00       	ld	a, +((_state) & 0xFF)
+1546  04D7  21 00 00    	ld	hl,_sprite
+1547  04DA  86          	add	a, (hl)
+1548  04DB  DD 77 FB    	ld	(ix-5),a
+1549  04DE  6F          	ld	l,a
+1550  04DF  3E 00       	ld	a,+((_state) / 256)
+1551  04E1  CE 00       	adc	a,0x00
+1552  04E3  DD 77 FC    	ld	(ix-4),a
+1553  04E6  67          	ld	h,a
+1554  04E7  22 00 00    	ld	(_p_state),hl
+1555  04EA  3E 00       	ld	a,+((_state_a) & 0xFF)
+1556  04EC  21 00 00    	ld	hl,_sprite
+1557  04EF  86          	add	a, (hl)
+1558  04F0  DD 77 FB    	ld	(ix-5),a
+1559  04F3  6F          	ld	l,a
+1560  04F4  3E 00       	ld	a,+((_state_a) / 256)
+1561  04F6  CE 00       	adc	a,0x00
+1562  04F8  DD 77 FC    	ld	(ix-4),a
+1563  04FB  67          	ld	h,a
+1564  04FC  22 00 00    	ld	(_p_state_a),hl
+1565  04FF  3E 00       	ld	a,+((_tile) & 0xFF)
+1566  0501  21 00 00    	ld	hl,_sprite
+1567  0504  86          	add	a, (hl)
+1568  0505  DD 77 FB    	ld	(ix-5),a
+1569  0508  3E 00       	ld	a, +((_tile) / 256)
+1570  050A  CE 00       	adc	a,0x00
+1571  050C  DD 77 FC    	ld	(ix-4),a
+1572  050F  21 00 00    	ld	hl,_sprite
+1573  0512  CD 00 00    	call	_spr_get_tile
+1574  0515  DD 75 FD    	ld	(ix-3),l
+1575  0518  DD 6E FB    	ld	l,(ix-5)
+1576  051B  DD 66 FC    	ld	h,(ix-4)
+1577  051E  DD 7E FD    	ld	a,(ix-3)
+1578  0521  77          	ld	(hl), a
+1579  0522  2A 00 00    	ld	hl,(_sprite)
+1580  0525  26 00       	ld	h,0x00
+1581  0527  29          	add	hl,hl
+1582  0528  DD 75 FB    	ld	(ix-5),l
+1583  052B  DD 74 FC    	ld	(ix-4),h
+1584  052E  3E 00       	ld	a,+((_spr_timer) & 0xFF)
+1585  0530  85          	add	a,l
+1586  0531  DD 77 FB    	ld	(ix-5),a
+1587  0534  3E 00       	ld	a, +((_spr_timer) / 256)
+1588  0536  DD 8E FC    	adc	a,(ix-4)
+1589  0539  DD 77 FC    	ld	(ix-4),a
+1590  053C  2A 00 00    	ld	hl,(_curr_time)
+1591  053F  DD 74 FE    	ld	(ix-2),h
+1592  0542  DD 75 FD    	ld	(ix-3),l
+1593  0545  DD 6E FB    	ld	l,(ix-5)
+1594  0548  DD 66 FC    	ld	h,(ix-4)
+1595  054B  DD 7E FD    	ld	a,(ix-3)
+1596  054E  77          	ld	(hl), a
+1597  054F  23          	inc	hl
+1598  0550  DD 7E FE    	ld	a,(ix-2)
+1599  0553  77          	ld	(hl), a
+1600  0554  2A 00 00    	ld	hl,(_sprite)
+1601  0557  26 00       	ld	h,0x00
+1602  0559  29          	add	hl,hl
+1603  055A  DD 75 FB    	ld	(ix-5),l
+1604  055D  DD 74 FC    	ld	(ix-4),h
+1605  0560  01 00 00    	ld	bc,_last_time
+1606  0563  09          	add	hl,bc
+1607  0564  DD 75 FB    	ld	(ix-5),l
+1608  0567  DD 74 FC    	ld	(ix-4),h
+1609  056A  AF          	xor	a, a
+1610  056B  77          	ld	(hl), a
+1611  056C  23          	inc	hl
+1612  056D  77          	ld	(hl), a
+1613  056E  21 00 00    	ld	hl,_spr_count
+1614  0571  34          	inc	(hl)
+1615  0572  18 16       	jr	l_enemy_init_00117
+1616  0574              l_enemy_init_00106:
+1617  0574  21 00 00    	ld	hl,_tmp0
+1618  0577  7E          	ld	a, (hl)
+1619  0578  C6 06       	add	a,0x06
+1620  057A  77          	ld	(hl), a
+1621  057B  C3 19 03    	jp	l_enemy_init_00108
+1622  057E              l_enemy_init_00112:
+1623  057E  DD 34 FA    	inc	(ix-6)
+1624  0581  DD 7E FA    	ld	a,(ix-6)
+1625  0584  DD 77 FF    	ld	(ix-1),a
+1626  0587  C3 FC 02    	jp	l_enemy_init_00114
+1627  058A              l_enemy_init_00117:
+1628  058A  DD F9       	ld	sp, ix
+1629  058C  DD E1       	pop	ix
+1630  058E  C9          	ret
+1631  058F              	SECTION IGNORE
+1632  0000              

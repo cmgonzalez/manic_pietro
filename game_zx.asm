@@ -23,25 +23,25 @@ _zx_isr:
    ret z
 
    ; avoid contention problems
-   
+
    ld a,0x80
    ld i,a
-   
+
    ; process song command
 
 song_command:
 
    ld a,(_ay_song_bank)
    or $10
-   
+
    ld bc,$7ffd
    out (c),a                   ; page in song bank
-   
+
    ld hl,vtii_setup
    set 1,(hl)                  ; enable stack output from ay song player
 
    ld a,(_ay_song_command)
-   
+
    bit 1,a
    jr z, check_song_new
 
@@ -60,9 +60,9 @@ song_new:
    and $01                     ; keep loop bit
    or $02                      ; enable stack output from ay song player
    ld (vtii_setup),a
-   
+
    ld hl,(_ay_song_command_param)
-   
+
    call vtii_init
    jr song_exit
 
@@ -81,12 +81,12 @@ fx_command:
 
    ld a,(_ay_fx_bank)
    or $10
-   
+
    ld bc,$7ffd
    out (c),a                   ; page in fx bank
 
    ld a,(_ay_fx_command)
-   
+
    bit 1,a
    jr z, check_fx_new
 
@@ -94,19 +94,19 @@ fx_stop:
 
    ld hl,0
    ld (mfx_mfxptr+1),hl
-   
+
    jr fx_play
 
 check_fx_new:
 
    bit 2,a
    jr z, fx_play
-   
+
 fx_new:
 
    ld hl,(_ay_fx_command_param)
    call mfx_add
-   
+
 fx_play:
 
    call mfx_playm
@@ -115,16 +115,16 @@ fx_exit:
 
    xor a
    ld (_ay_fx_command),a
-   
+
    ; restore original bank
-   
+
    ld a,(_GLOBAL_ZX_PORT_7FFD)
-   
+
    ld bc,$7ffd
    out (c),a
-   
+
    ; restore I
-   
+
    ld a,0xfe
    ld i,a
 
@@ -361,79 +361,6 @@ zx_print_chr:
 
    pop hl
    ld de,_tbuffer+2            ; print last three digits only
-
-   ; de = char *buffer
-   ;  h = row
-   ;  l = col
-
-   jp zx_print_str
-
-
-; void zx_print_bonus_time(unsigned char ui_row, unsigned char ui_col, unsigned int time)
-; callee linkage
-
-PUBLIC _zx_print_bonus_time
-
-EXTERN l_small_utoa, _tbuffer
-
-_zx_print_bonus_time:
-
-IF __SDCC
-
-   pop af
-   pop de                      ; e = row, d = col
-   pop hl                      ; hl = time
-   push af
-
-   ld a,e
-   ld e,d
-   ld d,a
-
-ENDIF
-
-IF __SCCZ80
-
-   pop af
-   pop hl                      ; hl = time
-   pop de                      ; e = col
-   pop bc                      ; c = row
-   push af
-
-   ld d,c
-
-ENDIF
-
-zx_print_bonus_time:
-
-   ;  e = col
-   ;  d = row
-   ; hl = time in hundredths of second
-
-   push de
-   ld de,_tbuffer
-
-   ; hl = unsigned int time
-   ; de = char *buffer
-   ; stack = row/col
-
-   scf                         ; request leading zeroes
-   call l_small_utoa           ; z88dk function: unsigned int to ascii buffer
-
-   ; insert decimal point before last two digits
-
-   ld hl,_tbuffer+3
-   ld e,(hl)
-   ld (hl),'.'
-   inc hl
-   ld d,(hl)
-   ld (hl),e
-   inc hl
-   ld (hl),d
-   inc hl
-   ld (hl),0                   ; zero terminate
-
-   pop hl
-   ld de,_tbuffer
 
    ; de = char *buffer
    ;  h = row

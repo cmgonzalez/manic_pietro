@@ -31,21 +31,30 @@
 void enemy_turn(void) {
 
   sprite = 0;
-
-  while (sprite < SPR_P1) {
+  nirv_sprite_index = 0;
+  while (sprite < spr_count) {
 
     s_class = class[sprite];
-    if (s_class > 0 && spr_chktime(&sprite)) {
+    if (s_class != 0) {
+      if (spr_chktime(&sprite)) {
 
-      s_lin0 = lin[sprite];
-      s_col0 = col[sprite];
-      p_state = &state[sprite];
-      p_state_a = &state_a[sprite];
-      enemy_move();
-      spr_paint();
-      last_time[sprite] = zx_clock();
+        s_lin0 = lin[sprite];
+        s_col0 = col[sprite];
+        s_tile0 = tile[sprite];
+        p_state = &state[sprite];
+        p_state_a = &state_a[sprite];
+        enemy_move();
+        spr_paint();
+        last_time[sprite] = zx_clock();
+      }
+
     }
     ++sprite;
+    ++nirv_sprite_index;
+    if (nirv_sprite_index > 7) {
+      nirv_sprite_index = 0;
+      NIRVANAP_halt();
+    }
   }
 }
 
@@ -63,9 +72,6 @@ void enemy_move(void) {
     break;
   case E_VERTICAL:
     enemy_vertical();
-    break;
-  case E_GHOST:
-    enemy_ghost();
     break;
   case E_GOTA:
     enemy_gota();
@@ -88,42 +94,6 @@ void enemy_gota() {
   }
 }
 
-void enemy_ghost() {
-  unsigned char v;
-  v = 0;
-
-  if (s_col0 < col[SPR_P1]) {
-    spr_set_right();
-    tile[sprite] = spr_get_tile(&sprite);
-    spr_move_right();
-    v = 1;
-  }
-  if (s_col0 > col[SPR_P1]) {
-    spr_set_left();
-    tile[sprite] = spr_get_tile(&sprite);
-    spr_move_left();
-    v = 1;
-  }
-
-  if (s_col0 == col[sprite]) {
-    if (s_lin0 > lin[SPR_P1]) {
-      spr_move_up();
-    }
-    if (s_lin0 < lin[SPR_P1]) {
-      spr_move_down();
-    }
-    if (v == 0 && s_lin0 != lin[sprite]) {
-      ++colint[sprite];
-      if (colint[sprite] == spr_frames[sprite]) {
-        colint[sprite] = 0;
-      }
-    }
-  } else {
-    spr_back_repaint();
-    s_col0 = col[sprite];
-  }
-}
-
 void enemy_static() {
 
   ++colint[sprite];
@@ -135,15 +105,16 @@ void enemy_static() {
 void enemy_horizontal() {
   if (BIT_CHK(*p_state, STAT_DIRR)) {
     spr_move_right_f();
-    if (col[sprite] == value_b[sprite] &&
-        colint[sprite] == 3 || col[sprite] > 30) { // HACK spr_frames[sprite] - 1
+    if (col[sprite] == value_b[sprite] && colint[sprite] == 3 ||
+        col[sprite] > 30) { // HACK spr_frames[sprite] - 1
       spr_set_left();
       state[sprite] = *p_state;
       tile[sprite] = spr_get_tile(&sprite);
     }
   } else {
     spr_move_left_f();
-    if (col[sprite] == value_a[sprite] && colint[sprite] == 0 || col[sprite] < 2) {
+    if (col[sprite] == value_a[sprite] && colint[sprite] == 0 ||
+        col[sprite] <= 1) {
       spr_set_right();
       state[sprite] = *p_state;
       tile[sprite] = spr_get_tile(&sprite);
@@ -208,7 +179,7 @@ void enemy_init(unsigned char f_lin, unsigned char f_col,
 
   // Get the first available sprite
   f_sprite = 0;
-  while (f_sprite < SPR_P1) {
+  while (f_sprite < GAME_MAX_ENEMIES) {
     if (class[f_sprite] == 0) {
       tmp0 = 0;
       while (tmp0 <= (GAME_TOTAL_INDEX_CLASSES * 6)) {
@@ -238,7 +209,6 @@ void enemy_init(unsigned char f_lin, unsigned char f_col,
           }
           p_state = &state[sprite];
           p_state_a = &state_a[sprite];
-
 
           tile[sprite] = spr_get_tile(&sprite);
 

@@ -18,58 +18,30 @@
 #define GLOBALS_H
 #include <input.h>
 
-#define GAME_ROWS                     10
-#define GAME_SCR_MAX_INDEX            512
-#define PLAYER                        0xFF
+#define GAME_SCR_MAX_INDEX           512 // 32 * 16
 
+#define GAME_MAX_SPRITES             16
+#define GAME_MAX_ENEMIES             15 //GAME_MAX_SPRITES - PLAYERS
 
+/* Player indexes */
+#define GAME_INDEX_P1                15 //Index of P1 == GAME_MAX_PRITES - 1
+
+//Nirvana Related
+#define NIRV_SPRITE_P1               7 //Sprite to be used by P1 (Have transparency)
+#define NIRV_TOTAL_SPRITES           8 //Maximun of sprites to handle (NIRVANA == 8)
+
+#define GAME_GRAVITY                 1
+#define GAME_VELOCITY               -6
+#define GAME_START_LIVES             3
+#define GAME_COLLISION_TIME         30 //TIME BTWN COLISION CHECKS
 
 #define PLAYER_SPEED                 4
 #define ENEMY_START_INDEX            64 //INDEX OF START OF ENEMY ON MAP ARRAY
 
 
-#define GAME_GRAVITY                  1
-#define GAME_VELOCITY                 -6
-#define GAME_START_LIVES              3
-#define GAME_START_MAX_MANA           100
-#define GAME_START_MAX_VITA           100
-#define GAME_MAX_LEVEL                10
-#define GAME_MAX_MANA                 200
-#define GAME_MAX_VITA                 200
-#define GAME_COLLISION_TIME           30 //TIME BETWN COLISION CHECKS
 
-/* Map foreground tiles */
-/*
-Offsets 544 to 552: Background
-Offsets 553 to 561: Floor
-Offsets 562 to 570: Crumbling Floor
-Offsets 571 to 579: Wall
-Offsets 580 to 588: Conveyor
-Offsets 589 to 597: Nasty 1
-Offsets 598 to 606: Nasty 2
-Offsets 607 to 615: Spare
-*/
-/* NUEVO MAPA
-0  VACIO
-1  PLATAFORM
-2  PLATAFORM CRUMBLING
-3  BRICK
-4  CONVEYOR
-5  DEADLY 1
-6  DEADLY 2
-7  ??? DEADLY 3 ??? SPIDER WEB
-8  LLAVE
-9  ???
-10 PLATAFORMA 1
-11 PLATAFORMA 2
-12 PLATAFORMA 3
-14 PLATAFORMA 4
-12 PLATAFORMA 5
-14 PLATAFORMA 6
-14 PLATAFORMA 7
-15 ???
-*/
 
+//TILES
 #define TILE_EMPTY                    0
 #define TILE_FLOOR                    1
 #define TILE_CRUMB0                   2
@@ -82,6 +54,11 @@ Offsets 607 to 615: Spare
 #define TILE_CRUMB1                   9
 #define TILE_CRUMB2                   10
 #define TILE_CRUMB3                   11
+
+#define TILE_EXIT0                   28
+#define TILE_EXIT1                   29
+#define TILE_EXIT2                   30
+#define TILE_EXIT3                   31
 
 #define TILE_WALL1                   62
 #define TILE_WALL2                   63
@@ -147,9 +124,8 @@ Offsets 607 to 615: Spare
 
 #define FRAMES_PLAYER                 4
 
-/* Player indexes */
-#define SPR_P1                        7
-#define SPR_P2                        6
+
+
 /* Screen variables */
 #define SPR_COLINT                    4   /* Internal colum increment */
 #define SCR_COLI                      1   /* Start column */
@@ -180,7 +156,7 @@ Offsets 607 to 615: Spare
 #define STAT_DIRR                     2
 #define STAT_DIRL                     3
 #define STAT_CONVEYOR                 4
-#define STAT_KILL                     5
+#define STAT_ONEXIT                   5
 #define STAT_ANGRY                    6
 #define STAT_UPGR                     7
 /*Stats alt (bit position number)*/
@@ -191,13 +167,8 @@ Offsets 607 to 615: Spare
 #define STAT_LDIRR                    4
 #define STAT_RESTART                  6
 #define STAT_HITBRICK                 7
-
 /* General */
-#define SPRITE_FALL_SPEED             3  /* Speed for falling from the screen after a kill */
-#define SPRITE_RESTART_SPEED          8
-#define SPRITE_LIN_INC                2
-#define SPRITE_HEIGHT                 16
-#define SPRITE_VCOL_MARGIN            14 //VERTICAL COLLISION MARGIN
+#define SPRITE_LIN_INC                2 //USED ONLY ONCE CHECK
 
 /* Player */
 
@@ -210,15 +181,12 @@ Offsets 607 to 615: Spare
 #define ENEMY_KILLED_SPEED            8
 
 
-/* Game times */
+// Game timers
 #define TIME_EVENT                    100
 #define TIME_ANIM                     8
-#define TIME_ROTATE                   6
 
-#define TIME_ANIM_PLAYER_EXPODE       12
-#define GAME_RANDOM_TYPE              2
 
-/* Sound Mode Variables */
+// Sound Mode Variables
 #define GAME_SOUND_48_FX_ON          0x01
 #define GAME_SOUND_48_FX_OFF         0xfe
 #define GAME_SOUND_48_MUS_ON         0x02
@@ -249,27 +217,28 @@ extern udk_t k1;
 
 extern unsigned char dirs;
 
-extern unsigned char class[8];
-extern unsigned char state[8];
-extern unsigned char state_a[8];
-extern unsigned char value_a[8];
-extern unsigned char value_b[8];
-extern unsigned char tile[8];
-extern unsigned char lin[8];
-extern unsigned char tbuffer[7];
+extern unsigned char class[GAME_MAX_SPRITES];
+extern unsigned char state[GAME_MAX_SPRITES];
+extern unsigned char state_a[GAME_MAX_SPRITES];
+extern unsigned char value_a[GAME_MAX_SPRITES];
+extern unsigned char value_b[GAME_MAX_SPRITES];
+extern unsigned char tile[GAME_MAX_SPRITES];
+extern unsigned char lin[GAME_MAX_SPRITES];
+extern unsigned char col[GAME_MAX_SPRITES];
+extern unsigned char colint[GAME_MAX_SPRITES];
+extern unsigned char jump_lin[GAME_MAX_SPRITES];
 
-extern unsigned char col[8];
-extern unsigned char colint[8];
-extern unsigned char jump_lin[8];
-extern unsigned int spr_timer[8];
+extern unsigned int last_time[GAME_MAX_SPRITES];
+extern unsigned int spr_timer[GAME_MAX_SPRITES];
 
-extern unsigned char obj_lin[8]; // object lin for HIGHLIGHT
-extern unsigned char obj_col[8]; // object col for HIGHLIGHT
+extern unsigned char obj_lin[GAME_MAX_SPRITES]; // object lin for HIGHLIGHT
+extern unsigned char obj_col[GAME_MAX_SPRITES]; // object col for HIGHLIGHT
 extern unsigned char obj_count;
 
+extern unsigned char tbuffer[7];
 
 
-extern unsigned int last_time[8];
+
 extern unsigned int player_score;
 extern signed int  player_vel_y;
 extern signed int  player_vel_y0;
@@ -298,6 +267,8 @@ extern unsigned char game_conveyor_dir;
 extern unsigned char game_conveyor_lin;
 extern unsigned char game_conveyor_col0;
 extern unsigned char game_conveyor_col1;
+extern unsigned char game_exit_col;
+extern unsigned char game_exit_lin;
 
 
 extern unsigned char game_round_up;
@@ -316,6 +287,7 @@ extern unsigned char game_fps_show;
 extern unsigned char player_jump_top;
 extern unsigned char player_killed;
 extern unsigned int  player_kill_index;
+extern unsigned char nirv_sprite_index;
 
 extern unsigned char s_tile0;
 extern unsigned char s_tile1;
@@ -341,7 +313,6 @@ extern unsigned char attrib[4];
 extern unsigned char attrib_hl[4];
 extern unsigned char attrib_osd[4];
 extern unsigned char game_attrib_osd;
-extern unsigned char attrib_red[4];
 
 
 //TILE ATTRIB
@@ -409,13 +380,12 @@ extern unsigned char scr_curr;
 extern unsigned char map_width;
 extern unsigned char map_heigth;
 
-extern unsigned char anim_lin[8]; //TODO REMOVE ANIM?
-extern unsigned char anim_col[8];
-extern unsigned char anim_tile[8];
-extern unsigned char anim_int[8];
-extern unsigned char anim_end[8];
-extern unsigned char anim_loop[8];
-extern unsigned char anim_respanwn[8];
+extern unsigned char anim_lin[GAME_MAX_SPRITES]; //TODO REMOVE ANIM?
+extern unsigned char anim_col[GAME_MAX_SPRITES];
+extern unsigned char anim_tile[GAME_MAX_SPRITES];
+extern unsigned char anim_int[GAME_MAX_SPRITES];
+extern unsigned char anim_end[GAME_MAX_SPRITES];
+extern unsigned char anim_loop[GAME_MAX_SPRITES];
 
 extern unsigned char anim_count;
 

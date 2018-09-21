@@ -58,6 +58,7 @@ void spr_set_left() {
   BIT_CLR(*p_state, STAT_DIRR);
   BIT_SET(*p_state, STAT_DIRL);
 }
+
 void spr_set_right() {
   BIT_CLR(*p_state_a, STAT_LDIRL);
   BIT_SET(*p_state_a, STAT_LDIRR);
@@ -142,18 +143,6 @@ unsigned char spr_move_horizontal(void) {
   if (BIT_CHK(*p_state, STAT_DIRL)) {
     l_ret = spr_move_left();
   }
-  /* Stop horizontal if player hit walls */
-  /*
-  if (sprite == SPR_P1 && l_ret) {
-
-    if ( BIT_CHK(*p_state, STAT_JUMP) || BIT_CHK(*p_state, STAT_FALL) ) {
-      NIRVANAP_spriteT(SPR_P1,tile[SPR_P1]+colint[SPR_P1],0,0);
-      BIT_CLR(*p_state, STAT_DIRL);
-      BIT_CLR(*p_state, STAT_DIRR);
-    }
-  }
-  */
-
   return l_ret;
 }
 
@@ -217,7 +206,6 @@ unsigned char spr_move_right(void) {
   return 0;
 }
 
-
 unsigned char spr_move_left(void) {
   unsigned char *f_colint;
   unsigned char *f_col;
@@ -243,7 +231,8 @@ unsigned char spr_move_left(void) {
         return 1;
       } else {
         --*f_col;
-        *f_colint = spr_frames[sprite] - 1;;
+        *f_colint = spr_frames[sprite] - 1;
+        ;
         if (*f_col == 255) {
           *f_col = 0;
           return 1;
@@ -309,7 +298,7 @@ unsigned char spr_move_left_f(void) {
 void spr_clear_scr() {
   unsigned char i;
   unsigned char j;
-  for (i = 0; i < 8; ++i) {
+  for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
   }
   intrinsic_halt();
@@ -333,39 +322,35 @@ void spr_clear_scr() {
 }
 
 unsigned char spr_paint_player(void) {
-  /* Parpadeo
-    if (player_hit) {
-      if ((loop_count & 1) == 0) {
-        spr_back_repaint();
-        NIRVANAP_spriteT(sprite, 0, 0, 0);
-        return 1;
-      }
-    }
-  */
-  s_col1 = col[SPR_P1];
-  s_lin1 = lin[SPR_P1];
+
+  s_col1 = col[GAME_INDEX_P1];
+  s_lin1 = lin[GAME_INDEX_P1];
 
   if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
 
     /* Column or lin Movement */
-    s_tile1 = tile[SPR_P1] + colint[SPR_P1];
+    s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
 
-    // NIRVANAP_fillT_raw(map_paper_clr, s_lin0+16, s_col0);
-    NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+    // if (BIT_CHK(*p_state, STAT_ONEXIT)) {
+    // PLAYER BACK DOOR
+    //  NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, 0, 0);
+    //  NIRVANAP_spriteT(0, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+    //  NIRVANAP_spriteT(1, 79, game_exit_lin, game_exit_col);
+    //} else {
+    NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+    //}
+
     spr_back_repaint();
     return 1;
   } else {
 
-    s_tile0 = *SPRITEVAL(sprite);
-    s_tile1 = tile[SPR_P1] + colint[SPR_P1];
+    // s_tile0 = *SPRITEVAL(GAME_INDEX_P1);
 
-    if (s_tile1 != s_tile0) {
-      /* Internal Movement, no clean needed */
-      NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + 16, s_col1);
-      return 0;
-    }
+    s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
+    NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + 16, s_col1);
+
+    return 0;
   }
-  return 0;
 }
 
 unsigned char spr_paint(void) {
@@ -375,28 +360,19 @@ unsigned char spr_paint(void) {
 
   if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
     /* Column or lin Movement */
-    // Speed UP hack
+
     s_tile1 = tile[sprite] + colint[sprite];
-    /*
-        if ((s_lin1 & 7) == 0) {
-          spr_back_repaint();
-        } else {
-          NIRVANAP_fillT(map_paper_clr, s_lin0, s_col0);
-        }
-    */
+
     NIRVANAP_fillT(map_paper_clr, s_lin0 + GAME_OFFSET_Y, s_col0);
-    NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+
     return 1;
   } else {
-    s_tile0 = *SPRITEVAL(sprite);
     s_tile1 = tile[sprite] + colint[sprite];
-    if (s_tile1 != s_tile0) {
-      /* Internal Movement, no clean needed */
-      NIRVANAP_spriteT(sprite, s_tile1, s_lin1 + 16, s_col1);
-      return 0;
-    }
+    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + 16, s_col1);
+
+    return 0;
   }
-  return 0;
 }
 
 void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
@@ -477,7 +453,7 @@ void spr_back_repaint(void) {
 
 void spr_init_effects(void) {
   unsigned char f_anim;
-  for (f_anim = 0; f_anim <= SPR_P1; f_anim++) {
+  for (f_anim = 0; f_anim <= GAME_INDEX_P1; f_anim++) {
     anim_lin[f_anim] = 0xFF;
   }
   anim_count = 0;
@@ -594,7 +570,7 @@ void spr_btile_paint_back() {
 
 void spr_flatten(void) {
   unsigned char i;
-  for (i = 0; i <= SPR_P1; ++i) {
+  for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
     s_lin1 = *SPRITELIN(i);
     s_col1 = *SPRITECOL(i);
     s_tile1 = *SPRITEVAL(i);
@@ -604,6 +580,6 @@ void spr_flatten(void) {
 }
 
 void spr_unflattenP1(void) {
-  // Only for SPR_P1
-  NIRVANAP_drawT(s_tile1, lin[SPR_P1], col[SPR_P1]);
+  // Only for GAME_INDEX_P1
+  NIRVANAP_drawT(s_tile1, lin[GAME_INDEX_P1], col[GAME_INDEX_P1]);
 }
