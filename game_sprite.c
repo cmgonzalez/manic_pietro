@@ -67,6 +67,23 @@ void spr_set_right() {
   BIT_SET(*p_state, STAT_DIRR);
 }
 
+
+unsigned char spr_move_up_f(void) {
+
+  if (lin[sprite] != 0) {
+    lin[sprite] =  lin[sprite] - SPRITE_LIN_INC;
+  }
+  return 0;
+}
+
+unsigned char spr_move_down_f(void) {
+
+  if (lin[sprite] <= GAME_LIN_FLOOR) {
+    lin[sprite] =  lin[sprite] + SPRITE_LIN_INC;
+  }
+  return 0;
+}
+
 unsigned char spr_move_up(void) {
   unsigned char f_check;
 
@@ -101,6 +118,104 @@ unsigned char spr_move_up(void) {
     return 0;
   }
 }
+
+
+void spr_draw8(unsigned char f_spr8, unsigned char f_lin,
+                       unsigned char f_col) {
+
+  /*
+     A quick note about the "btile" format:
+
+     Each "btile" represents a 16x16 image, using 8x2 attributes. It's very
+     similar to "ctiles" used in BIFROST* and ZXodus, except each tile is 48
+     bytes (instead of 64 bytes) and their attributes are stored vertically:
+     Byte 1: bitmap value for 1st pixel line, 1st column
+     Byte 2: bitmap value for 1st pixel line, 2nd column
+     Byte 3: bitmap value for 2nd pixel line, 1st column
+     Byte 4: bitmap value for 2nd pixel line, 2nd column
+     Byte 5: bitmap value for 3rd pixel line, 1st column
+     Byte 6: bitmap value for 3rd pixel line, 2nd column
+     ...
+     Byte 31: bitmap value at 16th pixel line, 1st column
+     Byte 32: bitmap value at 16th pixel line, 2nd column
+     Byte 33: attribute value for 1st and 2nd pixel line, 1st column
+     Byte 34: attribute value for 3rd and 4th pixel line, 1st column
+     Byte 35: attribute value for 5th and 6th pixel line, 1st column
+     ...
+     Byte 40: attribute value for 15th and 16th pixel line, 1st column
+     Byte 41: attribute value for 1st and 2nd pixel line, 2nd column
+     Byte 42: attribute value for 3rd and 4th pixel line, 2nd column
+     ...
+     Byte 48: attribute value for 15th and 16th pixel line, 2nd column
+
+     The ordering above looks somewhat unconventional, but there's a reason:
+     it's more convenient for the NIRVANA ENGINE this way, so it can be more
+     compact and efficient.
+   */
+  // Geometria ancho del btile (teorico) por ejemplo 8 btiles (16x16)
+  unsigned char *f_byte;
+  unsigned char *f_byte_src;
+  unsigned char *f_byte_src0;
+  unsigned char f_spr16;
+  unsigned char f_lin1;
+  unsigned char *f_attrib_start;
+
+  if (f_spr8 < 16) {
+    // si es mayor que 16 puedo sacar los graficos de la segunda linea
+    f_spr16 =
+        f_spr8 >>
+        1;
+    f_spr8 = f_spr8 % 2;
+  } else {
+    // si es mayor que 16 puedo sacar los graficos de la segunda linea
+    f_spr8 = f_spr8 - 16;
+    f_spr16 =
+        f_spr8 >>
+        1;
+    f_spr8 = 2 + (f_spr8 % 2);
+  }
+
+  f_byte_src0 = &btiles[0] + (48 * f_spr16);
+
+  switch (f_spr8) {
+  case 0:
+    f_byte_src = f_byte_src0;
+    f_attrib_start = f_byte_src0 + 32;
+    break;
+  case 1:
+    f_byte_src = f_byte_src0 + 1;
+    f_attrib_start = f_byte_src0 + 32 + 8;
+    break;
+  case 2:
+    f_byte_src = f_byte_src0 + 16;
+    f_attrib_start = f_byte_src0 + 32 + 4;
+    break;
+  case 3:
+    f_byte_src = f_byte_src0 + 17;
+    f_attrib_start = f_byte_src0 + 32 + 12;
+    break;
+  }
+
+  attrib[0] = *f_attrib_start;
+  ++f_attrib_start;
+  attrib[1] = *f_attrib_start;
+  ++f_attrib_start;
+  attrib[2] = *f_attrib_start;
+  ++f_attrib_start;
+  attrib[3] = *f_attrib_start;
+
+  NIRVANAP_paintC(&attrib, f_lin + 8, f_col); // TODO direct Nirvana Buffer poke
+
+  f_lin1 = f_lin + 8;
+  // TODO can be optimized on div 8 rows, no need for each zx_py2addr
+  while (f_lin < f_lin1) {
+    f_byte = zx_py2saddr(f_lin) + f_col;
+    *f_byte = *f_byte_src;
+    f_byte_src = f_byte_src + 2;
+    ++f_lin;
+  }
+}
+
 
 unsigned char spr_move_down(void) {
   unsigned char f_check;
@@ -423,31 +538,31 @@ void spr_back_repaint(void) {
   s_row1 = (s_lin0 >> 3) + 1;
   s_col1 = s_col0;
   // game_cell_paint();
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
   // game_cell_paint();
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
   // game_cell_paint();
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1--;
   s_col1--;
   // game_cell_paint();
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   // TODO PERFORMANCE
   // if ( (s_lin0 >> 3) != 0 ) {
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
   // game_cell_paint();
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
   // game_cell_paint();
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   //}
 }
 

@@ -23,7 +23,7 @@ extern void          enemy_walk(void);
 extern void          enemy_static(void);
 extern void          enemy_turn(void);
 extern void          enemy_move(void);
-extern void          enemy_init(unsigned char f_lin,unsigned  char f_col,unsigned  char f_index);
+extern void          enemy_init();
 extern void          enemy_kill( unsigned char f_sprite) __z88dk_fastcall;
 extern void          enemy_avoid_fall(void);
 extern unsigned char enemy_avoid_dead(void);

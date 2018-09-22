@@ -54,7 +54,7 @@ void menu_main() {
     c = in_inkey();
     // in_wait_nokey();
 
-    game_rotate_attrib();
+    game_highlight_coins();
     s_row = ((6 + menu_curr_sel) << 3) + 8;
     game_paint_attrib(&attrib_hl, s_col + 1, s_col_e, s_row);
     // 48

@@ -23,7 +23,6 @@
 #include "globals.h"
 void  test_proc();
 unsigned char  test_func();
-void game_sprite_draw8(unsigned char f_spr8, unsigned char f_lin,
-                       unsigned char f_col);
+
 
 #endif

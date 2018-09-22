@@ -51,11 +51,16 @@ void enemy_turn(void) {
     }
     ++sprite;
     ++nirv_sprite_index;
-    if (nirv_sprite_index > 7) {
+    if (nirv_sprite_index >= NIRV_TOTAL_SPRITES) {
       nirv_sprite_index = 0;
       NIRVANAP_halt();
     }
   }
+  if (spr_count > NIRV_TOTAL_SPRITES) {
+    NIRVANAP_halt();
+  }
+
+
 }
 
 void enemy_move(void) {
@@ -122,7 +127,20 @@ void enemy_horizontal() {
   }
 }
 
-void enemy_vertical() {}
+void enemy_vertical() {
+
+  if (BIT_CHK(*p_state, STAT_JUMP)) {
+    spr_move_up_f();
+    if (lin[sprite] == value_a[sprite] || lin[sprite] > GAME_LIN_FLOOR) {
+      spr_set_down();
+    }
+  } else {
+    spr_move_down_f();
+    if (lin[sprite] == value_b[sprite] || lin[sprite] > GAME_LIN_FLOOR) {
+      spr_set_up();
+    }
+  }
+}
 
 void enemy_walk(void) {}
 
@@ -172,41 +190,36 @@ unsigned char enemy_avoid_dead() {
   return 0;
 }
 
-void enemy_init(unsigned char f_lin, unsigned char f_col,
-                unsigned char f_class) {
+void enemy_init() {
   unsigned char f_sprite;
-  unsigned char f_dir;
 
   // Get the first available sprite
   f_sprite = 0;
   while (f_sprite < GAME_MAX_ENEMIES) {
     if (class[f_sprite] == 0) {
       tmp0 = 0;
-      while (tmp0 <= (GAME_TOTAL_INDEX_CLASSES * 6)) {
+      while (tmp0 <= (GAME_TOTAL_INDEX_CLASSES * 5)) {
 
-        if (spr_init[tmp0] == f_class) {
+        if (spr_init[tmp0] == scr_map[index1]) {
           // Class Found!
           sprite = f_sprite;
-
-          class[sprite] = f_class; // spr_init[tmp1];
-          spr_tile[sprite] = spr_init[tmp0 + 1];
-          f_dir = spr_init[tmp0 + 2];
-          spr_frames[sprite] = spr_init[tmp0 + 3];
-          spr_speed[sprite] = spr_init[tmp0 + 4];
-          spr_kind[sprite] = spr_init[tmp0 + 5];
-
-          lin[sprite] = f_lin;
-          col[sprite] = f_col;
           state[sprite] = 0;
           state_a[sprite] = 0;
-          jump_lin[sprite] = 0;
           colint[sprite] = 0;
-          if (f_dir == DIR_RIGHT) {
-            spr_set_right();
-          }
-          if (f_dir == DIR_LEFT) {
-            spr_set_left();
-          }
+
+          class[sprite] = scr_map[index1];
+
+          spr_tile[sprite] = spr_init[tmp0 + 1];
+          BIT_SET(state[sprite],spr_init[tmp0 + 2]);
+          spr_frames[sprite] = spr_init[tmp0 + 3];
+          spr_kind[sprite] = spr_init[tmp0 + 4];
+
+          spr_speed[sprite] = scr_map[index1+1];
+
+
+          lin[sprite] = (index1 >> 5) << 3;
+          col[sprite] = index1 & 31;
+
           p_state = &state[sprite];
           p_state_a = &state_a[sprite];
 
@@ -218,7 +231,7 @@ void enemy_init(unsigned char f_lin, unsigned char f_col,
           break;
         } else {
           // increment
-          tmp0 = tmp0 + 6; // Six variables on spr_init
+          tmp0 = tmp0 + 5; // Six variables on spr_init
         }
       }
       break;

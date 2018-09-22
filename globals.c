@@ -69,7 +69,6 @@ unsigned char col[GAME_MAX_SPRITES];      // COLUMN
 unsigned char colint[GAME_MAX_SPRITES];   // INTERNAL COLUMN/TILE INCREMENT
 unsigned int spr_timer[GAME_MAX_SPRITES]; // SPRITE GENERAL TIMER MILISECONDS
 unsigned int last_time[GAME_MAX_SPRITES]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
-unsigned char jump_lin[GAME_MAX_SPRITES]; // START JUMP LINE
 
 unsigned char obj_lin[GAME_MAX_SPRITES]; // object lin for HIGHLIGHT
 unsigned char obj_col[GAME_MAX_SPRITES]; // object col for HIGHLIGHT
@@ -108,6 +107,7 @@ unsigned char game_conveyor_col1;
 unsigned char game_exit_col;
 unsigned char game_exit_lin;
 
+unsigned char game_playing;
 unsigned char game_round_up;
 unsigned char menu_curr_sel;
 
@@ -206,18 +206,23 @@ unsigned char map_paper_last_a;
 // Enemy intialization variables, based on index on map array, used along
 // GAME_TOTAL_INDEX_CLASSES.
 const unsigned char spr_init[] = {
-    // SPR INDEX, TILE INDEX, SPRITE DIRECTION, FRAMES, SPEED , KIND
-    64, 16, DIR_LEFT , 4, 4, E_HORIZONTAL, // ROBOT
-    65, 16, DIR_RIGHT, 4, 4, E_HORIZONTAL,
-    66, 24, DIR_LEFT , 4, 4, E_HORIZONTAL, // PENGUIN
-    67, 24, DIR_RIGHT, 4, 4, E_HORIZONTAL,
-    68, 32, DIR_LEFT , 4, 4, E_HORIZONTAL, // CHICKEN
-    69, 32, DIR_RIGHT, 4, 4, E_HORIZONTAL,
-    70, 40, DIR_LEFT , 4, 4, E_HORIZONTAL, // FOCA
-    71, 40, DIR_RIGHT, 4, 4, E_HORIZONTAL,
-    72, 48, DIR_LEFT , 4, 4, E_HORIZONTAL, // WATER
-    73, 48, DIR_RIGHT, 4, 4, E_HORIZONTAL,
-    0,0,0,0,0,0,
+    //SPR INDEX, TILE INDEX, STAT, FRAMES , KIND
+    64, 16, STAT_DIRL, 4, E_HORIZONTAL, // ROBOT
+    65, 16, STAT_DIRR, 4, E_HORIZONTAL,
+    66, 24, STAT_DIRL, 4, E_HORIZONTAL, // PENGUIN
+    67, 24, STAT_DIRR, 4, E_HORIZONTAL,
+    68, 32, STAT_DIRL, 4, E_HORIZONTAL, // CHICKEN
+    69, 32, STAT_DIRR, 4, E_HORIZONTAL,
+    70, 40, STAT_DIRL, 4, E_HORIZONTAL, // FOCA
+    71, 40, STAT_DIRR, 4, E_HORIZONTAL,
+    72, 48, STAT_DIRL, 4, E_HORIZONTAL, // WATER LEFT
+    73, 48, STAT_DIRR, 4, E_HORIZONTAL, // WATER RIGHT
+    74, 56, STAT_FALL, 1, E_VERTICAL,   //EUGENE DOWN
+    75, 56, STAT_JUMP, 1, E_VERTICAL,   //EUGENE UP
+    76, 57, STAT_DIRL, 4, E_HORIZONTAL, // PAC LEFT
+    77, 57, STAT_DIRR, 4, E_HORIZONTAL, // PAC RIGHT
+    78, 65, STAT_DIRL, 4, E_HORIZONTAL, // KANGOROO LEFT
+    79, 65, STAT_DIRR, 4, E_HORIZONTAL, // KANGOROO RIGHT
 };
 
 unsigned char spr_tile[GAME_MAX_SPRITES];

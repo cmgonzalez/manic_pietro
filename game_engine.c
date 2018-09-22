@@ -35,7 +35,7 @@
 void game_tick(void) {
   ++curr_time;
   zx_isr();
-  game_rotate_attrib();
+  game_highlight_coins();
 }
 
 void game_loop(void) {
@@ -55,16 +55,15 @@ void game_loop(void) {
     /*Player Init*/
 
     dirs = 0x00;
-
+    game_playing = 1;
     while (!game_round_up && !game_over) {
-zx_border(INK_RED);
-      ///Enemies turn
+      zx_border(INK_RED);
+      /// Enemies turn
       enemy_turn();
-      //Player 1 turn
+      // Player 1 turn
       player_turn();
 
-      //NIRVANAP_halt();
-
+      // NIRVANAP_halt();
 
       /*Play animatios*/
       if (game_check_time(&anim_time, 3)) {
@@ -78,7 +77,7 @@ zx_border(INK_RED);
         // game_paint_attrib(&attrib_osd, 0, 32, 144);
       }
 
-      // game_rotate_attrib();
+      // game_highlight_coins();
 
       /*Each second aprox - update fps/score/phase left/phase advance*/
       if (game_check_time(&frame_time, TIME_EVENT)) {
@@ -93,10 +92,9 @@ zx_border(INK_RED);
       ++loop_count;
       ++fps;
 
-
-      //NIRVANAP_spriteT(6, 79, game_exit_lin, game_exit_col);
-      //NIRVANAP_spriteT(7, 79, game_exit_lin, game_exit_col);
-
+      // PRINT EXIT TODO PLAYER BEHIND DOOR
+      NIRVANAP_spriteT(6, 79, game_exit_lin, game_exit_col);
+      // NIRVANAP_spriteT(7, 79, game_exit_lin, game_exit_col);
 
       if (obj_count == player_coins) {
         game_flash_exit();
@@ -105,8 +103,10 @@ zx_border(INK_RED);
       }
     }
     if (game_round_up) {
+      game_playing = 0;
       game_round_init();
       game_round_up = 0;
+      game_playing = 1;
     }
   }
 }
@@ -182,10 +182,10 @@ void game_draw_map(void) {
         game_exit_lin = 16 + (index1 / 32) * 8;
       }
       // game_cell_paint();
-      game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+      spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
     } else {
       if (scr_map[index1] < 120) {
-        enemy_init((index1 >> 5) << 3, index1 & 31, scr_map[index1]);
+        enemy_init();
 
         value_a[sprite] = scr_map[index1 + 32];
         value_b[sprite] = scr_map[index1 + 33];
@@ -201,7 +201,7 @@ void game_draw_map(void) {
           player_lin_scr = s_lin1 - 16;
           player_col_scr = s_col1;
           scr_map[index1] = TILE_EMPTY;
-          game_sprite_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
+          spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
         }
       }
     }
@@ -226,12 +226,12 @@ void game_cell_paint_index() {
   s_row1 = (s_lin1 >> 3) + 1;
   s_lin1 = s_lin1 + 16;
   // game_cell_paint();
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
 }
 
 void game_cell_paint() {
 
-  game_sprite_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
 }
 
 void game_end() {}
@@ -336,8 +336,28 @@ void game_round_init(void) {
       "The Bank",
       "The Sixteenth Cavern",
   };
-  unsigned const char map_lens[] = {14, 13, 9,  26, 16, 7,  17, 19, 31, 12,
-                                    13, 19, 21, 19, 32, 30, 17, 18, 8,  20};
+  unsigned const char map_lens[] = {
+    14,
+    13,
+    9,
+    26,
+    13,
+    16,
+     7,
+    17,
+    19,
+    31,
+    12,
+    13,
+    21,
+    19,
+    32,
+    30,
+    17,
+    18,
+    9,
+    20,
+  };
 
   /* screen init */
   /*PHASE INIT*/
@@ -358,12 +378,12 @@ void game_round_init(void) {
     tmp_ui = tmp_ui + map_lens[i];
     ++i;
   }
-  //TODO REMOVE
-  zx_print_str(22,0, "                               ");
+  // TODO REMOVE
+  zx_print_str(22, 0, "                               ");
 
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   zx_print_str(17, 0, "                                ");
-  zx_print_str(17, (32 - map_lens[scr_curr]) >> 1, map_names[scr_curr]);
+  zx_print_str(17, ((32 - map_lens[scr_curr]) >> 1)-1, map_names[scr_curr]);
   zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
   zx_print_str(18, 0, "AIR ------");
   zx_print_ink(INK_WHITE | PAPER_GREEN | BRIGHT);
@@ -455,7 +475,7 @@ void game_colour_message(unsigned char f_row, unsigned char f_col,
       frame_time = zx_clock();
       if (game_over) {
         game_paint_attrib(&attrib_hl, f_col, f_col2, (f_row << 3) + 8);
-        game_rotate_attrib();
+        game_highlight_coins();
       } else {
         game_paint_attrib(&attrib_osd, f_col, f_col2, (f_row << 3) + 8);
         game_rotate_attrib_osd();
@@ -491,11 +511,11 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
   }
 }
 
-void game_rotate_attrib(void) {
-  if (!game_over && !game_round_up) {
+void game_highlight_coins(void) {
+  if (game_playing) {
 
     // TODO PERFOMANCE (ASM)
-    if (last_rotated > 7) {
+    if (last_rotated > obj_count) {
       last_rotated = 0;
     }
 
@@ -597,7 +617,7 @@ void game_page_map(void) {
   IO_7FFD = 0x10 + 6;
 
   if (l_scr == 255) {
-    l_scr = start_scr0[l_world];
+    //l_scr = start_scr0[l_world];
     l_scr_map = (l_world << 4) + l_scr;
   }
   l_paper = paper0[l_scr_map];
@@ -853,8 +873,8 @@ void game_flash_exit() {
     ++li;
   }
 
-  game_sprite_draw8(28, game_exit_lin - 8, game_exit_col);
-  game_sprite_draw8(29, game_exit_lin - 8, game_exit_col + 1);
-  game_sprite_draw8(30, game_exit_lin, game_exit_col);
-  game_sprite_draw8(31, game_exit_lin, game_exit_col + 1);
+  spr_draw8(28, game_exit_lin - 8, game_exit_col);
+  spr_draw8(29, game_exit_lin - 8, game_exit_col + 1);
+  spr_draw8(30, game_exit_lin, game_exit_col);
+  spr_draw8(31, game_exit_lin, game_exit_col + 1);
 }

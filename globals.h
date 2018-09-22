@@ -89,7 +89,7 @@
 
 
 #define GAME_TOTAL_CLASSES            6 //Total class of enemies
-#define GAME_TOTAL_INDEX_CLASSES      8 //Total class of enemies variations, the same enemy can be left/right etc...
+#define GAME_TOTAL_INDEX_CLASSES      16 //Total class of enemies variations, the same enemy can be left/right etc...
 
 #define E_HORIZONTAL                  1
 #define E_VERTICAL                    2
@@ -144,11 +144,13 @@
 #define ST_TURN_R                     10
 #define ST_TURN_L                     11
 
-/* Starting positions*/
-#define DIR_LEFT                      255
-#define DIR_RIGHT                     1
-
+//Starting Directions
 #define DIR_NONE                      0
+#define DIR_LEFT                      1
+#define DIR_RIGHT                     2
+#define DIR_UP                        3
+#define DIR_DOWN                      4
+
 
 /*Stats (bit position number)*/
 #define STAT_JUMP                     0
@@ -157,8 +159,8 @@
 #define STAT_DIRL                     3
 #define STAT_CONVEYOR                 4
 #define STAT_ONEXIT                   5
-#define STAT_ANGRY                    6
-#define STAT_UPGR                     7
+#define STAT_DIRU                     6
+#define STAT_DIRD                     7
 /*Stats alt (bit position number)*/
 #define STAT_LOCK                     0
 #define STAT_TURN                     1
@@ -226,7 +228,6 @@ extern unsigned char tile[GAME_MAX_SPRITES];
 extern unsigned char lin[GAME_MAX_SPRITES];
 extern unsigned char col[GAME_MAX_SPRITES];
 extern unsigned char colint[GAME_MAX_SPRITES];
-extern unsigned char jump_lin[GAME_MAX_SPRITES];
 
 extern unsigned int last_time[GAME_MAX_SPRITES];
 extern unsigned int spr_timer[GAME_MAX_SPRITES];
@@ -270,7 +271,7 @@ extern unsigned char game_conveyor_col1;
 extern unsigned char game_exit_col;
 extern unsigned char game_exit_lin;
 
-
+extern unsigned char game_playing;
 extern unsigned char game_round_up;
 extern unsigned char menu_curr_sel;
 extern unsigned char game_tileset;
@@ -367,15 +368,7 @@ extern unsigned char scr_map[];
 extern const unsigned char world0[];
 extern const unsigned char lenght0[];
 extern const unsigned char paper0[];
-extern const unsigned char start_scr0[];
-/*
-extern const unsigned char start_scr0[];
-extern const unsigned char lenght0[];
-extern const unsigned char paper0[];
-extern const unsigned char world0[];
-extern const unsigned char world0_w[];
-extern const unsigned char world0_h[];
-*/
+
 extern unsigned char scr_curr;
 extern unsigned char map_width;
 extern unsigned char map_heigth;
