@@ -21,6 +21,7 @@
 #define GAME_SCR_MAX_INDEX           512 // 32 * 16
 
 #define GAME_MAX_SPRITES             16
+#define GAME_MAX_OBJECTS             8  //OBJECTS OR COINS
 #define GAME_MAX_ENEMIES             15 //GAME_MAX_SPRITES - PLAYERS
 
 /* Player indexes */
@@ -232,8 +233,9 @@ extern unsigned char colint[GAME_MAX_SPRITES];
 extern unsigned int last_time[GAME_MAX_SPRITES];
 extern unsigned int spr_timer[GAME_MAX_SPRITES];
 
-extern unsigned char obj_lin[GAME_MAX_SPRITES]; // object lin for HIGHLIGHT
-extern unsigned char obj_col[GAME_MAX_SPRITES]; // object col for HIGHLIGHT
+extern unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
+extern unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
+extern unsigned char obj_ink[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
 extern unsigned char obj_count;
 
 extern unsigned char tbuffer[7];

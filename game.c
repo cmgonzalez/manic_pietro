@@ -57,7 +57,7 @@ void main(void) {
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
   game_gravity = 98;    // GAME_GRAVITY;
-  player_vel_y0 = -690; // GAME_VELOCITY;
+  player_vel_y0 = -694; // GAME_VELOCITY;
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;

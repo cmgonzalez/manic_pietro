@@ -213,7 +213,6 @@ void enemy_init() {
           BIT_SET(state[sprite],spr_init[tmp0 + 2]);
           spr_frames[sprite] = spr_init[tmp0 + 3];
           spr_kind[sprite] = spr_init[tmp0 + 4];
-
           spr_speed[sprite] = scr_map[index1+1];
 
 
@@ -225,9 +224,9 @@ void enemy_init() {
 
           tile[sprite] = spr_get_tile(&sprite);
 
+          ++spr_count;
           spr_timer[sprite] = zx_clock();
           last_time[sprite] = 0;
-          ++spr_count;
           break;
         } else {
           // increment

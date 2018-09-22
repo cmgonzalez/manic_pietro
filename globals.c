@@ -70,8 +70,10 @@ unsigned char colint[GAME_MAX_SPRITES];   // INTERNAL COLUMN/TILE INCREMENT
 unsigned int spr_timer[GAME_MAX_SPRITES]; // SPRITE GENERAL TIMER MILISECONDS
 unsigned int last_time[GAME_MAX_SPRITES]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
 
-unsigned char obj_lin[GAME_MAX_SPRITES]; // object lin for HIGHLIGHT
-unsigned char obj_col[GAME_MAX_SPRITES]; // object col for HIGHLIGHT
+unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
+unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
+unsigned char obj_ink[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
+
 unsigned char obj_count;
 
 // PLAYER ONLY

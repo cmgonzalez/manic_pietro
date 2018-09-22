@@ -227,11 +227,11 @@ unsigned char player_move_walk(void) {
       }
 
       return 1;
-    } //END IN_STICK_FIRE
+    } // END IN_STICK_FIRE
 
     if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
 
-      if ( !BIT_CHK(*p_state, STAT_DIRL) && !BIT_CHK(*p_state, STAT_DIRR)) {
+      if (!BIT_CHK(*p_state, STAT_DIRL) && !BIT_CHK(*p_state, STAT_DIRR)) {
 
       } else {
         /* Move Right */
@@ -318,7 +318,7 @@ unsigned char player_move_walk(void) {
 }
 void player_collision() {
   // Left
-  // if (colint[GAME_INDEX_P1] < 3) {
+
   BIT_CLR(*p_state, STAT_ONEXIT);
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1], col[GAME_INDEX_P1]);
@@ -335,7 +335,7 @@ void player_collision() {
   v0 = player_pick_item(v0, index1);
 
   // Right
-  // if (colint[GAME_INDEX_P1] > 0) {
+
   index1 = spr_calc_index(lin[GAME_INDEX_P1], col[GAME_INDEX_P1] + 1);
   v0 = scr_map[index1];
   v0 = player_pick_deadly(v0);
@@ -347,17 +347,19 @@ void player_collision() {
   v0 = player_pick_deadly(v0);
   v0 = player_pick_exit(v0);
   v0 = player_pick_item(v0, index1);
-  //}
+
   // Sprite Collision
   for (i = 0; i < GAME_INDEX_P1; ++i) {
     if (class[i] > 0) {
-      v0 = abs(col[i] - col[GAME_INDEX_P1]); // TODO INCLUDE COLINT FOR BETTER
-                                             // PRECISION
+      v0 = abs(col[i] - col[GAME_INDEX_P1]);
       if (v0 < 2) {
-        v1 = abs(lin[i] - lin[GAME_INDEX_P1]);
-        if (v1 < 16) {
-          player_kill_index = 0xFFFF;
-          player_killed = 1;
+        v0 = abs(lin[i] - lin[GAME_INDEX_P1]);
+        if (v0 < 16) {
+          v0 = abs(colint[i] - colint[GAME_INDEX_P1]);
+          if (v0 < 2) {
+            player_kill_index = 0xFFFF;
+            player_killed = 1;
+          }
         }
       }
     }
@@ -517,10 +519,12 @@ unsigned char player_check_floor(unsigned char f_inc) {
 
 void player_lost_life() {
   unsigned char i;
+
   ay_reset();
   audio_explosion();
   game_update_stats();
 
+  // BLINK
   while (i < 32) {
 
     if (player_kill_index != 0xFFFF) {
@@ -541,10 +545,10 @@ void player_lost_life() {
       NIRVANAP_spriteT(NIRV_SPRITE_P1, 0, 0, 0);
       NIRVANAP_halt();
     }
-    game_highlight_coins();
+    // game_highlight_coins();
     ++i;
   }
-
+  game_playing = 0;
   // z80_delay_ms(600);
   s_lin0 = lin[GAME_INDEX_P1];
   s_col0 = col[GAME_INDEX_P1];
@@ -559,6 +563,7 @@ void player_lost_life() {
   if (player_lives > 0) {
     // z80_delay_ms(500);
     game_round_init();
+    game_playing = 1;
   } else {
     // Game End
     player_lives = 0;
