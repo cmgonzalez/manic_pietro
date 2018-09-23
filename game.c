@@ -44,7 +44,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 4;
+  scr_curr = 0;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
@@ -78,7 +78,6 @@ void main(void) {
       ;
     srand(counter);
   }
-  zx_border(INK_BLACK);
   // Clear Screen and init Nirvana
   game_cls();
   // Init Game

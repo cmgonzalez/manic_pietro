@@ -18,6 +18,7 @@ CFLAGS = -SO3 --max-allocs-per-node1000 --opt-code-size
 .PHONY: depend clean
 
 default: loader.tap game_scr.bin game.font $(OUT)
+	touch game.c
 	-ls -l *.bin
 	-rm -f *.bin *.tap *.font *.zx7 game zcc_proj.lst zcc_opt.def
 	grep code_compiler_size game.map

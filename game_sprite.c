@@ -165,14 +165,16 @@ void spr_draw8(unsigned char f_spr8, unsigned char f_lin,
     f_spr16 =
         f_spr8 >>
         1;
-    f_spr8 = f_spr8 % 2;
+    //f_spr8 = f_spr8 % 2;
+    f_spr8 = f_spr8 & 1;
   } else {
     // si es mayor que 16 puedo sacar los graficos de la segunda linea
     f_spr8 = f_spr8 - 16;
     f_spr16 =
         f_spr8 >>
         1;
-    f_spr8 = 2 + (f_spr8 % 2);
+    //f_spr8 = 2 + (f_spr8 % 2);
+    f_spr8 = 2 + (f_spr8 & 1);
   }
 
   f_byte_src0 = &btiles[0] + (48 * f_spr16);

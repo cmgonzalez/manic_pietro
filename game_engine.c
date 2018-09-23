@@ -79,7 +79,6 @@ void game_loop(void) {
 
       /*Each second aprox - update fps/score/phase left/phase advance*/
       if (game_check_time(&frame_time, TIME_EVENT)) {
-
         frame_time = zx_clock();
         // intrinsic_halt();
         if (game_fps_show)
@@ -95,7 +94,7 @@ void game_loop(void) {
       // NIRVANAP_spriteT(7, 79, game_exit_lin, game_exit_col);
 
       if (obj_count == player_coins) {
-        game_flash_exit();
+        game_flash_exit(FLASH);
         zx_border(INK_BLACK);
         obj_count = 0xFF;
       }
@@ -364,6 +363,7 @@ void game_round_init(void) {
   key_attrib[1] = key_attrib[0];
   key_attrib[2] = key_attrib[0];
   key_attrib[3] = key_attrib[0];
+  game_flash_exit(!FLASH);
 
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   zx_print_str(17, 0, "                                ");
@@ -841,14 +841,17 @@ void game_page_map(void) {
   intrinsic_ei();
 }
 
-void game_flash_exit() {
+void game_flash_exit(unsigned char f_attrib) {
   unsigned int li;
+
+  // Set Flash bits on 8x8 Exits Tiles
   li = 192;
   while (li < 384) {
     v0 = li % 48;
     // Set flash bit on 8x8 exit tiles
     if ((v0 >= 36 && v0 < 40) || (v0 >= 44 && v0 < 48)) {
-      btiles[li] = btiles[li] | FLASH;
+      btiles[li] = btiles[li] & 127;
+      btiles[li] = btiles[li] | f_attrib;
     }
     ++li;
   }
@@ -857,4 +860,14 @@ void game_flash_exit() {
   spr_draw8(29, game_exit_lin - 8, game_exit_col + 1);
   spr_draw8(30, game_exit_lin, game_exit_col);
   spr_draw8(31, game_exit_lin, game_exit_col + 1);
+
+  // Set Flash bits on Exit Sprite
+  li = (48 * (80 - 1)) + 32; // 80 ==> TILE EXIT
+  i = 0;
+  while (i < 16) {
+      btiles[li] = btiles[li] & 127;
+      btiles[li] = btiles[li] | f_attrib;
+    ++i;
+    ++li;
+  }
 }

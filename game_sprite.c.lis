@@ -748,7 +748,7 @@
 745   0000              	GLOBAL _player_hit_time
 746   0000              	GLOBAL _player_lin_scr
 747   0000              	GLOBAL _player_col_scr
-748   0000              	GLOBAL _player_jump_cnt
+748   0000              	GLOBAL _player_jump_count
 749   0000              	GLOBAL _player_jump_hack
 750   0000              	GLOBAL _player_vel_inc
 751   0000              	GLOBAL _player_vel_y0
@@ -2167,23 +2167,23 @@
 2164  0804  35          	dec	(hl)
 2165  0805  3E 00       	ld	a, +((_lin) & 0xFF)
 2166  0807  80          	add	a, b
-2167  0808  DD 77 FE    	ld	(ix-2),a
-2168  080B  6F          	ld	l,a
-2169  080C  3E 00       	ld	a,+((_lin) / 256)
-2170  080E  CE 00       	adc	a,0x00
-2171  0810  DD 77 FF    	ld	(ix-1),a
-2172  0813  67          	ld	h,a
-2173  0814  7E          	ld	a, (hl)
+2167  0808  DD 77 FC    	ld	(ix-4),a
+2168  080B  3E 00       	ld	a, +((_lin) / 256)
+2169  080D  CE 00       	adc	a,0x00
+2170  080F  DD 77 FD    	ld	(ix-3),a
+2171  0812  E1          	pop	hl
+2172  0813  7E          	ld	a,(hl)
+2173  0814  E5          	push	hl
 2174  0815  32 00 00    	ld	(_s_lin0),a
 2175  0818  3E 00       	ld	a, +((_col) & 0xFF)
 2176  081A  80          	add	a, b
-2177  081B  DD 77 FC    	ld	(ix-4),a
-2178  081E  3E 00       	ld	a, +((_col) / 256)
-2179  0820  CE 00       	adc	a,0x00
-2180  0822  DD 77 FD    	ld	(ix-3),a
-2181  0825  E1          	pop	hl
-2182  0826  7E          	ld	a,(hl)
-2183  0827  E5          	push	hl
+2177  081B  DD 77 FE    	ld	(ix-2),a
+2178  081E  6F          	ld	l,a
+2179  081F  3E 00       	ld	a,+((_col) / 256)
+2180  0821  CE 00       	adc	a,0x00
+2181  0823  DD 77 FF    	ld	(ix-1),a
+2182  0826  67          	ld	h,a
+2183  0827  7E          	ld	a, (hl)
 2184  0828  32 00 00    	ld	(_s_col0),a
 2185  082B  2A 00 00    	ld	hl,(_s_lin0)
 2186  082E  C5          	push	bc
@@ -2211,14 +2211,14 @@
 2208  0853  5F          	ld	e, a
 2209  0854  3E 00       	ld	a, +((_tile) / 256)
 2210  0856  CE 00       	adc	a,0x00
-2211  0858  E1          	pop	hl
-2212  0859  57          	ld	d,a
-2213  085A  3A 00 00    	ld	a,(_s_tile0)
-2214  085D  12          	ld	(de),a
-2215  085E  E5          	push	hl
-2216  085F  36 00       	ld	(hl),0x00
-2217  0861  DD 6E FE    	ld	l,(ix-2)
-2218  0864  DD 66 FF    	ld	h,(ix-1)
+2211  0858  57          	ld	d, a
+2212  0859  3A 00 00    	ld	a,(_s_tile0)
+2213  085C  12          	ld	(de), a
+2214  085D  DD 6E FE    	ld	l,(ix-2)
+2215  0860  DD 66 FF    	ld	h,(ix-1)
+2216  0863  36 00       	ld	(hl),0x00
+2217  0865  E1          	pop	hl
+2218  0866  E5          	push	hl
 2219  0867  36 00       	ld	(hl),0x00
 2220  0869  11 00 00    	ld	de,_class+0
 2221  086C  68          	ld	l,b
@@ -2640,15 +2640,15 @@
 2637  0AEF  CE 00       	adc	a,0x00
 2638  0AF1  57          	ld	d, a
 2639  0AF2  1A          	ld	a, (de)
-2640  0AF3  DD 77 FF    	ld	(ix-1),a
+2640  0AF3  DD 77 FA    	ld	(ix-6),a
 2641  0AF6  3C          	inc	a
 2642  0AF7  CA C6 0B    	jp	Z,l_spr_play_anim_00115
 2643  0AFA  3E 00       	ld	a, +((_anim_int) & 0xFF)
 2644  0AFC  81          	add	a, c
-2645  0AFD  DD 77 FD    	ld	(ix-3),a
+2645  0AFD  DD 77 FE    	ld	(ix-2),a
 2646  0B00  3E 00       	ld	a,+((_anim_int) / 256)
 2647  0B02  CE 00       	adc	a,0x00
-2648  0B04  DD 77 FE    	ld	(ix-2),a
+2648  0B04  DD 77 FF    	ld	(ix-1),a
 2649  0B07  06 00       	ld	b,0x00
 2650  0B09  21 00 00    	ld	hl,_anim_end
 2651  0B0C  09          	add	hl,bc
@@ -2672,8 +2672,8 @@
 2669  0B27  CE 00       	adc	a,0x00
 2670  0B29  67          	ld	h, a
 2671  0B2A  5E          	ld	e, (hl)
-2672  0B2B  DD 6E FD    	ld	l,(ix-3)
-2673  0B2E  DD 66 FE    	ld	h,(ix-2)
+2672  0B2B  DD 6E FE    	ld	l,(ix-2)
+2673  0B2E  DD 66 FF    	ld	h,(ix-1)
 2674  0B31  6E          	ld	l, (hl)
 2675  0B32  7B          	ld	a, e
 2676  0B33  85          	add	a, l
@@ -2685,8 +2685,8 @@
 2682  0B39  CD 00 00    	call	_NIRVANAP_drawT_raw_callee
 2683  0B3C  C1          	pop	bc
 2684  0B3D  DD 34 F9    	inc	(ix-7)
-2685  0B40  DD 6E FD    	ld	l,(ix-3)
-2686  0B43  DD 66 FE    	ld	h,(ix-2)
+2685  0B40  DD 6E FE    	ld	l,(ix-2)
+2686  0B43  DD 66 FF    	ld	h,(ix-1)
 2687  0B46  46          	ld	b,(hl)
 2688  0B47  04          	inc	b
 2689  0B48  70          	ld	(hl), b
@@ -2696,7 +2696,7 @@
 2693  0B4E  21 00 00    	ld	hl,_anim_loop
 2694  0B51  09          	add	hl, bc
 2695  0B52  7E          	ld	a, (hl)
-2696  0B53  DD 77 FC    	ld	(ix-4),a
+2696  0B53  DD 77 FD    	ld	(ix-3),a
 2697  0B56  B7          	or	a, a
 2698  0B57  20 60       	jr	NZ,l_spr_play_anim_00106
 2699  0B59  21 00 00    	ld	hl,_anim_count
@@ -2706,7 +2706,7 @@
 2703  0B62  09          	add	hl, bc
 2704  0B63  7E          	ld	a, (hl)
 2705  0B64  32 00 00    	ld	(_s_col0),a
-2706  0B67  DD 7E FF    	ld	a,(ix-1)
+2706  0B67  DD 7E FA    	ld	a,(ix-6)
 2707  0B6A  32 00 00    	ld	(_s_lin0),a
 2708  0B6D  3A 00 00    	ld	a,(_s_col0)
 2709  0B70  2A 00 00    	ld	hl,(_s_lin0)
@@ -2716,28 +2716,28 @@
 2713  0B76  E5          	push	hl
 2714  0B77  CD 00 00    	call	_spr_calc_index
 2715  0B7A  F1          	pop	af
-2716  0B7B  DD 74 FB    	ld	(ix-5),h
-2717  0B7E  DD 75 FA    	ld	(ix-6),l
+2716  0B7B  DD 74 FC    	ld	(ix-4),h
+2717  0B7E  DD 75 FB    	ld	(ix-5),l
 2718  0B81  D1          	pop	de
 2719  0B82  C1          	pop	bc
-2720  0B83  DD 6E FA    	ld	l,(ix-6)
-2721  0B86  DD 66 FB    	ld	h,(ix-5)
+2720  0B83  DD 6E FB    	ld	l,(ix-5)
+2721  0B86  DD 66 FC    	ld	h,(ix-4)
 2722  0B89  22 00 00    	ld	(_index0),hl
 2723  0B8C  3E 00       	ld	a,+((_scr_map) & 0xFF)
 2724  0B8E  21 00 00    	ld	hl,_index0
 2725  0B91  86          	add	a, (hl)
-2726  0B92  DD 77 FA    	ld	(ix-6),a
+2726  0B92  DD 77 FB    	ld	(ix-5),a
 2727  0B95  3E 00       	ld	a, +((_scr_map) / 256)
 2728  0B97  23          	inc	hl
 2729  0B98  8E          	adc	a, (hl)
-2730  0B99  DD 6E FA    	ld	l,(ix-6)
-2731  0B9C  DD 77 FB    	ld	(ix-5),a
+2730  0B99  DD 6E FB    	ld	l,(ix-5)
+2731  0B9C  DD 77 FC    	ld	(ix-4),a
 2732  0B9F  67          	ld	h,a
 2733  0BA0  7E          	ld	a, (hl)
 2734  0BA1  D6 80       	sub	a,0x80
 2735  0BA3  38 08       	jr	C,l_spr_play_anim_00104
-2736  0BA5  DD 6E FA    	ld	l,(ix-6)
-2737  0BA8  DD 66 FB    	ld	h,(ix-5)
+2736  0BA5  DD 6E FB    	ld	l,(ix-5)
+2737  0BA8  DD 66 FC    	ld	h,(ix-4)
 2738  0BAB  36 00       	ld	(hl),0x00
 2739  0BAD              l_spr_play_anim_00104:
 2740  0BAD  C5          	push	bc
@@ -2749,11 +2749,11 @@
 2746  0BB6  12          	ld	(de), a
 2747  0BB7  18 0D       	jr	l_spr_play_anim_00115
 2748  0BB9              l_spr_play_anim_00106:
-2749  0BB9  DD 46 FC    	ld	b,(ix-4)
+2749  0BB9  DD 46 FD    	ld	b,(ix-3)
 2750  0BBC  05          	dec	b
 2751  0BBD  70          	ld	(hl), b
-2752  0BBE  DD 6E FD    	ld	l,(ix-3)
-2753  0BC1  DD 66 FE    	ld	h,(ix-2)
+2752  0BBE  DD 6E FE    	ld	l,(ix-2)
+2753  0BC1  DD 66 FF    	ld	h,(ix-1)
 2754  0BC4  36 FF       	ld	(hl),0xff
 2755  0BC6              l_spr_play_anim_00115:
 2756  0BC6  0C          	inc	c

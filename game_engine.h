@@ -40,5 +40,6 @@ extern unsigned char game_check_time(unsigned int *start, unsigned char lapse);
 extern void          game_print_header(void);
 extern void          game_attribs( );
 extern void          game_page_map(void);
+extern void          game_flash_exit(unsigned char f_attrib);
 
 #endif

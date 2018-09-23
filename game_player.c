@@ -95,13 +95,15 @@ void player_turn(void) {
     s_class = 0;
     player_move();
     player_collision();
+    if (player_killed && game_debug) {
+      player_killed = 0;
+      zx_border(INK_WHITE);
+      z80_delay_ms(25);
+    }
     if (player_killed) {
       player_killed = 0;
-      if (game_inmune) {
-        zx_border(INK_RED);
-      } else {
         player_lost_life();
-      }
+
     }
     // Level UP
     if (obj_count == 0xFF && col[GAME_INDEX_P1] == game_exit_col &&
@@ -139,7 +141,8 @@ unsigned char player_move_jump(void) {
        player_jump_count == 14) &&
       player_jump_hack) {
     player_jump_hack = 0;
-last_time[GAME_INDEX_P1] = 0;
+    // Force anim on next loop
+    last_time[GAME_INDEX_P1] = 0;
     player_vel_y = player_vel_y - game_gravity;
     return 0;
   }
@@ -174,7 +177,6 @@ last_time[GAME_INDEX_P1] = 0;
 
     player_jump_top = s_lin1;
 
-
   } else {
 
     // Falling
@@ -185,6 +187,10 @@ last_time[GAME_INDEX_P1] = 0;
             v0 >= s_lin0                  // Is below
     ) {
 
+      if ((s_lin1 - player_jump_top) > 48) {
+        // JUMP DEAD
+        player_killed = 1;
+      }
       // Jump end
       lin[GAME_INDEX_P1] = v0;
       player_vel_y = 0;
@@ -303,12 +309,12 @@ unsigned char player_move_walk(void) {
     index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
     if (scr_map[index1] == TILE_CONVEYOR ||
         scr_map[index1 + 1] == TILE_CONVEYOR) {
-      zx_border(INK_CYAN);
       BIT_SET(*p_state, STAT_CONVEYOR);
+      BIT_CLR(*p_state, STAT_DIRL);
+      BIT_CLR(*p_state, STAT_DIRR);
     }
 
-    BIT_CLR(*p_state, STAT_DIRL);
-    BIT_CLR(*p_state, STAT_DIRR);
+
 
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
@@ -444,11 +450,11 @@ void player_score_add(unsigned int f_score) __z88dk_fastcall {
 unsigned char player_pick_item(unsigned char l_val, int l_index) {
 
   if (l_val == TILE_OBJECT) {
-
+    zx_border(INK_YELLOW);
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
-    zx_border(INK_YELLOW);
     audio_coin();
+    zx_border(INK_WHITE);
     return TILE_EMPTY;
   }
   return l_val;
@@ -459,7 +465,6 @@ unsigned char player_pick_deadly(unsigned char l_val) {
   if (l_val == TILE_DEADLY1 || l_val == TILE_DEADLY2) {
     player_killed = 1;
     player_kill_index = index1;
-    zx_border(INK_RED);
     v0 = TILE_EMPTY;
     v1 = TILE_EMPTY;
     return 0;
