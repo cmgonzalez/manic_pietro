@@ -235,7 +235,6 @@ extern unsigned int spr_timer[GAME_MAX_SPRITES];
 
 extern unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
 extern unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
-extern unsigned char obj_ink[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
 extern unsigned char obj_count;
 
 extern unsigned char tbuffer[7];
@@ -246,6 +245,8 @@ extern unsigned int player_score;
 extern signed int  player_vel_y;
 extern signed int  player_vel_y0;
 extern signed char  player_vel_inc;
+extern unsigned char player_jump_hack;
+extern unsigned char player_jump_count;
 
 
 //PLAYER ATTRIBUTES
@@ -304,11 +305,6 @@ extern unsigned int loop_count;
 extern unsigned int index_tmp;
 extern unsigned int index0;
 extern unsigned int index1;
-extern unsigned char tmp;
-extern unsigned char tmp0;
-extern unsigned char tmp1;
-extern unsigned char tmp_uc;
-extern signed char tmp_sc;
 extern unsigned int tmp_ui;
 extern unsigned char enemies;
 extern unsigned char zx_val_asm;
@@ -319,7 +315,7 @@ extern unsigned char game_attrib_osd;
 
 
 //TILE ATTRIB
-extern unsigned char attrib_key[4];
+extern unsigned char key_attrib[4];
 
 
 extern unsigned char *p_state;
@@ -334,7 +330,8 @@ extern unsigned char game_conveyor_flag;
 extern unsigned int curr_time;
 extern unsigned int frame_time;
 extern unsigned int anim_time;
-extern unsigned char last_rotated;
+extern unsigned char key_last;
+extern unsigned char key_ink;
 
 extern unsigned char spr_count;
 extern unsigned char sprite_curr_index;
@@ -375,12 +372,12 @@ extern unsigned char scr_curr;
 extern unsigned char map_width;
 extern unsigned char map_heigth;
 
-extern unsigned char anim_lin[GAME_MAX_SPRITES]; //TODO REMOVE ANIM?
-extern unsigned char anim_col[GAME_MAX_SPRITES];
-extern unsigned char anim_tile[GAME_MAX_SPRITES];
-extern unsigned char anim_int[GAME_MAX_SPRITES];
-extern unsigned char anim_end[GAME_MAX_SPRITES];
-extern unsigned char anim_loop[GAME_MAX_SPRITES];
+extern unsigned char anim_lin[]; //TODO REMOVE ANIM?
+extern unsigned char anim_col[];
+extern unsigned char anim_tile[];
+extern unsigned char anim_int[];
+extern unsigned char anim_end[];
+extern unsigned char anim_loop[];
 
 extern unsigned char anim_count;
 

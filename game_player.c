@@ -116,8 +116,9 @@ unsigned char player_move(void) {
 
   if (BIT_CHK(*p_state, STAT_JUMP) || BIT_CHK(*p_state, STAT_FALL)) {
     // Jump Handling
-    player_move_jump();
     spr_move_horizontal();
+    player_move_jump();
+
   } else {
     // Walk Handling
     player_move_walk();
@@ -130,8 +131,20 @@ unsigned char player_move(void) {
 unsigned char player_move_jump(void) {
 
   signed int val_yc;
-
+  ++player_jump_count;
   player_vel_y = player_vel_y + game_gravity;
+
+  // JUMP HACK! TO BE LIKE REAL MMINER WE JUST INSERT HORIZONTAL EXTRA MOVEMENT
+  if ((player_jump_count == 2 || player_jump_count == 10 ||
+       player_jump_count == 14) &&
+      player_jump_hack) {
+    player_jump_hack = 0;
+last_time[GAME_INDEX_P1] = 0;
+    player_vel_y = player_vel_y - game_gravity;
+    return 0;
+  }
+  player_jump_hack = 1;
+
   // CONVER TO PIXEL'S
   val_yc = player_vel_y / 100;
 
@@ -160,7 +173,10 @@ unsigned char player_move_jump(void) {
     }
 
     player_jump_top = s_lin1;
+
+
   } else {
+
     // Falling
     v0 = player_get_floor();
 
@@ -194,7 +210,7 @@ unsigned char player_move_walk(void) {
       if (player_check_ceil(lin[GAME_INDEX_P1] - 2, col[GAME_INDEX_P1])) {
         // NEW JUMP
         player_vel_inc = 1;
-        player_jumpcount = 0xFF;
+        player_jump_count = 0xFF;
         audio_salto();
         spr_set_up();
         player_vel_y = player_vel_y0;
@@ -535,7 +551,7 @@ void player_lost_life() {
       NIRVANAP_halt();
       NIRVANAP_spriteT(NIRV_SPRITE_P1, 0, 0, 0);
       NIRVANAP_halt();
-      game_cell_paint_index();
+      game_cell_paint_index(); // TODO REMOVE
       NIRVANAP_halt();
     } else {
       NIRVANAP_spriteT(NIRV_SPRITE_P1,
@@ -545,7 +561,6 @@ void player_lost_life() {
       NIRVANAP_spriteT(NIRV_SPRITE_P1, 0, 0, 0);
       NIRVANAP_halt();
     }
-    // game_highlight_coins();
     ++i;
   }
   game_playing = 0;

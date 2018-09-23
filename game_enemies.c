@@ -173,16 +173,16 @@ unsigned char enemy_avoid_dead() {
   }
 
   /* Don't fall on edge*/
-  tmp0 = scr_map[index1];
-  if (tmp0 > TILE_ITEM_E && tmp0 < TILE_FLOOR) {
+  v0 = scr_map[index1];
+  if (v0 > TILE_ITEM_E && v0 < TILE_FLOOR) {
     spr_turn_horizontal();
     return 1;
   }
 
   /* Don't hit on Deadly*/
   index1 = index1 + 16;
-  tmp0 = scr_map[index1];
-  if (tmp0 > TILE_ITEM_E && tmp0 < TILE_FLOOR) {
+  v0 = scr_map[index1];
+  if (v0 > TILE_ITEM_E && v0 < TILE_FLOOR) {
     spr_turn_horizontal();
     return 1;
   }
@@ -197,10 +197,10 @@ void enemy_init() {
   f_sprite = 0;
   while (f_sprite < GAME_MAX_ENEMIES) {
     if (class[f_sprite] == 0) {
-      tmp0 = 0;
-      while (tmp0 <= (GAME_TOTAL_INDEX_CLASSES * 5)) {
+      v0 = 0;
+      while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 5)) {
 
-        if (spr_init[tmp0] == scr_map[index1]) {
+        if (spr_init[v0] == scr_map[index1]) {
           // Class Found!
           sprite = f_sprite;
           state[sprite] = 0;
@@ -209,10 +209,10 @@ void enemy_init() {
 
           class[sprite] = scr_map[index1];
 
-          spr_tile[sprite] = spr_init[tmp0 + 1];
-          BIT_SET(state[sprite],spr_init[tmp0 + 2]);
-          spr_frames[sprite] = spr_init[tmp0 + 3];
-          spr_kind[sprite] = spr_init[tmp0 + 4];
+          spr_tile[sprite] = spr_init[v0 + 1];
+          BIT_SET(state[sprite],spr_init[v0 + 2]);
+          spr_frames[sprite] = spr_init[v0 + 3];
+          spr_kind[sprite] = spr_init[v0 + 4];
           spr_speed[sprite] = scr_map[index1+1];
 
 
@@ -230,7 +230,7 @@ void enemy_init() {
           break;
         } else {
           // increment
-          tmp0 = tmp0 + 5; // Six variables on spr_init
+          v0 = v0 + 5; // Six variables on spr_init
         }
       }
       break;

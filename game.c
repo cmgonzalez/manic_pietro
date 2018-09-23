@@ -44,7 +44,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0;
+  scr_curr = 4;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
@@ -57,7 +57,7 @@ void main(void) {
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
   game_gravity = 98;    // GAME_GRAVITY;
-  player_vel_y0 = -694; // GAME_VELOCITY;
+  player_vel_y0 = -690; // GAME_VELOCITY;
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
@@ -66,7 +66,6 @@ void main(void) {
   k1.right = IN_KEY_SCANCODE_p;
   k1.up = IN_KEY_SCANCODE_q;   // must be defined otherwise up is always true
   k1.down = IN_KEY_SCANCODE_a; // must be defined otherwise down is always true
-
 
   // Wait for Keypress and Randomize //
   /* Default Values for menu */
@@ -96,7 +95,6 @@ void main(void) {
   menu_curr_sel = 1;
   map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
 
-
   while (1) {
 
     // MENU
@@ -123,7 +121,10 @@ void main(void) {
   }
 }
 
-void test_proc() {}
+void test_proc() {
+
+
+}
 
 unsigned char test_func() { return 0; }
 

@@ -35,7 +35,7 @@
 void game_tick(void) {
   ++curr_time;
   zx_isr();
-  game_highlight_coins();
+  game_key_paint();
 }
 
 void game_loop(void) {
@@ -76,8 +76,6 @@ void game_loop(void) {
         // game_rotate_attrib_osd();
         // game_paint_attrib(&attrib_osd, 0, 32, 144);
       }
-
-      // game_highlight_coins();
 
       /*Each second aprox - update fps/score/phase left/phase advance*/
       if (game_check_time(&frame_time, TIME_EVENT)) {
@@ -126,10 +124,9 @@ void game_draw_map(void) {
   while (v0 < GAME_INDEX_P1) { // TODO SINGLE CLEAR FUNC
     // Clear enemies related tables
     class[v0] = 0;
-    obj_col[v0] = 0;
-    obj_lin[v0] = 0;
     ++v0;
   }
+
   index1 = 16;
   s_lin1 = 0;
   s_col1 = 2;
@@ -354,20 +351,19 @@ void game_round_init(void) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
   }
 
+  // Coin HIGHLIGHT init
+  key_last = 0;
+  key_ink = INK_YELLOW;
   i = 0;
   while (i < GAME_MAX_OBJECTS) {
-    obj_ink[i] = 0;
+    obj_col[i] = 0xFF;
+    obj_lin[i] = 0xFF;
     ++i;
   }
-
-  i = 0;
-  tmp_ui = 0;
-  while (i < scr_curr) {
-    tmp_ui = tmp_ui + map_lens[i];
-    ++i;
-  }
-  // TODO REMOVE
-  zx_print_str(22, 0, "                               ");
+  key_attrib[0] = map_paper | key_ink;
+  key_attrib[1] = key_attrib[0];
+  key_attrib[2] = key_attrib[0];
+  key_attrib[3] = key_attrib[0];
 
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   zx_print_str(17, 0, "                                ");
@@ -443,8 +439,9 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
 void game_paint_attrib(unsigned char *f_attrib[], char f_start,
                        unsigned char f_end, unsigned char f_lin) {
 
-  for (tmp_uc = f_start; tmp_uc < f_end; ++tmp_uc) {
-    NIRVANAP_paintC(f_attrib, f_lin, tmp_uc);
+  unsigned char li;
+  for (li = f_start; li < f_end; ++li) {
+    NIRVANAP_paintC(f_attrib, f_lin, li);
     // TODO REMOVE PAINTC
   }
 }
@@ -454,16 +451,15 @@ void game_colour_message(unsigned char f_row, unsigned char f_col,
                          unsigned char skip) {
   unsigned int entry_time;
 
-  tmp = 1;
+  v0 = 1;
   frame_time = zx_clock();
   entry_time = zx_clock();
-  while (tmp && !game_check_time(&entry_time, f_microsecs)) {
+  while (v0 && !game_check_time(&entry_time, f_microsecs)) {
     if (game_check_time(&frame_time, 5)) {
       // ROTATE ATTRIB ARRAY
       frame_time = zx_clock();
       if (game_over) {
         game_paint_attrib(&attrib_hl, f_col, f_col2, (f_row << 3) + 8);
-        game_highlight_coins();
       } else {
         game_paint_attrib(&attrib_osd, f_col, f_col2, (f_row << 3) + 8);
         game_rotate_attrib_osd();
@@ -471,21 +467,21 @@ void game_colour_message(unsigned char f_row, unsigned char f_col,
     }
     if (skip) {
       while ((joyfunc1)(&k1) != 0)
-        tmp = 0;
+        v0 = 0;
     };
   };
   if (game_over) {
     // Clear Message
-    tmp1 = f_col2 - f_col;
-    for (tmp0 = 0; tmp0 < tmp1; tmp0++) {
-      zx_print_str(f_row, f_col + tmp0, " "); // SPACE
+    v1 = f_col2 - f_col;
+    for (v0 = 0; v0 < v1; v0++) {
+      zx_print_str(f_row, f_col + v0, " "); // SPACE
     }
   } else {
-    tmp1 = f_col2 - f_col;
+    v1 = f_col2 - f_col;
     s_lin0 = f_row << 3;        //* 8; // TODO OPTIMIZE
     s_col1 = (f_col >> 1) << 1; // (x*2)/2
-    for (tmp0 = 0; tmp0 < tmp1; tmp0 = tmp0 + 2) {
-      s_col0 = s_col1 + tmp0;
+    for (v2 = 0; v2 < v1; v2 = v2 + 2) {
+      s_col0 = s_col1 + v2;
       spr_back_repaint();
     }
   }
@@ -499,50 +495,36 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
   }
 }
 
-void game_highlight_coins(void) {
-  if (game_playing) {
-    i = 0;
-    while (i < GAME_MAX_OBJECTS) {
-      if (obj_col[i] > 0) {
-        attrib_key[0] = obj_ink[i] | game_attrib_osd;
-        attrib_key[1] = attrib_key[0];
-        attrib_key[2] = attrib_key[0];
-        attrib_key[3] = attrib_key[0];
-        NIRVANAP_paintC(attrib_key, obj_lin[i], obj_col[i]);
-        ++obj_ink[i];
-        if (obj_ink[i] >= 8) {
-          obj_ink[i] = 0;
+void game_key_paint(void) {
+  unsigned char li;
+
+  if (game_playing && obj_count > 0) {
+    // TODO PERFOMANCE (ASM)
+    li = key_last;
+    while (li < GAME_MAX_OBJECTS) {
+      if (obj_col[li] != 0xFF) {
+
+        NIRVANAP_paintC(key_attrib, obj_lin[li], obj_col[li]);
+
+        key_attrib[0] = map_paper | key_ink;
+        key_attrib[1] = key_attrib[0];
+        key_attrib[2] = key_attrib[0];
+        key_attrib[3] = key_attrib[0];
+
+        ++key_ink;
+        if (key_ink > 6) {
+          key_ink = 3;
         }
-        ++i;
+        key_last = li + 1;
+        break;
       }
+      ++li;
+    }
+
+    if (li >= GAME_MAX_OBJECTS) {
+      key_last = 0;
     }
   }
-
-  /*
-      // TODO PERFOMANCE (ASM)
-      if (last_rotated > obj_count) {
-        last_rotated = 0;
-      }
-
-      for (tmp_uc = last_rotated; tmp_uc < 8; ++tmp_uc) {
-        if (obj_col[tmp_uc] > 0) {
-          last_rotated = tmp_uc + 1;
-          NIRVANAP_paintC(attrib_key, obj_lin[tmp_uc], obj_col[tmp_uc]);
-          if (game_attrib_osd == 7) {
-            game_attrib_osd = 1;
-          }
-          ++game_attrib_osd;
-          attrib_key[0] = map_paper | game_attrib_osd;
-          attrib_key[1] = attrib_key[0];
-          attrib_key[2] = attrib_key[0];
-          attrib_key[3] = attrib_key[0];
-
-          tmp_uc = 8; // Exit loop
-        } else {
-          ++last_rotated;
-        }
-      }
-  */
 }
 
 void game_rotate_attrib_osd(void) {
@@ -551,21 +533,14 @@ void game_rotate_attrib_osd(void) {
     game_attrib_osd = 1;
   }
   ++game_attrib_osd;
-  tmp = attrib_osd[0];
+  v0 = attrib_osd[0];
   attrib_osd[0] = attrib_osd[3];
   attrib_osd[1] = attrib_osd[2];
   attrib_osd[2] = attrib_osd[1];
-  attrib_osd[3] = tmp;
+  attrib_osd[3] = v0;
 }
 
 void game_attribs() {
-
-  // TODO ESTO DEBE QUEDAR EN BANK6
-
-  attrib_key[0] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
-  attrib_key[1] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
-  attrib_key[2] = map_paper | BRIGHT | INK_YELLOW | PAPER_BLACK;
-  attrib_key[3] = map_paper | BRIGHT | INK_RED | PAPER_BLACK;
 
   // ATTRIB NORMAL
   attrib[0] = map_paper | BRIGHT | INK_WHITE;

@@ -54,7 +54,6 @@ void menu_main() {
     c = in_inkey();
     // in_wait_nokey();
 
-    game_highlight_coins();
     s_row = ((6 + menu_curr_sel) << 3) + 8;
     game_paint_attrib(&attrib_hl, s_col + 1, s_col_e, s_row);
     // 48
@@ -144,10 +143,10 @@ void menu_main_print(void) {
 void menu_redefine() {
   intrinsic_halt();
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
-  for (tmp0 = 8; tmp0 < 14; ++tmp0)
-    game_paint_attrib(&attrib, 10, 16, (tmp0 << 3) + 8);
+  for (v0 = 8; v0 < 14; ++v0)
+    game_paint_attrib(&attrib, 10, 16, (v0 << 3) + 8);
 
-  
+
   zx_print_str(10, 10, "LEFT");
   k1.left = menu_define_key();
   zx_print_str(11, 10, "RIGHT");
@@ -164,14 +163,14 @@ unsigned int menu_define_key() {
 
   while (1) {
     in_wait_key();
-    tmp1 = in_inkey();
+    v1 = in_inkey();
     in_wait_nokey();
-    tmp0 = 0;
-    while (tmp0 < 38) {
-      if (tmp1 == key_map[tmp0]) {
-        return scan_map[tmp0];
+    v0 = 0;
+    while (v0 < 38) {
+      if (v1 == key_map[v0]) {
+        return scan_map[v0];
       }
-      ++tmp0;
+      ++v0;
     }
   }
   // return 0;

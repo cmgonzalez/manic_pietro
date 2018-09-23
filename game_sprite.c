@@ -296,7 +296,8 @@ unsigned char spr_move_right(void) {
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
       s_col1 = *f_col + 2;
-      if (s_lin1 % 8 == 0) {
+      //if (s_lin1 % 8 == 0) {
+      if ( (s_lin1 & 2) == 0) {
         v0 = game_check_map(s_lin1, s_col1) ||
              game_check_map(s_lin1 + 8, s_col1);
       } else {
@@ -333,7 +334,8 @@ unsigned char spr_move_left(void) {
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
       s_col1 = *f_col - 1;
-      if (s_lin1 % 8 == 0) {
+      //if (s_lin1 % 8 == 0) {
+      if ( (s_lin1 & 2) == 0) {
         v0 = game_check_map(s_lin1, s_col1) ||
              game_check_map(s_lin1 + 8, s_col1);
       } else {
@@ -537,33 +539,25 @@ void spr_back_repaint(void) {
 
   s_row1 = (s_lin0 >> 3) + 1;
   s_col1 = s_col0;
-  // game_cell_paint();
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
-  // game_cell_paint();
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
-  // game_cell_paint();
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1--;
   s_col1--;
-  // game_cell_paint();
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
-  // TODO PERFORMANCE
-  // if ( (s_lin0 >> 3) != 0 ) {
+  // TODO PERFORMANCE  esto no deberia ser necesaro si estoy sobre plaforma
   s_lin1 = s_lin1 + 8;
   s_row1++;
   index1 = index1 + 32;
-  // game_cell_paint();
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
   index1++;
   s_col1++;
-  // game_cell_paint();
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
-  //}
 }
 
 void spr_init_effects(void) {

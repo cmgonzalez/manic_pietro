@@ -72,7 +72,6 @@ unsigned int last_time[GAME_MAX_SPRITES]; // LAST TIME OF MOVEMENT FOR ANIMATION
 
 unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
 unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
-unsigned char obj_ink[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
 
 unsigned char obj_count;
 
@@ -83,8 +82,10 @@ unsigned char player_coins;
 signed int player_vel_y;
 signed int player_vel_y0;
 signed char player_vel_inc;
-
+unsigned char player_jump_hack;
+unsigned char player_jump_count;
 unsigned char player_jump_top;
+
 // PLAYER ATTRIBUTES
 // Maximun Mana n Vitality
 
@@ -133,12 +134,7 @@ unsigned int index_tmp;
 unsigned int index0;
 unsigned int index1;
 
-unsigned char tmp;
-unsigned char tmp0;
-unsigned char tmp1;
-unsigned char tmp_uc;
 
-signed char tmp_sc;
 unsigned int tmp_ui;
 unsigned char enemies;
 unsigned char zx_val_asm;
@@ -146,7 +142,7 @@ unsigned char attrib[4];
 unsigned char attrib_hl[4];
 unsigned char attrib_osd[4];
 // TILE ATTRIB TODO REMOVE UNUSED
-unsigned char attrib_key[4];
+unsigned char key_attrib[4];
 
 unsigned char *p_state;
 unsigned char *p_state_a;
@@ -160,7 +156,8 @@ unsigned char game_tileset;
 unsigned int curr_time;
 unsigned int frame_time;
 unsigned int anim_time;
-unsigned char last_rotated;
+unsigned char key_last;
+unsigned char key_ink;
 
 unsigned char anim_count;
 
