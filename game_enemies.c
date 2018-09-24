@@ -47,7 +47,6 @@ void enemy_turn(void) {
         spr_paint();
         last_time[sprite] = zx_clock();
       }
-
     }
     ++sprite;
     ++nirv_sprite_index;
@@ -59,8 +58,6 @@ void enemy_turn(void) {
   if (spr_count > NIRV_TOTAL_SPRITES) {
     NIRVANAP_halt();
   }
-
-
 }
 
 void enemy_move(void) {
@@ -198,7 +195,7 @@ void enemy_init() {
   while (f_sprite < GAME_MAX_ENEMIES) {
     if (class[f_sprite] == 0) {
       v0 = 0;
-      while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 5)) {
+      while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 6)) {
 
         if (spr_init[v0] == scr_map[index1]) {
           // Class Found!
@@ -209,12 +206,42 @@ void enemy_init() {
 
           class[sprite] = scr_map[index1];
 
-          spr_tile[sprite] = spr_init[v0 + 1];
-          BIT_SET(state[sprite],spr_init[v0 + 2]);
+          // spr_tile[sprite] = spr_init[v0 + 1];
+          BIT_SET(state[sprite], spr_init[v0 + 2]);
           spr_frames[sprite] = spr_init[v0 + 3];
           spr_kind[sprite] = spr_init[v0 + 4];
-          spr_speed[sprite] = scr_map[index1+1];
 
+          spr_speed[sprite] = scr_map[index1 + 1];
+
+          // Tile paging
+          if (spr_init_tile[class[sprite] - 64] == 0) {
+            // Not paged
+            if (spr_frames[sprite] == 4) {
+              // Standard 4 tiles animation
+              spr_tile[sprite] = game_tile_cnt;
+              if ((spr_init_tile[class[sprite]] & 1) == 0) {
+                spr_init_tile[class[sprite] - 64] = game_tile_cnt;
+                spr_init_tile[class[sprite] - 64 + 1] = game_tile_cnt;
+              } else {
+                spr_init_tile[class[sprite] - 64] = game_tile_cnt;
+                spr_init_tile[class[sprite] - 64 - 1] = game_tile_cnt;
+              }
+
+              game_tile_cnt =
+                  game_copy_tile_std(spr_init[v0 + 1], game_tile_cnt);
+
+            } else {
+              // EUGENE (1 FRAME) TODO 2 FRAMES
+              spr_tile[sprite] = game_tile_cnt;
+              spr_init_tile[class[sprite] - 64] = game_tile_cnt;
+              game_copy_tile(spr_init[v0 + 1], game_tile_cnt,0);
+              ++game_tile_cnt;
+            }
+          } else {
+            // Read Value
+            spr_tile[sprite] = spr_init_tile[class[sprite] - 64];
+          }
+          // End Tile Paging
 
           lin[sprite] = (index1 >> 5) << 3;
           col[sprite] = index1 & 31;
@@ -230,7 +257,7 @@ void enemy_init() {
           break;
         } else {
           // increment
-          v0 = v0 + 5; // Six variables on spr_init
+          v0 = v0 + 5; // N variables on spr_init
         }
       }
       break;

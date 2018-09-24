@@ -142,6 +142,7 @@ unsigned char player_move_jump(void) {
       player_jump_hack) {
     player_jump_hack = 0;
     // Force anim on next loop
+
     last_time[GAME_INDEX_P1] = 0;
     player_vel_y = player_vel_y - game_gravity;
     return 0;

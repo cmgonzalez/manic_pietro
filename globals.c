@@ -181,6 +181,8 @@ unsigned char game_inmune;
 unsigned char game_inf_lives;
 
 unsigned char game_sound;
+unsigned char game_tile_cnt;
+
 unsigned char game_over;
 
 unsigned int game_score_top;
@@ -204,25 +206,27 @@ unsigned char map_paper_last_a;
 
 // Enemy intialization variables, based on index on map array, used along
 // GAME_TOTAL_INDEX_CLASSES.
-const unsigned char spr_init[] = {
-    //SPR INDEX, TILE INDEX, STAT, FRAMES , KIND
-    64, 16, STAT_DIRL, 4, E_HORIZONTAL, // ROBOT
-    65, 16, STAT_DIRR, 4, E_HORIZONTAL,
-    66, 24, STAT_DIRL, 4, E_HORIZONTAL, // PENGUIN
-    67, 24, STAT_DIRR, 4, E_HORIZONTAL,
-    68, 32, STAT_DIRL, 4, E_HORIZONTAL, // CHICKEN
-    69, 32, STAT_DIRR, 4, E_HORIZONTAL,
-    70, 40, STAT_DIRL, 4, E_HORIZONTAL, // FOCA
-    71, 40, STAT_DIRR, 4, E_HORIZONTAL,
-    72, 48, STAT_DIRL, 4, E_HORIZONTAL, // WATER LEFT
-    73, 48, STAT_DIRR, 4, E_HORIZONTAL, // WATER RIGHT
-    74, 56, STAT_FALL, 1, E_VERTICAL,   //EUGENE DOWN
-    75, 56, STAT_JUMP, 1, E_VERTICAL,   //EUGENE UP
-    76, 57, STAT_DIRL, 4, E_HORIZONTAL, // PAC LEFT
-    77, 57, STAT_DIRR, 4, E_HORIZONTAL, // PAC RIGHT
-    78, 65, STAT_DIRL, 4, E_HORIZONTAL, // KANGOROO LEFT
-    79, 65, STAT_DIRR, 4, E_HORIZONTAL, // KANGOROO RIGHT
+unsigned char const spr_init[] = {
+    //SPR INDEX, TILE INDEX, STAT, FRAMES , KIND, INITED
+    64, 44, STAT_DIRL, 4, E_HORIZONTAL, // ROBOT
+    65, 44, STAT_DIRR, 4, E_HORIZONTAL,
+    66, 48, STAT_DIRL, 4, E_HORIZONTAL,  // PENGUIN
+    67, 48, STAT_DIRR, 4, E_HORIZONTAL,
+    68, 52, STAT_DIRL, 4, E_HORIZONTAL,  // CHICKEN
+    69, 52, STAT_DIRR, 4, E_HORIZONTAL,
+    70, 56, STAT_DIRL, 4, E_HORIZONTAL,  // FOCA
+    71, 56, STAT_DIRR, 4, E_HORIZONTAL,
+    72, 60, STAT_DIRL, 4, E_HORIZONTAL,  // WATER LEFT
+    73, 60, STAT_DIRR, 4, E_HORIZONTAL,  // WATER RIGHT
+    74,148, STAT_FALL, 1, E_VERTICAL,    //EUGENE DOWN
+    75,148, STAT_JUMP, 1, E_VERTICAL,    //EUGENE UP
+    76, 64, STAT_DIRL, 4, E_HORIZONTAL,  // PAC LEFT
+    77, 64, STAT_DIRR, 4, E_HORIZONTAL,  // PAC RIGHT
+    78, 68, STAT_DIRL, 4, E_HORIZONTAL,  // KANGOROO LEFT
+    79, 68, STAT_DIRR, 4, E_HORIZONTAL,  // KANGOROO RIGHT
 };
+
+unsigned char spr_init_tile[GAME_TOTAL_CLASSES];
 
 unsigned char spr_tile[GAME_MAX_SPRITES];
 unsigned char spr_speed[GAME_MAX_SPRITES];

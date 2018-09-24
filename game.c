@@ -57,7 +57,7 @@ void main(void) {
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
   game_gravity = 98;    // GAME_GRAVITY;
-  player_vel_y0 = -690; // GAME_VELOCITY;
+  player_vel_y0 = -(98*7); // GAME_VELOCITY;
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
@@ -120,26 +120,6 @@ void main(void) {
   }
 }
 
-void test_proc() {
-
-
-}
+void test_proc() {}
 
 unsigned char test_func() { return 0; }
-
-void game_copy_tile() {
-  // copy a btile from upper memory to first 48
-  unsigned char btile[48];
-  unsigned char i;
-
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-  IO_7FFD = 0x10 + 6;
-  i = 0;
-  while (i < 48) {
-    btile[i] = btile[i];
-    ++i;
-  }
-  // Page in BANK 00
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-  IO_7FFD = 0x10 + 0;
-}

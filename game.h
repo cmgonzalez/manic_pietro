@@ -24,5 +24,4 @@
 void  test_proc();
 unsigned char  test_func();
 
-
 #endif

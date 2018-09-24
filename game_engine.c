@@ -349,6 +349,15 @@ void game_round_init(void) {
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
   }
+  //Read Tiles from bank 3
+
+  //Page Player from bank 3
+  v0 = 0;
+  while (v0 < GAME_TOTAL_INDEX_CLASSES) {
+    spr_init_tile[v0] = 0;
+    ++v0;
+  }
+  game_tile_cnt = game_copy_tile_std(40,8);
 
   // Coin HIGHLIGHT init
   key_last = 0;
@@ -377,12 +386,10 @@ void game_round_init(void) {
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
   spr_init_effects();
   ay_reset();
-  game_page_map();
-  spr_btile_paint_back();
-
   game_paint_attrib(&attrib_osd, 0, 32, 144);
-
+  game_page_map();
   game_draw_map();
+  spr_btile_paint_back();
 
   game_song_play_start = 0;
 
@@ -870,4 +877,78 @@ void game_flash_exit(unsigned char f_attrib) {
     ++i;
     ++li;
   }
+}
+
+unsigned char game_copy_tile_std(unsigned char f_hi_tile, unsigned char f_low_tile) {
+
+  game_copy_tile(f_hi_tile + 0, f_low_tile + 0, 0);
+  game_copy_tile(f_hi_tile + 1, f_low_tile + 1, 0);
+  game_copy_tile(f_hi_tile + 2, f_low_tile + 2, 0);
+  game_copy_tile(f_hi_tile + 3, f_low_tile + 3, 0);
+
+  game_copy_tile(f_hi_tile + 3, f_low_tile + 4, 1);
+  game_copy_tile(f_hi_tile + 2, f_low_tile + 5, 1);
+  game_copy_tile(f_hi_tile + 1, f_low_tile + 6, 1);
+  game_copy_tile(f_hi_tile + 0, f_low_tile + 7, 1);
+  return f_low_tile + 8;
+
+}
+
+void game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile,
+                    unsigned char f_flip) {
+  // copy a btile from bank3
+  unsigned char btile[48];
+  unsigned int li;
+  unsigned char i;
+
+  // Page a Tile
+  intrinsic_di();
+  GLOBAL_ZX_PORT_7FFD = 0x10 + 3;
+  IO_7FFD = 0x10 + 3;
+
+  li = (48 * f_hi_tile);
+  i = 0;
+  while (i < 48) {
+    btile[i] = hibtiles[li];
+    ++i;
+    ++li;
+  }
+  // Page in BANK 00
+  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
+  IO_7FFD = 0x10 + 0;
+  intrinsic_ei();
+  // Write Local
+  li = (48 * f_low_tile);
+  i = 0;
+  while (i < 48) {
+    if (f_flip) {
+      if (i < 32) {
+        if ((i & 1) == 0) {
+          btiles[li] = reverse(btile[i+1]);
+        } else {
+          btiles[li] = reverse(btile[i-1]);
+        }
+
+      } else {
+        if ( i < 40) {
+          btiles[li] = btile[i+8];
+        } else {
+          btiles[li] = btile[i-8];
+        }
+      }
+
+    } else {
+      btiles[li] = btile[i];
+    }
+
+    ++i;
+    ++li;
+  }
+}
+
+unsigned char reverse(unsigned char b) {
+  b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+  b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+  b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+  return b;
 }

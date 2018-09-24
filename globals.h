@@ -340,6 +340,7 @@ extern unsigned char sprite_curr_index;
 extern unsigned char game_inmune;
 extern unsigned char game_inf_lives;
 extern unsigned char game_sound;
+extern unsigned char game_tile_cnt;
 
 extern unsigned char game_over;
 extern unsigned char player_lives;
@@ -349,7 +350,8 @@ extern unsigned char game_start_scr;
 
 
 extern unsigned char screen_paper, screen_ink;
-extern const unsigned char spr_init[];
+extern unsigned char const spr_init[];
+extern unsigned char spr_init_tile[];
 
 extern unsigned char spr_tile[];
 extern unsigned char spr_speed[];
