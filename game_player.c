@@ -44,6 +44,8 @@ void player_init(unsigned char f_lin, unsigned char f_col,
   player_vel_y = 0;
   colint[GAME_INDEX_P1] = 0;
   spr_frames[GAME_INDEX_P1] = 4;
+  p_state = &state[GAME_INDEX_P1];
+  p_state_a = &state_a[GAME_INDEX_P1];
 
   // PLAYER ONLY VARIABLES
   if (f_col < 16) {
@@ -87,8 +89,7 @@ void player_turn(void) {
     p_state = &state[GAME_INDEX_P1];
     p_state_a = &state_a[GAME_INDEX_P1];
 
-    // TODO POINTERS lin y col ARRAYS
-
+    // TODO PERF POINTERS lin y col ARRAYS
     s_lin0 = lin[GAME_INDEX_P1];
     s_col0 = col[GAME_INDEX_P1];
     s_tile0 = tile[GAME_INDEX_P1];
@@ -97,13 +98,11 @@ void player_turn(void) {
     player_collision();
     if (player_killed && game_debug) {
       player_killed = 0;
-      zx_border(INK_WHITE);
-      z80_delay_ms(25);
+      zx_border(INK_BLACK);
     }
     if (player_killed) {
       player_killed = 0;
-        player_lost_life();
-
+      player_lost_life();
     }
     // Level UP
     if (obj_count == 0xFF && col[GAME_INDEX_P1] == game_exit_col &&
@@ -118,7 +117,6 @@ unsigned char player_move(void) {
 
   if (BIT_CHK(*p_state, STAT_JUMP) || BIT_CHK(*p_state, STAT_FALL)) {
     // Jump Handling
-    spr_move_horizontal();
     player_move_jump();
 
   } else {
@@ -137,7 +135,9 @@ unsigned char player_move_jump(void) {
   player_vel_y = player_vel_y + game_gravity;
 
   // JUMP HACK! TO BE LIKE REAL MMINER WE JUST INSERT HORIZONTAL EXTRA MOVEMENT
-  if ((player_jump_count == 2 || player_jump_count == 10 ||
+  // jump_count 0=>16
+  if ((player_jump_count == 2 || player_jump_count == 4 ||
+       player_jump_count == 10 || player_jump_count == 12 ||
        player_jump_count == 14) &&
       player_jump_hack) {
     player_jump_hack = 0;
@@ -145,6 +145,7 @@ unsigned char player_move_jump(void) {
 
     last_time[GAME_INDEX_P1] = 0;
     player_vel_y = player_vel_y - game_gravity;
+    spr_move_horizontal();
     return 0;
   }
   player_jump_hack = 1;
@@ -183,9 +184,9 @@ unsigned char player_move_jump(void) {
     // Falling
     v0 = player_get_floor();
 
-    if ((s_lin1 > GAME_LIN_FLOOR - 24) || // Out of screen
-        s_lin1 >= v0 &&                   // Have floor
-            v0 >= s_lin0                  // Is below
+    if ((s_lin1 >= 120) || // Out of screen
+        s_lin1 >= v0 &&    // Curr floor
+            v0 >= s_lin0   // Is below
     ) {
 
       if ((s_lin1 - player_jump_top) > 48) {
@@ -202,7 +203,7 @@ unsigned char player_move_jump(void) {
     spr_set_down();
     lin[GAME_INDEX_P1] = s_lin1;
   }
-
+  spr_move_horizontal();
   return 1;
 }
 
@@ -298,7 +299,7 @@ unsigned char player_move_walk(void) {
     player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
-      spr_move_horizontal();
+      // spr_move_horizontal();
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
@@ -315,11 +316,11 @@ unsigned char player_move_walk(void) {
       BIT_CLR(*p_state, STAT_DIRR);
     }
 
-
-
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
       BIT_SET(*p_state, STAT_FALL);
+      BIT_CLR(*p_state, STAT_DIRL);
+      BIT_CLR(*p_state, STAT_DIRR);
     }
 
     if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
@@ -394,8 +395,10 @@ unsigned char player_get_floor() {
 
   i = 0;
   while (i < 16) {
+
     v0 = scr_map[index1];
     v1 = scr_map[index1 + 1];
+
     if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
          v0 == TILE_DEADLY2 || v0 >= TILE_EXIT0) &&
         (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY1 ||
@@ -509,12 +512,25 @@ unsigned char player_check_floor(unsigned char f_inc) {
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1] + f_inc);
 
-  v0 = scr_map[index1];
 
+  //HACK CRUMB
+    if (f_inc == 0 && colint[GAME_INDEX_P1] == 3) {
+      v0 = TILE_EMPTY;
+    } else {
+      v0 = scr_map[index1];
+    }
+    if (f_inc == 1 && colint[GAME_INDEX_P1] == 0) {
+      v0 = TILE_EMPTY;
+    } else {
+      v0 = scr_map[index1];
+    }
+  //END HACK
+  v0 = scr_map[index1];
   if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
       v0 == TILE_DEADLY2) {
     return 1;
   }
+
 
   if (v0 == TILE_CRUMB0 ||
       (v0 >= TILE_CRUMB1 && v0 <= TILE_CRUMB3)) { // TODO CAUTION!

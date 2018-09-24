@@ -18,10 +18,11 @@ CFLAGS = -SO3 --max-allocs-per-node1000 --opt-code-size
 .PHONY: depend clean
 
 default: loader.tap game_scr.bin game.font $(OUT)
-	touch game.c
-	-ls -l *.bin
-	-rm -f *.bin *.tap *.font *.zx7 game zcc_proj.lst zcc_opt.def
-	grep code_compiler_size game.map
+	@touch game.c
+	@-ls -lh *.bin
+	@find . -type f -name '*.bin' -exec du -ch {} + | grep total$
+	@-rm -f *.bin *.tap *.font *.zx7 game zcc_proj.lst zcc_opt.def
+	@grep code_compiler_size game.map
 
 zx7: loader.tap game_scr.bin game.font $(OUTC)
 	-ls -l *.bin
@@ -34,7 +35,7 @@ sna: game_scr.bin game_scr.asm game.font $(OUTS)
 	grep code_compiler_size game.map
 
 loader.tap: src_tap/loader.bas
-	src_tap/bas2tap -sMPietro -a10 src_tap/loader.bas loader.tap
+	src_tap/bas2tap -sMPietro -a10 src_tap/loader.bas loader.tap >> /dev/null
 
 game_scr.bin: src_tap/game_scr.bin
 	cp src_tap/game_scr.bin game_scr.bin

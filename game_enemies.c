@@ -43,6 +43,7 @@ void enemy_turn(void) {
         s_tile0 = tile[sprite];
         p_state = &state[sprite];
         p_state_a = &state_a[sprite];
+
         enemy_move();
         spr_paint();
         last_time[sprite] = zx_clock();
@@ -106,18 +107,21 @@ void enemy_static() {
 
 void enemy_horizontal() {
   if (BIT_CHK(*p_state, STAT_DIRR)) {
+
     spr_move_right_f();
-    if (col[sprite] == value_b[sprite] && colint[sprite] == 3 ||
+    if ((col[sprite] >= value_b[sprite] && colint[sprite] == 3) ||
         col[sprite] > 30) { // HACK spr_frames[sprite] - 1
       spr_set_left();
       state[sprite] = *p_state;
       tile[sprite] = spr_get_tile(&sprite);
     }
   } else {
+
     spr_move_left_f();
-    if (col[sprite] == value_a[sprite] && colint[sprite] == 0 ||
+    if ((col[sprite] <= value_a[sprite] && colint[sprite] == 0) ||
         col[sprite] <= 1) {
       spr_set_right();
+
       state[sprite] = *p_state;
       tile[sprite] = spr_get_tile(&sprite);
     }
@@ -147,46 +151,6 @@ void enemy_kill(unsigned char f_sprite) __z88dk_fastcall {
   spr_destroy(f_sprite);
 }
 
-void enemy_avoid_fall() {
-
-  /* Don't fall on edge*/
-  if (BIT_CHK(*p_state, STAT_DIRR)) {
-    index1 = spr_calc_index(lin[sprite] + GAME_OFFSET_Y, col[sprite] + 2);
-  } else {
-    index1 = spr_calc_index(lin[sprite] + GAME_OFFSET_Y, col[sprite] - 2);
-  }
-  if (scr_map[index1] < TILE_FLOOR) {
-    spr_turn_horizontal();
-  }
-}
-
-unsigned char enemy_avoid_dead() {
-
-  index1 = spr_calc_index(lin[sprite], col[sprite]);
-  if (BIT_CHK(*p_state, STAT_DIRR)) {
-    index1++;
-  } else {
-    index1--;
-  }
-
-  /* Don't fall on edge*/
-  v0 = scr_map[index1];
-  if (v0 > TILE_ITEM_E && v0 < TILE_FLOOR) {
-    spr_turn_horizontal();
-    return 1;
-  }
-
-  /* Don't hit on Deadly*/
-  index1 = index1 + 16;
-  v0 = scr_map[index1];
-  if (v0 > TILE_ITEM_E && v0 < TILE_FLOOR) {
-    spr_turn_horizontal();
-    return 1;
-  }
-
-  return 0;
-}
-
 void enemy_init() {
   unsigned char f_sprite;
 
@@ -206,25 +170,32 @@ void enemy_init() {
 
           class[sprite] = scr_map[index1];
 
-          // spr_tile[sprite] = spr_init[v0 + 1];
-          BIT_SET(state[sprite], spr_init[v0 + 2]);
+          p_state = &state[sprite];
+          p_state_a = &state_a[sprite];
+          v1 = spr_init[v0 + 2];
+          BIT_SET(*p_state, v1);
+          if (v1 == STAT_DIRL) {
+            colint[sprite] = 3;
+          }
+
           spr_frames[sprite] = spr_init[v0 + 3];
           spr_kind[sprite] = spr_init[v0 + 4];
 
           spr_speed[sprite] = scr_map[index1 + 1];
 
           // Tile paging
-          if (spr_init_tile[class[sprite] - 64] == 0) {
+          v1 = class[sprite] - 64;
+          if (spr_init_tile[v1] == 0) {
             // Not paged
             if (spr_frames[sprite] == 4) {
               // Standard 4 tiles animation
               spr_tile[sprite] = game_tile_cnt;
-              if ((spr_init_tile[class[sprite]] & 1) == 0) {
-                spr_init_tile[class[sprite] - 64] = game_tile_cnt;
-                spr_init_tile[class[sprite] - 64 + 1] = game_tile_cnt;
+              if ((spr_init_tile[v1] & 1) == 0) {
+                spr_init_tile[v1] = game_tile_cnt;
+                spr_init_tile[v1 + 1] = game_tile_cnt;
               } else {
-                spr_init_tile[class[sprite] - 64] = game_tile_cnt;
-                spr_init_tile[class[sprite] - 64 - 1] = game_tile_cnt;
+                spr_init_tile[v1] = game_tile_cnt;
+                spr_init_tile[v1 - 1] = game_tile_cnt;
               }
 
               game_tile_cnt =
@@ -232,28 +203,31 @@ void enemy_init() {
 
             } else {
               // EUGENE (1 FRAME) TODO 2 FRAMES
+              i = 0;
               spr_tile[sprite] = game_tile_cnt;
-              spr_init_tile[class[sprite] - 64] = game_tile_cnt;
-              game_copy_tile(spr_init[v0 + 1], game_tile_cnt,0);
-              ++game_tile_cnt;
+              spr_init_tile[v1] = game_tile_cnt;
+              while (i < spr_frames[sprite]) {
+                game_copy_tile(spr_init[v0 + 1], game_tile_cnt, 0);
+                ++game_tile_cnt;
+                ++i;
+              }
             }
           } else {
             // Read Value
-            spr_tile[sprite] = spr_init_tile[class[sprite] - 64];
+            spr_tile[sprite] = spr_init_tile[v1];
           }
           // End Tile Paging
 
           lin[sprite] = (index1 >> 5) << 3;
           col[sprite] = index1 & 31;
 
-          p_state = &state[sprite];
-          p_state_a = &state_a[sprite];
-
           tile[sprite] = spr_get_tile(&sprite);
 
           ++spr_count;
+
           spr_timer[sprite] = zx_clock();
           last_time[sprite] = 0;
+          
           break;
         } else {
           // increment
