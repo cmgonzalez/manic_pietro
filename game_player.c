@@ -329,6 +329,7 @@ unsigned char player_move_walk(void) {
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
       // spr_move_horizontal();
+      player_jump_top = lin[GAME_INDEX_P1];
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
@@ -347,6 +348,7 @@ unsigned char player_move_walk(void) {
 
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
+      player_jump_top = lin[GAME_INDEX_P1];
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);

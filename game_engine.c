@@ -69,9 +69,9 @@ void game_loop(void) {
       }
       if ((loop_count & 15) == 0) {
         if (game_conveyor_col0 > 0) {
-          NIRVANAP_spriteT(6, 79, game_exit_lin, game_exit_col);
           game_anim_conveyor();
         }
+        NIRVANAP_spriteT(6, 79, game_exit_lin, game_exit_col);
       }
       //Each second aprox - update fps/score/phase left/phase advance
       if (game_check_time(&frame_time, TIME_EVENT)) {
@@ -349,6 +349,10 @@ void game_round_init(void) {
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
   }
+  for (i = 0; i < GAME_TOTAL_CLASSES; i++) {
+    spr_init_tile[i] = 0;
+  }
+
   NIRVANAP_halt();
   spr_clear_scr();
   // Read Tiles from bank 3
@@ -381,6 +385,8 @@ void game_round_init(void) {
   zx_print_ink(INK_YELLOW);
 
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
+  zx_print_str(21, 0, "DEMO PARA NUESTRO LIDER SUPREMO!");
+  zx_print_str(22, 0, "   EL SPECTRUMERO JAVI ORTIZ    ");
   ay_reset();
   game_paint_attrib(&attrib_osd, 0, 32, 144);
 
