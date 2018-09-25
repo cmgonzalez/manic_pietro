@@ -214,7 +214,7 @@ void enemy_init() {
               spr_tile[sprite] = game_tile_cnt;
               spr_init_tile[v1] = game_tile_cnt;
               while (i < spr_frames[sprite]) {
-                game_copy_tile(spr_init[v0 + 1], game_tile_cnt, 0);
+                game_copy_tile(spr_init[v0 + 1] + i, game_tile_cnt, 0);
                 ++game_tile_cnt;
                 ++i;
               }

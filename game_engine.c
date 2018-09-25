@@ -69,6 +69,7 @@ void game_loop(void) {
       }
       if ((loop_count & 15) == 0) {
         if (game_conveyor_col0 > 0) {
+          NIRVANAP_spriteT(6, 79, game_exit_lin, game_exit_col);
           game_anim_conveyor();
         }
       }
@@ -78,7 +79,7 @@ void game_loop(void) {
         // intrinsic_halt();
         if (game_fps_show)
           game_fps();
-        NIRVANAP_spriteT(6, 79, game_exit_lin, game_exit_col);
+
       }
 
       ++loop_count;
@@ -110,7 +111,8 @@ void game_draw_map(void) {
   intrinsic_halt();
   zx_print_ink(INK_WHITE); // For Debug
   v0 = 0;
-  while (v0 < GAME_INDEX_P1) { // TODO SINGLE CLEAR FUNC
+  while (v0 < GAME_INDEX_P1) {
+    // TODO SINGLE CLEAR FUNC
     // Clear enemies related tables
     class[v0] = 0;
     ++v0;
@@ -332,7 +334,7 @@ void game_round_init(void) {
   };
   unsigned const char map_lens[] = {
       14, 13, 9,  26, 13, 16, 7,  32, 17, 19,
-      12, 13, 21, 19, 32, 30, 17, 18, 9,  20,
+      31, 12, 13, 21, 19, 30, 17, 18, 8,  20,
   };
 
   /* screen init */

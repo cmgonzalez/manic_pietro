@@ -44,7 +44,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 9; //La Ultima Ctm!
+  scr_curr = 7; //La Ultima Ctm!
   nirv_sprite_index = 0;
 
   game_song_play = 1;
