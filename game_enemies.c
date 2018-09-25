@@ -130,6 +130,11 @@ void enemy_horizontal() {
 
 void enemy_vertical() {
 
+  ++colint[sprite];
+  if (colint[sprite] == spr_frames[sprite]) {
+    colint[sprite] = 0;
+  }
+
   if (BIT_CHK(*p_state, STAT_JUMP)) {
     spr_move_up_f();
     if (lin[sprite] == value_a[sprite] || lin[sprite] > GAME_LIN_FLOOR) {
@@ -141,6 +146,7 @@ void enemy_vertical() {
       spr_set_up();
     }
   }
+
 }
 
 void enemy_walk(void) {}
@@ -159,8 +165,8 @@ void enemy_init() {
   while (f_sprite < GAME_MAX_ENEMIES) {
     if (class[f_sprite] == 0) {
       v0 = 0;
-      while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 6)) {
-
+      while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 8)) {
+        //TODO DANGEROUS
         if (spr_init[v0] == scr_map[index1]) {
           // Class Found!
           sprite = f_sprite;
@@ -182,6 +188,7 @@ void enemy_init() {
           spr_kind[sprite] = spr_init[v0 + 4];
 
           spr_speed[sprite] = scr_map[index1 + 1];
+
 
           // Tile paging
           v1 = class[sprite] - 64;
@@ -227,7 +234,7 @@ void enemy_init() {
 
           spr_timer[sprite] = zx_clock();
           last_time[sprite] = 0;
-          
+
           break;
         } else {
           // increment

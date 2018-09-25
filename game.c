@@ -44,7 +44,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0;
+  scr_curr = 9; //La Ultima Ctm!
   nirv_sprite_index = 0;
 
   game_song_play = 1;
@@ -56,8 +56,8 @@ void main(void) {
   // ENABLE SOUND BASED ON DETECTED MODEL
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
-  game_gravity = 100;    // GAME_GRAVITY;
-  player_vel_y0 = -(game_gravity*6); // GAME_VELOCITY;
+  game_gravity = 100;                  // GAME_GRAVITY;
+  player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
@@ -77,6 +77,8 @@ void main(void) {
     for (counter = 31416; !in_test_key(); counter += 10061)
       ;
     srand(counter);
+  } else {
+    srand(0);
   }
   // Clear Screen and init Nirvana
   game_cls();

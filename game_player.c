@@ -83,8 +83,15 @@ void player_turn(void) {
         scr_curr = 0;
       }
     }
+
+    if (c == 51) {
+      game_inmune = !game_inmune;
+      zx_border(INK_GREEN);
+      z80_delay_ms(250);
+    }
     // zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
     dirs = (joyfunc1)(&k1);
+
     /* Player initial Values */
     p_state = &state[GAME_INDEX_P1];
     p_state_a = &state_a[GAME_INDEX_P1];
@@ -94,9 +101,15 @@ void player_turn(void) {
     s_col0 = col[GAME_INDEX_P1];
     s_tile0 = tile[GAME_INDEX_P1];
     s_class = 0;
+    // Key Lock
+    if (dirs == 0) {
+      // Release the Lock
+      BIT_CLR(*p_state_a, STAT_LOCK);
+    }
+
     player_move();
     player_collision();
-    if (player_killed && game_debug) {
+    if (player_killed && game_inmune) {
       player_killed = 0;
       zx_border(INK_BLACK);
     }
@@ -133,23 +146,33 @@ unsigned char player_move_jump(void) {
   signed int val_yc;
   ++player_jump_count;
   player_vel_y = player_vel_y + game_gravity;
-
-  // JUMP HACK! TO BE LIKE REAL MMINER WE JUST INSERT HORIZONTAL EXTRA MOVEMENT
-  // jump_count 0=>16
-  if ((player_jump_count == 2 || player_jump_count == 4 ||
-       player_jump_count == 10 || player_jump_count == 12 ||
-       player_jump_count == 14) &&
-      player_jump_hack) {
-    player_jump_hack = 0;
-    // Force anim on next loop
-
-    last_time[GAME_INDEX_P1] = 0;
-    player_vel_y = player_vel_y - game_gravity;
-    spr_move_horizontal();
-    return 0;
+  // END JUMP HORIZONTAL MOVEMENT
+  if (player_jump_count == 17) {
+    BIT_CLR(*p_state, STAT_DIRL);
+    BIT_CLR(*p_state, STAT_DIRR);
   }
-  player_jump_hack = 1;
 
+  // JUMP HACK! TO BE LIKE REAL MMINER WE JUST INSERT HORIZONTAL EXTRA
+  // MOVEMENT jump_count 0=>16
+  if (BIT_CHK(*p_state, STAT_DIRL) || BIT_CHK(*p_state, STAT_DIRR))
+     {
+
+      if ((player_jump_count == 3 || player_jump_count == 6 ||
+           player_jump_count == 9 || player_jump_count == 12 ||
+           player_jump_count == 15) &&
+          player_jump_hack) {
+        player_jump_hack = 0;
+        // Force anim on next loop
+
+        player_vel_y = player_vel_y - game_gravity;
+        spr_move_horizontal();
+        last_time[GAME_INDEX_P1] = 0;
+        z80_delay_ms(2);
+        return 0;
+      }
+      player_jump_hack = 1;
+    }
+  // END JUMP HACK
   // CONVER TO PIXEL'S
   val_yc = player_vel_y / 100;
 
@@ -198,6 +221,7 @@ unsigned char player_move_jump(void) {
       player_vel_y = 0;
       BIT_CLR(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_JUMP);
+      BIT_CLR(*p_state, STAT_CONVEYOR);
       return 0;
     }
     spr_set_down();
@@ -222,6 +246,8 @@ unsigned char player_move_walk(void) {
         audio_salto();
         spr_set_up();
         player_vel_y = player_vel_y0;
+        // Set the Lock
+        BIT_SET(*p_state_a, STAT_LOCK);
 
         BIT_CLR(*p_state, STAT_DIRL);
         BIT_CLR(*p_state, STAT_DIRR);
@@ -275,12 +301,15 @@ unsigned char player_move_walk(void) {
 
       // CONVEYOR DETECTION
       BIT_CLR(*p_state, STAT_CONVEYOR);
-      index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
-      if (scr_map[index1] == TILE_CONVEYOR ||
-          scr_map[index1 + 1] == TILE_CONVEYOR) {
-        zx_border(INK_CYAN);
-        BIT_SET(*p_state, STAT_CONVEYOR);
+      if (!BIT_CHK(*p_state_a, STAT_LOCK)) {
+        index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
+        if (scr_map[index1] == TILE_CONVEYOR ||
+            scr_map[index1 + 1] == TILE_CONVEYOR) {
+          zx_border(INK_CYAN);
+          BIT_SET(*p_state, STAT_CONVEYOR);
+        }
       }
+
 
       /* Move Right */
       if (dirs & IN_STICK_RIGHT) {
@@ -399,10 +428,11 @@ unsigned char player_get_floor() {
     v0 = scr_map[index1];
     v1 = scr_map[index1 + 1];
 
+
     if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
-         v0 == TILE_DEADLY2 || v0 >= TILE_EXIT0) &&
+         v0 == TILE_DEADLY2  || v0 >= TILE_EXIT0) &&
         (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY1 ||
-         v1 == TILE_DEADLY2 || v1 >= TILE_EXIT0)) {
+         v1 == TILE_DEADLY2  || v1 >= TILE_EXIT0)) {
       index1 = index1 + 32;
       ++i;
     } else {
@@ -512,25 +542,26 @@ unsigned char player_check_floor(unsigned char f_inc) {
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1] + f_inc);
 
-
-  //HACK CRUMB
-    if (f_inc == 0 && colint[GAME_INDEX_P1] == 3) {
-      v0 = TILE_EMPTY;
-    } else {
-      v0 = scr_map[index1];
-    }
-    if (f_inc == 1 && colint[GAME_INDEX_P1] == 0) {
-      v0 = TILE_EMPTY;
-    } else {
-      v0 = scr_map[index1];
-    }
-  //END HACK
   v0 = scr_map[index1];
+
+
+  // HACK CRUMB
+  if (f_inc == 0 && colint[GAME_INDEX_P1] == 3) {
+    v0 = TILE_EMPTY;
+  } else {
+    v0 = scr_map[index1];
+  }
+  if (f_inc == 1 && colint[GAME_INDEX_P1] == 0) {
+    v0 = TILE_EMPTY;
+  } else {
+    v0 = scr_map[index1];
+  }
+  // END HACK
+
   if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
-      v0 == TILE_DEADLY2) {
+      v0 == TILE_DEADLY2 || v0 == TILE_EXIT0 || v0 == TILE_EXIT1) {
     return 1;
   }
-
 
   if (v0 == TILE_CRUMB0 ||
       (v0 >= TILE_CRUMB1 && v0 <= TILE_CRUMB3)) { // TODO CAUTION!
@@ -589,7 +620,6 @@ void player_lost_life() {
   // z80_delay_ms(600);
   s_lin0 = lin[GAME_INDEX_P1];
   s_col0 = col[GAME_INDEX_P1];
-  spr_init_effects();
 
   // Player lost life
   if (!game_inf_lives) {

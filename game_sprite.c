@@ -67,11 +67,10 @@ void spr_set_right() {
   BIT_SET(*p_state, STAT_DIRR);
 }
 
-
 unsigned char spr_move_up_f(void) {
 
   if (lin[sprite] != 0) {
-    lin[sprite] =  lin[sprite] - SPRITE_LIN_INC;
+    lin[sprite] = lin[sprite] - SPRITE_LIN_INC;
   }
   return 0;
 }
@@ -79,7 +78,7 @@ unsigned char spr_move_up_f(void) {
 unsigned char spr_move_down_f(void) {
 
   if (lin[sprite] <= GAME_LIN_FLOOR) {
-    lin[sprite] =  lin[sprite] + SPRITE_LIN_INC;
+    lin[sprite] = lin[sprite] + SPRITE_LIN_INC;
   }
   return 0;
 }
@@ -119,9 +118,7 @@ unsigned char spr_move_up(void) {
   }
 }
 
-
-void spr_draw8(unsigned char f_spr8, unsigned char f_lin,
-                       unsigned char f_col) {
+void spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col) {
 
   /*
      A quick note about the "btile" format:
@@ -162,18 +159,14 @@ void spr_draw8(unsigned char f_spr8, unsigned char f_lin,
 
   if (f_spr8 < 16) {
     // si es mayor que 16 puedo sacar los graficos de la segunda linea
-    f_spr16 =
-        f_spr8 >>
-        1;
-    //f_spr8 = f_spr8 % 2;
+    f_spr16 = f_spr8 >> 1;
+    // f_spr8 = f_spr8 % 2;
     f_spr8 = f_spr8 & 1;
   } else {
     // si es mayor que 16 puedo sacar los graficos de la segunda linea
     f_spr8 = f_spr8 - 16;
-    f_spr16 =
-        f_spr8 >>
-        1;
-    //f_spr8 = 2 + (f_spr8 % 2);
+    f_spr16 = f_spr8 >> 1;
+    // f_spr8 = 2 + (f_spr8 % 2);
     f_spr8 = 2 + (f_spr8 & 1);
   }
 
@@ -217,7 +210,6 @@ void spr_draw8(unsigned char f_spr8, unsigned char f_lin,
     ++f_lin;
   }
 }
-
 
 unsigned char spr_move_down(void) {
   unsigned char f_check;
@@ -298,8 +290,8 @@ unsigned char spr_move_right(void) {
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
       s_col1 = *f_col + 2;
-      //if (s_lin1 % 8 == 0) {
-      if ( (s_lin1 & 2) == 0) {
+      // if (s_lin1 % 8 == 0) {
+      if ((s_lin1 & 2) == 0) {
         v0 = game_check_map(s_lin1, s_col1) ||
              game_check_map(s_lin1 + 8, s_col1);
       } else {
@@ -336,8 +328,8 @@ unsigned char spr_move_left(void) {
     s_lin1 = lin[sprite];
     if (*f_col < 31) {
       s_col1 = *f_col - 1;
-      //if (s_lin1 % 8 == 0) {
-      if ( (s_lin1 & 2) == 0) {
+      // if (s_lin1 % 8 == 0) {
+      if ((s_lin1 & 2) == 0) {
         v0 = game_check_map(s_lin1, s_col1) ||
              game_check_map(s_lin1 + 8, s_col1);
       } else {
@@ -450,13 +442,13 @@ unsigned char spr_paint_player(void) {
     /* Column or lin Movement */
     s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
 
-    // if (BIT_CHK(*p_state, STAT_ONEXIT)) {
-    // PLAYER BACK DOOR
+    //if (BIT_CHK(*p_state, STAT_ONEXIT)) {
+    //  // HACK PLAYER BACK DOOR
     //  NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, 0, 0);
     //  NIRVANAP_spriteT(0, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     //  NIRVANAP_spriteT(1, 79, game_exit_lin, game_exit_col);
     //} else {
-    NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+      NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     //}
 
     spr_back_repaint();
@@ -483,7 +475,8 @@ unsigned char spr_paint(void) {
     s_tile1 = tile[sprite] + colint[sprite];
 
     NIRVANAP_fillT(map_paper_clr, s_lin0 + GAME_OFFSET_Y, s_col0);
-    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + GAME_OFFSET_Y,
+                     s_col1);
 
     return 1;
   } else {
@@ -560,14 +553,6 @@ void spr_back_repaint(void) {
   index1++;
   s_col1++;
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
-}
-
-void spr_init_effects(void) {
-  unsigned char f_anim;
-  for (f_anim = 0; f_anim <= GAME_INDEX_P1; f_anim++) {
-    anim_lin[f_anim] = 0xFF;
-  }
-  anim_count = 0;
 }
 
 void spr_add_anim(unsigned char f_lin, unsigned char f_col,
@@ -666,8 +651,9 @@ void spr_btile_paint_back() {
     // Internal
     while (i < 16) {
       f_char = &btiles[0] + index0 + i + 32; // TODO SPEED UP INC MEMORY ADDRESS
-      if ((*f_char & 0x38) == map_paper_last) { // 00111000
-        *f_char = *f_char & 0xC7;               // 11000111
+      if ((*f_char & 0x38) ==
+          PAPER_BLACK) {          // 00111000 DEFAULT ON HI MEM BTILES
+        *f_char = *f_char & 0xC7; // 11000111
         *f_char = *f_char | map_paper;
       }
       ++i;

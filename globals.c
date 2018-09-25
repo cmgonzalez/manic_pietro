@@ -26,12 +26,13 @@ unsigned char v0;
 unsigned char v1;
 unsigned char v2;
 unsigned char v3;
+unsigned char tbuffer[7]; //Used for ASM PRINT
 
 //###############################################################################################
 //# # # SCREEN GAME MAP
 //###############################################################################################
 
-unsigned char scr_map[512];
+unsigned char scr_map[512]; //16*32
 unsigned char scr_curr;
 unsigned char map_width;
 unsigned char map_heigth;
@@ -58,12 +59,14 @@ unsigned char state_a[GAME_MAX_SPRITES]; // SPRITE STATES ALT SEE DEFINES UPPER 
 unsigned char value_a[GAME_MAX_SPRITES]; // SPRITE VALUE A MIN COL/LIN
 unsigned char value_b[GAME_MAX_SPRITES]; // SPRITE VALUE B MAX COL/LIN
 
+unsigned char spr_tile[GAME_MAX_SPRITES];
+unsigned char spr_speed[GAME_MAX_SPRITES];
+unsigned char spr_frames[GAME_MAX_SPRITES];
+unsigned char spr_kind[GAME_MAX_SPRITES];
+
 unsigned char tile[GAME_MAX_SPRITES]; // TILE
 unsigned char lin[GAME_MAX_SPRITES];  // LINE
-unsigned char tbuffer[7];
 
-// unsigned char lin_max[7];      // MAX LINE FOR VERTICAL ENEMIES
-// unsigned char lin_min[7];      // MIN LINE FOR VERTICAL ENEMIES
 
 unsigned char col[GAME_MAX_SPRITES];      // COLUMN
 unsigned char colint[GAME_MAX_SPRITES];   // INTERNAL COLUMN/TILE INCREMENT
@@ -74,6 +77,7 @@ unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
 unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
 
 unsigned char obj_count;
+
 
 // PLAYER ONLY
 unsigned int player_score; // SCORE
@@ -195,7 +199,6 @@ unsigned char screen_ink;
 unsigned char map_paper;
 unsigned char map_paper_clr;
 unsigned char map_paper_last;
-unsigned char map_paper_last_a;
 
 //###############################################################################################
 //# # # ENEMIES ANIMATION SPEEDS - INTERRUPTS VALUES 50HZ
@@ -206,6 +209,7 @@ unsigned char map_paper_last_a;
 
 // Enemy intialization variables, based on index on map array, used along
 // GAME_TOTAL_INDEX_CLASSES.
+//TODO REMOVE DIRECTIONS only use even spr index 4 lookup attribs alt on a new column to save some bytes
 unsigned char const spr_init[] = {
     //SPR INDEX, TILE INDEX, STAT, FRAMES , KIND, INITED
     64, 44, STAT_DIRL, 4, E_HORIZONTAL,  // ROBOT LEFT
@@ -227,14 +231,16 @@ unsigned char const spr_init[] = {
     80, 72, STAT_DIRL, 4, E_HORIZONTAL,  // BARRELL LEFT
     81, 72, STAT_DIRR, 4, E_HORIZONTAL,  // BARRELL RIGHT
     82,144, STAT_DIRR, 2, E_STATIC,      // KONG
+    83, 92, STAT_FALL, 4, E_VERTICAL,      // AMEBATRON DOWN
+    84, 92, STAT_JUMP, 4, E_VERTICAL,      // AMEBATRON UP
+    85, 76, STAT_DIRL, 4, E_HORIZONTAL,  // CARRITO LEFT
+    86, 76, STAT_DIRR, 4, E_HORIZONTAL,  // CARRITO RIGHT
+    87, 80, STAT_DIRL, 4, E_HORIZONTAL,  // EWOK LEFT
+    88, 80, STAT_DIRR, 4, E_HORIZONTAL,  // EWOK RIGHT
 };
 
 unsigned char spr_init_tile[GAME_TOTAL_CLASSES];
 
-unsigned char spr_tile[GAME_MAX_SPRITES];
-unsigned char spr_speed[GAME_MAX_SPRITES];
-unsigned char spr_frames[GAME_MAX_SPRITES];
-unsigned char spr_kind[GAME_MAX_SPRITES];
 
 const unsigned char key_map[] = {
     13,  32,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  97,

@@ -50,7 +50,7 @@
 #define TILE_CONVEYOR                 4
 #define TILE_DEADLY1                  5
 #define TILE_DEADLY2                  6
-#define TILE_DEADLY3                  7
+#define TILE_EXTRA                    7
 #define TILE_OBJECT                   8
 #define TILE_CRUMB1                   9
 #define TILE_CRUMB2                   10
@@ -90,7 +90,7 @@
 
 
 #define GAME_TOTAL_CLASSES            6 //Total class of enemies
-#define GAME_TOTAL_INDEX_CLASSES      16 //Total class of enemies variations, the same enemy can be left/right etc...
+#define GAME_TOTAL_INDEX_CLASSES      24 //Total class of enemies variations, the same enemy can be left/right etc...
 
 #define E_HORIZONTAL                  1
 #define E_VERTICAL                    2
@@ -117,15 +117,9 @@
 // 56..63   SPECIAL BRICKS (FLORR AND CEIL CAN BE HITTED)
 
 /* Player 1 tiles */
-
 #define TILE_P1_RIGHT                 8
 #define TILE_P1_LEN                   4 //LEN OF PLAYER SPRITES FOR EACH DIRECTION
-
-
-
 #define FRAMES_PLAYER                 4
-
-
 
 /* Screen variables */
 #define SPR_COLINT                    4   /* Internal colum increment */
@@ -135,7 +129,6 @@
 #define SCR_ROWI                      0   /* Start row */
 #define SCR_ROWS                      23  /* Rows max */
 #define SCR_LINS                      184 /* Lins max */
-#define PAPER                         PAPER_BLUE | INK_BLUE | BRIGHT/* Screen paper */
 #define GAME_LIN_FLOOR                128
 #define GAME_LIN_TOP_PLATFORM         48
 #define GAME_OFFSET_Y                 16
@@ -162,6 +155,7 @@
 #define STAT_ONEXIT                   5
 #define STAT_DIRU                     6
 #define STAT_DIRD                     7
+
 /*Stats alt (bit position number)*/
 #define STAT_LOCK                     0
 #define STAT_TURN                     1
@@ -386,7 +380,6 @@ extern unsigned char anim_count;
 extern unsigned char map_paper;
 extern unsigned char map_paper_clr;
 extern unsigned char map_paper_last;
-extern unsigned char map_paper_last_a;
 
 extern const unsigned char key_map[];
 extern unsigned int scan_map[];

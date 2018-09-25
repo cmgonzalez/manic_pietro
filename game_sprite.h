@@ -40,7 +40,6 @@ extern void             spr_clear_scr(void);
 extern void             spr_add_anim( unsigned char f_lin, unsigned char f_col, unsigned char f_tile, unsigned char f_end, unsigned char f_loops );
 extern void             spr_play_anim(void);
 extern void             spr_turn_horizontal(void);
-extern void             spr_init_effects(void);
 extern void             spr_btile_paint_back(void);
 extern void             spr_flatten(void);
 extern void             spr_unflattenP1(void);
