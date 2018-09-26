@@ -196,6 +196,7 @@ unsigned char game_start_scr;
 unsigned char screen_paper;
 unsigned char screen_ink;
 
+unsigned char map_border;
 unsigned char map_paper;
 unsigned char map_paper_clr;
 unsigned char map_paper_last;
@@ -255,6 +256,13 @@ unsigned char const spr_init[] = {
 
     91, 88, STAT_DIRL, 4, E_HORIZONTAL,  // WEA LEFT
     92, 88, STAT_DIRR, 4, E_HORIZONTAL,  // WEA RIGHT
+
+    93, 96, STAT_DIRL, 4, E_HORIZONTAL,  // WEA 2 LEFT
+    94, 96, STAT_DIRR, 4, E_HORIZONTAL,  // WEA 2 RIGHT
+
+    95,100, STAT_FALL, 4, E_VERTICAL,    // EYE DOWN
+    96,100, STAT_JUMP, 4, E_VERTICAL,    // EYE UP
+
 
 };
 

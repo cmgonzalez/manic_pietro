@@ -56,13 +56,13 @@ void game_loop(void) {
     dirs = 0x00;
     game_playing = 1;
     while (!game_round_up && !game_over) {
-      zx_border(INK_RED);
+      zx_border(map_border);
       /// Enemies turn
       enemy_turn();
       // Player 1 turn
       player_turn();
 
-      //Cicling events
+      // Cicling events
 
       if ((loop_count & 3) == 0) {
         game_key_paint();
@@ -73,13 +73,12 @@ void game_loop(void) {
         }
         NIRVANAP_spriteT(6, 79, game_exit_lin, game_exit_col);
       }
-      //Each second aprox - update fps/score/phase left/phase advance
+      // Each second aprox - update fps/score/phase left/phase advance
       if (game_check_time(&frame_time, TIME_EVENT)) {
         frame_time = zx_clock();
         // intrinsic_halt();
         if (game_fps_show)
           game_fps();
-
       }
 
       ++loop_count;
@@ -144,7 +143,6 @@ void game_draw_map(void) {
 
     if (scr_map[index1] < ENEMY_START_INDEX) {
 
-
       spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
 
       if (scr_map[index1] == TILE_OBJECT) {
@@ -179,7 +177,6 @@ void game_draw_map(void) {
         scr_map[index1 + 32] = TILE_EXIT2;
         scr_map[index1 + 33] = TILE_EXIT3;
       }
-
 
     } else {
       if (scr_map[index1] < 120) {
@@ -309,36 +306,64 @@ void game_anim_conveyor() {
   }
 }
 
+// TODO TO UPPER MEMORY READ INTO string[32]
+unsigned const char game_borders[] = {
+    INK_RED,     // 0
+    INK_RED,     // 1
+    INK_RED,     // 2
+    INK_RED,     // 3
+    INK_BLUE,    // 4
+    INK_RED,     // 5
+    INK_GREEN,   // 6
+    INK_RED,     // 7
+    INK_BLUE,    // 8
+    INK_RED,     // 9
+    INK_RED,     // 10
+    INK_RED,     // 11
+    INK_BLUE,    // 12
+    INK_YELLOW,  // 13
+    INK_RED,     // 14
+    INK_RED,     // 15
+    INK_RED,     // 16
+    INK_BLUE,    // 17
+    INK_MAGENTA, // 18
+    INK_RED,     // 19
+};
+
 void game_round_init(void) {
   unsigned const char *map_names[] = {
-      "Central Cavern",
-      "The Cold Room",
-      "Menagerie",
-      "Abandoned Uranium Workings",
-      "Eugene's Lair",
-      "Processing Plant",
-      "The Vat",
-      "Miner Willy meets the Kong Beast",
-      "Wacky Amoebatrons",
-      "The Endorian Forest",
-      "Attack of the Mutant Telephones",
-      "Ore Refinery",
-      "The Warehouse",
-      "Solar Power Generator",
-      "Amoebatrons Revenge",
-      "Return of the Alien Kong Beast",
-      "The Final Barrier",
-      "Skylab Landing Bay",
-      "The Bank",
-      "The Sixteenth Cavern",
+      "         Central Cavern",          // 0
+      "          The Cold Room",          // 1
+      "          The Menagerie",          // 2
+      "   Abandoned Uranium Workings",    // 3
+      "         Eugene's Lair",           // 4
+      "       Processing Plant",          // 5
+      "            The Vat",              // 6
+      "Miner Willy meets the Kong Beast", // 7
+      "        Wacky Amoebatrons",        // 8
+      "       The Endorian Forest",       // 9
+      "Attack of the Mutant Telephones",  // 10
+      " Return of the Alien Kong Beast",  // 11
+      "          Ore Refinery",           // 12
+      "        Skylab Landing Bay",       // 13
+      "             The Bank",            // 14
+      "      The Sixteenth Cavern",       // 15
+      "         The Warehouse",           // 16
+      "      Amoebatrons Revenge",        // 17
+      "     Solar Power Generator",       // 18
+      "        The Final Barrier",        // 19
   };
-  unsigned const char map_lens[] = {
-      14, 13, 9,  26, 13, 16, 7,  32, 17, 19,
-      31, 12, 13, 21, 19, 30, 17, 18, 8,  20,
-  };
+
+  // TODO Just use start to simplify
 
   /* screen init */
   /*PHASE INIT*/
+  map_border = game_borders[scr_curr];
+  zx_border(map_border);
+  zx_print_ink(map_border | (map_border << 3));
+  zx_print_str(0, 0, "                                ");
+  zx_print_ink(INK_BLACK | PAPER_YELLOW);
+  zx_print_str(17, 0, "                                ");
 
   loop_count = 0;
   zx_set_clock(0);
@@ -355,6 +380,7 @@ void game_round_init(void) {
 
   NIRVANAP_halt();
   spr_clear_scr();
+
   // Read Tiles from bank 3
 
   // Page Player from bank 3
@@ -375,20 +401,11 @@ void game_round_init(void) {
     ++i;
   }
 
-  zx_print_ink(INK_BLACK | PAPER_YELLOW);
-  zx_print_str(17, 0, "                                ");
-  zx_print_str(17, (32 - map_lens[scr_curr]) >> 1, map_names[scr_curr]);
-  zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
-  zx_print_str(18, 0, "AIR ------");
-  zx_print_ink(INK_WHITE | PAPER_GREEN | BRIGHT);
-  zx_print_str(18, 10, "----------------------");
-  zx_print_ink(INK_YELLOW);
 
-  zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
-  zx_print_str(21, 0, "DEMO PARA NUESTRO LIDER SUPREMO!");
-  zx_print_str(22, 0, "   EL SPECTRUMERO JAVI ORTIZ    ");
+
   ay_reset();
-  game_paint_attrib(&attrib_osd, 0, 32, 144);
+
+
 
   game_page_map();
   game_draw_map();
@@ -398,21 +415,24 @@ void game_round_init(void) {
   key_attrib[2] = key_attrib[0];
   key_attrib[3] = key_attrib[0];
   game_flash_exit(!FLASH);
-
   game_song_play_start = 0;
 
   if (!game_over) {
     player_init(player_lin_scr, player_col_scr, TILE_P1_RIGHT);
   }
-
   game_update_stats();
 
+  zx_print_ink(INK_BLACK | PAPER_YELLOW);
+  zx_print_str(17, 0, map_names[scr_curr]);
+  zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
+  zx_print_str(18, 0, "AIR ------");
+  zx_print_ink(INK_WHITE | PAPER_GREEN | BRIGHT);
+  zx_print_str(18, 10, "----------------------");
+  zx_print_ink(INK_YELLOW);
+  zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
+
+
   audio_ingame();
-
-  zx_print_ink(INK_RED | PAPER_RED);
-
-  zx_print_str(0, 0, "                                ");
-  zx_border(INK_RED);
   zx_print_ink(INK_WHITE | PAPER_BLACK);
 }
 

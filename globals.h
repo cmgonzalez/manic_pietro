@@ -377,6 +377,7 @@ extern unsigned char anim_loop[];
 
 extern unsigned char anim_count;
 
+extern unsigned char map_border;
 extern unsigned char map_paper;
 extern unsigned char map_paper_clr;
 extern unsigned char map_paper_last;
