@@ -146,7 +146,6 @@ void enemy_vertical() {
       spr_set_up();
     }
   }
-
 }
 
 void enemy_walk(void) {}
@@ -159,91 +158,132 @@ void enemy_kill(unsigned char f_sprite) __z88dk_fastcall {
 
 void enemy_init() {
   unsigned char f_sprite;
+  unsigned char f_tot_class;
+  unsigned char f_class;
+  unsigned char f_variant;
+  unsigned char f_basetile;
 
-  // Get the first available sprite
+  // Defines
+  f_class = scr_map[index1];
+
+  f_variant = 0;
+  if (f_class & 1) {
+    --f_class;
+    f_variant = 1;
+  }
+
+  // Found an empty sprite slot
+  f_tot_class = 0;
   f_sprite = 0;
   while (f_sprite < GAME_MAX_ENEMIES) {
     if (class[f_sprite] == 0) {
-      v0 = 0;
-      while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 8)) {
-        //TODO DANGEROUS
-        if (spr_init[v0] == scr_map[index1]) {
-          // Class Found!
-          sprite = f_sprite;
-          state[sprite] = 0;
-          state_a[sprite] = 0;
-          colint[sprite] = 0;
+      break;
+    }
+    if (class[f_sprite] == f_class) {
+      ++f_tot_class;
+    }
+    ++f_sprite;
+  }
 
-          class[sprite] = scr_map[index1];
+  // Search for Sprite Attribs on spr_init
+  v0 = 0;
 
-          p_state = &state[sprite];
-          p_state_a = &state_a[sprite];
-          v1 = spr_init[v0 + 2];
-          BIT_SET(*p_state, v1);
-          if (v1 == STAT_DIRL) {
-            colint[sprite] = 3;
-          }
+  while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 8)) {
 
-          spr_frames[sprite] = spr_init[v0 + 3];
-          spr_kind[sprite] = spr_init[v0 + 4];
+    if (spr_init[v0] == f_class) {
 
-          spr_speed[sprite] = scr_map[index1 + 1];
+      // Read from ARRAY
+      f_basetile = spr_init[v0 + 1];
+      spr_frames[f_sprite] = spr_init[v0 + 2];
+      spr_kind[f_sprite] = spr_init[v0 + 3];
 
+      // Color Alternates
+      spr_init_cin = spr_init[v0 + 4];
 
-          // Tile paging
-          v1 = class[sprite] - 64;
-          if (spr_init_tile[v1] == 0) {
-            // Not paged
-            if (spr_frames[sprite] == 4) {
-              // Standard 4 tiles animation
-              spr_tile[sprite] = game_tile_cnt;
-              if ((spr_init_tile[v1] & 1) == 0) {
-                spr_init_tile[v1] = game_tile_cnt;
-                spr_init_tile[v1 + 1] = game_tile_cnt;
-              } else {
-                spr_init_tile[v1] = game_tile_cnt;
-                spr_init_tile[v1 - 1] = game_tile_cnt;
-              }
+      switch (f_tot_class) {
+      case 0:
+        spr_init_cin = 0;
+        spr_init_cout = 0;
+        break;
+      case 1:
+        spr_init_cout = spr_init[v0 + 5];
+        break;
+      case 2:
+        spr_init_cout = spr_init[v0 + 6];
+        break;
+      case 3:
+        spr_init_cout = spr_init[v0 + 7];
+        break;
+      }
 
-              game_tile_cnt =
-                  game_copy_tile_std(spr_init[v0 + 1], game_tile_cnt);
+      // Read From Map
+      class[f_sprite] = f_class;
+      spr_speed[f_sprite] = scr_map[index1 + 1];
+      value_a[f_sprite] = scr_map[index1 + 32];
+      value_b[f_sprite] = scr_map[index1 + 33];
 
-            } else {
-              // EUGENE (1 FRAME) TODO 2 FRAMES
-              i = 0;
-              spr_tile[sprite] = game_tile_cnt;
-              spr_init_tile[v1] = game_tile_cnt;
-              while (i < spr_frames[sprite]) {
-                game_copy_tile(spr_init[v0 + 1] + i, game_tile_cnt, 0);
-                ++game_tile_cnt;
-                ++i;
-              }
-            }
-          } else {
-            // Read Value
-            spr_tile[sprite] = spr_init_tile[v1];
-          }
-          // End Tile Paging
+      // Clear Adjancent tiles
+      scr_map[index1] = TILE_EMPTY;
+      scr_map[index1 + 1] = TILE_EMPTY; // NO USE
+      scr_map[index1 + 32] = TILE_EMPTY;
+      scr_map[index1 + 33] = TILE_EMPTY;
+      // Class Found!
+      state[f_sprite] = 0;
+      state_a[f_sprite] = 0;
+      // Position
+      lin[f_sprite] = (index1 >> 5) << 3;
+      col[f_sprite] = index1 & 31;
+      colint[f_sprite] = 0;
 
-          lin[sprite] = (index1 >> 5) << 3;
-          col[sprite] = index1 & 31;
+      p_state = &state[f_sprite];
+      p_state_a = &state_a[f_sprite];
 
-          tile[sprite] = spr_get_tile(&sprite);
-
-          ++spr_count;
-
-          spr_timer[sprite] = zx_clock();
-          last_time[sprite] = 0;
-
-          break;
+      switch (spr_kind[f_sprite]) {
+      case E_HORIZONTAL:
+        if (f_variant) {
+          BIT_SET(*p_state, STAT_DIRR);
         } else {
-          // increment
-          v0 = v0 + 5; // N variables on spr_init
+          BIT_SET(*p_state, STAT_DIRL);
+          colint[f_sprite] = 3;
+        }
+        break;
+      case E_VERTICAL:
+        if (f_variant) {
+          BIT_SET(*p_state, STAT_DIRU);
+        } else {
+          BIT_SET(*p_state, STAT_DIRD);
+        }
+        break;
+      }
+
+      // Tile paging
+      if (spr_frames[f_sprite] == 4) {
+        // Standard 4 tiles animation
+        spr_tile[f_sprite] = game_tile_cnt;
+        game_tile_cnt = game_copy_tile_std(f_basetile, game_tile_cnt);
+      } else {
+        // Others animations
+        i = 0;
+        spr_tile[f_sprite] = game_tile_cnt;
+        while (i < spr_frames[f_sprite]) {
+          game_copy_tile(f_basetile + i, game_tile_cnt, 0);
+          ++game_tile_cnt;
+          ++i;
         }
       }
+
+      // End Tile Paging
+      tile[f_sprite] = spr_get_tile(&f_sprite);
+
+      ++spr_count;
+
+      spr_timer[f_sprite] = zx_clock();
+      last_time[f_sprite] = 0;
+
       break;
     } else {
-      f_sprite++;
+      // Next Class increment
+      v0 = v0 + 8; // N variables on spr_init
     }
   }
 }

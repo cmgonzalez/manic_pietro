@@ -315,11 +315,6 @@ extern unsigned char key_attrib[4];
 extern unsigned char *p_state;
 extern unsigned char *p_state_a;
 //TODO REVIEW 128 bytes! needs loop on final target without udg's
-extern unsigned char game_conveyor_tile;
-extern unsigned char game_conveyor_flag;
-
-
-
 
 extern unsigned int curr_time;
 extern unsigned int frame_time;
@@ -345,13 +340,13 @@ extern unsigned char game_start_scr;
 
 extern unsigned char screen_paper, screen_ink;
 extern unsigned char const spr_init[];
-extern unsigned char spr_init_tile[];
 
 extern unsigned char spr_tile[];
 extern unsigned char spr_speed[];
 extern unsigned char spr_frames[];
 extern unsigned char spr_kind[];
 extern unsigned char scr_map[];
+extern const unsigned char spr_init_len;
 
 
 //extern unsigned char scr_obj0[];
@@ -386,3 +381,6 @@ extern const unsigned char key_map[];
 extern unsigned int scan_map[];
 //extern unsigned char *map_names[];
 //extern const unsigned char map_lens[];
+
+extern unsigned char spr_init_cin;
+extern unsigned char spr_init_cout;

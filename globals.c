@@ -26,13 +26,13 @@ unsigned char v0;
 unsigned char v1;
 unsigned char v2;
 unsigned char v3;
-unsigned char tbuffer[7]; //Used for ASM PRINT
+unsigned char tbuffer[7]; // Used for ASM PRINT
 
 //###############################################################################################
 //# # # SCREEN GAME MAP
 //###############################################################################################
 
-unsigned char scr_map[512]; //16*32
+unsigned char scr_map[512]; // 16*32
 unsigned char scr_curr;
 unsigned char map_width;
 unsigned char map_heigth;
@@ -53,9 +53,11 @@ udk_t k1;
 unsigned char dirs;
 
 // SPRITES GAME ARRAYS
-unsigned char class[GAME_MAX_SPRITES];   // CLASS OF SPRITE
-unsigned char state[GAME_MAX_SPRITES];   // SPRITE STATES SEE DEFINES UPPER BIT VALUES
-unsigned char state_a[GAME_MAX_SPRITES]; // SPRITE STATES ALT SEE DEFINES UPPER BIT VALUES
+unsigned char class[GAME_MAX_SPRITES]; // CLASS OF SPRITE
+unsigned char
+    state[GAME_MAX_SPRITES]; // SPRITE STATES SEE DEFINES UPPER BIT VALUES
+unsigned char
+    state_a[GAME_MAX_SPRITES]; // SPRITE STATES ALT SEE DEFINES UPPER BIT VALUES
 unsigned char value_a[GAME_MAX_SPRITES]; // SPRITE VALUE A MIN COL/LIN
 unsigned char value_b[GAME_MAX_SPRITES]; // SPRITE VALUE B MAX COL/LIN
 
@@ -67,17 +69,16 @@ unsigned char spr_kind[GAME_MAX_SPRITES];
 unsigned char tile[GAME_MAX_SPRITES]; // TILE
 unsigned char lin[GAME_MAX_SPRITES];  // LINE
 
-
 unsigned char col[GAME_MAX_SPRITES];      // COLUMN
 unsigned char colint[GAME_MAX_SPRITES];   // INTERNAL COLUMN/TILE INCREMENT
 unsigned int spr_timer[GAME_MAX_SPRITES]; // SPRITE GENERAL TIMER MILISECONDS
-unsigned int last_time[GAME_MAX_SPRITES]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
+unsigned int
+    last_time[GAME_MAX_SPRITES]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
 
 unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
 unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
 
 unsigned char obj_count;
-
 
 // PLAYER ONLY
 unsigned int player_score; // SCORE
@@ -89,19 +90,15 @@ signed char player_vel_inc;
 unsigned char player_jump_hack;
 unsigned char player_jump_count;
 unsigned char player_jump_top;
-
-// PLAYER ATTRIBUTES
-// Maximun Mana n Vitality
-
 unsigned char player_col_scr;
 unsigned char player_lin_scr;
 unsigned char player_killed;
 unsigned int player_kill_index;
-unsigned char nirv_sprite_index;
-
 unsigned int player_hit_time;
 unsigned char player_hit;
 unsigned char player_jumpcount;
+
+unsigned char nirv_sprite_index;
 
 signed int game_gravity;
 unsigned char game_world;
@@ -113,6 +110,9 @@ unsigned char game_conveyor_col0;
 unsigned char game_conveyor_col1;
 unsigned char game_exit_col;
 unsigned char game_exit_lin;
+
+unsigned char game_attrib_osd;
+unsigned char game_tileset;
 
 unsigned char game_playing;
 unsigned char game_round_up;
@@ -138,7 +138,6 @@ unsigned int index_tmp;
 unsigned int index0;
 unsigned int index1;
 
-
 unsigned int tmp_ui;
 unsigned char enemies;
 unsigned char zx_val_asm;
@@ -151,11 +150,7 @@ unsigned char key_attrib[4];
 unsigned char *p_state;
 unsigned char *p_state_a;
 
-// TODO REVIEW
-unsigned char game_conveyor_tile;
-unsigned char game_conveyor_flag;
-unsigned char game_attrib_osd;
-unsigned char game_tileset;
+
 
 unsigned int curr_time;
 unsigned int frame_time;
@@ -207,66 +202,43 @@ unsigned char map_paper_last;
 //#
 //###############################################################################################
 
-
 // Enemy intialization variables, based on index on map array, used along
 // GAME_TOTAL_INDEX_CLASSES.
-//TODO REMOVE DIRECTIONS only use even spr index 4 lookup attribs alt on a new column to save some bytes
+// column to save some bytes
+
+//Sprite Index on MAP Data
+//Index on btile from bank 3
+//Frames
+//Sprite KIND
+//Base INK for REPLACE
+//Variant INK1
+//Variant INK2
+//Variant INK3
+
+
 unsigned char const spr_init[] = {
-    //SPR INDEX, TILE INDEX, STAT, FRAMES , KIND, INITED
-    64, 44, STAT_DIRL, 4, E_HORIZONTAL,  // ROBOT LEFT
-    65, 44, STAT_DIRR, 4, E_HORIZONTAL,  // ROBOT RIGHT
-
-    66, 48, STAT_DIRL, 4, E_HORIZONTAL,  // PENGUIN
-    67, 48, STAT_DIRR, 4, E_HORIZONTAL,
-
-    68, 52, STAT_DIRL, 4, E_HORIZONTAL,  // CHICKEN LEFT
-    69, 52, STAT_DIRR, 4, E_HORIZONTAL,  // CHICKEN RIGHT
-
-    70, 56, STAT_DIRL, 4, E_HORIZONTAL,  // FOCA
-    71, 56, STAT_DIRR, 4, E_HORIZONTAL,
-
-    72, 60, STAT_DIRL, 4, E_HORIZONTAL,  // WATER LEFT
-    73, 60, STAT_DIRR, 4, E_HORIZONTAL,  // WATER RIGHT
-
-    74,148, STAT_FALL, 1, E_VERTICAL,    // EUGENE DOWN
-    75,148, STAT_JUMP, 1, E_VERTICAL,    // EUGENE UP
-
-    76, 64, STAT_DIRL, 4, E_HORIZONTAL,  // PAC LEFT
-    77, 64, STAT_DIRR, 4, E_HORIZONTAL,  // PAC RIGHT
-
-    78, 68, STAT_DIRL, 4, E_HORIZONTAL,  // KANGOROO LEFT
-    79, 68, STAT_DIRR, 4, E_HORIZONTAL,  // KANGOROO RIGHT
-
-    80, 72, STAT_DIRL, 4, E_HORIZONTAL,  // BARRELL LEFT
-    81, 72, STAT_DIRR, 4, E_HORIZONTAL,  // BARRELL RIGHT
-
-    82,144, STAT_DIRR, 2, E_STATIC,      // KONG TODO!!! 2 ELEMENT SO 50% SIZE
-
-    83, 92, STAT_FALL, 4, E_VERTICAL,    // AMEBATRON DOWN
-    84, 92, STAT_JUMP, 4, E_VERTICAL,    // AMEBATRON UP
-
-    85, 76, STAT_DIRL, 4, E_HORIZONTAL,  // CARRITO LEFT
-    86, 76, STAT_DIRR, 4, E_HORIZONTAL,  // CARRITO RIGHT
-
-    87, 80, STAT_DIRL, 4, E_HORIZONTAL,  // EWOK LEFT
-    88, 80, STAT_DIRR, 4, E_HORIZONTAL,  // EWOK RIGHT
-
-    89, 84, STAT_FALL, 4, E_VERTICAL,    // TELEF DOWN
-    90, 84, STAT_JUMP, 4, E_VERTICAL,    // TELEF UP
-
-    91, 88, STAT_DIRL, 4, E_HORIZONTAL,  // WEA LEFT
-    92, 88, STAT_DIRR, 4, E_HORIZONTAL,  // WEA RIGHT
-
-    93, 96, STAT_DIRL, 4, E_HORIZONTAL,  // WEA 2 LEFT
-    94, 96, STAT_DIRR, 4, E_HORIZONTAL,  // WEA 2 RIGHT
-
-    95,100, STAT_FALL, 4, E_VERTICAL,    // EYE DOWN
-    96,100, STAT_JUMP, 4, E_VERTICAL,    // EYE UP
-
-
+    64,  44, 4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // ROBOT
+    66,  48, 4, E_HORIZONTAL, 0x05, 0x07, 0xFF, 0xFF, // PENGUIN
+    68,  52, 4, E_HORIZONTAL, 0x03, 0x02, 0x04, 0xFF, // CHICKEN
+    70,  56, 4, E_HORIZONTAL, 0x05, 0x03, 0xFF, 0xFF, // FOCA
+    72,  60, 4, E_HORIZONTAL, 0x07, 0x00, 0xFF, 0xFF, // WATER
+    74, 148, 1, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
+    76,  64, 4, E_HORIZONTAL, 0x46, 0x44, 0x45, 0x06, // PAC
+    78,  68, 4, E_HORIZONTAL, 0x03, 0x04, 0x05, 0xFF, // KANGOROO
+    80,  72, 4, E_HORIZONTAL, 0x43, 0x42, 0x44, 0x03, // BARRELL
+    82, 144, 2, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG
+    84,  92, 4, E_VERTICAL  , 0x03, 0x02, 0x01, 0x04, // AMEBATRON
+    86,  76, 4, E_HORIZONTAL, 0x06, 0x03, 0x02, 0x04, // CARRITO
+    88,  80, 4, E_HORIZONTAL, 0x02, 0x07, 0x05, 0x06, // EWOK
+    90,  84, 4, E_VERTICAL  , 0x04, 0x02, 0x03, 0x06, // TELEF
+    92,  88, 4, E_HORIZONTAL, 0x05, 0x02, 0x03, 0x04, // WEA
+    94,  96, 4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // WEA 2
+    96, 100, 4, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EYE
 };
+const unsigned char spr_init_len = 8;
 
-unsigned char spr_init_tile[GAME_TOTAL_CLASSES];
+unsigned char spr_init_cin;
+unsigned char spr_init_cout;
 
 
 const unsigned char key_map[] = {

@@ -132,7 +132,6 @@ void game_draw_map(void) {
   game_conveyor_lin = 0;
   game_conveyor_col0 = 0;
   game_conveyor_col1 = 0;
-  game_conveyor_tile = 17;
   NIRVANAP_stop();
   attrib_hl[0] = map_paper | (map_paper >> 3);
   attrib_hl[1] = attrib_hl[0];
@@ -158,8 +157,8 @@ void game_draw_map(void) {
       }
       if (scr_map[index1] == TILE_CONVEYOR) {
         if (game_conveyor_col0 == 0) {
-          game_conveyor_col0 = index1 % 32;          // TODO OPTIMIZE
-          game_conveyor_lin = 8 + (index1 / 32) * 8; // TODO OPTIMIZE
+          game_conveyor_col0 = (index1 & 31);              //index1 % 32
+          game_conveyor_lin = 8 + ((index1 >> 5) << 3);  //8 + (index1 / 32) * 8;
 
           if (scr_map[index1 + 1]) {
             game_conveyor_dir = DIR_LEFT;
@@ -171,8 +170,8 @@ void game_draw_map(void) {
       }
 
       if (scr_map[index1] == TILE_EXIT0) {
-        game_exit_col = index1 % 32;
-        game_exit_lin = 16 + (index1 / 32) * 8;
+        game_exit_col = (index1 & 31);//index1 % 32;
+        game_exit_lin = 16 + ((index1 >> 5) << 3);
         scr_map[index1 + 1] = TILE_EXIT1;
         scr_map[index1 + 32] = TILE_EXIT2;
         scr_map[index1 + 33] = TILE_EXIT3;
@@ -180,17 +179,8 @@ void game_draw_map(void) {
 
     } else {
       if (scr_map[index1] < 120) {
-        spr_draw8(0, s_row1 << 3, s_col1);
+        spr_draw8(0, s_row1 << 3, s_col1); //Draw a Block with Paper
         enemy_init();
-
-        value_a[sprite] = scr_map[index1 + 32];
-        value_b[sprite] = scr_map[index1 + 33];
-        scr_map[index1] = TILE_EMPTY;
-        // Clear Adjancent tiles
-        scr_map[index1] = TILE_EMPTY;
-        scr_map[index1 + 1] = TILE_EMPTY; // NO USE
-        scr_map[index1 + 32] = TILE_EMPTY;
-        scr_map[index1 + 33] = TILE_EMPTY;
       } else {
         // Willy
         if (scr_map[index1] == 127) {
@@ -359,23 +349,14 @@ void game_round_init(void) {
   /* screen init */
   /*PHASE INIT*/
   map_border = game_borders[scr_curr];
-  zx_border(map_border);
-  zx_print_ink(map_border | (map_border << 3));
-  zx_print_str(0, 0, "                                ");
-  zx_print_ink(INK_BLACK | PAPER_YELLOW);
-  zx_print_str(17, 0, "                                ");
 
   loop_count = 0;
   zx_set_clock(0);
   frame_time = 0;
   player_coins = 0;
-  game_conveyor_flag = 0;
   // Fill top LINE
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
-  }
-  for (i = 0; i < GAME_TOTAL_CLASSES; i++) {
-    spr_init_tile[i] = 0;
   }
 
   NIRVANAP_halt();
@@ -384,11 +365,8 @@ void game_round_init(void) {
   // Read Tiles from bank 3
 
   // Page Player from bank 3
-  v0 = 0;
-  while (v0 < GAME_TOTAL_INDEX_CLASSES) {
-    spr_init_tile[v0] = 0;
-    ++v0;
-  }
+  spr_init_cin = 0;
+  spr_init_cout = 0;
   game_tile_cnt = game_copy_tile_std(40, 8);
 
   // Coin HIGHLIGHT init
@@ -401,12 +379,13 @@ void game_round_init(void) {
     ++i;
   }
 
-
-
   ay_reset();
-
-
-
+  
+  zx_border(map_border);
+  zx_print_ink(map_border | (map_border << 3));
+  zx_print_str(0, 0, "                                ");
+  zx_print_ink(INK_BLACK | PAPER_YELLOW);
+  zx_print_str(17, 0, "                                ");
   game_page_map();
   game_draw_map();
   spr_btile_paint_back();
@@ -416,24 +395,25 @@ void game_round_init(void) {
   key_attrib[3] = key_attrib[0];
   game_flash_exit(!FLASH);
   game_song_play_start = 0;
-
+  audio_ingame();
   if (!game_over) {
     player_init(player_lin_scr, player_col_scr, TILE_P1_RIGHT);
   }
-  game_update_stats();
 
+  game_update_stats();
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   zx_print_str(17, 0, map_names[scr_curr]);
+
   zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
   zx_print_str(18, 0, "AIR ------");
   zx_print_ink(INK_WHITE | PAPER_GREEN | BRIGHT);
   zx_print_str(18, 10, "----------------------");
   zx_print_ink(INK_YELLOW);
   zx_print_str(20, 0, "HIGH SCORE 000000   SCORE 000000");
-
-
-  audio_ingame();
   zx_print_ink(INK_WHITE | PAPER_BLACK);
+  zx_print_str(21, 0, "       ERRAZKING LA'LLEA!");
+  zx_print_ink(INK_WHITE | PAPER_BLACK);
+
 }
 
 void game_print_header(void) {
@@ -924,6 +904,7 @@ unsigned char game_copy_tile_std(unsigned char f_hi_tile,
   game_copy_tile(f_hi_tile + 2, f_low_tile + 5, 1);
   game_copy_tile(f_hi_tile + 1, f_low_tile + 6, 1);
   game_copy_tile(f_hi_tile + 0, f_low_tile + 7, 1);
+
   return f_low_tile + 8;
 }
 
@@ -934,49 +915,64 @@ void game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile,
   unsigned int li;
   unsigned char i;
 
-  // Page a Tile
-  intrinsic_di();
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 3;
-  IO_7FFD = 0x10 + 3;
+    // Page a Tile
+    intrinsic_di();
+    GLOBAL_ZX_PORT_7FFD = 0x10 + 3;
+    IO_7FFD = 0x10 + 3;
 
-  li = (48 * f_hi_tile);
-  i = 0;
-  while (i < 48) {
-    btile[i] = hibtiles[li];
-    ++i;
-    ++li;
-  }
-  // Page in BANK 00
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-  IO_7FFD = 0x10 + 0;
-  intrinsic_ei();
-  // Write Local
-  li = (48 * f_low_tile);
-  i = 0;
-  while (i < 48) {
-    if (f_flip) {
-      if (i < 32) {
-        if ((i & 1) == 0) {
-          btiles[li] = reverse(btile[i + 1]);
+    li = (48 * f_hi_tile);
+    i = 0;
+    while (i < 48) {
+      btile[i] = hibtiles[li];
+
+      if ( i > 31 && btile[i] == spr_init_cin) {
+          btile[i] = spr_init_cout;
+      }
+      ++i;
+      ++li;
+    }
+    // Page in BANK 00
+    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
+    IO_7FFD = 0x10 + 0;
+    intrinsic_ei();
+
+    //Paint Variants
+    i = 31;
+    while (i < 48) {
+      if ( btile[i] == spr_init_cin) {
+          btile[i] = spr_init_cout;
+      }
+      ++i;
+    }
+
+    // Write Local
+    li = (48 * f_low_tile);
+    i = 0;
+    while (i < 48) {
+      if (f_flip) {
+        if (i < 32) {
+          if ((i & 1) == 0) {
+            btiles[li] = reverse(btile[i + 1]);
+          } else {
+            btiles[li] = reverse(btile[i - 1]);
+          }
+
         } else {
-          btiles[li] = reverse(btile[i - 1]);
+          if (i < 40) {
+            btiles[li] = btile[i + 8];
+          } else {
+            btiles[li] = btile[i - 8];
+          }
         }
 
       } else {
-        if (i < 40) {
-          btiles[li] = btile[i + 8];
-        } else {
-          btiles[li] = btile[i - 8];
-        }
+        btiles[li] = btile[i];
       }
 
-    } else {
-      btiles[li] = btile[i];
+      ++i;
+      ++li;
     }
 
-    ++i;
-    ++li;
-  }
 }
 
 unsigned char reverse(unsigned char b) {

@@ -38,6 +38,8 @@ void main(void) {
 
   // DEBUG
   zx_border(INK_BLACK);
+  zx_print_ink(INK_WHITE);
+  
   z80_delay_ms(666);
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
@@ -108,7 +110,7 @@ void main(void) {
     // GAME OVER
     // spr_flatten();
     // game_update_stats();
-    zx_print_str(11, 12, "DEMO OVER");
+    zx_print_str(11, 12, "SHOE HERE!");
     z80_delay_ms(250);
     game_over = 0; // Hack game_colour_message to render background
     // game_colour_message(12, 12, 12 + 9, 250, 0);
