@@ -23,3 +23,7 @@ _ay_song_04_ingame:
 PUBLIC _ay_song_04_ingame0
 _ay_song_04_ingame0:
   BINARY "songs/pietro_cavern.pt3"
+
+PUBLIC _ay_song_04_menu
+_ay_song_04_menu:
+    BINARY "songs/pietro_blue.pt3"

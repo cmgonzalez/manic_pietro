@@ -87,6 +87,11 @@ void player_turn(void) {
     if (c == 51) {
       game_inmune = !game_inmune;
       zx_border(INK_GREEN);
+      z80_delay_ms(25);
+    }
+
+    if (c == 52) {
+      game_round_up = 1;
       z80_delay_ms(250);
     }
     // zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
@@ -122,6 +127,12 @@ void player_turn(void) {
         lin[GAME_INDEX_P1] == game_exit_lin - 16) {
       ++scr_curr;
       game_round_up = 1;
+      // Amimate Air
+
+      while (air_curr_byte >= air_end_byte) {
+        game_anim_air();
+        player_score_add(10);
+      }
     }
   }
 }
@@ -310,7 +321,6 @@ unsigned char player_move_walk(void) {
         }
       }
 
-
       /* Move Right */
       if (dirs & IN_STICK_RIGHT) {
         spr_set_right();
@@ -430,11 +440,10 @@ unsigned char player_get_floor() {
     v0 = scr_map[index1];
     v1 = scr_map[index1 + 1];
 
-
     if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY1 ||
-         v0 == TILE_DEADLY2  || v0 >= TILE_EXIT0) &&
+         v0 == TILE_DEADLY2 || v0 >= TILE_EXIT0) &&
         (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY1 ||
-         v1 == TILE_DEADLY2  || v1 >= TILE_EXIT0)) {
+         v1 == TILE_DEADLY2 || v1 >= TILE_EXIT0)) {
       index1 = index1 + 32;
       ++i;
     } else {
@@ -487,6 +496,7 @@ unsigned char player_pick_item(unsigned char l_val, int l_index) {
 
   if (l_val == TILE_OBJECT) {
     zx_border(INK_YELLOW);
+    player_score_add(100);
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
     audio_coin();
@@ -545,7 +555,6 @@ unsigned char player_check_floor(unsigned char f_inc) {
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1] + f_inc);
 
   v0 = scr_map[index1];
-
 
   // HACK CRUMB
   if (f_inc == 0 && colint[GAME_INDEX_P1] == 3) {

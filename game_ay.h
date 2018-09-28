@@ -51,6 +51,7 @@ extern unsigned char hibtiles[];
 //BANK_4
 extern unsigned char ay_song_04_ingame[];
 extern unsigned char ay_song_04_ingame0[];
+extern unsigned char ay_song_04_menu[];
 
 
 

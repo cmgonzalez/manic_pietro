@@ -44,6 +44,7 @@ extern void          game_flash_exit(unsigned char f_attrib);
 extern unsigned char game_copy_tile_std(unsigned char f_hi_tile, unsigned char f_low_tile);
 void                 game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile, unsigned char f_flip);
 unsigned char        reverse(unsigned char b);
+extern void          game_anim_air(void);
 
 
 #endif

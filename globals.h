@@ -65,7 +65,10 @@
 #define TILE_WALL2                   63
 #define TILE_WALL3                   64
 
-#define TILE_WORLD_EXIT               57
+#define SPRITE_EMPTY                  94
+#define SPRITE_DOOR                   95
+
+
 #define TILE_BACKGROUND_S             0  //START OF BACKGROUND
 #define TILE_BACKGROUND_E             35 //END OF BACKGROUND
 
@@ -76,7 +79,7 @@
 
 #define TILE_CEIL                     72 //START CEILS TILES
 
-#define TILE_DOOR_E                   76 //END OF DOOR TILES
+#define TILE_DOOR_E                   88 //END OF DOOR TILES
 #define TILE_END                      96 //END OF TILES
 
 
@@ -90,14 +93,14 @@
 
 
 #define GAME_TOTAL_CLASSES            6 //Total class of enemies
-#define GAME_TOTAL_INDEX_CLASSES      24 //Total class of enemies variations, the same enemy can be left/right etc...
+#define GAME_TOTAL_INDEX_CLASSES      30 //Total class of enemies variations, the same enemy can be left/right etc...
 
 #define E_HORIZONTAL                  1
 #define E_VERTICAL                    2
 #define E_WALK                        3
 #define E_STATIC                      4
 #define E_GHOST                       5
-#define E_GOTA                        6
+#define E_SKYLAB                        6
 #define E_EUGENE                      7
 
 
@@ -318,6 +321,7 @@ extern unsigned char *p_state_a;
 
 extern unsigned int curr_time;
 extern unsigned int frame_time;
+extern unsigned int air_time;
 extern unsigned int anim_time;
 extern unsigned char key_last;
 extern unsigned char key_ink;
@@ -384,3 +388,7 @@ extern unsigned int scan_map[];
 
 extern unsigned char spr_init_cin;
 extern unsigned char spr_init_cout;
+
+extern unsigned char *air_curr_byte;
+extern const unsigned int air_start_byte;
+extern const unsigned int air_end_byte;

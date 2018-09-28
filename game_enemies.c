@@ -76,22 +76,49 @@ void enemy_move(void) {
   case E_VERTICAL:
     enemy_vertical();
     break;
-  case E_GOTA:
+  case E_SKYLAB:
     enemy_gota();
     break;
   }
 }
 
 void enemy_gota() {
+  unsigned char l_found;
   if (colint[sprite] == 0) {
-    if (spr_move_down()) {
+
+    index1 = spr_calc_index(lin[sprite] + 16 , col[sprite] );
+    if ( scr_map[index1] == TILE_EMPTY) {
+      spr_move_down_f();
+    } else {
       colint[sprite] = 1;
     }
+
   } else {
     colint[sprite]++;
     if (colint[sprite] == spr_frames[sprite]) {
-      // Respawn!
-      // lin[sprite] = (game_respawn_index[sprite] >> 3) << 4;
+      // Respawn Hack!
+      lin[sprite] = value_a[sprite];
+      l_found = 0;
+      col[sprite] = 0xFF;
+      while(!l_found){
+        v0 = ((rand() & 15) << 1) - 1;
+
+        if (v0 == 0xFF) {
+          v0 = 1;
+        }
+        if (v0 == 15) {
+          v0 = 13;
+        }
+        if (v0 == 23) {
+          v0 = 21;
+        }
+
+        if (col[0] != v0 && col[1] != v0 && col[2] != v0) {
+          l_found = 1;
+        }
+      }
+
+      col[sprite] = v0;
       colint[sprite] = 0;
     }
   }

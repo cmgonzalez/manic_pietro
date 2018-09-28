@@ -39,14 +39,13 @@ void main(void) {
   // DEBUG
   zx_border(INK_BLACK);
   zx_print_ink(INK_WHITE);
-  
   z80_delay_ms(666);
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
-  game_debug = 1;
+  game_debug = 0;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0; //La Ultima Ctm!
+  scr_curr = 0;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
@@ -55,6 +54,12 @@ void main(void) {
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
   ay_reset();
+
+  // Init Game
+  game_start_timer();
+
+
+
   // ENABLE SOUND BASED ON DETECTED MODEL
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
@@ -74,18 +79,16 @@ void main(void) {
   joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
   joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
 
-  if (!game_debug) {
-    in_wait_nokey();
-    for (counter = 31416; !in_test_key(); counter += 10061)
-      ;
-    srand(counter);
-  } else {
-    srand(0);
-  }
+
+  //NIRVANAP_stop();
+  in_wait_nokey();
+  for (counter = 31416; !in_test_key(); counter += 10061)
+    ;
+  srand(counter);
+
   // Clear Screen and init Nirvana
+
   game_cls();
-  // Init Game
-  game_start_timer();
   // Load Tiles
   NIRVANAP_tiles(_btiles);
   game_attribs();
@@ -98,29 +101,32 @@ void main(void) {
   menu_curr_sel = 1;
   map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
 
+
   while (1) {
 
     // MENU
     if (!game_debug) {
+
       menu_main();
     }
 
     // GAME
+    game_cls();
     game_loop();
-    // GAME OVER
+
+
     // spr_flatten();
     // game_update_stats();
     zx_print_str(11, 12, "SHOE HERE!");
     z80_delay_ms(250);
     game_over = 0; // Hack game_colour_message to render background
-    // game_colour_message(12, 12, 12 + 9, 250, 0);
-
-    // spr_clear_scr();
 
     for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
       NIRVANAP_spriteT(i, 0, 0, 0);
     }
-    // game_cls();
+    // GAME OVER
+    scr_curr = 0;
+    game_cls();
   }
 }
 

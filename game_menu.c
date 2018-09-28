@@ -38,8 +38,8 @@ void menu_main() {
   unsigned char c;
 
   f_input = 1;
-  s_col = 10;
-  s_col_e = 10 + 12;
+  s_col = 11;
+  s_col_e = 11 + 9;
   s_row = 7;
   c = 0;
 
@@ -110,10 +110,19 @@ void menu_main_print(void) {
   // intrinsic_halt();
   game_cls();
   // Manic Pietro Logo
-  NIRVANAP_spriteT(0, TILE_TITLE, 32, 11);
-  NIRVANAP_spriteT(1, TILE_TITLE + 1, 32, 13);
-  NIRVANAP_spriteT(2, TILE_TITLE + 2, 32, 15);
-  NIRVANAP_spriteT(3, TILE_TITLE + 3, 32, 17);
+  //NIRVANAP_spriteT(0, TILE_TITLE, 32, 11);
+  //NIRVANAP_spriteT(1, TILE_TITLE + 1, 32, 13);
+  //NIRVANAP_spriteT(2, TILE_TITLE + 2, 32, 15);
+  //NIRVANAP_spriteT(3, TILE_TITLE + 3, 32, 17);
+
+  zx_print_str(3, 9, "MANIC PIETRO");
+  game_paint_attrib(&attrib, 9, 21, (3 << 3) + 8);
+
+
+
+
+
+  ay_song_play(AY_SONG_LOOP, 4, ay_song_04_menu);
   game_attribs();
   zx_print_str(s_row, s_col, "1 SINCLAIR");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
@@ -134,17 +143,20 @@ void menu_main_print(void) {
   s_row = s_row + 2;
   zx_print_str(s_row, s_col, "0 START");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-  s_row = s_row + 9;
+  s_row = s_row + 8;
   zx_print_ink(INK_CYAN);
+
   zx_print_str(s_row, 8, "2018 NOENTIENDO");
   game_paint_attrib(&attrib, 0, 31, (s_row << 3) + 8);
+
+  zx_print_str(23, 2, "INT.RELEASE DON'T DISTRIBUTE");
 }
 
 void menu_redefine() {
   intrinsic_halt();
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
   for (v0 = 8; v0 < 14; ++v0)
-    game_paint_attrib(&attrib, 10, 16, (v0 << 3) + 8);
+    game_paint_attrib(&attrib, 0, 31, (v0 << 3) + 8);
 
 
   zx_print_str(10, 10, "LEFT");
