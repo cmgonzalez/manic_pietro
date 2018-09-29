@@ -45,14 +45,20 @@
 //TILES
 #define TILE_EMPTY                    0
 #define TILE_FLOOR                    1
+
 #define TILE_CRUMB0                   2
 #define TILE_WALL                     3
+
 #define TILE_CONVEYOR                 4
 #define TILE_DEADLY1                  5
+
 #define TILE_DEADLY2                  6
 #define TILE_EXTRA                    7
+#define TILE_EXTRA_OFF                16
+
 #define TILE_OBJECT                   8
 #define TILE_CRUMB1                   9
+
 #define TILE_CRUMB2                   10
 #define TILE_CRUMB3                   11
 
@@ -100,8 +106,8 @@
 #define E_WALK                        3
 #define E_STATIC                      4
 #define E_GHOST                       5
-#define E_SKYLAB                        6
-#define E_EUGENE                      7
+#define E_SKYLAB                      6
+#define E_FALL                        7
 
 
 #define TILE_TITLE                    204

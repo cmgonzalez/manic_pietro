@@ -35,7 +35,7 @@ void enemy_turn(void) {
   while (sprite < spr_count) {
 
     s_class = class[sprite];
-    if (s_class != 0) {
+    if (s_class != 0) { //TODO UNIFY WITH SPR_KIND!!!
       if (spr_chktime(&sprite)) {
 
         s_lin0 = lin[sprite];
@@ -79,6 +79,9 @@ void enemy_move(void) {
   case E_SKYLAB:
     enemy_gota();
     break;
+  case E_FALL:
+    enemy_fall();
+    break;
   }
 }
 
@@ -86,8 +89,8 @@ void enemy_gota() {
   unsigned char l_found;
   if (colint[sprite] == 0) {
 
-    index1 = spr_calc_index(lin[sprite] + 16 , col[sprite] );
-    if ( scr_map[index1] == TILE_EMPTY) {
+    index1 = spr_calc_index(lin[sprite] + 16, col[sprite]);
+    if (scr_map[index1] == TILE_EMPTY) {
       spr_move_down_f();
     } else {
       colint[sprite] = 1;
@@ -100,7 +103,7 @@ void enemy_gota() {
       lin[sprite] = value_a[sprite];
       l_found = 0;
       col[sprite] = 0xFF;
-      while(!l_found){
+      while (!l_found) {
         v0 = ((rand() & 15) << 1) - 1;
 
         if (v0 == 0xFF) {
@@ -121,6 +124,22 @@ void enemy_gota() {
       col[sprite] = v0;
       colint[sprite] = 0;
     }
+  }
+}
+
+void enemy_fall() {
+  ++colint[sprite];
+  if (colint[sprite] == spr_frames[sprite]) {
+    colint[sprite] = 0;
+  }
+  spr_move_down_f();
+  index1 = spr_calc_index(s_lin0, s_col0);
+  game_cell_paint_index();
+  index1 = spr_calc_index(s_lin0, s_col0+1);
+  game_cell_paint_index();
+  if (lin[sprite] >= 104) {
+    class[sprite] = 0;
+    NIRVANAP_spriteT(sprite,0,0,0);
   }
 }
 
@@ -302,6 +321,10 @@ void enemy_init() {
       // End Tile Paging
       tile[f_sprite] = spr_get_tile(&f_sprite);
 
+      // Hack Kong
+      if (f_class == 82) {
+        spr_frames[f_sprite] = 2;
+      }
       ++spr_count;
 
       spr_timer[f_sprite] = zx_clock();

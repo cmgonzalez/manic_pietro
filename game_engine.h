@@ -46,5 +46,4 @@ void                 game_copy_tile(unsigned char f_hi_tile, unsigned char f_low
 unsigned char        reverse(unsigned char b);
 extern void          game_anim_air(void);
 
-
 #endif

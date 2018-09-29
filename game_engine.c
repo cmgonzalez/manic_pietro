@@ -66,14 +66,12 @@ void game_loop(void) {
 
       if ((loop_count & 3) == 0) {
         game_key_paint();
-        // NIRVANAP_halt();
       }
       if ((loop_count & 15) == 0) {
         if (game_conveyor_col0 > 0) {
           game_anim_conveyor();
         }
         NIRVANAP_spriteT(6, SPRITE_DOOR, game_exit_lin, game_exit_col);
-        // NIRVANAP_halt(); // Seems to reduce flicker
       }
 
       if (game_check_time(&air_time, 25)) {
@@ -86,18 +84,16 @@ void game_loop(void) {
 
         frame_time = zx_clock();
         // intrinsic_halt();
-        if (game_fps_show)
+        if (game_debug)
           game_fps();
+
+
       }
 
       ++loop_count;
       ++fps;
 
-      if (obj_count == player_coins) {
-        game_flash_exit(FLASH);
-        zx_border(INK_BLACK);
-        obj_count = 0xFF;
-      }
+
     }
     if (game_round_up) {
       game_playing = 0;
@@ -250,7 +246,9 @@ void game_print_score(void) {
 }
 void game_print_lives(void) {
   v0 = 0;
-  zx_print_str(22, v0, "                                ");
+
+  game_fill_row(22, 32);
+
   while (v0 < player_lives) {
     zx_print_ink(INK_CYAN);
     zx_print_str(22, v0, "<");
@@ -299,7 +297,7 @@ void game_anim_air() {
     *(air_curr_byte + 512) = v0;
     *(air_curr_byte + 768) = v0;
   } else {
-    if (air_curr_byte > air_end_byte) {
+    if ( (unsigned int) air_curr_byte > (unsigned int) air_end_byte) {
       air_curr_byte = air_curr_byte - 1;
     } else {
       player_killed = 1;
@@ -408,7 +406,7 @@ void game_round_init(void) {
   zx_set_clock(0);
   frame_time = 0;
   player_coins = 0;
-  air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
+  air_curr_byte = (unsigned int) air_start_byte; // Remaing Air anim
   // Fill top LINE
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
@@ -445,9 +443,11 @@ void game_round_init(void) {
 
   zx_border(map_border);
   zx_print_ink(map_border | (map_border << 3));
-  zx_print_str(0, 0, "                                ");
-  zx_print_ink(INK_BLACK | PAPER_YELLOW);
-  zx_print_str(17, 0, "                                ");
+  game_fill_row(0, 32);
+  if (scr_curr > 0) {
+    zx_print_ink(INK_BLACK | PAPER_YELLOW);
+    game_fill_row(17, 32);
+  }
   game_page_map();
   game_draw_map();
   spr_btile_paint_back();
@@ -464,7 +464,9 @@ void game_round_init(void) {
   }
 
   game_update_stats();
+
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
+  game_fill_row(17, 32);
   zx_print_str(17, 0, map_names[scr_curr]);
 
   zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
@@ -478,6 +480,7 @@ void game_round_init(void) {
 
   zx_print_ink(INK_WHITE | PAPER_BLACK);
   NIRVANAP_halt();
+
 }
 
 void game_print_header(void) {
@@ -631,15 +634,15 @@ void game_attribs() {
 
   // ATTRIB NORMAL
   attrib[0] = map_paper | INK_YELLOW;
-  attrib[1] = map_paper | BRIGHT | INK_YELLOW;
+  attrib[1] = map_paper | INK_YELLOW | BRIGHT;
   attrib[2] = map_paper | INK_WHITE;
   attrib[3] = map_paper | INK_YELLOW;
 
   // ATTRIB HIGHLIGHT
-  attrib_hl[0] = map_paper | INK_CYAN | PAPER_RED | BRIGHT;
-  attrib_hl[1] = map_paper | INK_CYAN | PAPER_RED;
-  attrib_hl[2] = map_paper | INK_BLUE | PAPER_RED;
-  attrib_hl[3] = map_paper | INK_BLACK | PAPER_RED;
+  attrib_hl[0] = map_paper | INK_CYAN | PAPER_RED;
+  attrib_hl[1] = map_paper | INK_CYAN | PAPER_RED| BRIGHT;
+  attrib_hl[2] = map_paper | INK_WHITE | PAPER_RED;
+  attrib_hl[3] = map_paper | INK_CYAN | PAPER_RED;
 
   // ATTRIB OSD
   attrib_osd[0] = PAPER_YELLOW | INK_BLACK | BRIGHT;
@@ -822,6 +825,26 @@ void game_page_map(void) {
   // Atribs
   btiles[240 + 43] = btiles[48 + 32];
 
+  //TILE EXTRA OFF
+  // Write Local
+  li = (48 * 3);
+  lk = (48 * 0);
+
+  //Pixels
+  i = 0;
+  while (i < 16) {
+    btiles[lk + 16 + i] = reverse(btiles[li + i + 1]);
+    ++i;
+    ++i;
+  }
+  //Attribs
+  lk = lk + 32 + 4;
+  i = 0;
+  while (i < 4) {
+    btiles[lk + i] = btiles[li + i + 32 + 8];
+    ++i;
+  }
+
   // TODO Optimize Draw Crumb mover llave al ultimo tile y asi aplicar un loop
   /* 1 PX but with more tiles...
     // Pixels
@@ -927,7 +950,7 @@ void game_page_map(void) {
 
 void game_flash_exit(unsigned char f_attrib) {
   unsigned int li;
-
+/*
   // Set Flash bits on 8x8 Exits Tiles
   li = 192;
   while (li < 384) {
@@ -944,9 +967,9 @@ void game_flash_exit(unsigned char f_attrib) {
   spr_draw8(29, game_exit_lin - 8, game_exit_col + 1);
   spr_draw8(30, game_exit_lin, game_exit_col);
   spr_draw8(31, game_exit_lin, game_exit_col + 1);
-
+*/
   // Set Flash bits on Exit Sprite
-  li = (48 * (80 - 1)) + 32; // 80 ==> TILE EXIT
+  li = (48 * (SPRITE_DOOR )) + 32; // 80 ==> TILE EXIT
   i = 0;
   while (i < 16) {
     btiles[li] = btiles[li] & 127;
@@ -954,6 +977,8 @@ void game_flash_exit(unsigned char f_attrib) {
     ++i;
     ++li;
   }
+  NIRVANAP_spriteT(6, SPRITE_DOOR, game_exit_lin, game_exit_col);
+  NIRVANAP_halt();
 }
 
 unsigned char game_copy_tile_std(unsigned char f_hi_tile,

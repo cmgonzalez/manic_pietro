@@ -75,6 +75,7 @@ void player_turn(void) {
       if (scr_curr == 255) {
         scr_curr = 19;
       }
+      in_wait_nokey();
     }
     if (c == 50) { // 2
       ++scr_curr;
@@ -82,17 +83,20 @@ void player_turn(void) {
       if (scr_curr == 20) {
         scr_curr = 0;
       }
+      in_wait_nokey();
     }
 
     if (c == 51) {
       game_inmune = !game_inmune;
       zx_border(INK_GREEN);
       z80_delay_ms(25);
+      in_wait_nokey();
     }
 
     if (c == 52) {
       game_round_up = 1;
       z80_delay_ms(250);
+      in_wait_nokey();
     }
     // zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
     dirs = (joyfunc1)(&k1);
@@ -129,9 +133,9 @@ void player_turn(void) {
       game_round_up = 1;
       // Amimate Air
 
-      while (air_curr_byte >= air_end_byte) {
+      while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
         game_anim_air();
-        player_score_add(10);
+        player_score_add(25);
       }
     }
   }
@@ -168,9 +172,9 @@ unsigned char player_move_jump(void) {
   if (BIT_CHK(*p_state, STAT_DIRL) || BIT_CHK(*p_state, STAT_DIRR))
      {
 
-      if ((player_jump_count == 3 || player_jump_count == 6 ||
-           player_jump_count == 9 || player_jump_count == 12 ||
-           player_jump_count == 15) &&
+      if ((player_jump_count == 1 || player_jump_count == 3 ||
+           player_jump_count == 6 || player_jump_count == 9 ||
+           player_jump_count == 12) &&
           player_jump_hack) {
         player_jump_hack = 0;
         // Force anim on next loop
@@ -387,31 +391,17 @@ void player_collision() {
   BIT_CLR(*p_state, STAT_ONEXIT);
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1], col[GAME_INDEX_P1]);
-  v0 = scr_map[index1];
-  v0 = player_pick_deadly(v0);
-  v0 = player_pick_exit(v0);
-
-  v0 = player_pick_item(v0, index1);
+  player_pick();
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 14, col[GAME_INDEX_P1]);
-  v0 = scr_map[index1];
-  v0 = player_pick_deadly(v0);
-  v0 = player_pick_exit(v0);
-  v0 = player_pick_item(v0, index1);
+  player_pick();
 
   // Right
-
   index1 = spr_calc_index(lin[GAME_INDEX_P1], col[GAME_INDEX_P1] + 1);
-  v0 = scr_map[index1];
-  v0 = player_pick_deadly(v0);
-  v0 = player_pick_exit(v0);
-  v0 = player_pick_item(v0, index1);
+  player_pick();
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 14, col[GAME_INDEX_P1] + 1);
-  v0 = scr_map[index1];
-  v0 = player_pick_deadly(v0);
-  v0 = player_pick_exit(v0);
-  v0 = player_pick_item(v0, index1);
+  player_pick();
 
   // Sprite Collision
   for (i = 0; i < GAME_INDEX_P1; ++i) {
@@ -429,6 +419,14 @@ void player_collision() {
       }
     }
   }
+}
+
+void player_pick(void) {
+  v0 = scr_map[index1];
+  v0 = player_pick_deadly(v0);
+  v0 = player_pick_exit(v0);
+  v0 = player_pick_item(v0, index1);
+  v0 = player_pick_extra(v0);
 }
 
 unsigned char player_get_floor() {
@@ -501,6 +499,10 @@ unsigned char player_pick_item(unsigned char l_val, int l_index) {
     ++player_coins;
     audio_coin();
     zx_border(INK_WHITE);
+    if (obj_count == player_coins) {
+      game_flash_exit(FLASH);
+      obj_count = 0xFF;
+    }
     return TILE_EMPTY;
   }
   return l_val;
@@ -522,6 +524,47 @@ unsigned char player_pick_exit(unsigned char l_val) {
 
   if (l_val >= TILE_EXIT0) {
     BIT_SET(*p_state, STAT_ONEXIT);
+    return 0;
+  }
+  return l_val;
+}
+
+unsigned char player_pick_extra(unsigned char l_val) {
+
+  if (l_val == TILE_EXTRA) {
+
+    // HACK
+    if (scr_curr == 7 || scr_curr == 11) {
+      // 7 Miner Willy meets the kong beast
+      scr_map[index1] = TILE_EXTRA_OFF;
+      game_cell_paint_index();
+
+
+        if (index1 == 5 || index1 == 6) {
+          // Switch 1
+          index1 = 352 + 17;
+          scr_map[index1] = TILE_EMPTY;
+          game_cell_paint_index();
+          index1 = 352 + 32 + 17;
+          scr_map[index1] = TILE_EMPTY;
+          game_cell_paint_index();
+          value_b[2] = 18;
+        }
+        if (index1 == 18) {
+          // Switch 2
+          tile[0] = tile[0] + 2;
+          spr_kind[0] = E_FALL;
+          spr_speed[0] = 4;
+          index1 = 64 + 15;
+          scr_map[index1] = TILE_EMPTY;
+          game_cell_paint_index();
+          index1 = 64 + 16;
+          scr_map[index1] = TILE_EMPTY;
+          game_cell_paint_index();
+        }
+
+    }
+
     return 0;
   }
   return l_val;

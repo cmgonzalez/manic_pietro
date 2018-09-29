@@ -42,7 +42,7 @@ void main(void) {
   z80_delay_ms(666);
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
-  game_debug = 0;
+  game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
   scr_curr = 0;
@@ -100,7 +100,6 @@ void main(void) {
 
   menu_curr_sel = 1;
   map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
-
 
   while (1) {
 

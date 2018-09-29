@@ -199,7 +199,7 @@ unsigned char map_paper_last;
 
 unsigned char *air_curr_byte;
 const unsigned int air_start_byte = 21087;
-const unsigned int air_end_byte = 21060;
+const unsigned int air_end_byte = 21059;
 
 
 //###############################################################################################
@@ -233,7 +233,7 @@ unsigned char const spr_init[] = {
     76,  64, 4, E_HORIZONTAL, 0x46, 0x43, 0x45, 0x06, // PAC
     78,  68, 4, E_HORIZONTAL, 0x05, 0x03, 0x06, 0x02, // KANGOROO
     80,  72, 4, E_HORIZONTAL, 0x45, 0x43, 0x44, 0x42, // BARRELL
-    82, 144, 2, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG
+    82, 144, 4, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG
     84,  92, 4, E_VERTICAL  , 0x03, 0x05, 0x04, 0x02, // AMEBATRON
     86,  76, 4, E_HORIZONTAL, 0x04, 0x05, 0x02, 0x06, // CARRITO
     88,  80, 4, E_HORIZONTAL, 0x05, 0x06, 0x02, 0x07, // EWOK
@@ -250,6 +250,7 @@ unsigned char const spr_init[] = {
    110, 132, 4, E_VERTICAL  , 0x06, 0x04, 0x03, 0x05, // AMEBATRON 2
    112, 136, 4, E_VERTICAL  , 0x22, 0x21, 0x26, 0x24, // PELOTA(PAPER GREEN)
    114, 140, 4, E_HORIZONTAL, 0x26, 0x21, 0x22, 0x27, // WEA SOLAR (PAPER GREEN)
+   116, 146, 6, E_FALL      , 0xFF, 0xFF, 0xFF, 0xFF, // KONG FALLING
 
 };
 
