@@ -172,8 +172,8 @@ unsigned char player_move_jump(void) {
   if (BIT_CHK(*p_state, STAT_DIRL) || BIT_CHK(*p_state, STAT_DIRR))
      {
 
-      if ((player_jump_count == 1 || player_jump_count == 3 ||
-           player_jump_count == 6 || player_jump_count == 9 ||
+      if ((player_jump_count == 1 || player_jump_count == 4 ||
+           player_jump_count == 7 || player_jump_count == 9 ||
            player_jump_count == 12) &&
           player_jump_hack) {
         player_jump_hack = 0;
