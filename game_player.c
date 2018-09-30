@@ -37,7 +37,7 @@ void player_init(unsigned char f_lin, unsigned char f_col,
 
   lin[GAME_INDEX_P1] = f_lin; //*SPRITELIN(GAME_INDEX_P1);
   col[GAME_INDEX_P1] = f_col; //*SPRITECOL(GAME_INDEX_P1);
-
+  player_jump_top = f_lin;
   state[GAME_INDEX_P1] = 0;
   state_a[GAME_INDEX_P1] = 0;
   last_time[GAME_INDEX_P1] = zx_clock();
@@ -58,6 +58,7 @@ void player_init(unsigned char f_lin, unsigned char f_col,
     BIT_SET(*p_state_a, STAT_LDIRL);
     tile[GAME_INDEX_P1] = f_tile + spr_frames[GAME_INDEX_P1];
   }
+  // TODO PERF remove +16 and ajust all game
   NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16,
                    col[GAME_INDEX_P1]);
 }
@@ -127,13 +128,19 @@ void player_turn(void) {
       player_lost_life();
     }
     // Level UP
-    if (obj_count == 0xFF && col[GAME_INDEX_P1] == game_exit_col &&
-        lin[GAME_INDEX_P1] == game_exit_lin - 16) {
+    // CAUTION lin[GAME_INDEX_P1] has + 16px!!
+
+    v0 = abs((lin[GAME_INDEX_P1] + 16) - game_exit_lin);
+
+    if ((obj_count == 0xFF) && (col[GAME_INDEX_P1] == game_exit_col) &&
+        (v0 < 8)) {
+
       ++scr_curr;
       game_round_up = 1;
       // Amimate Air
 
       while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
+        audio_tick();
         game_anim_air();
         player_score_add(25);
       }
@@ -219,6 +226,7 @@ unsigned char player_move_jump(void) {
 
   } else {
 
+    if (player_jump_count == 14) audio_fall();
     // Falling
     v0 = player_get_floor();
 
@@ -237,6 +245,7 @@ unsigned char player_move_jump(void) {
       BIT_CLR(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_JUMP);
       BIT_CLR(*p_state, STAT_CONVEYOR);
+      ay_fx_stop();
       return 0;
     }
     spr_set_down();
@@ -258,7 +267,8 @@ unsigned char player_move_walk(void) {
         // NEW JUMP
         player_vel_inc = 1;
         player_jump_count = 0xFF;
-        audio_salto();
+
+        audio_jump();
         spr_set_up();
         player_vel_y = player_vel_y0;
         // Set the Lock
@@ -347,6 +357,8 @@ unsigned char player_move_walk(void) {
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
+      player_fall_start = 1;
+      audio_fall();
     }
     return 1;
   } else {
@@ -366,6 +378,8 @@ unsigned char player_move_walk(void) {
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
+      // player_fall_start = 1;
+      // audio_fall();
     }
 
     if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
@@ -539,30 +553,28 @@ unsigned char player_pick_extra(unsigned char l_val) {
       scr_map[index1] = TILE_EXTRA_OFF;
       game_cell_paint_index();
 
-
-        if (index1 == 5 || index1 == 6) {
-          // Switch 1
-          index1 = 352 + 17;
-          scr_map[index1] = TILE_EMPTY;
-          game_cell_paint_index();
-          index1 = 352 + 32 + 17;
-          scr_map[index1] = TILE_EMPTY;
-          game_cell_paint_index();
-          value_b[2] = 18;
-        }
-        if (index1 == 18) {
-          // Switch 2
-          tile[0] = tile[0] + 2;
-          spr_kind[0] = E_FALL;
-          spr_speed[0] = 4;
-          index1 = 64 + 15;
-          scr_map[index1] = TILE_EMPTY;
-          game_cell_paint_index();
-          index1 = 64 + 16;
-          scr_map[index1] = TILE_EMPTY;
-          game_cell_paint_index();
-        }
-
+      if (index1 == 5 || index1 == 6) {
+        // Switch 1
+        index1 = 352 + 17;
+        scr_map[index1] = TILE_EMPTY;
+        game_cell_paint_index();
+        index1 = 352 + 32 + 17;
+        scr_map[index1] = TILE_EMPTY;
+        game_cell_paint_index();
+        value_b[2] = 18;
+      }
+      if (index1 == 18) {
+        // Switch 2
+        tile[0] = tile[0] + 2;
+        spr_kind[0] = E_FALL;
+        spr_speed[0] = 4;
+        index1 = 64 + 15;
+        scr_map[index1] = TILE_EMPTY;
+        game_cell_paint_index();
+        index1 = 64 + 16;
+        scr_map[index1] = TILE_EMPTY;
+        game_cell_paint_index();
+      }
     }
 
     return 0;
@@ -644,7 +656,7 @@ void player_lost_life() {
   unsigned char i;
 
   ay_reset();
-  audio_explosion();
+  audio_dead();
   game_update_stats();
 
   // BLINK

@@ -19,22 +19,16 @@
 
 #include "globals.h"
 extern void audio_ingame(void);
-extern void audio_explosion(void);
-extern void audio_explosion1(void);
-extern void audio_disparo1(void);
-extern void audio_disparo2(void);
-extern void audio_disparo_axe(void);
-extern void audio_disparo_fire(void);
-extern void audio_efecto(void);
-extern void audio_salto(void);
-extern void audio_golpe(void);
+extern void audio_dead(void);
+extern void audio_jump(void);
+extern void audio_fall(void);
 extern void audio_coin(void);
-extern void audio_magic1(void);
-extern void audio_sin_mana(void);
+extern void audio_door(void);
+extern void audio_tick(void);
 extern void audio_puerta(void);
-extern void audio_lotr_lose_a_life(void);
 extern void audio_level_start(void);
 extern void audio_level_complete(void);
+extern void audio_game_start(void);
 extern void audio_game_end(void);
 extern void audio_menu(void);
 extern void audio_levelup(void);

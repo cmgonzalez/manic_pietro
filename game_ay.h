@@ -44,38 +44,23 @@ extern void ay_song_stop(void) __preserves_regs(b,c,d,e,h,l);
 
 extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 
-// AY Songs
+
 //BANK_3
 extern unsigned char hibtiles[];
 
-//BANK_4
+//BANK_4 Songs
 extern unsigned char ay_song_04_ingame[];
 extern unsigned char ay_song_04_ingame0[];
 extern unsigned char ay_song_04_menu[];
 
 
-
-//BANK_6
-extern unsigned char ay_song_06_lotr_lose_a_life[];
-extern unsigned char ay_song_06_lotr_level_complete[];
-extern unsigned char ay_song_06_lotr_level_start[];
-// AY Sound Effects
+//BANK6 AY FXs
 extern unsigned char ay_fx_06_coin[];
-extern unsigned char ay_fx_06_dano_por_toque[];
-extern unsigned char ay_fx_06_explosion[];
-extern unsigned char ay_fx_06_golpe[];
-extern unsigned char ay_fx_06_magic1[];
-extern unsigned char ay_fx_06_puerta[];
-extern unsigned char ay_fx_06_salto[];
-extern unsigned char ay_fx_06_sin_mana[];
-extern unsigned char ay_fx_06_magic[];
-extern unsigned char ay_fx_06_levelup[];
-extern unsigned char ay_fx_06_disparo1[];
-extern unsigned char ay_fx_06_disparo2[];
-extern unsigned char ay_fx_06_efecto[];
-extern unsigned char ay_fx_06_explosion1[];
-extern unsigned char ay_fx_06_disparo_axe[];
-extern unsigned char ay_fx_06_disparo_fire[];
-
+extern unsigned char ay_fx_06_dead[];
+extern unsigned char ay_fx_06_jump[];
+extern unsigned char ay_fx_06_fall[];
+extern unsigned char ay_fx_06_game_start[];
+extern unsigned char ay_fx_06_tick[];
+extern unsigned char ay_fx_06_door[];
 
 #endif

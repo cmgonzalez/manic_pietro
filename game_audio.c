@@ -38,57 +38,65 @@ void audio_ingame(void) {
   }
 }
 
-void audio_explosion(void) {
+void audio_dead(void) {
   ay_fx_stop();
-  ay_fx_play(6, ay_fx_06_explosion);
+  ay_fx_play(6, ay_fx_06_dead);
 }
 
-void audio_explosion1(void) {
-  ay_fx_play(6, ay_fx_06_explosion);
-  // ay_song_play(AY_SONG_ONCE, 4, 4, ay_fx_06_explosion1);
+
+
+
+void audio_jump(void) {
+  ay_fx_play(6, ay_fx_06_jump);
+  player_fall_start = 1;
 }
 
-void audio_disparo1(void) { ay_fx_play(6, ay_fx_06_disparo1); }
+void audio_fall(void) {
+  if (player_fall_start){
+    ay_fx_stop();
+    ay_fx_play(6, ay_fx_06_fall);
+    player_fall_start = 0;
+  }
 
-void audio_disparo2(void) { ay_fx_play(6, ay_fx_06_disparo2); }
+}
+void audio_game_start(void) {
+  ay_fx_play(6, ay_fx_06_game_start);
+}
 
-void audio_disparo_axe(void) { ay_fx_play(6, ay_fx_06_disparo_axe); }
-
-void audio_disparo_fire(void) { ay_fx_play(6, ay_fx_06_disparo_fire); }
-
-void audio_efecto(void) { ay_fx_play(6, ay_fx_06_efecto); }
-void audio_salto(void) { ay_fx_play(6, ay_fx_06_salto); }
-void audio_golpe(void) { ay_fx_play(6, ay_fx_06_golpe); }
+void audio_door(void) {
+  ay_fx_play(6, ay_fx_06_door);
+}
+void audio_tick(void) {
+  ay_fx_stop();
+  ay_fx_play(6, ay_fx_06_tick);
+}
 void audio_coin(void) {
   // ay_fx_stop();
   ay_fx_play(6, ay_fx_06_coin);
 }
-void audio_magic1(void) { ay_fx_play(6, ay_fx_06_magic1); }
-void audio_sin_mana(void) { ay_fx_play(6, ay_fx_06_sin_mana); }
-void audio_puerta(void) { ay_fx_play(6, ay_fx_06_puerta); }
 
-void audio_lotr_lose_a_life(void) {
-  ay_reset();
-  ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_lose_a_life);
+void audio_puerta(void) {
+  //ay_fx_play(6, ay_fx_06_puerta);
 }
+
 void audio_level_start(void) {
   ay_reset();
-  ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_start);
+  //ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_start);
 }
 void audio_level_complete(void) {
   ay_reset();
-  ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_complete);
+  //ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_complete);
 }
 void audio_game_end(void) {
   ay_reset();
-  //ay_song_play(AY_SONG_ONCE, 3, ay_song_03_sunflower);
+  // ay_song_play(AY_SONG_ONCE, 3, ay_song_03_sunflower);
 }
 void audio_menu(void) {
   ay_reset();
-  //ay_song_play(AY_SONG_LOOP, 3, ay_song_03_tdm_cs9);
+  ay_song_play(AY_SONG_LOOP, 4, ay_song_04_menu);
 }
 
 void audio_levelup(void) {
   ay_fx_stop();
-  ay_fx_play(6, ay_fx_06_levelup);
+  //ay_fx_play(6, ay_fx_06_levelup);
 }

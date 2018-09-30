@@ -97,6 +97,7 @@ unsigned int player_kill_index;
 unsigned int player_hit_time;
 unsigned char player_hit;
 unsigned char player_jumpcount;
+unsigned char player_fall_start;
 
 unsigned char nirv_sprite_index;
 

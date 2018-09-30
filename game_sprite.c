@@ -448,6 +448,7 @@ unsigned char spr_paint_player(void) {
     //  NIRVANAP_spriteT(0, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     //  NIRVANAP_spriteT(1, 79, game_exit_lin, game_exit_col);
     //} else {
+    //TODO PERF remove +16 and ajust all game
       NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     //}
 
@@ -458,6 +459,7 @@ unsigned char spr_paint_player(void) {
     // s_tile0 = *SPRITEVAL(GAME_INDEX_P1);
 
     s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
+    //TODO PERF remove +16 and ajust all game
     NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + 16, s_col1);
 
     return 0;

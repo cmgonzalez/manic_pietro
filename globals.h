@@ -250,7 +250,7 @@ extern signed int  player_vel_y0;
 extern signed char  player_vel_inc;
 extern unsigned char player_jump_hack;
 extern unsigned char player_jump_count;
-
+extern unsigned char player_fall_start;
 
 //PLAYER ATTRIBUTES
 
@@ -295,6 +295,7 @@ extern unsigned char player_jump_top;
 extern unsigned char player_killed;
 extern unsigned int  player_kill_index;
 extern unsigned char nirv_sprite_index;
+
 
 extern unsigned char s_tile0;
 extern unsigned char s_tile1;

@@ -21,6 +21,7 @@ default: loader.tap game_scr.bin game.font $(OUT)
 	@touch game.c
 	@-ls -lh *.bin
 	@find . -type f -name '*.bin' -exec du -ch {} + | grep total$
+	@sleep 1
 	@-rm -f *.bin *.tap *.font *.zx7 game zcc_proj.lst zcc_opt.def
 	@grep code_compiler_size game.map
 

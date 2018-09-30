@@ -461,6 +461,7 @@ void game_round_init(void) {
 
   if (!game_over) {
     player_init(player_lin_scr, player_col_scr, TILE_P1_RIGHT);
+    player_killed = 0;
   }
 
   game_update_stats();

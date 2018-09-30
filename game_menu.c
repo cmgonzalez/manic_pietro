@@ -89,7 +89,7 @@ void menu_main() {
       intrinsic_halt();
       game_cls();
       ay_reset();
-      audio_coin();
+      audio_game_start();
       z80_delay_ms(300);
       f_input = 0; // Exit Loop
       break;
@@ -109,11 +109,13 @@ void menu_main_print(void) {
   s_col_e = 20;
   // intrinsic_halt();
   game_cls();
+  audio_menu();
   // Manic Pietro Logo
   //NIRVANAP_spriteT(0, TILE_TITLE, 32, 11);
   //NIRVANAP_spriteT(1, TILE_TITLE + 1, 32, 13);
   //NIRVANAP_spriteT(2, TILE_TITLE + 2, 32, 15);
   //NIRVANAP_spriteT(3, TILE_TITLE + 3, 32, 17);
+  game_attribs();
 
   zx_print_str(3, 9, "MANIC PIETRO");
   game_paint_attrib(&attrib, 9, 21, (3 << 3) + 8);
@@ -122,8 +124,6 @@ void menu_main_print(void) {
 
 
 
-  ay_song_play(AY_SONG_LOOP, 4, ay_song_04_menu);
-  game_attribs();
   zx_print_str(s_row, s_col, "1 SINCLAIR");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
   ++s_row;
