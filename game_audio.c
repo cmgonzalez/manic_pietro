@@ -34,58 +34,54 @@ void audio_ingame(void) {
 
   if (game_song_play && !game_song_play_start) {
     game_song_play_start = 1;
-    ay_song_play(AY_SONG_LOOP, 4, ay_song_04_ingame0);
+    if (game_mode == 0) {
+      ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
+    } else {
+      ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame1);
+    }
   }
 }
 
 void audio_dead(void) {
   ay_fx_stop();
-  ay_fx_play(6, ay_fx_06_dead);
+  ay_fx_play(4, ay_fx_dead);
 }
 
-
-
-
 void audio_jump(void) {
-  ay_fx_play(6, ay_fx_06_jump);
+  ay_fx_play(4, ay_fx_jump);
   player_fall_start = 1;
 }
 
 void audio_fall(void) {
-  if (player_fall_start){
+  if (player_fall_start) {
     ay_fx_stop();
-    ay_fx_play(6, ay_fx_06_fall);
+    ay_fx_play(4, ay_fx_fall);
     player_fall_start = 0;
   }
+}
+void audio_game_start(void) { ay_fx_play(4, ay_fx_game_start); }
 
-}
-void audio_game_start(void) {
-  ay_fx_play(6, ay_fx_06_game_start);
-}
-
-void audio_door(void) {
-  ay_fx_play(6, ay_fx_06_door);
-}
+void audio_door(void) { ay_fx_play(4, ay_fx_door); }
 void audio_tick(void) {
   ay_fx_stop();
-  ay_fx_play(6, ay_fx_06_tick);
+  ay_fx_play(4, ay_fx_tick);
 }
 void audio_coin(void) {
   // ay_fx_stop();
-  ay_fx_play(6, ay_fx_06_coin);
+  ay_fx_play(4, ay_fx_coin);
 }
 
 void audio_puerta(void) {
-  //ay_fx_play(6, ay_fx_06_puerta);
+  // ay_fx_play(4, ay_fx_puerta);
 }
 
 void audio_level_start(void) {
   ay_reset();
-  //ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_start);
+  // ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_start);
 }
 void audio_level_complete(void) {
   ay_reset();
-  //ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_complete);
+  // ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_complete);
 }
 void audio_game_end(void) {
   ay_reset();
@@ -93,10 +89,10 @@ void audio_game_end(void) {
 }
 void audio_menu(void) {
   ay_reset();
-  ay_song_play(AY_SONG_LOOP, 4, ay_song_04_menu);
+  ay_song_play(AY_SONG_LOOP, 4, ay_song_menu);
 }
 
 void audio_levelup(void) {
   ay_fx_stop();
-  //ay_fx_play(6, ay_fx_06_levelup);
+  // ay_fx_play(4, ay_fx_levelup);
 }

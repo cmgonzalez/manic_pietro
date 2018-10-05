@@ -653,8 +653,7 @@ void spr_btile_paint_back() {
     // Internal
     while (i < 16) {
       f_char = &btiles[0] + index0 + i + 32; // TODO SPEED UP INC MEMORY ADDRESS
-      if ((*f_char & 0x38) ==
-          PAPER_BLACK) {          // 00111000 DEFAULT ON HI MEM BTILES
+      if ( (*f_char & 0x38) == PAPER_BLACK ) {          // 00111000 DEFAULT ON HI MEM BTILES
         *f_char = *f_char & 0xC7; // 11000111
         *f_char = *f_char | map_paper;
       }

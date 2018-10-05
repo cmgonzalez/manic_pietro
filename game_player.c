@@ -74,14 +74,14 @@ void player_turn(void) {
       --scr_curr;
       game_round_up = 1;
       if (scr_curr == 255) {
-        scr_curr = 19;
+        scr_curr = 39;
       }
       in_wait_nokey();
     }
     if (c == 50) { // 2
       ++scr_curr;
       game_round_up = 1;
-      if (scr_curr == 20) {
+      if (scr_curr == 40) {
         scr_curr = 0;
       }
       in_wait_nokey();
@@ -89,9 +89,16 @@ void player_turn(void) {
 
     if (c == 51) {
       game_inmune = !game_inmune;
-      zx_border(INK_GREEN);
+      if (game_inmune) {
+        zx_print_str(21,0,"MILLENIAL MODE");
+      } else {
+        zx_print_str(21,0,"GENX MODE");
+      }
+
       z80_delay_ms(25);
       in_wait_nokey();
+      game_fill_row(21,32);
+
     }
 
     if (c == 52) {
@@ -265,6 +272,18 @@ unsigned char player_move_walk(void) {
       // Pre CHECK
       if (player_check_ceil(lin[GAME_INDEX_P1] - 2, col[GAME_INDEX_P1])) {
         // NEW JUMP
+if (game_mode == 0) {
+  //Willy
+  game_gravity = 100;                  // GAME_GRAVITY;
+  player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
+} else {
+  //Pietro
+  game_gravity = 100;                  // GAME_GRAVITY;
+  //player_vel_y0 = -(game_gravity * 7); // GAME_VELOCITY;
+  player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
+}
+
+
         player_vel_inc = 1;
         player_jump_count = 0xFF;
 

@@ -79,11 +79,13 @@ $(OUTC): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	zx7 -f game_CODE.bin
 	zx7 -f game_BANK_3.bin
 	zx7 -f game_BANK_4.bin
+	zx7 -f game_BANK_5.bin
 	zx7 -f game_BANK_6.bin
-	echo PUBLIC LEN_SCREEN, LEN_NIRVANAP, LEN_GAME, LEN_BANK_3, LEN_BANK_4, LEN_BANK_6 > zx7_game_sizes.asm
+	echo PUBLIC LEN_SCREEN, LEN_NIRVANAP, LEN_GAME, LEN_BANK_3, LEN_BANK_4, LEN_BANK_5, LEN_BANK_6 > zx7_game_sizes.asm
 	echo defc LEN_SCREEN = $(shell wc -c < game_scr.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_NIRVANAP = $(shell wc -c < nirvanap_final.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_GAME = $(shell wc -c < game_CODE.bin.zx7) >> zx7_game_sizes.asm
+	echo defc LEN_BANK_1 = $(shell wc -c < game_BANK_1.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_BANK_3 = $(shell wc -c < game_BANK_3.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_BANK_4 = $(shell wc -c < game_BANK_4.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_BANK_6 = $(shell wc -c < game_BANK_6.bin.zx7) >> zx7_game_sizes.asm

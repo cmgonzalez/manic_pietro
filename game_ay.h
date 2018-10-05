@@ -45,22 +45,29 @@ extern void ay_song_stop(void) __preserves_regs(b,c,d,e,h,l);
 extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 
 
-//BANK_3
-extern unsigned char hibtiles[];
+//BANK 3 Sprites
+extern unsigned char hisprites1[];
+extern unsigned char hisprites2[];
+extern unsigned char hidoors1[];
+extern unsigned char hidoors2[];
 
-//BANK_4 Songs
-extern unsigned char ay_song_04_ingame[];
-extern unsigned char ay_song_04_ingame0[];
-extern unsigned char ay_song_04_menu[];
+//BANK 4 Songs
+extern unsigned char ay_song_ingame0[];
+extern unsigned char ay_song_ingame1[];
+extern unsigned char ay_song_menu[];
 
+//BANK 5 Tiles
+extern unsigned char hitiles1[];
+extern unsigned char hitiles2[];
 
-//BANK6 AY FXs
-extern unsigned char ay_fx_06_coin[];
-extern unsigned char ay_fx_06_dead[];
-extern unsigned char ay_fx_06_jump[];
-extern unsigned char ay_fx_06_fall[];
-extern unsigned char ay_fx_06_game_start[];
-extern unsigned char ay_fx_06_tick[];
-extern unsigned char ay_fx_06_door[];
+//BANK 6 Sound fx
+extern unsigned char ay_fx_coin[];
+extern unsigned char ay_fx_dead[];
+extern unsigned char ay_fx_jump[];
+extern unsigned char ay_fx_fall[];
+extern unsigned char ay_fx_game_start[];
+extern unsigned char ay_fx_tick[];
+extern unsigned char ay_fx_door[];
+
 
 #endif

@@ -86,14 +86,10 @@ void game_loop(void) {
         // intrinsic_halt();
         if (game_debug)
           game_fps();
-
-
       }
 
       ++loop_count;
       ++fps;
-
-
     }
     if (game_round_up) {
       game_playing = 0;
@@ -297,7 +293,7 @@ void game_anim_air() {
     *(air_curr_byte + 512) = v0;
     *(air_curr_byte + 768) = v0;
   } else {
-    if ( (unsigned int) air_curr_byte > (unsigned int) air_end_byte) {
+    if ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
       air_curr_byte = air_curr_byte - 1;
     } else {
       player_killed = 1;
@@ -394,6 +390,27 @@ void game_round_init(void) {
       "      Amoebatrons Revenge",        // 17
       "     Solar Power Generator",       // 18
       "        The Final Barrier",        // 19
+      "       Frozen Central Pipe",
+      "            Stage 21",
+      "            Stage 22",
+      "            Stage 23",
+      "            Stage 24",
+      "            Stage 25",
+      "            Stage 26",
+      "            Stage 27",
+      "            Stage 28",
+      "            Stage 29",
+      "            Stage 30",
+      "            Stage 31",
+      "            Stage 32",
+      "            Stage 33",
+      "            Stage 34",
+      "            Stage 35",
+      "            Stage 36",
+      "            Stage 37",
+      "            Stage 38",
+      "            Stage 39",
+
   };
 
   // TODO Just use start to simplify
@@ -406,7 +423,7 @@ void game_round_init(void) {
   zx_set_clock(0);
   frame_time = 0;
   player_coins = 0;
-  air_curr_byte = (unsigned int) air_start_byte; // Remaing Air anim
+  air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
   // Fill top LINE
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
@@ -427,7 +444,16 @@ void game_round_init(void) {
     spr_init_cout = 3;
   }
 
-  game_tile_cnt = game_copy_tile_std(40, 8);
+  if (scr_curr < 20) {
+    game_tileset = 0;
+    game_mode = 0;
+  } else {
+    game_tileset = 1;
+    game_mode = 1;
+  }
+
+  // Copy player tile
+  game_tile_cnt = game_copy_tile_std(0, 8);
 
   // Coin HIGHLIGHT init
   key_last = 0;
@@ -481,7 +507,6 @@ void game_round_init(void) {
 
   zx_print_ink(INK_WHITE | PAPER_BLACK);
   NIRVANAP_halt();
-
 }
 
 void game_print_header(void) {
@@ -641,7 +666,7 @@ void game_attribs() {
 
   // ATTRIB HIGHLIGHT
   attrib_hl[0] = map_paper | INK_CYAN | PAPER_RED;
-  attrib_hl[1] = map_paper | INK_CYAN | PAPER_RED| BRIGHT;
+  attrib_hl[1] = map_paper | INK_CYAN | PAPER_RED | BRIGHT;
   attrib_hl[2] = map_paper | INK_WHITE | PAPER_RED;
   attrib_hl[3] = map_paper | INK_CYAN | PAPER_RED;
 
@@ -669,7 +694,9 @@ void game_page_map(void) {
   // unsigned char l_world_h;
   unsigned char l_paper;
   unsigned char l_scr;
+  unsigned char l_scr0;
   unsigned char l_scr_map;
+  unsigned char l_mode;
 
   // btile page
   unsigned char l_btile[48];
@@ -679,40 +706,77 @@ void game_page_map(void) {
   l_world = game_world;
   l_scr = scr_curr;
   l_scr_map = (l_world << 4) + l_scr;
+  l_mode = game_tileset;
 
   // Read Player start screen on world map
   GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
   IO_7FFD = 0x10 + 6;
-
   if (l_scr == 255) {
-    // l_scr = start_scr0[l_world];
     l_scr_map = (l_world << 4) + l_scr;
   }
   l_paper = paper0[l_scr_map];
-  // l_world_w = world0_w[l_world];
-  // l_world_h = world0_h[l_world];
 
   GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
   IO_7FFD = 0x10 + 0;
 
   // Get Background btiles from Bank 3
+  if (l_scr >= 20) {
+    l_scr0 = l_scr - 20;
+  } else {
+    l_scr0 = l_scr;
+  }
 
+  // Get Door Sprite
+  l_start = l_scr0 * 48;
+
+  GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
+  IO_7FFD = 0x10 + 6;
+  li = 0;
+  while (li < 48) {
+    if (l_mode == 0) {
+      l_btile[li] = hidoors1[l_start+li];
+    } else {
+      l_btile[li] = hidoors2[l_start+li];
+    }
+    ++li;
+  }
+  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
+  IO_7FFD = 0x10 + 0;
+
+  index1 = 48 * SPRITE_DOOR;
+  li = 0;
+  while (li < 48) {
+    btiles[index1 + li] = l_btile[li];
+    ++li;
+  }
+  ++lk;
+
+  // Tiles
+  l_start = (l_scr0 >> 1) * 48 * 4;
   lk = 0;
-  l_start = (l_scr >> 1) * 48 * 4;
+  while (lk < 48 * 4) {
+    GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
+    IO_7FFD = 0x10 + 6;
 
-  while (lk < 48 * 5) {
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 3;
-    IO_7FFD = 0x10 + 3;
     li = 0;
     while (li < 48) {
-      l_btile[li] = hibtiles[l_start + li + lk];
+      if (l_mode == 0) {
+        l_btile[li] = hitiles1[l_start + li + lk];
+      } else {
+        l_btile[li] = hitiles2[l_start + li + lk];
+      }
+
       ++li;
     }
-    // TODO SPEED UP BANK3? (WHICH BANK IS THE BEST -> BTILE LOW MEM
     GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
     IO_7FFD = 0x10 + 0;
     // Store btile
-
+    li = 0;
+    while (li < 48) {
+      btiles[lk + li] = l_btile[li];
+      ++li;
+    }
+/*
     if ((l_scr % 2) == 0) {
 
       // Pixels
@@ -754,9 +818,11 @@ void game_page_map(void) {
         ++li;
       }
     }
-
+*/
     lk = lk + 48; // Next btile
   }
+
+
   // Clear Key n Crumb upper row
   li = 192;
   while (li < 384) {
@@ -787,10 +853,10 @@ void game_page_map(void) {
     lk = lk + 48;
   }
   */
-  // Move Key
+  // Move Key to tile 7
   li = 0;
   while (li < 16) {
-    btiles[192 + li] = btiles[li];
+    btiles[(4*48) + li] = btiles[li];
     li = li + 2;
   }
   // Clear Empty Tile
@@ -826,19 +892,19 @@ void game_page_map(void) {
   // Atribs
   btiles[240 + 43] = btiles[48 + 32];
 
-  //TILE EXTRA OFF
+  // TILE EXTRA OFF (Switch, pipe)
   // Write Local
   li = (48 * 3);
-  lk = (48 * 0);
+  lk = (48 * 4);
 
-  //Pixels
+  // Pixels
   i = 0;
   while (i < 16) {
     btiles[lk + 16 + i] = reverse(btiles[li + i + 1]);
     ++i;
     ++i;
   }
-  //Attribs
+  // Attribs
   lk = lk + 32 + 4;
   i = 0;
   while (i < 4) {
@@ -898,6 +964,8 @@ void game_page_map(void) {
     btiles[336 + 35] = btiles[48 + 32];
     // Calculate the current screen start index in the world map
   */
+
+  //Get Map data
   lj = 0;
   lk = 0;
 
@@ -951,26 +1019,26 @@ void game_page_map(void) {
 
 void game_flash_exit(unsigned char f_attrib) {
   unsigned int li;
-/*
-  // Set Flash bits on 8x8 Exits Tiles
-  li = 192;
-  while (li < 384) {
-    v0 = li % 48;
-    // Set flash bit on 8x8 exit tiles
-    if ((v0 >= 36 && v0 < 40) || (v0 >= 44 && v0 < 48)) {
-      btiles[li] = btiles[li] & 127;
-      btiles[li] = btiles[li] | f_attrib;
+  /*
+    // Set Flash bits on 8x8 Exits Tiles
+    li = 192;
+    while (li < 384) {
+      v0 = li % 48;
+      // Set flash bit on 8x8 exit tiles
+      if ((v0 >= 36 && v0 < 40) || (v0 >= 44 && v0 < 48)) {
+        btiles[li] = btiles[li] & 127;
+        btiles[li] = btiles[li] | f_attrib;
+      }
+      ++li;
     }
-    ++li;
-  }
 
-  spr_draw8(28, game_exit_lin - 8, game_exit_col);
-  spr_draw8(29, game_exit_lin - 8, game_exit_col + 1);
-  spr_draw8(30, game_exit_lin, game_exit_col);
-  spr_draw8(31, game_exit_lin, game_exit_col + 1);
-*/
+    spr_draw8(28, game_exit_lin - 8, game_exit_col);
+    spr_draw8(29, game_exit_lin - 8, game_exit_col + 1);
+    spr_draw8(30, game_exit_lin, game_exit_col);
+    spr_draw8(31, game_exit_lin, game_exit_col + 1);
+  */
   // Set Flash bits on Exit Sprite
-  li = (48 * (SPRITE_DOOR )) + 32; // 80 ==> TILE EXIT
+  li = (48 * (SPRITE_DOOR)) + 32; // 80 ==> TILE EXIT
   i = 0;
   while (i < 16) {
     btiles[li] = btiles[li] & 127;
@@ -1004,6 +1072,9 @@ void game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile,
   unsigned char btile[48];
   unsigned int li;
   unsigned char i;
+  unsigned char l_mode;
+
+  l_mode = game_tileset;
 
   // Page a Tile
   intrinsic_di();
@@ -1013,7 +1084,11 @@ void game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile,
   li = (48 * f_hi_tile);
   i = 0;
   while (i < 48) {
-    btile[i] = hibtiles[li];
+    if (l_mode == 0) {
+      btile[i] = hisprites1[li];
+    } else {
+      btile[i] = hisprites2[li];
+    }
 
     if (i > 31 && btile[i] == spr_init_cin) {
       btile[i] = spr_init_cout;

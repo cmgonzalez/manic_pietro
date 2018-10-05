@@ -1,70 +1,22 @@
-;; AY RELATED FOR BANK_6
+; MAP DATA & TILES
 
-; OWN COPY OF VTII PLAYER
+SECTION BANK_6_DATA
 
-; This bank exports the player entry addresses
-; which are the same for all banks' copies
 
-SECTION BANK_6_VTII
+;Tiles 8x8
+PUBLIC _hitiles1
+PUBLIC _hitiles2
+PUBLIC _hidoors1
+PUBLIC _hidoors2
 
-PUBLIC vtii_init
-PUBLIC vtii_play
-PUBLIC vtii_stop
-PUBLIC vtii_setup
-PUBLIC vtii_modaddr
+;Tiles 8x8
+_hitiles1:
+   BINARY "game_tiles_1.btile"
+_hitiles2:
+   BINARY "game_tiles_2.btile"
 
-defc vtii_init  = INIT
-defc vtii_play  = PLAY
-defc vtii_stop  = STOP
-defc vtii_setup = SETUP
-defc vtii_modaddr = MODADDR
-
-INCLUDE "src/VTII10bG-mfx.asm"
-
-; OWN COPY OF MFXPLAYER
-
-; This bank exports the mfx entry addresses
-; which are the same for all banks' copies
-
-SECTION BANK_6_MFX
-
-PUBLIC mfx_init
-PUBLIC mfx_add
-PUBLIC mfx_playm
-PUBLIC mfx_playe
-PUBLIC mfx_mfxptr
-
-defc mfx_init  = MFXINIT
-defc mfx_add   = MFXADD
-defc mfx_playm = MFXPLAYM
-defc mfx_playe = MFXPLAYE
-defc mfx_mfxptr = mfxPtr
-
-INCLUDE "src/mfx.asm"
-
-; SONGS & EFFECTS IN THIS BANK
-
-SECTION BANK_6_AUDIO
-
-PUBLIC _ay_fx_06_coin
-PUBLIC _ay_fx_06_dead
-PUBLIC _ay_fx_06_jump
-PUBLIC _ay_fx_06_fall
-PUBLIC _ay_fx_06_game_start
-PUBLIC _ay_fx_06_door
-PUBLIC _ay_fx_06_tick
-
-_ay_fx_06_coin:
-  BINARY "fx/coin.afx"
-_ay_fx_06_dead:
-  BINARY "fx/dead.afx"
-_ay_fx_06_jump:
-  BINARY "fx/jump.afx"
-_ay_fx_06_fall:
-  BINARY "fx/fall.afx"
-_ay_fx_06_game_start:
-  BINARY "fx/game_start.afx"
-_ay_fx_06_door:
-  BINARY "fx/door.afx"
-_ay_fx_06_tick:
-    BINARY "fx/tick.afx"
+;Doors
+_hidoors1:
+  BINARY "game_doors_1.btile"
+_hidoors2:
+  BINARY "game_doors_2.btile"

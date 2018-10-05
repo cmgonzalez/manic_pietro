@@ -39,17 +39,19 @@ void main(void) {
   // DEBUG
   zx_border(INK_BLACK);
   zx_print_ink(INK_WHITE);
-  z80_delay_ms(666);
+  z80_delay_ms(666);  //SATANIC DELAY
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
-  game_debug = 0;
+  game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 0;
+  scr_curr = 20;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
-  game_tileset = scr_curr * 8;
+  //0 Willy 1 Pietro
+  game_tileset = 0;
+  game_mode = 0;
 
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -63,8 +65,7 @@ void main(void) {
   // ENABLE SOUND BASED ON DETECTED MODEL
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
-  game_gravity = 100;                  // GAME_GRAVITY;
-  player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
+
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;

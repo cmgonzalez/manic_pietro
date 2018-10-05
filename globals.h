@@ -28,7 +28,7 @@
 #define GAME_INDEX_P1                15 //Index of P1 == GAME_MAX_PRITES - 1
 
 //Nirvana Related
-#define NIRV_SPRITE_P1               7 //Sprite to be used by P1 (Have transparency)
+#define NIRV_SPRITE_P1               6 //Sprite to be used by P1 (Have transparency)
 #define NIRV_TOTAL_SPRITES           8 //Maximun of sprites to handle (NIRVANA == 8)
 
 #define GAME_GRAVITY                 1
@@ -43,24 +43,20 @@
 
 
 //TILES
-#define TILE_EMPTY                    0
-#define TILE_FLOOR                    1
+#define TILE_EMPTY                   0
+#define TILE_FLOOR                   1
+#define TILE_CRUMB0                  2
+#define TILE_WALL                    3
+#define TILE_CONVEYOR                4
+#define TILE_DEADLY1                 5
+#define TILE_DEADLY2                 6
+#define TILE_EXTRA                   7
+#define TILE_EXTRA_OFF               16
+#define TILE_OBJECT                  8
+#define TILE_CRUMB1                  9
+#define TILE_CRUMB2                  10
+#define TILE_CRUMB3                  11
 
-#define TILE_CRUMB0                   2
-#define TILE_WALL                     3
-
-#define TILE_CONVEYOR                 4
-#define TILE_DEADLY1                  5
-
-#define TILE_DEADLY2                  6
-#define TILE_EXTRA                    7
-#define TILE_EXTRA_OFF                16
-
-#define TILE_OBJECT                   8
-#define TILE_CRUMB1                   9
-
-#define TILE_CRUMB2                   10
-#define TILE_CRUMB3                   11
 
 #define TILE_EXIT0                   28
 #define TILE_EXIT1                   29
@@ -281,6 +277,7 @@ extern unsigned char game_playing;
 extern unsigned char game_round_up;
 extern unsigned char menu_curr_sel;
 extern unsigned char game_tileset;
+extern unsigned char game_mode;
 
 
 extern unsigned int fps;
@@ -390,6 +387,8 @@ extern unsigned char map_paper_last;
 
 extern const unsigned char key_map[];
 extern unsigned int scan_map[];
+
+extern unsigned char tile_class[];
 //extern unsigned char *map_names[];
 //extern const unsigned char map_lens[];
 

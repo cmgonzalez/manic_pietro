@@ -25,5 +25,7 @@
 #define PEEK(addr)			(*(unsigned char *)(addr))
 #define POKE(addr, data)	(*(unsigned char *)(addr) = (data))
 
+
+
 //#define CALC_INDEX(l, c)(c+ ((l >> 3) << 5))
 #endif
