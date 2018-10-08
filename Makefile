@@ -1,7 +1,7 @@
 
 
 CSRC   = globals.c game.c game_enemies.c game_engine.c game_player.c game_sprite.c game_zx.c game_audio.c game_menu.c
-ASRC   = ay/ay_01.asm ay/ay_03.asm ay/ay_04.asm ay/ay_06.asm btiles.asm font.asm game_ay.asm game_engine.asm game_zx.asm
+ASRC   = ay/ay_01.asm ay/ay_03.asm ay/ay_04.asm ay/ay_06.asm ay/ay_07.asm btiles.asm font.asm game_ay.asm game_engine.asm game_zx.asm
 
 OBJS = $(CSRC:.c=.o)
 INCL = $(ZCCCFG)/../../include/_DEVELOPMENT/sdcc
@@ -58,7 +58,8 @@ $(OUT): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	appmake +zx -b game_BANK_3.bin -o game_ay_3.tap --org 49152 --noloader --noheader
 	appmake +zx -b game_BANK_4.bin -o game_ay_4.tap --org 49152 --noloader --noheader
 	appmake +zx -b game_BANK_6.bin -o game_ay_6.tap --org 49152 --noloader --noheader
-	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_ay_1.tap game_ay_3.tap game_ay_4.tap game_ay_6.tap > $(OUT)
+	appmake +zx -b game_BANK_7.bin -o game_ay_7.tap --org 49152 --noloader --noheader
+	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_ay_1.tap game_ay_3.tap game_ay_4.tap game_ay_6.tap game_ay_7.tap > $(OUT)
 	grep code_compiler_size game.map
 
 $(OUTS): $(OBJS) $(ASRC) game_sna.asm globals_06.o mmap.inc
@@ -82,7 +83,8 @@ $(OUTC): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	zx7 -f game_BANK_3.bin
 	zx7 -f game_BANK_4.bin
 	zx7 -f game_BANK_6.bin
-	echo PUBLIC LEN_SCREEN, LEN_NIRVANAP, LEN_GAME, LEN_BANK_1, LEN_BANK_3, LEN_BANK_4, LEN_BANK_6 > zx7_game_sizes.asm
+	zx7 -f game_BANK_7.bin
+	echo PUBLIC LEN_SCREEN, LEN_NIRVANAP, LEN_GAME, LEN_BANK_1, LEN_BANK_3, LEN_BANK_4, LEN_BANK_6, LEN_BANK_7 > zx7_game_sizes.asm
 	echo defc LEN_SCREEN = $(shell wc -c < game_scr.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_NIRVANAP = $(shell wc -c < nirvanap_final.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_GAME = $(shell wc -c < game_CODE.bin.zx7) >> zx7_game_sizes.asm
@@ -90,6 +92,7 @@ $(OUTC): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	echo defc LEN_BANK_3 = $(shell wc -c < game_BANK_3.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_BANK_4 = $(shell wc -c < game_BANK_4.bin.zx7) >> zx7_game_sizes.asm
 	echo defc LEN_BANK_6 = $(shell wc -c < game_BANK_6.bin.zx7) >> zx7_game_sizes.asm
+	echo defc LEN_BANK_7 = $(shell wc -c < game_BANK_7.bin.zx7) >> zx7_game_sizes.asm
 	zcc +zx -vn -startup=31 -clib=sdcc_iy -Ca-DPCOMPRESS $(OBJS) $(ASRC) globals_06.o zx7_game_sizes.asm game_loader.asm -o game -pragma-include:zpragma.inc
 	appmake +zx -b game_MCLOAD.bin -o mcload.tap --blockname mcload --org 16384 --noloader
 	appmake +zx -b game_LOADER.bin -o mcloader.tap --org 23296 --noloader --noheader
@@ -100,7 +103,8 @@ $(OUTC): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	appmake +zx -b game_BANK_3.bin.zx7 -o game_ay_3.tap --org 49152 --noloader --noheader
 	appmake +zx -b game_BANK_4.bin.zx7 -o game_ay_4.tap --org 49152 --noloader --noheader
 	appmake +zx -b game_BANK_6.bin.zx7 -o game_ay_6.tap --org 49152 --noloader --noheader
-	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_ay_1.tap game_ay_3.tap game_ay_4.tap game_ay_6.tap > $(OUTC)
+	appmake +zx -b game_BANK_7.bin.zx7 -o game_ay_7.tap --org 49152 --noloader --noheader
+	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_ay_1.tap game_ay_3.tap game_ay_4.tap game_ay_6.tap game_ay_7.tap > $(OUTC)
 	grep code_compiler_size game.map
 
 .c.o:

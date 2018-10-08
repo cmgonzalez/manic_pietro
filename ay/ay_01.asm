@@ -1,4 +1,4 @@
-SECTION BANK_1
+SECTION BANK_1_DATA
 
 PUBLIC bank1_filler
 
