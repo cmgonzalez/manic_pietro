@@ -57,9 +57,11 @@ IFNDEF PCOMPRESS
    PUBLIC game_loader
 
    EXTERN __CODE_head, __CODE_END_tail, __NIRVANAP_head
+   EXTERN __BANK_1_head, __BANK_1_MISC_tail
    EXTERN __BANK_3_head, __BANK_3_MISC_tail
    EXTERN __BANK_4_head, __BANK_4_MISC_tail
    EXTERN __BANK_6_head, __BANK_6_MISC_tail
+   EXTERN __BANK_7_head, __BANK_7_MISC_tail
    EXTERN _spec128
 
    game_loader:
@@ -111,12 +113,12 @@ IFNDEF PCOMPRESS
       ; check for 128k spectrum
 
       ld bc,$7ffd
-      ld de,$1013
+      ld de,$1011
 
       ld hl,0xc000
       ld a,(hl)                   ; a = byte at 0xc000
 
-      out (c),e                   ; enable BANK_3
+      out (c),e                   ; enable BANK_1
 
       cpl
       ld (hl),a                   ; write complemented byte to 0xc000
@@ -130,6 +132,14 @@ IFNDEF PCOMPRESS
       jp nz, __CODE_head          ; if the byte changed this is a 48k machine
 
       ; load extra banks for 128k machines
+      
+      ld hl,__BANK_1_MISC_tail - __BANK_1_head
+      
+      call load_bank
+      jp nc, __CODE_head          ; if tape loading error forget about sound effects
+      
+      inc e
+      inc e                       ; BANK_3
       ld hl,__BANK_3_MISC_tail - __BANK_3_head
 
       call load_bank
@@ -146,6 +156,12 @@ IFNDEF PCOMPRESS
       inc e                       ; BANK_6
       ld hl,__BANK_6_MISC_tail - __BANK_6_head
 
+      call load_bank
+      jp nc, __CODE_head          ; if tape loading error forget about sound effects
+      
+      inc e                       ; BANK_7
+      ld hl,__BANK_7_MISC_tail - __BANK_7_head
+      
       call load_bank
       jp nc, __CODE_head          ; if tape loading error forget about sound effects
 
@@ -207,7 +223,7 @@ IFDEF PCOMPRESS
 
    EXTERN asm_dzx7_standard
    EXTERN __CODE_head, __CODE_END_tail, __NIRVANAP_head, _spec128
-   EXTERN LEN_SCREEN, LEN_NIRVANAP, LEN_GAME, LEN_BANK_3, LEN_BANK_4, LEN_BANK_6
+   EXTERN LEN_SCREEN, LEN_NIRVANAP, LEN_GAME, LEN_BANK_1, LEN_BANK_3, LEN_BANK_4, LEN_BANK_6, LEN_BANK_7
 
    game_loader:
 
@@ -273,12 +289,12 @@ IFDEF PCOMPRESS
       ; check for 128k spectrum
 
       ld bc,$7ffd
-      ld de,$1013
+      ld de,$1011
 
       ld hl,0xc000
       ld a,(hl)                     ; a = byte at 0xc000
 
-      out (c),e                     ; enable BANK_3
+      out (c),e                     ; enable BANK_1
 
       cpl
       ld (hl),a                     ; write complemented byte to 0xc000
@@ -293,6 +309,15 @@ IFDEF PCOMPRESS
 
       ; load extra banks for 128k machines
 
+      ld ix,0x10000 - LEN_BANK_1    ; load at top of bank to enable overlapped decompression
+      ld hl,LEN_BANK_1
+      
+      call load_bank
+      jr nc, set_mode               ; if tape loading error stay in 48k mode
+      
+      inc e
+      inc e                         ; BANK_3
+      
       ld ix,0x10000 - LEN_BANK_3    ; load at top of bank to enable overlapped decompression
       ld hl,LEN_BANK_3
 
@@ -313,6 +338,14 @@ IFDEF PCOMPRESS
       ld ix,0x10000 - LEN_BANK_6    ; load at top of bank to enable overlapped decompression
       ld hl,LEN_BANK_6
 
+      call load_bank
+      jr nc, set_mode               ; if tape loading error stay in 48k mode
+      
+      inc e                         ; BANK_7
+      
+      ld ix,0x10000 - LEN_BANK_7    ; load at top of bank to enable overlapped decompression
+      ld hl,LEN_BANK_7
+      
       call load_bank
       jr nc, set_mode               ; if tape loading error stay in 48k mode
 
