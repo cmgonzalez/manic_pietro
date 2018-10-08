@@ -45,7 +45,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 20;
+  scr_curr = 0;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
@@ -102,6 +102,7 @@ void main(void) {
   menu_curr_sel = 1;
   map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
 
+
   while (1) {
 
     // MENU
@@ -116,7 +117,6 @@ void main(void) {
 
 
     // spr_flatten();
-    // game_update_stats();
     zx_print_str(11, 12, "SHOE HERE!");
     z80_delay_ms(250);
     game_over = 0; // Hack game_colour_message to render background

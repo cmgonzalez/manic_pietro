@@ -109,6 +109,8 @@ void game_fps(void) {
 }
 
 void game_draw_map(void) {
+  unsigned char val0;
+  unsigned char f_exit;
 
   intrinsic_halt();
   zx_print_ink(INK_WHITE); // For Debug
@@ -140,60 +142,65 @@ void game_draw_map(void) {
   attrib_hl[1] = attrib_hl[0];
   attrib_hl[2] = attrib_hl[0];
   attrib_hl[3] = attrib_hl[0];
-
+  f_exit = 0;
   while (index1 < GAME_SCR_MAX_INDEX) {
 
-    if (scr_map[index1] < ENEMY_START_INDEX) {
+    val0 = scr_map[index1];
 
-      spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
+    if (val0 < 32) {
+      spr_draw8(val0, s_row1 << 3, s_col1);
+    }
+    if (val0 == TILE_OBJECT) {
+      obj_col[obj_count] = s_col1;
+      obj_lin[obj_count] = s_lin1;
+      ++obj_count;
+      NIRVANAP_paintC(attrib_hl, s_lin1, s_col1);
+    }
+    // DRAW CONVEYORS
+    if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
+        val0 != TILE_CONVEYOR) {
+      game_conveyor_col1 = s_col1;//index1 % 32; // TODO OPTIMIZE
+    }
+    if (val0 == TILE_CONVEYOR) {
+      if (game_conveyor_col0 == 0) {
+        game_conveyor_col0 = s_col1;//(index1 & 31);           // index1 % 32
+        game_conveyor_lin = s_lin1 - 8;//8 + ((index1 >> 5) << 3); // 8 + (index1 / 32) *
+                                                      // 8;
 
-      if (scr_map[index1] == TILE_OBJECT) {
-        obj_col[obj_count] = s_col1;
-        obj_lin[obj_count] = s_lin1;
-        ++obj_count;
-        NIRVANAP_paintC(attrib_hl, s_lin1, s_col1);
-      }
-      // DRAW CONVEYORS
-      if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
-          scr_map[index1] != TILE_CONVEYOR) {
-        game_conveyor_col1 = index1 % 32; // TODO OPTIMIZE
-      }
-      if (scr_map[index1] == TILE_CONVEYOR) {
-        if (game_conveyor_col0 == 0) {
-          game_conveyor_col0 = (index1 & 31);           // index1 % 32
-          game_conveyor_lin = 8 + ((index1 >> 5) << 3); // 8 + (index1 / 32) *
-                                                        // 8;
-
-          if (scr_map[index1 + 1]) {
-            game_conveyor_dir = DIR_LEFT;
-          } else {
-            game_conveyor_dir = DIR_RIGHT;
-          }
-          scr_map[index1 + 1] = TILE_CONVEYOR;
+        if (scr_map[index1 + 1]) {
+          game_conveyor_dir = DIR_LEFT;
+        } else {
+          game_conveyor_dir = DIR_RIGHT;
         }
+        scr_map[index1 + 1] = TILE_CONVEYOR;
       }
+    }
 
-      if (scr_map[index1] == TILE_EXIT0) {
-        game_exit_col = (index1 & 31); // index1 % 32;
-        game_exit_lin = 16 + ((index1 >> 5) << 3);
-        scr_map[index1 + 1] = TILE_EXIT1;
-        scr_map[index1 + 32] = TILE_EXIT2;
-        scr_map[index1 + 33] = TILE_EXIT3;
-      }
+    //Sprites 16x16
 
-    } else {
-      if (scr_map[index1] < 120) {
-        spr_draw8(0, s_row1 << 3, s_col1); // Draw a Block with Paper
-        enemy_init();
-      } else {
-        // Willy
-        if (scr_map[index1] == 127) {
-          player_lin_scr = s_lin1 - 16;
-          player_col_scr = s_col1;
-          scr_map[index1] = TILE_EMPTY;
-          spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
-        }
-      }
+    // Door
+    if (val0 == SPRITE_EXIT && !f_exit) {
+      f_exit = 1;
+      game_exit_col = s_col1;//(index1 & 31); // index1 % 32;
+      game_exit_lin = s_lin1;//16 + ((index1 >> 5) << 3);
+      scr_map[index1 + 1] = SPRITE_EXIT;
+      scr_map[index1 + 32] = SPRITE_EXIT;
+      scr_map[index1 + 33] = SPRITE_EXIT;
+    }
+
+    // Enemy
+    if (val0 >= ENEMY_START_INDEX && val0 < 120) {
+      spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1); // Draw a Block with Paper
+      enemy_init();
+      scr_map[index1] = TILE_EMPTY;
+    }
+
+    // Player
+    if (val0 == 127) {
+      player_lin_scr = s_lin1 - 16;
+      player_col_scr = s_col1;
+      scr_map[index1] = TILE_EMPTY;
+      spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
     }
 
     ++index1;
@@ -205,8 +212,6 @@ void game_draw_map(void) {
     }
   }
   NIRVANAP_start();
-
-  game_update_stats();
 }
 
 void game_cell_paint_index() {
@@ -230,7 +235,6 @@ void game_print_footer(void) {
     zx_print_ink(INK_WHITE | PAPER_BLACK);
     zx_print_str(23, 20, "LPS:");
   }
-  game_update_stats();
 }
 
 void game_print_score(void) {
@@ -277,8 +281,6 @@ void game_cls() {
   intrinsic_ei();
   NIRVANAP_start();
 }
-
-void game_update_stats(void) {}
 
 void game_start_timer(void) {
   NIRVANAP_ISR_HOOK[0] = 205;                                // call
@@ -490,8 +492,6 @@ void game_round_init(void) {
     player_killed = 0;
   }
 
-  game_update_stats();
-
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   game_fill_row(17, 32);
   zx_print_str(17, 0, map_names[scr_curr]);
@@ -532,7 +532,8 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
     return 1;
   }
 
-  f_tile = scr_map[*f_index];
+
+  f_tile = tile_class[scr_map[*f_index]];
   index1 = *f_index;
   // f_tile = player_pick_deadly(f_tile);
   // f_tile = player_pick_item(f_tile, *f_index);
@@ -734,9 +735,9 @@ void game_page_map(void) {
   li = 0;
   while (li < 48) {
     if (l_mode == 0) {
-      l_btile[li] = hidoors1[l_start+li];
+      l_btile[li] = hidoors1[l_start + li];
     } else {
-      l_btile[li] = hidoors2[l_start+li];
+      l_btile[li] = hidoors2[l_start + li];
     }
     ++li;
   }
@@ -776,52 +777,51 @@ void game_page_map(void) {
       btiles[lk + li] = l_btile[li];
       ++li;
     }
-/*
-    if ((l_scr % 2) == 0) {
+    /*
+        if ((l_scr % 2) == 0) {
 
-      // Pixels
-      li = 0;
-      while (li < 16) {
-        btiles[li + lk] = l_btile[li];
-        ++li;
-      }
-      // Atribs 1 column
-      li = 32;
-      while (li < 36) {
-        btiles[li + lk] = l_btile[li];
-        ++li;
-      }
-      // Atribs 2 column
-      li = 40;
-      while (li < 44) {
-        btiles[li + lk] = l_btile[li];
-        ++li;
-      }
-    } else {
+          // Pixels
+          li = 0;
+          while (li < 16) {
+            btiles[li + lk] = l_btile[li];
+            ++li;
+          }
+          // Atribs 1 column
+          li = 32;
+          while (li < 36) {
+            btiles[li + lk] = l_btile[li];
+            ++li;
+          }
+          // Atribs 2 column
+          li = 40;
+          while (li < 44) {
+            btiles[li + lk] = l_btile[li];
+            ++li;
+          }
+        } else {
 
-      // Pixels
-      li = 0;
-      while (li < 16) {
-        btiles[li + lk] = l_btile[li + 16];
-        ++li;
-      }
-      // Atribs 1 column
-      li = 32;
-      while (li < 36) {
-        btiles[li + lk] = l_btile[li + 4];
-        ++li;
-      }
-      // Atribs 2 column
-      li = 40;
-      while (li < 44) {
-        btiles[li + lk] = l_btile[li + 4];
-        ++li;
-      }
-    }
-*/
+          // Pixels
+          li = 0;
+          while (li < 16) {
+            btiles[li + lk] = l_btile[li + 16];
+            ++li;
+          }
+          // Atribs 1 column
+          li = 32;
+          while (li < 36) {
+            btiles[li + lk] = l_btile[li + 4];
+            ++li;
+          }
+          // Atribs 2 column
+          li = 40;
+          while (li < 44) {
+            btiles[li + lk] = l_btile[li + 4];
+            ++li;
+          }
+        }
+    */
     lk = lk + 48; // Next btile
   }
-
 
   // Clear Key n Crumb upper row
   li = 192;
@@ -856,7 +856,7 @@ void game_page_map(void) {
   // Move Key to tile 7
   li = 0;
   while (li < 16) {
-    btiles[(4*48) + li] = btiles[li];
+    btiles[(4 * 48) + li] = btiles[li];
     li = li + 2;
   }
   // Clear Empty Tile
@@ -965,7 +965,7 @@ void game_page_map(void) {
     // Calculate the current screen start index in the world map
   */
 
-  //Get Map data
+  // Get Map data
   lj = 0;
   lk = 0;
 

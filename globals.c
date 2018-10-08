@@ -223,6 +223,8 @@ const unsigned int air_end_byte = 21059;
 //Variant INK2
 //Variant INK3
 
+
+
 const unsigned char spr_init_len = 8; //Columns on SPR_INIT
 
 unsigned char const spr_init[] = {
@@ -281,3 +283,22 @@ unsigned int scan_map[] = {
     IN_KEY_SCANCODE_s,     IN_KEY_SCANCODE_t,     IN_KEY_SCANCODE_u,
     IN_KEY_SCANCODE_v,     IN_KEY_SCANCODE_w,     IN_KEY_SCANCODE_x,
     IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z};
+
+const unsigned char tile_class[] = {
+    TILE_EMPTY,     //0
+    TILE_FLOOR,     //1
+    TILE_CRUMB,     //2
+    TILE_WALL,      //3
+    TILE_CONVEYOR,  //4
+    TILE_DEADLY,    //5
+    TILE_DEADLY,    //6
+    TILE_EXTRA,     //7 Switch
+    TILE_OBJECT,    //8
+    TILE_CRUMB,     //9
+    TILE_CRUMB,     //10
+    TILE_CRUMB,     //11
+    TILE_EMPTY,     //12
+    TILE_EMPTY,     //13
+    TILE_EMPTY,     //14
+    TILE_EMPTY,     //15
+};

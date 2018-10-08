@@ -42,33 +42,27 @@
 
 
 
-//TILES
-#define TILE_EMPTY                   0
-#define TILE_FLOOR                   1
-#define TILE_CRUMB0                  2
-#define TILE_WALL                    3
-#define TILE_CONVEYOR                4
-#define TILE_DEADLY1                 5
-#define TILE_DEADLY2                 6
-#define TILE_EXTRA                   7
-#define TILE_EXTRA_OFF               16
+//TILES CLASSES
+#define TILE_EMPTY                   0  //BACKGROUND
+#define TILE_FLOOR                   1  //PLATFORMS
+#define TILE_CRUMB                   2  //PLATFORMS CRUMBLING
+#define TILE_WALL                    3  //SOLID WALL
+#define TILE_CONVEYOR                4  //CONVEYORS
+#define TILE_DEADLY                  5  //DEADLY
+#define TILE_EXTRA                   6  //EXTRA SWITCH
 #define TILE_OBJECT                  8
-#define TILE_CRUMB1                  9
-#define TILE_CRUMB2                  10
-#define TILE_CRUMB3                  11
+
+#define TILE_EXTRA_OFF               16 //EXTRA SWITCH OFF
 
 
-#define TILE_EXIT0                   28
-#define TILE_EXIT1                   29
-#define TILE_EXIT2                   30
-#define TILE_EXIT3                   31
+#define TILE_CRUMB_INIT              2 //TODO MOVE ON BTILE AND PLACE ADJACENT TO CRUMBLING TILES
+#define TILE_CRUMB_START             9
+#define TILE_CRUMB_END               11
 
-#define TILE_WALL1                   62
-#define TILE_WALL2                   63
-#define TILE_WALL3                   64
 
-#define SPRITE_EMPTY                  94
-#define SPRITE_DOOR                   95
+#define SPRITE_EXIT                  32
+#define SPRITE_EMPTY                 94
+#define SPRITE_DOOR                  95
 
 
 #define TILE_BACKGROUND_S             0  //START OF BACKGROUND
@@ -388,7 +382,7 @@ extern unsigned char map_paper_last;
 extern const unsigned char key_map[];
 extern unsigned int scan_map[];
 
-extern unsigned char tile_class[];
+extern const unsigned char tile_class[];
 //extern unsigned char *map_names[];
 //extern const unsigned char map_lens[];
 
