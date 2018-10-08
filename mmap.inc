@@ -47,6 +47,9 @@ section LOADER_CODE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+SECTION BANK_1
+org 0xc000
+
 SECTION BANK_3
 org 0xc000
 SECTION BANK_3_DATA
