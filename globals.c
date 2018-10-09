@@ -259,9 +259,14 @@ unsigned char const spr_init[] = {
 };
 
 
-unsigned char spr_init_cin;
-unsigned char spr_init_cout;
+unsigned char spr_init_cin0;
+unsigned char spr_init_cout0;
 
+unsigned char spr_init_cin1;
+unsigned char spr_init_cout1;
+
+unsigned char spr_init_cin2;
+unsigned char spr_init_cout2;
 
 const unsigned char key_map[] = {
     13,  32,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  97,

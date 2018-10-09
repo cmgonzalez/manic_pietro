@@ -244,21 +244,21 @@ void enemy_init() {
       spr_kind[f_sprite] = spr_init[v0 + 3];
 
       // Color Alternates
-      spr_init_cin = spr_init[v0 + 4];
+      spr_init_cin0 = spr_init[v0 + 4];
 
       switch (f_tot_class) {
       case 0:
-        spr_init_cin = 0;
-        spr_init_cout = 0;
+        spr_init_cin0 = 0;
+        spr_init_cout0 = 0;
         break;
       case 1:
-        spr_init_cout = spr_init[v0 + 5];
+        spr_init_cout0 = spr_init[v0 + 5];
         break;
       case 2:
-        spr_init_cout = spr_init[v0 + 6];
+        spr_init_cout0 = spr_init[v0 + 6];
         break;
       case 3:
-        spr_init_cout = spr_init[v0 + 7];
+        spr_init_cout0 = spr_init[v0 + 7];
         break;
       }
 

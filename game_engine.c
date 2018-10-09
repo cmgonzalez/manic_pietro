@@ -398,7 +398,7 @@ void game_round_init(void) {
       "     Solar Power Generator",       // 18
       "        The Final Barrier",        // 19
       "       Frozen Central Pipe",
-      "            Stage 21",
+      "         Super Luizo Bro",
       "            Stage 22",
       "            Stage 23",
       "            Stage 24",
@@ -443,24 +443,9 @@ void game_round_init(void) {
   // Read Tiles from bank 3
 
   // Page Player from bank 3
-  spr_init_cin = 0;
-  spr_init_cout = 0;
-  // HACK Eugene Lair
-  if (scr_curr == 4) {
-    spr_init_cin = 2;
-    spr_init_cout = 3;
-  }
+  spr_init_cin0 = 0;
+  spr_init_cout0 = 0;
 
-  if (scr_curr < 20) {
-    game_tileset = 0;
-    game_mode = 0;
-  } else {
-    game_tileset = 1;
-    game_mode = 1;
-  }
-
-  // Copy player tile
-  game_tile_cnt = game_copy_sprite_std(0, 8);
 
   // Coin HIGHLIGHT init
   key_last = 0;
@@ -481,7 +466,40 @@ void game_round_init(void) {
     zx_print_ink(INK_BLACK | PAPER_YELLOW);
     game_fill_row(17, 32);
   }
+
+
+
+  if (scr_curr < 20) {
+    game_tileset = 0;
+    game_mode = 0;
+  } else {
+    game_tileset = 1;
+    game_mode = 1;
+  }
   game_page_map();
+
+  // Copy player tile
+  if (scr_curr < 20) {
+    if (map_paper == PAPER_RED) {
+      spr_init_cin0 = 2;
+      spr_init_cout0 = 3;
+    }
+  } else {
+    if (map_paper == PAPER_BLUE) {
+      spr_init_cin0 = PAPER_BLACK | INK_BLUE;
+      spr_init_cout0 = PAPER_BLACK | INK_WHITE;
+      spr_init_cin1 = PAPER_BLACK | INK_RED;
+      spr_init_cout1 = PAPER_BLACK | INK_GREEN;
+      spr_init_cin2 = PAPER_YELLOW | INK_RED;
+      spr_init_cout2 = PAPER_YELLOW | INK_GREEN;
+    }
+  }
+  game_tile_cnt = game_copy_sprite_std(0, 8);
+  spr_init_cin1 = 0;
+  spr_init_cout1 = 0;
+  spr_init_cin2 = 0;
+  spr_init_cout2 = 0;
+
   game_draw_map();
   spr_btile_paint_back();
   key_attrib[0] = map_paper | key_ink;
@@ -974,8 +992,8 @@ void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
       btile[i] = hisprites2[li];
     }
 
-    if (i > 31 && btile[i] == spr_init_cin) {
-      btile[i] = spr_init_cout;
+    if (i > 31 && btile[i] == spr_init_cin0) {
+      btile[i] = spr_init_cout0;
     }
     ++i;
     ++li;
@@ -987,9 +1005,18 @@ void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
   // Paint Variants
   i = 31;
   while (i < 48) {
-    if (btile[i] == spr_init_cin) {
-      btile[i] = spr_init_cout;
+    if (btile[i] == spr_init_cin0) {
+      btile[i] = spr_init_cout0;
+    } else {
+      if (btile[i] == spr_init_cin1) {
+        btile[i] = spr_init_cout1;
+      } else {
+        if (btile[i] == spr_init_cin2) {
+          btile[i] = spr_init_cout2;
+        }
+      }
     }
+
     ++i;
   }
 

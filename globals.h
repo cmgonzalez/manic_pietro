@@ -386,8 +386,15 @@ extern const unsigned char tile_class[];
 //extern unsigned char *map_names[];
 //extern const unsigned char map_lens[];
 
-extern unsigned char spr_init_cin;
-extern unsigned char spr_init_cout;
+extern unsigned char spr_init_cin0;
+extern unsigned char spr_init_cout0;
+
+extern unsigned char spr_init_cin1;
+extern unsigned char spr_init_cout1;
+
+
+extern unsigned char spr_init_cin2;
+extern unsigned char spr_init_cout2;
 
 extern unsigned char *air_curr_byte;
 extern const unsigned int air_start_byte;

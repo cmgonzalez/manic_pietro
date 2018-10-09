@@ -662,8 +662,8 @@
 659   0000              	GLOBAL _NIRVANAP_HOLE
 660   0000              	GLOBAL _NIRVANAP_ISR_HOOK
 661   0000              	GLOBAL _air_curr_byte
-662   0000              	GLOBAL _spr_init_cout
-663   0000              	GLOBAL _spr_init_cin
+662   0000              	GLOBAL _spr_init_cout0
+663   0000              	GLOBAL _spr_init_cin0
 664   0000              	GLOBAL _scan_map
 665   0000              	GLOBAL _map_paper_last
 666   0000              	GLOBAL _map_paper_clr
@@ -789,15 +789,15 @@
 786   0000              	GLOBAL _GLOBAL_ZX_PORT_7FFD
 787   0000              	GLOBAL _GLOBAL_ZX_PORT_1FFD
 788   0000              	GLOBAL _GLOBAL_ZX_PORT_FE
-789   0000              	GLOBAL _ay_fx_door
-790   0000              	GLOBAL _ay_fx_tick
-791   0000              	GLOBAL _ay_fx_game_start
-792   0000              	GLOBAL _ay_fx_fall
-793   0000              	GLOBAL _ay_fx_jump
-794   0000              	GLOBAL _ay_fx_dead
-795   0000              	GLOBAL _ay_fx_coin
-796   0000              	GLOBAL _hitiles2
-797   0000              	GLOBAL _hitiles1
+789   0000              	GLOBAL _hitiles2
+790   0000              	GLOBAL _hitiles1
+791   0000              	GLOBAL _ay_fx_door
+792   0000              	GLOBAL _ay_fx_tick
+793   0000              	GLOBAL _ay_fx_game_start
+794   0000              	GLOBAL _ay_fx_fall
+795   0000              	GLOBAL _ay_fx_jump
+796   0000              	GLOBAL _ay_fx_dead
+797   0000              	GLOBAL _ay_fx_coin
 798   0000              	GLOBAL _ay_song_menu
 799   0000              	GLOBAL _ay_song_ingame1
 800   0000              	GLOBAL _ay_song_ingame0
@@ -1492,13 +1492,13 @@
 1489  0427              l_enemy_init_00102:
 1490  0427  06 00       	ld	b,0x00
 1491  0429  DD 70 FB    	ld	(ix-5),b
-1492  042C  DD 36 FF 00 	ld	(ix-1),0x00
+1492  042C  DD 36 FC 00 	ld	(ix-4),0x00
 1493  0430              l_enemy_init_00107:
-1494  0430  DD 7E FF    	ld	a,(ix-1)
+1494  0430  DD 7E FC    	ld	a,(ix-4)
 1495  0433  D6 0F       	sub	a,0x0f
 1496  0435  30 1E       	jr	NC,l_enemy_init_00160
 1497  0437  3E 00       	ld	a, +((_class) & 0xFF)
-1498  0439  DD 86 FF    	add	a,(ix-1)
+1498  0439  DD 86 FC    	add	a,(ix-4)
 1499  043C  6F          	ld	l, a
 1500  043D  3E 00       	ld	a, +((_class) / 256)
 1501  043F  CE 00       	adc	a,0x00
@@ -1510,13 +1510,13 @@
 1507  0447  20 01       	jr	NZ,l_enemy_init_00106
 1508  0449  04          	inc	b
 1509  044A              l_enemy_init_00106:
-1510  044A  DD 34 FF    	inc	(ix-1)
-1511  044D  DD 7E FF    	ld	a,(ix-1)
+1510  044A  DD 34 FC    	inc	(ix-4)
+1511  044D  DD 7E FC    	ld	a,(ix-4)
 1512  0450  DD 77 FB    	ld	(ix-5),a
 1513  0453  18 DB       	jr	l_enemy_init_00107
 1514  0455              l_enemy_init_00160:
-1515  0455  DD 70 FE    	ld	(ix-2),b
-1516  0458  DD 7E FF    	ld	a,(ix-1)
+1515  0455  DD 70 FF    	ld	(ix-1),b
+1516  0458  DD 7E FC    	ld	a,(ix-4)
 1517  045B  DD 77 FB    	ld	(ix-5),a
 1518  045E  21 00 00    	ld	hl,_v0
 1519  0461  36 00       	ld	(hl),0x00
@@ -1548,24 +1548,24 @@
 1545  0488  56          	ld	d, (hl)
 1546  0489  3E 00       	ld	a, +((_spr_frames) & 0xFF)
 1547  048B  DD 86 FB    	add	a,(ix-5)
-1548  048E  DD 77 FC    	ld	(ix-4),a
+1548  048E  DD 77 FD    	ld	(ix-3),a
 1549  0491  3E 00       	ld	a, +((_spr_frames) / 256)
 1550  0493  CE 00       	adc	a,0x00
-1551  0495  DD 77 FD    	ld	(ix-3),a
+1551  0495  DD 77 FE    	ld	(ix-2),a
 1552  0498  03          	inc	bc
 1553  0499  03          	inc	bc
 1554  049A  21 00 00    	ld	hl,_spr_init
 1555  049D  09          	add	hl, bc
 1556  049E  4E          	ld	c, (hl)
-1557  049F  DD 6E FC    	ld	l,(ix-4)
-1558  04A2  DD 66 FD    	ld	h,(ix-3)
+1557  049F  DD 6E FD    	ld	l,(ix-3)
+1558  04A2  DD 66 FE    	ld	h,(ix-2)
 1559  04A5  71          	ld	(hl), c
 1560  04A6  3E 00       	ld	a, +((_spr_kind) & 0xFF)
 1561  04A8  DD 86 FB    	add	a,(ix-5)
-1562  04AB  DD 77 FC    	ld	(ix-4),a
+1562  04AB  DD 77 FD    	ld	(ix-3),a
 1563  04AE  3E 00       	ld	a, +((_spr_kind) / 256)
 1564  04B0  CE 00       	adc	a,0x00
-1565  04B2  DD 77 FD    	ld	(ix-3),a
+1565  04B2  DD 77 FE    	ld	(ix-2),a
 1566  04B5  3A 00 00    	ld	a,(_v0)
 1567  04B8  4F          	ld	c,a
 1568  04B9  06 00       	ld	b,0x00
@@ -1575,8 +1575,8 @@
 1572  04BE  21 00 00    	ld	hl,_spr_init
 1573  04C1  09          	add	hl, bc
 1574  04C2  4E          	ld	c, (hl)
-1575  04C3  DD 6E FC    	ld	l,(ix-4)
-1576  04C6  DD 66 FD    	ld	h,(ix-3)
+1575  04C3  DD 6E FD    	ld	l,(ix-3)
+1576  04C6  DD 66 FE    	ld	h,(ix-2)
 1577  04C9  71          	ld	(hl), c
 1578  04CA  3A 00 00    	ld	a,(_v0)
 1579  04CD  4F          	ld	c,a
@@ -1590,42 +1590,42 @@
 1587  04DA  8C          	adc	a, h
 1588  04DB  67          	ld	h, a
 1589  04DC  7E          	ld	a, (hl)
-1590  04DD  32 00 00    	ld	(_spr_init_cin),a
-1591  04E0  DD 7E FE    	ld	a,(ix-2)
+1590  04DD  32 00 00    	ld	(_spr_init_cin0),a
+1591  04E0  DD 7E FF    	ld	a,(ix-1)
 1592  04E3  B7          	or	a, a
 1593  04E4  28 13       	jr	Z,l_enemy_init_00110
 1594  04E6  3D          	dec	a
 1595  04E7  28 1C       	jr	Z,l_enemy_init_00111
-1596  04E9  DD 7E FE    	ld	a,(ix-2)
+1596  04E9  DD 7E FF    	ld	a,(ix-1)
 1597  04EC  D6 02       	sub	a,0x02
 1598  04EE  28 1F       	jr	Z,l_enemy_init_00112
-1599  04F0  DD 7E FE    	ld	a,(ix-2)
+1599  04F0  DD 7E FF    	ld	a,(ix-1)
 1600  04F3  D6 03       	sub	a,0x03
 1601  04F5  28 22       	jr	Z,l_enemy_init_00113
 1602  04F7  18 28       	jr	l_enemy_init_00114
 1603  04F9              l_enemy_init_00110:
-1604  04F9  21 00 00    	ld	hl,_spr_init_cin
+1604  04F9  21 00 00    	ld	hl,_spr_init_cin0
 1605  04FC  36 00       	ld	(hl),0x00
-1606  04FE  21 00 00    	ld	hl,_spr_init_cout
+1606  04FE  21 00 00    	ld	hl,_spr_init_cout0
 1607  0501  36 00       	ld	(hl),0x00
 1608  0503  18 1C       	jr	l_enemy_init_00114
 1609  0505              l_enemy_init_00111:
 1610  0505  21 05 00    	ld	hl,0x0005 + _spr_init
 1611  0508  09          	add	hl,bc
 1612  0509  7E          	ld	a, (hl)
-1613  050A  32 00 00    	ld	(_spr_init_cout),a
+1613  050A  32 00 00    	ld	(_spr_init_cout0),a
 1614  050D  18 12       	jr	l_enemy_init_00114
 1615  050F              l_enemy_init_00112:
 1616  050F  21 06 00    	ld	hl,0x0006 + _spr_init
 1617  0512  09          	add	hl,bc
 1618  0513  7E          	ld	a, (hl)
-1619  0514  32 00 00    	ld	(_spr_init_cout),a
+1619  0514  32 00 00    	ld	(_spr_init_cout0),a
 1620  0517  18 08       	jr	l_enemy_init_00114
 1621  0519              l_enemy_init_00113:
 1622  0519  21 07 00    	ld	hl,0x0007 + _spr_init
 1623  051C  09          	add	hl,bc
 1624  051D  7E          	ld	a, (hl)
-1625  051E  32 00 00    	ld	(_spr_init_cout),a
+1625  051E  32 00 00    	ld	(_spr_init_cout0),a
 1626  0521              l_enemy_init_00114:
 1627  0521  3E 00       	ld	a, +((_class) & 0xFF)
 1628  0523  DD 86 FB    	add	a,(ix-5)
@@ -1637,47 +1637,47 @@
 1634  052D  02          	ld	(bc), a
 1635  052E  3E 00       	ld	a, +((_spr_speed) & 0xFF)
 1636  0530  DD 86 FB    	add	a,(ix-5)
-1637  0533  DD 77 FC    	ld	(ix-4),a
+1637  0533  DD 77 FD    	ld	(ix-3),a
 1638  0536  3E 00       	ld	a, +((_spr_speed) / 256)
 1639  0538  CE 00       	adc	a,0x00
-1640  053A  DD 77 FD    	ld	(ix-3),a
+1640  053A  DD 77 FE    	ld	(ix-2),a
 1641  053D  ED 4B 00 00 	ld	bc,(_index1)
 1642  0541  03          	inc	bc
 1643  0542  21 00 00    	ld	hl,_scr_map
 1644  0545  09          	add	hl, bc
 1645  0546  4E          	ld	c, (hl)
-1646  0547  DD 6E FC    	ld	l,(ix-4)
-1647  054A  DD 66 FD    	ld	h,(ix-3)
+1646  0547  DD 6E FD    	ld	l,(ix-3)
+1647  054A  DD 66 FE    	ld	h,(ix-2)
 1648  054D  71          	ld	(hl), c
 1649  054E  3E 00       	ld	a, +((_value_a) & 0xFF)
 1650  0550  DD 86 FB    	add	a,(ix-5)
-1651  0553  DD 77 FC    	ld	(ix-4),a
+1651  0553  DD 77 FD    	ld	(ix-3),a
 1652  0556  3E 00       	ld	a, +((_value_a) / 256)
 1653  0558  CE 00       	adc	a,0x00
-1654  055A  DD 77 FD    	ld	(ix-3),a
+1654  055A  DD 77 FE    	ld	(ix-2),a
 1655  055D  2A 00 00    	ld	hl,(_index1)
 1656  0560  01 20 00    	ld	bc,0x0020
 1657  0563  09          	add	hl,bc
 1658  0564  01 00 00    	ld	bc,_scr_map
 1659  0567  09          	add	hl,bc
 1660  0568  4E          	ld	c, (hl)
-1661  0569  DD 6E FC    	ld	l,(ix-4)
-1662  056C  DD 66 FD    	ld	h,(ix-3)
+1661  0569  DD 6E FD    	ld	l,(ix-3)
+1662  056C  DD 66 FE    	ld	h,(ix-2)
 1663  056F  71          	ld	(hl), c
 1664  0570  3E 00       	ld	a, +((_value_b) & 0xFF)
 1665  0572  DD 86 FB    	add	a,(ix-5)
-1666  0575  DD 77 FC    	ld	(ix-4),a
+1666  0575  DD 77 FD    	ld	(ix-3),a
 1667  0578  3E 00       	ld	a, +((_value_b) / 256)
 1668  057A  CE 00       	adc	a,0x00
-1669  057C  DD 77 FD    	ld	(ix-3),a
+1669  057C  DD 77 FE    	ld	(ix-2),a
 1670  057F  2A 00 00    	ld	hl,(_index1)
 1671  0582  01 21 00    	ld	bc,0x0021
 1672  0585  09          	add	hl,bc
 1673  0586  01 00 00    	ld	bc,_scr_map
 1674  0589  09          	add	hl,bc
 1675  058A  4E          	ld	c, (hl)
-1676  058B  DD 6E FC    	ld	l,(ix-4)
-1677  058E  DD 66 FD    	ld	h,(ix-3)
+1676  058B  DD 6E FD    	ld	l,(ix-3)
+1677  058E  DD 66 FE    	ld	h,(ix-2)
 1678  0591  71          	ld	(hl), c
 1679  0592  2A 00 00    	ld	hl,(_index1)
 1680  0595  01 00 00    	ld	bc,_scr_map
@@ -1719,10 +1719,10 @@
 1716  05D9  02          	ld	(bc), a
 1717  05DA  3E 00       	ld	a, +((_lin) & 0xFF)
 1718  05DC  DD 86 FB    	add	a,(ix-5)
-1719  05DF  DD 77 FC    	ld	(ix-4),a
+1719  05DF  DD 77 FD    	ld	(ix-3),a
 1720  05E2  3E 00       	ld	a, +((_lin) / 256)
 1721  05E4  CE 00       	adc	a,0x00
-1722  05E6  DD 77 FD    	ld	(ix-3),a
+1722  05E6  DD 77 FE    	ld	(ix-2),a
 1723  05E9  ED 4B 00 00 	ld	bc,(_index1)
 1724  05ED  79          	ld	a,c
 1725  05EE  0E 05       	ld	c,0x05
@@ -1735,8 +1735,8 @@
 1732  05F7  07          	rlca
 1733  05F8  07          	rlca
 1734  05F9  E6 F8       	and	a,0xf8
-1735  05FB  DD 6E FC    	ld	l,(ix-4)
-1736  05FE  DD 66 FD    	ld	h,(ix-3)
+1735  05FB  DD 6E FD    	ld	l,(ix-3)
+1736  05FE  DD 66 FE    	ld	h,(ix-2)
 1737  0601  77          	ld	(hl), a
 1738  0602  3E 00       	ld	a, +((_col) & 0xFF)
 1739  0604  DD 86 FB    	add	a,(ix-5)
@@ -1778,8 +1778,8 @@
 1775  0649  0A          	ld	a, (bc)
 1776  064A  4F          	ld	c, a
 1777  064B  2A 00 00    	ld	hl,(_p_state)
-1778  064E  DD 75 FC    	ld	(ix-4),l
-1779  0651  DD 74 FD    	ld	(ix-3),h
+1778  064E  DD 75 FD    	ld	(ix-3),l
+1779  0651  DD 74 FE    	ld	(ix-2),h
 1780  0654  79          	ld	a,c
 1781  0655  3D          	dec	a
 1782  0656  28 07       	jr	Z,l_enemy_init_00115
@@ -1788,23 +1788,23 @@
 1785  065B  28 35       	jr	Z,l_enemy_init_00119
 1786  065D  18 56       	jr	l_enemy_init_00123
 1787  065F              l_enemy_init_00115:
-1788  065F  DD 6E FC    	ld	l,(ix-4)
-1789  0662  DD 66 FD    	ld	h,(ix-3)
+1788  065F  DD 6E FD    	ld	l,(ix-3)
+1789  0662  DD 66 FE    	ld	h,(ix-2)
 1790  0665  4E          	ld	c, (hl)
 1791  0666  DD 7E FA    	ld	a,(ix-6)
 1792  0669  B7          	or	a, a
 1793  066A  28 0C       	jr	Z,l_enemy_init_00117
 1794  066C  79          	ld	a, c
 1795  066D  F6 04       	or	a,0x04
-1796  066F  DD 6E FC    	ld	l,(ix-4)
-1797  0672  DD 66 FD    	ld	h,(ix-3)
+1796  066F  DD 6E FD    	ld	l,(ix-3)
+1797  0672  DD 66 FE    	ld	h,(ix-2)
 1798  0675  77          	ld	(hl), a
 1799  0676  18 3D       	jr	l_enemy_init_00123
 1800  0678              l_enemy_init_00117:
 1801  0678  79          	ld	a, c
 1802  0679  F6 08       	or	a,0x08
-1803  067B  DD 6E FC    	ld	l,(ix-4)
-1804  067E  DD 66 FD    	ld	h,(ix-3)
+1803  067B  DD 6E FD    	ld	l,(ix-3)
+1804  067E  DD 66 FE    	ld	h,(ix-2)
 1805  0681  77          	ld	(hl), a
 1806  0682  3E 00       	ld	a, +((_colint) & 0xFF)
 1807  0684  DD 86 FB    	add	a,(ix-5)
@@ -1816,23 +1816,23 @@
 1813  068F  02          	ld	(bc), a
 1814  0690  18 23       	jr	l_enemy_init_00123
 1815  0692              l_enemy_init_00119:
-1816  0692  DD 6E FC    	ld	l,(ix-4)
-1817  0695  DD 66 FD    	ld	h,(ix-3)
+1816  0692  DD 6E FD    	ld	l,(ix-3)
+1817  0695  DD 66 FE    	ld	h,(ix-2)
 1818  0698  4E          	ld	c, (hl)
 1819  0699  DD 7E FA    	ld	a,(ix-6)
 1820  069C  B7          	or	a, a
 1821  069D  28 0C       	jr	Z,l_enemy_init_00121
 1822  069F  79          	ld	a, c
 1823  06A0  F6 40       	or	a,0x40
-1824  06A2  DD 6E FC    	ld	l,(ix-4)
-1825  06A5  DD 66 FD    	ld	h,(ix-3)
+1824  06A2  DD 6E FD    	ld	l,(ix-3)
+1825  06A5  DD 66 FE    	ld	h,(ix-2)
 1826  06A8  77          	ld	(hl), a
 1827  06A9  18 0A       	jr	l_enemy_init_00123
 1828  06AB              l_enemy_init_00121:
 1829  06AB  79          	ld	a, c
 1830  06AC  F6 80       	or	a,0x80
-1831  06AE  DD 6E FC    	ld	l,(ix-4)
-1832  06B1  DD 66 FD    	ld	h,(ix-3)
+1831  06AE  DD 6E FD    	ld	l,(ix-3)
+1832  06B1  DD 66 FE    	ld	h,(ix-2)
 1833  06B4  77          	ld	(hl), a
 1834  06B5              l_enemy_init_00123:
 1835  06B5  3E 00       	ld	a, +((_spr_frames) & 0xFF)
@@ -1909,10 +1909,10 @@
 1906  0728              l_enemy_init_00129:
 1907  0728  3E 00       	ld	a, +((_tile) & 0xFF)
 1908  072A  DD 86 FB    	add	a,(ix-5)
-1909  072D  DD 77 FC    	ld	(ix-4),a
+1909  072D  DD 77 FD    	ld	(ix-3),a
 1910  0730  3E 00       	ld	a, +((_tile) / 256)
 1911  0732  CE 00       	adc	a,0x00
-1912  0734  DD 77 FD    	ld	(ix-3),a
+1912  0734  DD 77 FE    	ld	(ix-2),a
 1913  0737  21 01 00    	ld	hl,0x0001
 1914  073A  39          	add	hl, sp
 1915  073B  4D          	ld	c, l
@@ -1923,8 +1923,8 @@
 1920  0740  CD 00 00    	call	_spr_get_tile
 1921  0743  D1          	pop	de
 1922  0744  4D          	ld	c,l
-1923  0745  DD 6E FC    	ld	l,(ix-4)
-1924  0748  DD 66 FD    	ld	h,(ix-3)
+1923  0745  DD 6E FD    	ld	l,(ix-3)
+1924  0748  DD 66 FE    	ld	h,(ix-2)
 1925  074B  71          	ld	(hl), c
 1926  074C  7B          	ld	a, e
 1927  074D  D6 52       	sub	a,0x52
