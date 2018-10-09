@@ -150,66 +150,67 @@ void game_draw_map(void) {
     val1 = scr_map[index1 + 1];
 
     if (val0 < 32) {
+      // Tiles
       spr_draw8(val0, s_row1 << 3, s_col1);
-    }
-    if (val0 == TILE_OBJECT) {
-      obj_col[obj_count] = s_col1;
-      obj_lin[obj_count] = s_lin1;
-      ++obj_count;
-      NIRVANAP_paintC(attrib_hl, s_lin1, s_col1);
-    }
-    // DRAW CONVEYORS
-    if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
-        val0 != TILE_CONVEYOR) {
-      game_conveyor_col1 = s_col1; // index1 % 32; // TODO OPTIMIZE
-    }
-    if (val0 == TILE_CONVEYOR &&
-        (val1 == TILE_EMPTY || val1 == TILE_CONVEYOR)) {
-      if (game_conveyor_col0 == 0) {
-        game_conveyor_col0 = s_col1; //(index1 & 31);           // index1 % 32
-        game_conveyor_lin =
-            s_lin1 - 8; // 8 + ((index1 >> 5) << 3); // 8 + (index1 / 32) *
-                        // 8;
+      val0 = tile_class[val0];
+      val1 = tile_class[val1];
 
-        if (val1) {
-          game_conveyor_dir = DIR_LEFT;
-        } else {
-          game_conveyor_dir = DIR_RIGHT;
+      // Keys
+      if (val0 == TILE_OBJECT) {
+        obj_col[obj_count] = s_col1;
+        obj_lin[obj_count] = s_lin1;
+        ++obj_count;
+      }
+
+      // Conveyor Continue
+      if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
+          val0 != TILE_CONVEYOR) {
+        game_conveyor_col1 = s_col1;
+      }
+      // Conveyor Start
+      if (val0 == TILE_CONVEYOR &&
+          (val1 == TILE_EMPTY || val1 == TILE_CONVEYOR)) {
+        if (game_conveyor_col0 == 0) {
+          game_conveyor_col0 = s_col1;
+          game_conveyor_lin = s_lin1 - 8;
+          if (val1) {
+            game_conveyor_dir = DIR_LEFT;
+          } else {
+            game_conveyor_dir = DIR_RIGHT;
+          }
+          scr_map[index1 + 1] = TILE_CONVEYOR;
         }
-        scr_map[index1 + 1] = TILE_CONVEYOR;
+      }
+    } else {
+      // Sprites 16x16
+      // Door
+      if (val0 == SPRITE_EXIT && !f_exit) {
+        f_exit = 1;
+        game_exit_col = s_col1; //(index1 & 31); // index1 % 32;
+        game_exit_lin = s_lin1; // 16 + ((index1 >> 5) << 3);
+        scr_map[index1 + 1] = SPRITE_EXIT;
+        scr_map[index1 + 32] = SPRITE_EXIT;
+        scr_map[index1 + 33] = SPRITE_EXIT;
+      }
+      // Enemy
+      if (val0 >= ENEMY_START_INDEX && val0 < 120) {
+        spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1); // Draw a Block with Paper
+        enemy_init();
+        scr_map[index1] = TILE_EMPTY;
+      }
+      // Player
+      if (val0 == 127) {
+        player_lin_scr = s_lin1 - 16;
+        player_col_scr = s_col1;
+        scr_map[index1] = TILE_EMPTY;
+        spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
       }
     }
-
-    // Sprites 16x16
-
-    // Door
-    if (val0 == SPRITE_EXIT && !f_exit) {
-      f_exit = 1;
-      game_exit_col = s_col1; //(index1 & 31); // index1 % 32;
-      game_exit_lin = s_lin1; // 16 + ((index1 >> 5) << 3);
-      scr_map[index1 + 1] = SPRITE_EXIT;
-      scr_map[index1 + 32] = SPRITE_EXIT;
-      scr_map[index1 + 33] = SPRITE_EXIT;
-    }
-
-    // Enemy
-    if (val0 >= ENEMY_START_INDEX && val0 < 120) {
-      spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1); // Draw a Block with Paper
-      enemy_init();
-      scr_map[index1] = TILE_EMPTY;
-    }
-
-    // Player
-    if (val0 == 127) {
-      player_lin_scr = s_lin1 - 16;
-      player_col_scr = s_col1;
-      scr_map[index1] = TILE_EMPTY;
-      spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
-    }
-
+    // Increment Counters
     ++index1;
     ++s_col1;
-    if ((index1 & 31) == 0) {
+    // if ((index1 & 31) == 0) {
+    if (s_col1 == 32) {
       ++s_row1;
       s_lin1 = s_lin1 + 8;
       s_col1 = 0;
@@ -852,59 +853,6 @@ void game_page_map(void) {
     btiles[lk + i] = btiles[li + i + 32 + 8];
     ++i;
   }
-
-  // TODO Optimize Draw Crumb mover llave al ultimo tile y asi aplicar un loop
-  /* 1 PX but with more tiles...
-    // Pixels
-    btiles[192 + 3] = btiles[48 + 0];
-    btiles[192 + 5] = btiles[48 + 2];
-    btiles[192 + 7] = btiles[48 + 4];
-    btiles[192 + 9] = btiles[48 + 6];
-    btiles[192 + 11] = btiles[48 + 8];
-    btiles[192 + 13] = btiles[48 + 10];
-    // Atribs
-    btiles[192 + 40] = btiles[48 + 32];
-    btiles[192 + 41] = btiles[48 + 33];
-    btiles[192 + 42] = btiles[48 + 34];
-    btiles[192 + 43] = btiles[48 + 35];
-    // Pixels
-    btiles[240 + 4] = btiles[48 + 0];
-    btiles[240 + 6] = btiles[48 + 2];
-    btiles[240 + 8] = btiles[48 + 4];
-    btiles[240 + 10] = btiles[48 + 6];
-    btiles[240 + 12] = btiles[48 + 8];
-    // Atribs
-    btiles[240 + 33] = btiles[48 + 32];
-    btiles[240 + 34] = btiles[48 + 33];
-    btiles[240 + 35] = btiles[48 + 34];
-    // Pixels
-    btiles[240 + 7] = btiles[48 + 0];
-    btiles[240 + 9] = btiles[48 + 2];
-    btiles[240 + 11] = btiles[48 + 4];
-    btiles[240 + 13] = btiles[48 + 6];
-    // Atribs
-    btiles[240 + 41] = btiles[48 + 32];
-    btiles[240 + 42] = btiles[48 + 33];
-    btiles[240 + 43] = btiles[48 + 34];
-    // Pixels
-    btiles[288 + 8] = btiles[48 + 0];
-    btiles[288 + 10] = btiles[48 + 2];
-    btiles[288 + 12] = btiles[48 + 4];
-    // Atribs
-    btiles[288 + 34] = btiles[48 + 32];
-    btiles[288 + 35] = btiles[48 + 33];
-    // Pixels
-    btiles[288 + 11] = btiles[48 + 0];
-    btiles[288 + 13] = btiles[48 + 2];
-    // Atribs
-    btiles[288 + 42] = btiles[48 + 32];
-    btiles[288 + 43] = btiles[48 + 33];
-    // Pixels
-    btiles[336 + 12] = btiles[48 + 0];
-    // Atribs
-    btiles[336 + 35] = btiles[48 + 32];
-    // Calculate the current screen start index in the world map
-  */
 
   // Get Map data
   lj = 0;
