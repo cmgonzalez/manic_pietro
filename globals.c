@@ -301,14 +301,14 @@ const unsigned char tile_class[] = {
     TILE_EMPTY,     //13 Not Used autodraw
     TILE_EMPTY,     //14 Not Used autodraw
     TILE_EMPTY,     //15 Not Used autodraw
-    TILE_EMPTY,     //16
-    TILE_EMPTY,     //17
-    TILE_EMPTY,     //18
-    TILE_EMPTY,     //19
-    TILE_EMPTY,     //20
-    TILE_EMPTY,     //21
-    TILE_EMPTY,     //22
-    TILE_EMPTY,     //23
+    TILE_EMPTY,     //16 Backgound 2
+    TILE_FLOOR,     //17 Platform
+    TILE_FLOOR,     //18 Platform
+    TILE_FLOOR,     //19 Platform
+    TILE_FLOOR,     //20 Platform
+    TILE_FLOOR,     //21 Platform
+    TILE_WALL,      //22
+    TILE_DEADLY,    //23
     TILE_FLOOR,     //24 Switch Off
     TILE_EMPTY,     //25 Not Used autodraw
     TILE_EMPTY,     //26 Not Used autodraw
