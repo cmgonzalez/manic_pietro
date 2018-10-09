@@ -285,20 +285,36 @@ unsigned int scan_map[] = {
     IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z};
 
 const unsigned char tile_class[] = {
-    TILE_EMPTY,     //0
-    TILE_FLOOR,     //1
-    TILE_CRUMB,     //2
-    TILE_WALL,      //3
-    TILE_CONVEYOR,  //4
-    TILE_DEADLY,    //5
-    TILE_DEADLY,    //6
-    TILE_EXTRA,     //7 Switch
-    TILE_OBJECT,    //8
-    TILE_CRUMB,     //9
-    TILE_CRUMB,     //10
-    TILE_CRUMB,     //11
+    TILE_EMPTY,     //00
+    TILE_FLOOR,     //01
+    TILE_CRUMB,     //02
+    TILE_WALL,      //03
+    TILE_CONVEYOR,  //04
+    TILE_DEADLY,    //05
+    TILE_DEADLY,    //06
+    TILE_EXTRA,     //07 Switch
+    TILE_OBJECT,    //08
+    TILE_CRUMB,     //09 Crumb1
+    TILE_CRUMB,     //10 Crumb2
+    TILE_CRUMB,     //11 Crumb3
     TILE_EMPTY,     //12
     TILE_EMPTY,     //13
     TILE_EMPTY,     //14
     TILE_EMPTY,     //15
+    TILE_EMPTY,     //16
+    TILE_EMPTY,     //17
+    TILE_EMPTY,     //18
+    TILE_EMPTY,     //19
+    TILE_EMPTY,     //20
+    TILE_EMPTY,     //21
+    TILE_EMPTY,     //22
+    TILE_EMPTY,     //23
+    TILE_FLOOR,     //24 Switch Off
+    TILE_EMPTY,     //25
+    TILE_EMPTY,     //26
+    TILE_EMPTY,     //27
+    TILE_EMPTY,     //28
+    TILE_EMPTY,     //29
+    TILE_EMPTY,     //30
+    TILE_OBJECT,    //31
 };

@@ -52,7 +52,7 @@
 #define TILE_EXTRA                   6  //EXTRA SWITCH
 #define TILE_OBJECT                  8
 
-#define TILE_EXTRA_OFF               16 //EXTRA SWITCH OFF
+#define TILE_EXTRA_OFF               24 //EXTRA SWITCH OFF
 
 
 #define TILE_CRUMB_INIT              2 //TODO MOVE ON BTILE AND PLACE ADJACENT TO CRUMBLING TILES

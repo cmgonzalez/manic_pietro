@@ -306,13 +306,13 @@ void enemy_init() {
       if (spr_frames[f_sprite] == 4) {
         // Standard 4 tiles animation
         spr_tile[f_sprite] = game_tile_cnt;
-        game_tile_cnt = game_copy_tile_std(f_basetile, game_tile_cnt);
+        game_tile_cnt = game_copy_sprite_std(f_basetile, game_tile_cnt);
       } else {
         // Others animations
         i = 0;
         spr_tile[f_sprite] = game_tile_cnt;
         while (i < spr_frames[f_sprite]) {
-          game_copy_tile(f_basetile + i, game_tile_cnt, 0);
+          game_copy_sprite(f_basetile + i, game_tile_cnt, 0);
           ++game_tile_cnt;
           ++i;
         }

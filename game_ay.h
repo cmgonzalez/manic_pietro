@@ -56,11 +56,7 @@ extern unsigned char ay_song_ingame0[];
 extern unsigned char ay_song_ingame1[];
 extern unsigned char ay_song_menu[];
 
-//BANK 5 Tiles
-extern unsigned char hitiles1[];
-extern unsigned char hitiles2[];
-
-//BANK 6 Sound fx
+//BANK 4 Sound fx
 extern unsigned char ay_fx_coin[];
 extern unsigned char ay_fx_dead[];
 extern unsigned char ay_fx_jump[];
@@ -68,6 +64,11 @@ extern unsigned char ay_fx_fall[];
 extern unsigned char ay_fx_game_start[];
 extern unsigned char ay_fx_tick[];
 extern unsigned char ay_fx_door[];
+
+//BANK 6 Tiles
+extern unsigned char hitiles1[];
+extern unsigned char hitiles2[];
+
 
 
 #endif

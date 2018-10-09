@@ -41,9 +41,11 @@ extern void          game_print_header(void);
 extern void          game_attribs( );
 extern void          game_page_map(void);
 extern void          game_flash_exit(unsigned char f_attrib);
-extern unsigned char game_copy_tile_std(unsigned char f_hi_tile, unsigned char f_low_tile);
-void                 game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile, unsigned char f_flip);
+extern unsigned char game_copy_sprite_std(unsigned char f_hi_sprite, unsigned char f_low_sprite);
+void                 game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite, unsigned char f_flip);
 unsigned char        reverse(unsigned char b);
 extern void          game_anim_air(void);
+extern void          page( unsigned char bank );
+
 
 #endif

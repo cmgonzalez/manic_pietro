@@ -71,7 +71,7 @@ void game_loop(void) {
         if (game_conveyor_col0 > 0) {
           game_anim_conveyor();
         }
-        NIRVANAP_spriteT(6, SPRITE_DOOR, game_exit_lin, game_exit_col);
+        NIRVANAP_spriteT(7, SPRITE_DOOR, game_exit_lin, game_exit_col);
       }
 
       if (game_check_time(&air_time, 25)) {
@@ -94,7 +94,7 @@ void game_loop(void) {
     if (game_round_up) {
       game_playing = 0;
       game_round_init();
-      NIRVANAP_spriteT(6, SPRITE_DOOR, game_exit_lin, game_exit_col);
+      NIRVANAP_spriteT(7, SPRITE_DOOR, game_exit_lin, game_exit_col);
       NIRVANAP_halt();
       game_round_up = 0;
       game_playing = 1;
@@ -110,6 +110,7 @@ void game_fps(void) {
 
 void game_draw_map(void) {
   unsigned char val0;
+  unsigned char val1;
   unsigned char f_exit;
 
   intrinsic_halt();
@@ -146,6 +147,7 @@ void game_draw_map(void) {
   while (index1 < GAME_SCR_MAX_INDEX) {
 
     val0 = scr_map[index1];
+    val1 = scr_map[index1 + 1];
 
     if (val0 < 32) {
       spr_draw8(val0, s_row1 << 3, s_col1);
@@ -159,15 +161,17 @@ void game_draw_map(void) {
     // DRAW CONVEYORS
     if (game_conveyor_col0 > 0 && game_conveyor_col1 == 0 &&
         val0 != TILE_CONVEYOR) {
-      game_conveyor_col1 = s_col1;//index1 % 32; // TODO OPTIMIZE
+      game_conveyor_col1 = s_col1; // index1 % 32; // TODO OPTIMIZE
     }
-    if (val0 == TILE_CONVEYOR) {
+    if (val0 == TILE_CONVEYOR &&
+        (val1 == TILE_EMPTY || val1 == TILE_CONVEYOR)) {
       if (game_conveyor_col0 == 0) {
-        game_conveyor_col0 = s_col1;//(index1 & 31);           // index1 % 32
-        game_conveyor_lin = s_lin1 - 8;//8 + ((index1 >> 5) << 3); // 8 + (index1 / 32) *
-                                                      // 8;
+        game_conveyor_col0 = s_col1; //(index1 & 31);           // index1 % 32
+        game_conveyor_lin =
+            s_lin1 - 8; // 8 + ((index1 >> 5) << 3); // 8 + (index1 / 32) *
+                        // 8;
 
-        if (scr_map[index1 + 1]) {
+        if (val1) {
           game_conveyor_dir = DIR_LEFT;
         } else {
           game_conveyor_dir = DIR_RIGHT;
@@ -176,13 +180,13 @@ void game_draw_map(void) {
       }
     }
 
-    //Sprites 16x16
+    // Sprites 16x16
 
     // Door
     if (val0 == SPRITE_EXIT && !f_exit) {
       f_exit = 1;
-      game_exit_col = s_col1;//(index1 & 31); // index1 % 32;
-      game_exit_lin = s_lin1;//16 + ((index1 >> 5) << 3);
+      game_exit_col = s_col1; //(index1 & 31); // index1 % 32;
+      game_exit_lin = s_lin1; // 16 + ((index1 >> 5) << 3);
       scr_map[index1 + 1] = SPRITE_EXIT;
       scr_map[index1 + 32] = SPRITE_EXIT;
       scr_map[index1 + 33] = SPRITE_EXIT;
@@ -346,7 +350,7 @@ void game_anim_conveyor() {
   }
 }
 
-// TODO TO UPPER MEMORY READ INTO string[32]
+// TODO move to 128 bank's
 unsigned const char game_borders[] = {
     INK_RED,     // 0
     INK_RED,     // 1
@@ -455,7 +459,7 @@ void game_round_init(void) {
   }
 
   // Copy player tile
-  game_tile_cnt = game_copy_tile_std(0, 8);
+  game_tile_cnt = game_copy_sprite_std(0, 8);
 
   // Coin HIGHLIGHT init
   key_last = 0;
@@ -531,7 +535,6 @@ unsigned char game_check_cell(unsigned int *f_index) __z88dk_fastcall {
   if (*f_index > GAME_SCR_MAX_INDEX) {
     return 1;
   }
-
 
   f_tile = tile_class[scr_map[*f_index]];
   index1 = *f_index;
@@ -679,7 +682,7 @@ void game_attribs() {
 }
 
 void game_page_map(void) {
-
+  // TODO review and encapsulate inside logic
   unsigned char lv0;
   unsigned char lv1;
   unsigned char vr;
@@ -697,53 +700,46 @@ void game_page_map(void) {
   unsigned char l_scr;
   unsigned char l_scr0;
   unsigned char l_scr_map;
-  unsigned char l_mode;
+  unsigned char l_tileset;
 
   // btile page
   unsigned char l_btile[48];
 
   intrinsic_di();
+
   // Get Map from Bank 6
   l_world = game_world;
   l_scr = scr_curr;
-  l_scr_map = (l_world << 4) + l_scr;
-  l_mode = game_tileset;
+  l_scr0 = scr_curr;
+  if (l_scr > 19) {
+    l_scr0 = l_scr - 20;
+  }
 
-  // Read Player start screen on world map
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-  IO_7FFD = 0x10 + 6;
+  l_scr_map = (l_world << 4) + l_scr;
+  l_tileset = game_tileset;
+
+  // Read default start screen from world map
+  page(6);
   if (l_scr == 255) {
     l_scr_map = (l_world << 4) + l_scr;
   }
   l_paper = paper0[l_scr_map];
+  page(0);
 
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-  IO_7FFD = 0x10 + 0;
-
-  // Get Background btiles from Bank 3
-  if (l_scr >= 20) {
-    l_scr0 = l_scr - 20;
-  } else {
-    l_scr0 = l_scr;
-  }
-
-  // Get Door Sprite
+  // Get Door Sprite @Bank 3
   l_start = l_scr0 * 48;
-
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-  IO_7FFD = 0x10 + 6;
+  page(3);
   li = 0;
   while (li < 48) {
-    if (l_mode == 0) {
+    if (l_tileset == 0) {
       l_btile[li] = hidoors1[l_start + li];
     } else {
       l_btile[li] = hidoors2[l_start + li];
     }
     ++li;
   }
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-  IO_7FFD = 0x10 + 0;
-
+  page(0);
+  // Store
   index1 = 48 * SPRITE_DOOR;
   li = 0;
   while (li < 48) {
@@ -752,80 +748,35 @@ void game_page_map(void) {
   }
   ++lk;
 
-  // Tiles
-  l_start = (l_scr0 >> 1) * 48 * 4;
+  // Tiles (8x8) @Bank6
+  l_start = l_scr0 * 48 * 4;
+
   lk = 0;
   while (lk < 48 * 4) {
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-    IO_7FFD = 0x10 + 6;
+    page(6);
 
     li = 0;
     while (li < 48) {
-      if (l_mode == 0) {
+      if (l_tileset == 0) {
         l_btile[li] = hitiles1[l_start + li + lk];
       } else {
         l_btile[li] = hitiles2[l_start + li + lk];
       }
-
       ++li;
     }
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-    IO_7FFD = 0x10 + 0;
-    // Store btile
+    page(0);
+    // Store btile in low mem
     li = 0;
     while (li < 48) {
       btiles[lk + li] = l_btile[li];
       ++li;
     }
-    /*
-        if ((l_scr % 2) == 0) {
-
-          // Pixels
-          li = 0;
-          while (li < 16) {
-            btiles[li + lk] = l_btile[li];
-            ++li;
-          }
-          // Atribs 1 column
-          li = 32;
-          while (li < 36) {
-            btiles[li + lk] = l_btile[li];
-            ++li;
-          }
-          // Atribs 2 column
-          li = 40;
-          while (li < 44) {
-            btiles[li + lk] = l_btile[li];
-            ++li;
-          }
-        } else {
-
-          // Pixels
-          li = 0;
-          while (li < 16) {
-            btiles[li + lk] = l_btile[li + 16];
-            ++li;
-          }
-          // Atribs 1 column
-          li = 32;
-          while (li < 36) {
-            btiles[li + lk] = l_btile[li + 4];
-            ++li;
-          }
-          // Atribs 2 column
-          li = 40;
-          while (li < 44) {
-            btiles[li + lk] = l_btile[li + 4];
-            ++li;
-          }
-        }
-    */
     lk = lk + 48; // Next btile
   }
 
   // Clear Key n Crumb upper row
-  li = 192;
-  while (li < 384) {
+  li = 4 * 48;
+  while (li < (8 * 48)) {
     v0 = li % 48;
     // clean uper pixels col1 n col2
     if (v0 < 16) {
@@ -841,31 +792,21 @@ void game_page_map(void) {
     }
     ++li;
   }
-  /*
-  // Paint Paper
-  lk = 192 + 32;
-  while (lk < 384) {
-    li = 0;
-    while (li < 16) {
-      btiles[lk + li] = INK_WHITE | l_paper;
-      ++li;
-    }
-    lk = lk + 48;
-  }
-  */
+
   // Move Key to tile 7
   li = 0;
+  index1 = (48 * 7) + 16 + 1;
   while (li < 16) {
-    btiles[(4 * 48) + li] = btiles[li];
+    btiles[index1 + li] = btiles[li];
+    btiles[li] = 0; // Clear Empty Tile (with key) but keep attribs for ingame
     li = li + 2;
   }
-  // Clear Empty Tile
   li = 0;
-  while (li < 16) {
-    btiles[li] = 0;
-    li = li + 2;
+  index1 = (48 * 7) + 32 + 8 + 4;
+  while (li < 4) {
+    btiles[index1 + li] = INK_WHITE | l_paper;
+    li = li + 1;
   }
-
   // CRUMB 1
   btiles[192 + 5] = btiles[48 + 0];
   btiles[192 + 7] = btiles[48 + 2];
@@ -971,27 +912,23 @@ void game_page_map(void) {
 
   start_index = 0;
   add_index = 0;
-
+  page(6);
   while (lj < l_scr_map) {
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-    IO_7FFD = 0x10 + 6;
+
     add_index = lenght0[lj]; // TODO n LEVELS
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-    IO_7FFD = 0x10 + 0;
+
     start_index = start_index + add_index;
     ++lj;
   }
-
+  page(0);
   for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
 
     // Page in BANK 06 - Note that global variables are in page 0
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 6;
-    IO_7FFD = 0x10 + 6;
+    page(6);                            // TODO SINGLE READ TO speedup
     lv0 = world0[start_index + li];     // TODO n LEVELS
     lv1 = world0[start_index + li + 1]; // TODO n LEVELS
     // Page in BANK 00
-    GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-    IO_7FFD = 0x10 + 0;
+    page(0);
 
     if (lv0 < 128) {
       scr_map[lk] = lv0;
@@ -1046,45 +983,44 @@ void game_flash_exit(unsigned char f_attrib) {
     ++i;
     ++li;
   }
-  NIRVANAP_spriteT(6, SPRITE_DOOR, game_exit_lin, game_exit_col);
+  NIRVANAP_spriteT(7, SPRITE_DOOR, game_exit_lin, game_exit_col);
   NIRVANAP_halt();
 }
 
-unsigned char game_copy_tile_std(unsigned char f_hi_tile,
-                                 unsigned char f_low_tile) {
+unsigned char game_copy_sprite_std(unsigned char f_hi_sprite,
+                                   unsigned char f_low_sprite) {
 
-  game_copy_tile(f_hi_tile + 0, f_low_tile + 0, 0);
-  game_copy_tile(f_hi_tile + 1, f_low_tile + 1, 0);
-  game_copy_tile(f_hi_tile + 2, f_low_tile + 2, 0);
-  game_copy_tile(f_hi_tile + 3, f_low_tile + 3, 0);
+  game_copy_sprite(f_hi_sprite + 0, f_low_sprite + 0, 0);
+  game_copy_sprite(f_hi_sprite + 1, f_low_sprite + 1, 0);
+  game_copy_sprite(f_hi_sprite + 2, f_low_sprite + 2, 0);
+  game_copy_sprite(f_hi_sprite + 3, f_low_sprite + 3, 0);
 
-  game_copy_tile(f_hi_tile + 3, f_low_tile + 4, 1);
-  game_copy_tile(f_hi_tile + 2, f_low_tile + 5, 1);
-  game_copy_tile(f_hi_tile + 1, f_low_tile + 6, 1);
-  game_copy_tile(f_hi_tile + 0, f_low_tile + 7, 1);
+  game_copy_sprite(f_hi_sprite + 3, f_low_sprite + 4, 1);
+  game_copy_sprite(f_hi_sprite + 2, f_low_sprite + 5, 1);
+  game_copy_sprite(f_hi_sprite + 1, f_low_sprite + 6, 1);
+  game_copy_sprite(f_hi_sprite + 0, f_low_sprite + 7, 1);
 
-  return f_low_tile + 8;
+  return f_low_sprite + 8;
 }
 
-void game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile,
-                    unsigned char f_flip) {
+void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
+                      unsigned char f_flip) {
   // copy a btile from bank3
   unsigned char btile[48];
   unsigned int li;
   unsigned char i;
-  unsigned char l_mode;
+  unsigned char l_tileset;
 
-  l_mode = game_tileset;
+  l_tileset = game_tileset;
 
   // Page a Tile
   intrinsic_di();
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 3;
-  IO_7FFD = 0x10 + 3;
+  page(3);
 
-  li = (48 * f_hi_tile);
+  li = (48 * f_hi_sprite);
   i = 0;
   while (i < 48) {
-    if (l_mode == 0) {
+    if (l_tileset == 0) {
       btile[i] = hisprites1[li];
     } else {
       btile[i] = hisprites2[li];
@@ -1097,8 +1033,7 @@ void game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile,
     ++li;
   }
   // Page in BANK 00
-  GLOBAL_ZX_PORT_7FFD = 0x10 + 0;
-  IO_7FFD = 0x10 + 0;
+  page(0);
   intrinsic_ei();
 
   // Paint Variants
@@ -1111,7 +1046,7 @@ void game_copy_tile(unsigned char f_hi_tile, unsigned char f_low_tile,
   }
 
   // Write Local
-  li = (48 * f_low_tile);
+  li = (48 * f_low_sprite);
   i = 0;
   while (i < 48) {
     if (f_flip) {
@@ -1144,4 +1079,9 @@ unsigned char reverse(unsigned char b) {
   b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
   b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
   return b;
+}
+
+void page(unsigned char bank) {
+  GLOBAL_ZX_PORT_7FFD = 0x10 + bank;
+  IO_7FFD = 0x10 + bank;
 }
