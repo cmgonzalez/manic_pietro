@@ -434,36 +434,31 @@ void spr_clear_scr() {
 
 unsigned char spr_paint_player(void) {
 
+  //TODO PERF remove +16 and ajust all game
+  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
+  spr_back_repaint();
+  return 0;
+
+  /*
   s_col1 = col[GAME_INDEX_P1];
   s_lin1 = lin[GAME_INDEX_P1];
 
   if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
-
-    /* Column or lin Movement */
+    // Column or lin Movement
     s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
-
-    //if (BIT_CHK(*p_state, STAT_ONEXIT)) {
-    //  // HACK PLAYER BACK DOOR
-    //  NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, 0, 0);
-    //  NIRVANAP_spriteT(0, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
-    //  NIRVANAP_spriteT(1, 79, game_exit_lin, game_exit_col);
-    //} else {
-    //TODO PERF remove +16 and ajust all game
-      NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
-    //}
-
+    NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     spr_back_repaint();
     return 1;
   } else {
 
-    // s_tile0 = *SPRITEVAL(GAME_INDEX_P1);
-
     s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
     //TODO PERF remove +16 and ajust all game
     NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + 16, s_col1);
-
+    spr_back_repaint();
     return 0;
   }
+  */
+
 }
 
 unsigned char spr_paint(void) {
