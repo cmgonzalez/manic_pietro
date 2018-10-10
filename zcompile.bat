@@ -53,7 +53,7 @@ appmake +zx -b game_BANK_3.bin -o game_ay_3.tap --org 49152 --noloader --noheade
 appmake +zx -b game_BANK_4.bin -o game_ay_4.tap --org 49152 --noloader --noheader
 appmake +zx -b game_BANK_6.bin -o game_ay_6.tap --org 49152 --noloader --noheader
 appmake +zx -b game_BANK_7.bin -o game_ay_7.tap --org 49152 --noloader --noheader
-copy /b loader.tap + mcload.tap + mcloader.tap + game_scr.tap + nirvanap.tap + game.tap + game_ay_1.tap game_ay_3.tap + game_ay_4.tap + game_ay_6.tap + game_ay_7.tap bin\game_release.tap 1>nul
+copy /b loader.tap + mcload.tap + mcloader.tap + game_scr.tap + nirvanap.tap + game.tap + game_ay_1.tap + game_ay_3.tap + game_ay_4.tap + game_ay_6.tap + game_ay_7.tap bin\game_release.tap
 
 @rem MAKE ZX7 COMPRESSED LOADING BINARY
 echo Making ZX7-Compressed Loading Binary

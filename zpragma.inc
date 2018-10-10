@@ -4,8 +4,8 @@
 
 // COMPILE TIME CRT CONFIGURATION
 
-#pragma output CRT_ORG_CODE          = 23584      // org of compile
-#pragma output REGISTER_SP           = -1         // crt will not change stack location; loader sets sp
+#pragma output CRT_ORG_CODE          = 23616      // org of compile
+#pragma output REGISTER_SP           = 23616      // loader sets sp but we set it explicitly in the crt for the sna
 
 #pragma output CRT_ENABLE_CLOSE      = 0          // don't bother closing files on exit
 #pragma output CRT_ENABLE_EIDI       = 0          // don't di on start or exit; loader does di before start
