@@ -37,6 +37,9 @@ mini_loader:
    call 0x0556
    di
 
+   ld sp,__CODE_head           ; move stack underneath program
+   ld iy,128                   ; move IY into ROM in case an im1 interrupt occurs
+
    jp c, __LOADER_head
    rst 0                       ; if tape loading error
 
@@ -93,9 +96,6 @@ IFNDEF PCOMPRESS
       jp nc, 0                    ; if tape loading error
 
       ; 3. Manic Pietro
-
-      ld sp,__CODE_head                             ; move stack underneath program
-      ld iy,128                                     ; move IY into ROM in case an im1 interrupt occurs
 
       ld ix,__CODE_head                             ; start of binary
       ld de,__CODE_END_tail - __CODE_head           ; length of binary
@@ -211,6 +211,8 @@ IFDEF PCOMPRESS
    ;; the loader so that it is available during the entire load process.
 
       pop hl
+      pop hl
+      pop hl
 
    l_ret:
 
@@ -264,9 +266,6 @@ IFDEF PCOMPRESS
       call asm_dzx7_standard      ; decompress to 56323
 
       ; 3. Manic Pietro
-
-      ld sp,__CODE_head                             ; move stack underneath program
-      ld iy,128                                     ; move IY into ROM in case an im1 interrupt occurs
 
       ld ix,__CODE_END_tail + 6 - LEN_GAME        ; load binary with fixed six byte delta (see zx7 docs)
       ld de,LEN_GAME                              ; length of binary
