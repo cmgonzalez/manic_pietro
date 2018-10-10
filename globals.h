@@ -28,7 +28,8 @@
 #define GAME_INDEX_P1                15 //Index of P1 == GAME_MAX_PRITES - 1
 
 //Nirvana Related
-#define NIRV_SPRITE_P1               6 //Sprite to be used by P1 (Have transparency)
+#define NIRV_SPRITE_P1               5 //Sprite to be used by P1 (Have transparency)
+#define NIRV_SPRITE_DOOR             6 //Sprite to be used by P1 (Have transparency)
 #define NIRV_TOTAL_SPRITES           8 //Maximun of sprites to handle (NIRVANA == 8)
 
 #define GAME_GRAVITY                 1
@@ -170,7 +171,7 @@
 
 
 /* Enemies */
-#define ENEMIES_MAX                   6   //MAX QUANTITY OF ENEMIES ON SCREEN (0->6)
+#define ENEMIES_MAX                   5   //MAX QUANTITY OF ENEMIES ON SCREEN (0->6)
 #define ENEMIES_MAXJUMP               12 //MAX JUMP WHEN HIT
 #define ENEMY_JUMP_SPEED              1
 #define ENEMY_FALL_SPEED              1
@@ -358,7 +359,7 @@ extern const unsigned char spr_init_len;
 
 //Bank 6 Level Data
 extern const unsigned char world0[];
-extern const unsigned char lenght0[];
+extern const unsigned int lenght0[];
 extern const unsigned char paper0[];
 
 extern unsigned char scr_curr;

@@ -45,7 +45,7 @@ void main(void) {
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 21;
+  scr_curr = 23;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
@@ -125,7 +125,7 @@ void main(void) {
       NIRVANAP_spriteT(i, 0, 0, 0);
     }
     // GAME OVER
-    scr_curr = 0;
+    scr_curr = 20;
     game_cls();
   }
 }

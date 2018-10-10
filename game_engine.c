@@ -71,7 +71,7 @@ void game_loop(void) {
         if (game_conveyor_col0 > 0) {
           game_anim_conveyor();
         }
-        NIRVANAP_spriteT(7, SPRITE_DOOR, game_exit_lin, game_exit_col);
+        NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin, game_exit_col);
       }
 
       if (game_check_time(&air_time, 25)) {
@@ -94,7 +94,7 @@ void game_loop(void) {
     if (game_round_up) {
       game_playing = 0;
       game_round_init();
-      NIRVANAP_spriteT(7, SPRITE_DOOR, game_exit_lin, game_exit_col);
+      NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin, game_exit_col);
       NIRVANAP_halt();
       game_round_up = 0;
       game_playing = 1;
@@ -398,9 +398,9 @@ void game_round_init(void) {
       "     Solar Power Generator",       // 18
       "        The Final Barrier",        // 19
       "       Frozen Central Pipe",
-      "         Super Luizo Bro",
-      "            Stage 22",
-      "            Stage 23",
+      "        Super Luizo Bro",
+      "    Pietro meets Monkey Kong",
+      "         Chuntey Crew",
       "            Stage 24",
       "            Stage 25",
       "            Stage 26",
@@ -949,7 +949,7 @@ void game_flash_exit(unsigned char f_attrib) {
     ++i;
     ++li;
   }
-  NIRVANAP_spriteT(7, SPRITE_DOOR, game_exit_lin, game_exit_col);
+  NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin, game_exit_col);
   NIRVANAP_halt();
 }
 
