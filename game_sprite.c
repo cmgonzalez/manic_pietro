@@ -640,7 +640,7 @@ void spr_btile_paint_back() {
   tmp_ui = 0;
   map_paper_clr = map_paper | (map_paper >> 3);
 
-  index0 = 48 * 8;
+  index0 = 48 * 16;
   while (index0 < (48 * 9 * 8)) { // 12*20 btiles
 
     i = 0;
