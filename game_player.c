@@ -442,7 +442,7 @@ void player_collision() {
       v0 = abs(col[i] - col[GAME_INDEX_P1]);
       if (v0 < 2) {
         v0 = abs(lin[i] - lin[GAME_INDEX_P1]);
-        if (v0 < 16) {
+        if (v0 < 14) {
           v0 = abs(colint[i] - colint[GAME_INDEX_P1]);
           if (v0 < 2) {
             player_kill_index = 0xFFFF;
