@@ -118,7 +118,46 @@ unsigned char spr_move_up(void) {
   }
 }
 
-void spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col) {
+
+
+void spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col)
+{
+    unsigned char *f_byte_src0;
+    unsigned char f_spr16;
+    
+    //f_byte_src0 = &btiles[0] + (((f_spr8 >> 2) + game_tileset) * 48);
+    if (f_spr8 < 16) {
+      // si es mayor que 16 puedo sacar los graficos de la segunda linea
+      f_spr16 = f_spr8 >> 1;
+      // f_spr8 = f_spr8 % 2;
+      f_spr8 = f_spr8 & 1;
+    } else {
+      // si es mayor que 16 puedo sacar los graficos de la segunda linea
+      f_spr8 = f_spr8 - 16;
+      f_spr16 = f_spr8 >> 1;
+      // f_spr8 = 2 + (f_spr8 % 2);
+      f_spr8 = 2 + (f_spr8 & 1);
+    }
+
+    f_byte_src0 = &btiles[0] + (48 * f_spr16);
+
+    switch(f_spr8 & 3) {
+         case 0:
+             NIRVANAP_printQ(f_byte_src0, f_byte_src0+32, f_lin+8, f_col);
+             break;
+         case 1:
+             NIRVANAP_printQ(f_byte_src0+1, f_byte_src0+40, f_lin+8, f_col);
+             break;
+         case 2:
+             NIRVANAP_printQ(f_byte_src0+16, f_byte_src0+36, f_lin+8, f_col);
+             break;
+         case 3:
+             NIRVANAP_printQ(f_byte_src0+17, f_byte_src0+44, f_lin+8, f_col);
+             break;
+    }
+}
+
+void spr_draw8_old(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col) {
 
   /*
      A quick note about the "btile" format:
