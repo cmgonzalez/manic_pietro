@@ -396,6 +396,9 @@ extern unsigned char spr_init_cout1;
 
 extern unsigned char spr_init_cin2;
 extern unsigned char spr_init_cout2;
+extern unsigned char spr_init_cin3;
+extern unsigned char spr_init_cout3;
+extern unsigned char spr_init_bright;
 
 extern unsigned char *air_curr_byte;
 extern const unsigned int air_start_byte;

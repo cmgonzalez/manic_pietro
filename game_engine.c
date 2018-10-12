@@ -401,7 +401,7 @@ void game_round_init(void) {
       "        Super Luizo Bro",
       "    Pietro meets Monkey Kong",
       "         Chuntey Crew",
-      "            Stage 24",
+      "     Kong Jr Watch the Game",
       "            Stage 25",
       "            Stage 26",
       "            Stage 27",
@@ -431,7 +431,7 @@ void game_round_init(void) {
   frame_time = 0;
   player_coins = 0;
   air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
-  // Fill top LINE
+  // Init Sprites
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
   }
@@ -479,6 +479,11 @@ void game_round_init(void) {
   game_page_map();
 
   // Copy player tile
+
+  //Hack player colors TODO  Configureable
+
+  spr_init_bright = 0;
+
   if (scr_curr < 20) {
     if (map_paper == PAPER_RED) {
       spr_init_cin0 = 2;
@@ -493,12 +498,35 @@ void game_round_init(void) {
       spr_init_cin2 = PAPER_YELLOW | INK_RED;
       spr_init_cout2 = PAPER_YELLOW | INK_GREEN;
     }
+    if (map_paper == (PAPER_WHITE | BRIGHT) ) {
+      spr_init_bright = BRIGHT;
+
+
+      spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
+      spr_init_cout0 = PAPER_BLACK | INK_MAGENTA;
+
+      spr_init_cin1 = PAPER_BLACK | INK_BLUE;
+      spr_init_cout1 = PAPER_BLACK | INK_BLACK;
+
+
+      spr_init_cin2 = PAPER_BLACK | INK_RED;
+      spr_init_cout2 = PAPER_BLACK | INK_BLUE;
+
+      spr_init_cin3 = PAPER_YELLOW | INK_RED;
+      spr_init_cout3 = PAPER_MAGENTA | INK_BLUE;
+
+      //spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
+      //spr_init_cout3 = PAPER_BLACK | INK_BLACK;
+
+
+    }
   }
   game_tile_cnt = game_copy_sprite_std(0, 8);
   spr_init_cin1 = 0;
   spr_init_cout1 = 0;
   spr_init_cin2 = 0;
   spr_init_cout2 = 0;
+
 
   game_draw_map();
   spr_btile_paint_back();
@@ -1013,10 +1041,14 @@ void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
       } else {
         if (btile[i] == spr_init_cin2) {
           btile[i] = spr_init_cout2;
+        } else {
+          if (btile[i] == spr_init_cin3) {
+            btile[i] = spr_init_cout3;
+          }
         }
       }
     }
-
+    btile[i] = (btile[i]  | spr_init_bright);
     ++i;
   }
 

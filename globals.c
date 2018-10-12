@@ -255,18 +255,21 @@ unsigned char const spr_init[] = {
    112,  96, 4, E_VERTICAL  , 0x22, 0x21, 0x26, 0x24, // PELOTA(PAPER GREEN)
    114, 100, 4, E_HORIZONTAL, 0x26, 0x21, 0x22, 0x27, // WEA SOLAR (PAPER GREEN)
    116, 106, 6, E_FALL      , 0xFF, 0xFF, 0xFF, 0xFF, // KONG FALLING
+   118, 112, 2, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG JR
 
 };
 
-
+//Sprite color change
 unsigned char spr_init_cin0;
 unsigned char spr_init_cout0;
-
 unsigned char spr_init_cin1;
 unsigned char spr_init_cout1;
-
 unsigned char spr_init_cin2;
 unsigned char spr_init_cout2;
+unsigned char spr_init_cin3;
+unsigned char spr_init_cout3;
+unsigned char spr_init_bright;
+
 
 const unsigned char key_map[] = {
     13,  32,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  97,
