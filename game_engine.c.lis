@@ -1047,7 +1047,7 @@
 1044  0063  3A 00 00    	ld	a,(_loop_count)
 1045  0066  E6 03       	and	a,0x03
 1046  0068  20 03       	jr	NZ,l_game_loop_00102
-1047  006A  CD 6F 0C    	call	_game_key_paint
+1047  006A  CD 75 0C    	call	_game_key_paint
 1048  006D              l_game_loop_00102:
 1049  006D  3A 00 00    	ld	a,(_loop_count)
 1050  0070  E6 0F       	and	a,0x0f
@@ -1071,7 +1071,7 @@
 1068  0090  33          	inc	sp
 1069  0091  21 00 00    	ld	hl,_air_time
 1070  0094  E5          	push	hl
-1071  0095  CD 45 0C    	call	_game_check_time
+1071  0095  CD 4B 0C    	call	_game_check_time
 1072  0098  F1          	pop	af
 1073  0099  33          	inc	sp
 1074  009A  7D          	ld	a, l
@@ -1087,7 +1087,7 @@
 1084  00AB  33          	inc	sp
 1085  00AC  21 00 00    	ld	hl,_frame_time
 1086  00AF  E5          	push	hl
-1087  00B0  CD 45 0C    	call	_game_check_time
+1087  00B0  CD 4B 0C    	call	_game_check_time
 1088  00B3  F1          	pop	af
 1089  00B4  33          	inc	sp
 1090  00B5  7D          	ld	a, l
@@ -1223,17 +1223,17 @@
 1220  01A2  8E          	adc	a, (hl)
 1221  01A3  47          	ld	b, a
 1222  01A4  0A          	ld	a, (bc)
-1223  01A5  DD 77 FF    	ld	(ix-1),a
+1223  01A5  DD 77 FD    	ld	(ix-3),a
 1224  01A8  46          	ld	b,(hl)
 1225  01A9  2B          	dec	hl
 1226  01AA  4E          	ld	c,(hl)
 1227  01AB  03          	inc	bc
 1228  01AC  21 00 00    	ld	hl,_scr_map
 1229  01AF  09          	add	hl,bc
-1230  01B0  DD 75 FD    	ld	(ix-3),l
-1231  01B3  DD 74 FE    	ld	(ix-2),h
+1230  01B0  DD 75 FE    	ld	(ix-2),l
+1231  01B3  DD 74 FF    	ld	(ix-1),h
 1232  01B6  4E          	ld	c, (hl)
-1233  01B7  DD 7E FF    	ld	a,(ix-1)
+1233  01B7  DD 7E FD    	ld	a,(ix-3)
 1234  01BA  D6 20       	sub	a,0x20
 1235  01BC  D2 6E 02    	jp	NC, l_game_draw_map_00128
 1236  01BF  3A 00 00    	ld	a,(_s_row1)
@@ -1247,7 +1247,7 @@
 1244  01CC  48          	ld	c,b
 1245  01CD  47          	ld	b,a
 1246  01CE  C5          	push	bc
-1247  01CF  DD 7E FF    	ld	a,(ix-1)
+1247  01CF  DD 7E FD    	ld	a,(ix-3)
 1248  01D2  F5          	push	af
 1249  01D3  33          	inc	sp
 1250  01D4  CD 00 00    	call	_spr_draw8
@@ -1255,7 +1255,7 @@
 1252  01D8  33          	inc	sp
 1253  01D9  C1          	pop	bc
 1254  01DA  3E 00       	ld	a, +((_tile_class) & 0xFF)
-1255  01DC  DD 86 FF    	add	a,(ix-1)
+1255  01DC  DD 86 FD    	add	a,(ix-3)
 1256  01DF  6F          	ld	l, a
 1257  01E0  3E 00       	ld	a, +((_tile_class) / 256)
 1258  01E2  CE 00       	adc	a,0x00
@@ -1338,7 +1338,7 @@
 1335  0269  36 04       	ld	(hl),0x04
 1336  026B  C3 13 03    	jp	l_game_draw_map_00129
 1337  026E              l_game_draw_map_00128:
-1338  026E  DD 7E FF    	ld	a,(ix-1)
+1338  026E  DD 7E FD    	ld	a,(ix-3)
 1339  0271  D6 20       	sub	a,0x20
 1340  0273  20 38       	jr	NZ,l_game_draw_map_00120
 1341  0275  DD 7E FC    	ld	a,(ix-4)
@@ -1349,8 +1349,8 @@
 1346  0282  32 00 00    	ld	(_game_exit_col),a
 1347  0285  3A 00 00    	ld	a,(_s_lin1)
 1348  0288  32 00 00    	ld	(_game_exit_lin),a
-1349  028B  DD 6E FD    	ld	l,(ix-3)
-1350  028E  DD 66 FE    	ld	h,(ix-2)
+1349  028B  DD 6E FE    	ld	l,(ix-2)
+1350  028E  DD 66 FF    	ld	h,(ix-1)
 1351  0291  36 20       	ld	(hl),0x20
 1352  0293  2A 00 00    	ld	hl,(_index1)
 1353  0296  01 20 00    	ld	bc,0x0020
@@ -1365,10 +1365,10 @@
 1362  02AA  09          	add	hl,bc
 1363  02AB  36 20       	ld	(hl),0x20
 1364  02AD              l_game_draw_map_00120:
-1365  02AD  DD 7E FF    	ld	a,(ix-1)
+1365  02AD  DD 7E FD    	ld	a,(ix-3)
 1366  02B0  D6 40       	sub	a,0x40
 1367  02B2  38 2A       	jr	C,l_game_draw_map_00123
-1368  02B4  DD 7E FF    	ld	a,(ix-1)
+1368  02B4  DD 7E FD    	ld	a,(ix-3)
 1369  02B7  D6 78       	sub	a,0x78
 1370  02B9  30 23       	jr	NC,l_game_draw_map_00123
 1371  02BB  3A 00 00    	ld	a,(_s_row1)
@@ -1394,7 +1394,7 @@
 1391  02DC  AF          	xor	a,a
 1392  02DD  77          	ld	(hl),a
 1393  02DE              l_game_draw_map_00123:
-1394  02DE  DD 7E FF    	ld	a,(ix-1)
+1394  02DE  DD 7E FD    	ld	a,(ix-3)
 1395  02E1  D6 7F       	sub	a,0x7f
 1396  02E3  20 2E       	jr	NZ,l_game_draw_map_00129
 1397  02E5  3A 00 00    	ld	a,(_s_lin1)
@@ -2157,7 +2157,7 @@
 2154  078A  DD 7E FF    	ld	a,(ix-1)
 2155  078D  CE 00       	adc	a,0x00
 2156  078F  47          	ld	b, a
-2157  0790  3E B9       	ld	a, +((___str_28) & 0xFF)
+2157  0790  3E BC       	ld	a, +((___str_28) & 0xFF)
 2158  0792  02          	ld	(bc), a
 2159  0793  03          	inc	bc
 2160  0794  3E 02       	ld	a, +((___str_28) / 256)
@@ -2168,7 +2168,7 @@
 2165  079D  DD 7E FF    	ld	a,(ix-1)
 2166  07A0  CE 00       	adc	a,0x00
 2167  07A2  47          	ld	b, a
-2168  07A3  3E CE       	ld	a, +((___str_29) & 0xFF)
+2168  07A3  3E D1       	ld	a, +((___str_29) & 0xFF)
 2169  07A5  02          	ld	(bc), a
 2170  07A6  03          	inc	bc
 2171  07A7  3E 02       	ld	a, +((___str_29) / 256)
@@ -2179,7 +2179,7 @@
 2176  07B0  DD 7E FF    	ld	a,(ix-1)
 2177  07B3  CE 00       	adc	a,0x00
 2178  07B5  47          	ld	b, a
-2179  07B6  3E E3       	ld	a, +((___str_30) & 0xFF)
+2179  07B6  3E E6       	ld	a, +((___str_30) & 0xFF)
 2180  07B8  02          	ld	(bc), a
 2181  07B9  03          	inc	bc
 2182  07BA  3E 02       	ld	a, +((___str_30) / 256)
@@ -2190,7 +2190,7 @@
 2187  07C3  DD 7E FF    	ld	a,(ix-1)
 2188  07C6  CE 00       	adc	a,0x00
 2189  07C8  47          	ld	b, a
-2190  07C9  3E F8       	ld	a, +((___str_31) & 0xFF)
+2190  07C9  3E FB       	ld	a, +((___str_31) & 0xFF)
 2191  07CB  02          	ld	(bc), a
 2192  07CC  03          	inc	bc
 2193  07CD  3E 02       	ld	a, +((___str_31) / 256)
@@ -2201,7 +2201,7 @@
 2198  07D6  DD 7E FF    	ld	a,(ix-1)
 2199  07D9  CE 00       	adc	a,0x00
 2200  07DB  47          	ld	b, a
-2201  07DC  3E 0D       	ld	a, +((___str_32) & 0xFF)
+2201  07DC  3E 10       	ld	a, +((___str_32) & 0xFF)
 2202  07DE  02          	ld	(bc), a
 2203  07DF  03          	inc	bc
 2204  07E0  3E 03       	ld	a, +((___str_32) / 256)
@@ -2212,7 +2212,7 @@
 2209  07E9  DD 7E FF    	ld	a,(ix-1)
 2210  07EC  CE 00       	adc	a,0x00
 2211  07EE  47          	ld	b, a
-2212  07EF  3E 22       	ld	a, +((___str_33) & 0xFF)
+2212  07EF  3E 25       	ld	a, +((___str_33) & 0xFF)
 2213  07F1  02          	ld	(bc), a
 2214  07F2  03          	inc	bc
 2215  07F3  3E 03       	ld	a, +((___str_33) / 256)
@@ -2223,7 +2223,7 @@
 2220  07FC  DD 7E FF    	ld	a,(ix-1)
 2221  07FF  CE 00       	adc	a,0x00
 2222  0801  47          	ld	b, a
-2223  0802  3E 37       	ld	a, +((___str_34) & 0xFF)
+2223  0802  3E 3A       	ld	a, +((___str_34) & 0xFF)
 2224  0804  02          	ld	(bc), a
 2225  0805  03          	inc	bc
 2226  0806  3E 03       	ld	a, +((___str_34) / 256)
@@ -2234,7 +2234,7 @@
 2231  080F  DD 7E FF    	ld	a,(ix-1)
 2232  0812  CE 00       	adc	a,0x00
 2233  0814  47          	ld	b, a
-2234  0815  3E 4C       	ld	a, +((___str_35) & 0xFF)
+2234  0815  3E 4F       	ld	a, +((___str_35) & 0xFF)
 2235  0817  02          	ld	(bc), a
 2236  0818  03          	inc	bc
 2237  0819  3E 03       	ld	a, +((___str_35) / 256)
@@ -2245,7 +2245,7 @@
 2242  0822  DD 7E FF    	ld	a,(ix-1)
 2243  0825  CE 00       	adc	a,0x00
 2244  0827  47          	ld	b, a
-2245  0828  3E 61       	ld	a, +((___str_36) & 0xFF)
+2245  0828  3E 64       	ld	a, +((___str_36) & 0xFF)
 2246  082A  02          	ld	(bc), a
 2247  082B  03          	inc	bc
 2248  082C  3E 03       	ld	a, +((___str_36) / 256)
@@ -2256,7 +2256,7 @@
 2253  0835  DD 7E FF    	ld	a,(ix-1)
 2254  0838  CE 00       	adc	a,0x00
 2255  083A  47          	ld	b, a
-2256  083B  3E 76       	ld	a, +((___str_37) & 0xFF)
+2256  083B  3E 79       	ld	a, +((___str_37) & 0xFF)
 2257  083D  02          	ld	(bc), a
 2258  083E  03          	inc	bc
 2259  083F  3E 03       	ld	a, +((___str_37) / 256)
@@ -2267,7 +2267,7 @@
 2264  0848  DD 7E FF    	ld	a,(ix-1)
 2265  084B  CE 00       	adc	a,0x00
 2266  084D  47          	ld	b, a
-2267  084E  3E 8B       	ld	a, +((___str_38) & 0xFF)
+2267  084E  3E 8E       	ld	a, +((___str_38) & 0xFF)
 2268  0850  02          	ld	(bc), a
 2269  0851  03          	inc	bc
 2270  0852  3E 03       	ld	a, +((___str_38) / 256)
@@ -2278,7 +2278,7 @@
 2275  085B  DD 7E FF    	ld	a,(ix-1)
 2276  085E  CE 00       	adc	a,0x00
 2277  0860  47          	ld	b, a
-2278  0861  3E A0       	ld	a, +((___str_39) & 0xFF)
+2278  0861  3E A3       	ld	a, +((___str_39) & 0xFF)
 2279  0863  02          	ld	(bc), a
 2280  0864  03          	inc	bc
 2281  0865  3E 03       	ld	a, +((___str_39) / 256)
@@ -2289,7 +2289,7 @@
 2286  086E  DD 7E FF    	ld	a,(ix-1)
 2287  0871  CE 00       	adc	a,0x00
 2288  0873  47          	ld	b, a
-2289  0874  3E B5       	ld	a, +((___str_40) & 0xFF)
+2289  0874  3E B8       	ld	a, +((___str_40) & 0xFF)
 2290  0876  02          	ld	(bc), a
 2291  0877  03          	inc	bc
 2292  0878  3E 03       	ld	a, +((___str_40) / 256)
@@ -2300,184 +2300,184 @@
 2297  0881  DD 7E FF    	ld	a,(ix-1)
 2298  0884  CE 00       	adc	a,0x00
 2299  0886  47          	ld	b, a
-2300  0887  3E CA       	ld	a, +((___str_41) & 0xFF)
+2300  0887  3E CD       	ld	a, +((___str_41) & 0xFF)
 2301  0889  02          	ld	(bc), a
 2302  088A  03          	inc	bc
 2303  088B  3E 03       	ld	a, +((___str_41) / 256)
 2304  088D  02          	ld	(bc), a
-2305  088E  2A 00 00    	ld	hl,(_scr_curr)
-2306  0891  26 00       	ld	h,0x00
-2307  0893  01 07 00    	ld	bc,_game_borders
-2308  0896  09          	add	hl,bc
-2309  0897  7E          	ld	a,(hl)
-2310  0898  32 00 00    	ld	(_map_border),a
-2311  089B  21 00 00    	ld	hl,0x0000
-2312  089E  22 00 00    	ld	(_loop_count),hl
-2313  08A1  21 00 00    	ld	hl,0
-2314  08A4  22 00 00    	ld	(_curr_time),hl
-2315  08A7  21 00 00    	ld	hl,0x0000
-2316  08AA  22 00 00    	ld	(_frame_time),hl
-2317  08AD  21 00 00    	ld	hl,_player_coins
-2318  08B0  36 00       	ld	(hl),0x00
-2319  08B2  2A 00 00    	ld	hl,(_air_start_byte)
-2320  08B5  22 00 00    	ld	(_air_curr_byte),hl
-2321  08B8  21 00 00    	ld	hl,_i
-2322  08BB  36 00       	ld	(hl),0x00
-2323  08BD              l_game_round_init_00121:
-2324  08BD  21 00 00    	ld	hl,0x0000
-2325  08C0  E5          	push	hl
-2326  08C1  AF          	xor	a, a
-2327  08C2  2A 00 00    	ld	hl,(_i)
-2328  08C5  67          	ld	h,a
-2329  08C6  E5          	push	hl
-2330  08C7  CD 00 00    	call	_NIRVANAP_spriteT_callee
-2331  08CA  21 00 00    	ld	hl,_i
-2332  08CD  7E          	ld	a,(hl)
-2333  08CE  3C          	inc	a
-2334  08CF  77          	ld	(hl),a
-2335  08D0  D6 08       	sub	a,0x08
-2336  08D2  38 E9       	jr	C,l_game_round_init_00121
-2337  08D4  76          	halt
-2338  08D5  CD 00 00    	call	_spr_clear_scr
-2339  08D8  21 00 00    	ld	hl,_spr_init_cin0
-2340  08DB  36 00       	ld	(hl),0x00
-2341  08DD  21 00 00    	ld	hl,_spr_init_cout0
-2342  08E0  36 00       	ld	(hl),0x00
-2343  08E2  21 00 00    	ld	hl,_key_last
-2344  08E5  36 00       	ld	(hl),0x00
-2345  08E7  21 00 00    	ld	hl,_key_ink
-2346  08EA  36 06       	ld	(hl),0x06
-2347  08EC  21 00 00    	ld	hl,_i
-2348  08EF  36 00       	ld	(hl),0x00
-2349  08F1              l_game_round_init_00102:
-2350  08F1  21 00 00    	ld	hl,_i
-2351  08F4  7E          	ld	a, (hl)
-2352  08F5  D6 08       	sub	a,0x08
-2353  08F7  30 1B       	jr	NC,l_game_round_init_00104
-2354  08F9  3E 00       	ld	a, +((_obj_col) & 0xFF)
-2355  08FB  86          	add	a, (hl)
-2356  08FC  4F          	ld	c, a
-2357  08FD  3E 00       	ld	a, +((_obj_col) / 256)
-2358  08FF  CE 00       	adc	a,0x00
-2359  0901  47          	ld	b, a
-2360  0902  3E FF       	ld	a,0xff
-2361  0904  02          	ld	(bc), a
-2362  0905  3E 00       	ld	a, +((_obj_lin) & 0xFF)
-2363  0907  86          	add	a, (hl)
-2364  0908  4F          	ld	c, a
-2365  0909  3E 00       	ld	a, +((_obj_lin) / 256)
-2366  090B  CE 00       	adc	a,0x00
-2367  090D  47          	ld	b, a
-2368  090E  3E FF       	ld	a,0xff
-2369  0910  02          	ld	(bc), a
-2370  0911  34          	inc	(hl)
-2371  0912  18 DD       	jr	l_game_round_init_00102
-2372  0914              l_game_round_init_00104:
-2373  0914  CD 00 00    	call	_ay_reset
-2374  0917  2A 00 00    	ld	hl,(_map_border)
-2375  091A  CD 00 00    	call	_zx_border_fastcall
-2376  091D  21 00 00    	ld	hl,_map_border
-2377  0920  7E          	ld	a, (hl)
-2378  0921  07          	rlca
-2379  0922  07          	rlca
-2380  0923  07          	rlca
-2381  0924  E6 F8       	and	a,0xf8
-2382  0926  B6          	or	a, (hl)
-2383  0927  32 00 00    	ld	(_screen_ink),a
-2384  092A  21 00 20    	ld	hl,0x2000
-2385  092D  E5          	push	hl
-2386  092E  CD 00 00    	call	_game_fill_row
-2387  0931  3A 00 00    	ld	a,(_scr_curr)
-2388  0934  B7          	or	a, a
-2389  0935  28 0C       	jr	Z,l_game_round_init_00106
-2390  0937  21 00 00    	ld	hl,_screen_ink
-2391  093A  36 30       	ld	(hl),0x30
-2392  093C  21 11 20    	ld	hl,0x2011
-2393  093F  E5          	push	hl
-2394  0940  CD 00 00    	call	_game_fill_row
-2395  0943              l_game_round_init_00106:
-2396  0943  3A 00 00    	ld	a,(_scr_curr)
-2397  0946  D6 14       	sub	a,0x14
-2398  0948  30 0C       	jr	NC,l_game_round_init_00108
-2399  094A  21 00 00    	ld	hl,_game_tileset
-2400  094D  36 00       	ld	(hl),0x00
-2401  094F  21 00 00    	ld	hl,_game_mode
-2402  0952  36 00       	ld	(hl),0x00
-2403  0954  18 0A       	jr	l_game_round_init_00109
-2404  0956              l_game_round_init_00108:
-2405  0956  21 00 00    	ld	hl,_game_tileset
-2406  0959  36 01       	ld	(hl),0x01
-2407  095B  21 00 00    	ld	hl,_game_mode
-2408  095E  36 01       	ld	(hl),0x01
-2409  0960              l_game_round_init_00109:
-2410  0960  CD 62 0D    	call	_game_page_map
-2411  0963  21 00 00    	ld	hl,_spr_init_bright
-2412  0966  36 00       	ld	(hl),0x00
-2413  0968  3A 00 00    	ld	a,(_scr_curr)
-2414  096B  D6 14       	sub	a,0x14
-2415  096D  30 13       	jr	NC,l_game_round_init_00117
-2416  096F  3A 00 00    	ld	a,(_map_paper)
-2417  0972  D6 10       	sub	a,0x10
-2418  0974  20 65       	jr	NZ,l_game_round_init_00118
-2419  0976  21 00 00    	ld	hl,_spr_init_cin0
-2420  0979  36 02       	ld	(hl),0x02
-2421  097B  21 00 00    	ld	hl,_spr_init_cout0
-2422  097E  36 03       	ld	(hl),0x03
-2423  0980  18 59       	jr	l_game_round_init_00118
-2424  0982              l_game_round_init_00117:
-2425  0982  3A 00 00    	ld	a,(_map_paper)
-2426  0985  D6 08       	sub	a,0x08
-2427  0987  20 1E       	jr	NZ,l_game_round_init_00113
-2428  0989  21 00 00    	ld	hl,_spr_init_cin0
-2429  098C  36 01       	ld	(hl),0x01
-2430  098E  21 00 00    	ld	hl,_spr_init_cout0
-2431  0991  36 07       	ld	(hl),0x07
-2432  0993  21 00 00    	ld	hl,_spr_init_cin1
-2433  0996  36 02       	ld	(hl),0x02
-2434  0998  21 00 00    	ld	hl,_spr_init_cout1
-2435  099B  36 04       	ld	(hl),0x04
-2436  099D  21 00 00    	ld	hl,_spr_init_cin2
-2437  09A0  36 32       	ld	(hl),0x32
-2438  09A2  21 00 00    	ld	hl,_spr_init_cout2
-2439  09A5  36 34       	ld	(hl),0x34
-2440  09A7              l_game_round_init_00113:
-2441  09A7  3A 00 00    	ld	a,(_map_paper)
-2442  09AA  D6 78       	sub	a,0x78
-2443  09AC  20 2D       	jr	NZ,l_game_round_init_00118
-2444  09AE  21 00 00    	ld	hl,_spr_init_bright
-2445  09B1  36 40       	ld	(hl),0x40
-2446  09B3  21 00 00    	ld	hl,_spr_init_cin0
-2447  09B6  36 06       	ld	(hl),0x06
-2448  09B8  21 00 00    	ld	hl,_spr_init_cout0
-2449  09BB  36 03       	ld	(hl),0x03
-2450  09BD  21 00 00    	ld	hl,_spr_init_cin1
-2451  09C0  36 01       	ld	(hl),0x01
-2452  09C2  21 00 00    	ld	hl,_spr_init_cout1
-2453  09C5  36 00       	ld	(hl),0x00
-2454  09C7  21 00 00    	ld	hl,_spr_init_cin2
-2455  09CA  36 02       	ld	(hl),0x02
-2456  09CC  21 00 00    	ld	hl,_spr_init_cout2
-2457  09CF  36 01       	ld	(hl),0x01
-2458  09D1  21 00 00    	ld	hl,_spr_init_cin3
-2459  09D4  36 32       	ld	(hl),0x32
-2460  09D6  21 00 00    	ld	hl,_spr_init_cout3
-2461  09D9  36 19       	ld	(hl),0x19
-2462  09DB              l_game_round_init_00118:
-2463  09DB  21 00 08    	ld	hl,0x0800
-2464  09DE  E5          	push	hl
-2465  09DF  CD E7 12    	call	_game_copy_sprite_std
-2466  09E2  F1          	pop	af
-2467  09E3  7D          	ld	a,l
-2468  09E4  32 00 00    	ld	(_game_tile_cnt),a
-2469  09E7  21 00 00    	ld	hl,_spr_init_cin1
-2470  09EA  36 00       	ld	(hl),0x00
-2471  09EC  21 00 00    	ld	hl,_spr_init_cout1
-2472  09EF  36 00       	ld	(hl),0x00
-2473  09F1  21 00 00    	ld	hl,_spr_init_cin2
-2474  09F4  36 00       	ld	(hl),0x00
-2475  09F6  21 00 00    	ld	hl,_spr_init_cout2
-2476  09F9  36 00       	ld	(hl),0x00
-2477  09FB  CD 20 01    	call	_game_draw_map
+2305  088E  CD 00 00    	call	_ay_reset
+2306  0891  CD 00 00    	call	_spr_clear_scr
+2307  0894  21 00 00    	ld	hl,_i
+2308  0897  36 00       	ld	(hl),0x00
+2309  0899              l_game_round_init_00121:
+2310  0899  21 00 00    	ld	hl,0x0000
+2311  089C  E5          	push	hl
+2312  089D  AF          	xor	a, a
+2313  089E  2A 00 00    	ld	hl,(_i)
+2314  08A1  67          	ld	h,a
+2315  08A2  E5          	push	hl
+2316  08A3  CD 00 00    	call	_NIRVANAP_spriteT_callee
+2317  08A6  21 00 00    	ld	hl,_i
+2318  08A9  7E          	ld	a,(hl)
+2319  08AA  3C          	inc	a
+2320  08AB  77          	ld	(hl),a
+2321  08AC  D6 07       	sub	a,0x07
+2322  08AE  38 E9       	jr	C,l_game_round_init_00121
+2323  08B0  76          	halt
+2324  08B1  CD 00 00    	call	_NIRVANAP_stop
+2325  08B4  2A 00 00    	ld	hl,(_scr_curr)
+2326  08B7  26 00       	ld	h,0x00
+2327  08B9  01 07 00    	ld	bc,_game_borders
+2328  08BC  09          	add	hl,bc
+2329  08BD  7E          	ld	a,(hl)
+2330  08BE  32 00 00    	ld	(_map_border),a
+2331  08C1  21 00 00    	ld	hl,0x0000
+2332  08C4  22 00 00    	ld	(_loop_count),hl
+2333  08C7  21 00 00    	ld	hl,0
+2334  08CA  22 00 00    	ld	(_curr_time),hl
+2335  08CD  21 00 00    	ld	hl,0x0000
+2336  08D0  22 00 00    	ld	(_frame_time),hl
+2337  08D3  21 00 00    	ld	hl,_player_coins
+2338  08D6  36 00       	ld	(hl),0x00
+2339  08D8  2A 00 00    	ld	hl,(_air_start_byte)
+2340  08DB  22 00 00    	ld	(_air_curr_byte),hl
+2341  08DE  21 00 00    	ld	hl,_key_last
+2342  08E1  36 00       	ld	(hl),0x00
+2343  08E3  21 00 00    	ld	hl,_key_ink
+2344  08E6  36 06       	ld	(hl),0x06
+2345  08E8  21 00 00    	ld	hl,_i
+2346  08EB  36 00       	ld	(hl),0x00
+2347  08ED              l_game_round_init_00102:
+2348  08ED  21 00 00    	ld	hl,_i
+2349  08F0  7E          	ld	a, (hl)
+2350  08F1  D6 08       	sub	a,0x08
+2351  08F3  30 1B       	jr	NC,l_game_round_init_00104
+2352  08F5  3E 00       	ld	a, +((_obj_col) & 0xFF)
+2353  08F7  86          	add	a, (hl)
+2354  08F8  4F          	ld	c, a
+2355  08F9  3E 00       	ld	a, +((_obj_col) / 256)
+2356  08FB  CE 00       	adc	a,0x00
+2357  08FD  47          	ld	b, a
+2358  08FE  3E FF       	ld	a,0xff
+2359  0900  02          	ld	(bc), a
+2360  0901  3E 00       	ld	a, +((_obj_lin) & 0xFF)
+2361  0903  86          	add	a, (hl)
+2362  0904  4F          	ld	c, a
+2363  0905  3E 00       	ld	a, +((_obj_lin) / 256)
+2364  0907  CE 00       	adc	a,0x00
+2365  0909  47          	ld	b, a
+2366  090A  3E FF       	ld	a,0xff
+2367  090C  02          	ld	(bc), a
+2368  090D  34          	inc	(hl)
+2369  090E  18 DD       	jr	l_game_round_init_00102
+2370  0910              l_game_round_init_00104:
+2371  0910  2A 00 00    	ld	hl,(_map_border)
+2372  0913  CD 00 00    	call	_zx_border_fastcall
+2373  0916  21 00 00    	ld	hl,_map_border
+2374  0919  7E          	ld	a, (hl)
+2375  091A  07          	rlca
+2376  091B  07          	rlca
+2377  091C  07          	rlca
+2378  091D  E6 F8       	and	a,0xf8
+2379  091F  B6          	or	a, (hl)
+2380  0920  32 00 00    	ld	(_screen_ink),a
+2381  0923  21 00 20    	ld	hl,0x2000
+2382  0926  E5          	push	hl
+2383  0927  CD 00 00    	call	_game_fill_row
+2384  092A  3A 00 00    	ld	a,(_scr_curr)
+2385  092D  B7          	or	a, a
+2386  092E  28 0C       	jr	Z,l_game_round_init_00106
+2387  0930  21 00 00    	ld	hl,_screen_ink
+2388  0933  36 30       	ld	(hl),0x30
+2389  0935  21 11 20    	ld	hl,0x2011
+2390  0938  E5          	push	hl
+2391  0939  CD 00 00    	call	_game_fill_row
+2392  093C              l_game_round_init_00106:
+2393  093C  3A 00 00    	ld	a,(_scr_curr)
+2394  093F  D6 14       	sub	a,0x14
+2395  0941  30 0C       	jr	NC,l_game_round_init_00108
+2396  0943  21 00 00    	ld	hl,_game_tileset
+2397  0946  36 00       	ld	(hl),0x00
+2398  0948  21 00 00    	ld	hl,_game_mode
+2399  094B  36 00       	ld	(hl),0x00
+2400  094D  18 0A       	jr	l_game_round_init_00109
+2401  094F              l_game_round_init_00108:
+2402  094F  21 00 00    	ld	hl,_game_tileset
+2403  0952  36 01       	ld	(hl),0x01
+2404  0954  21 00 00    	ld	hl,_game_mode
+2405  0957  36 01       	ld	(hl),0x01
+2406  0959              l_game_round_init_00109:
+2407  0959  CD 68 0D    	call	_game_page_map
+2408  095C  21 00 00    	ld	hl,_spr_init_bright
+2409  095F  36 00       	ld	(hl),0x00
+2410  0961  3A 00 00    	ld	a,(_scr_curr)
+2411  0964  D6 14       	sub	a,0x14
+2412  0966  30 13       	jr	NC,l_game_round_init_00117
+2413  0968  3A 00 00    	ld	a,(_map_paper)
+2414  096B  D6 10       	sub	a,0x10
+2415  096D  20 65       	jr	NZ,l_game_round_init_00118
+2416  096F  21 00 00    	ld	hl,_spr_init_cin0
+2417  0972  36 02       	ld	(hl),0x02
+2418  0974  21 00 00    	ld	hl,_spr_init_cout0
+2419  0977  36 03       	ld	(hl),0x03
+2420  0979  18 59       	jr	l_game_round_init_00118
+2421  097B              l_game_round_init_00117:
+2422  097B  3A 00 00    	ld	a,(_map_paper)
+2423  097E  D6 08       	sub	a,0x08
+2424  0980  20 1E       	jr	NZ,l_game_round_init_00113
+2425  0982  21 00 00    	ld	hl,_spr_init_cin0
+2426  0985  36 01       	ld	(hl),0x01
+2427  0987  21 00 00    	ld	hl,_spr_init_cout0
+2428  098A  36 07       	ld	(hl),0x07
+2429  098C  21 00 00    	ld	hl,_spr_init_cin1
+2430  098F  36 02       	ld	(hl),0x02
+2431  0991  21 00 00    	ld	hl,_spr_init_cout1
+2432  0994  36 04       	ld	(hl),0x04
+2433  0996  21 00 00    	ld	hl,_spr_init_cin2
+2434  0999  36 16       	ld	(hl),0x16
+2435  099B  21 00 00    	ld	hl,_spr_init_cout2
+2436  099E  36 27       	ld	(hl),0x27
+2437  09A0              l_game_round_init_00113:
+2438  09A0  3A 00 00    	ld	a,(_map_paper)
+2439  09A3  D6 78       	sub	a,0x78
+2440  09A5  20 2D       	jr	NZ,l_game_round_init_00118
+2441  09A7  21 00 00    	ld	hl,_spr_init_bright
+2442  09AA  36 40       	ld	(hl),0x40
+2443  09AC  21 00 00    	ld	hl,_spr_init_cin0
+2444  09AF  36 06       	ld	(hl),0x06
+2445  09B1  21 00 00    	ld	hl,_spr_init_cout0
+2446  09B4  36 00       	ld	(hl),0x00
+2447  09B6  21 00 00    	ld	hl,_spr_init_cin1
+2448  09B9  36 01       	ld	(hl),0x01
+2449  09BB  21 00 00    	ld	hl,_spr_init_cout1
+2450  09BE  36 01       	ld	(hl),0x01
+2451  09C0  21 00 00    	ld	hl,_spr_init_cin2
+2452  09C3  36 02       	ld	(hl),0x02
+2453  09C5  21 00 00    	ld	hl,_spr_init_cout2
+2454  09C8  36 03       	ld	(hl),0x03
+2455  09CA  21 00 00    	ld	hl,_spr_init_cin3
+2456  09CD  36 16       	ld	(hl),0x16
+2457  09CF  21 00 00    	ld	hl,_spr_init_cout3
+2458  09D2  36 08       	ld	(hl),0x08
+2459  09D4              l_game_round_init_00118:
+2460  09D4  21 00 08    	ld	hl,0x0800
+2461  09D7  E5          	push	hl
+2462  09D8  CD ED 12    	call	_game_copy_sprite_std
+2463  09DB  F1          	pop	af
+2464  09DC  7D          	ld	a,l
+2465  09DD  32 00 00    	ld	(_game_tile_cnt),a
+2466  09E0  21 00 00    	ld	hl,_spr_init_cin1
+2467  09E3  36 00       	ld	(hl),0x00
+2468  09E5  21 00 00    	ld	hl,_spr_init_cout1
+2469  09E8  36 00       	ld	(hl),0x00
+2470  09EA  21 00 00    	ld	hl,_spr_init_cin2
+2471  09ED  36 00       	ld	(hl),0x00
+2472  09EF  21 00 00    	ld	hl,_spr_init_cout2
+2473  09F2  36 00       	ld	(hl),0x00
+2474  09F4  21 00 00    	ld	hl,_spr_init_cin3
+2475  09F7  36 00       	ld	(hl),0x00
+2476  09F9  21 00 00    	ld	hl,_spr_init_cout3
+2477  09FC  36 00       	ld	(hl),0x00
 2478  09FE  CD 00 00    	call	_spr_btile_paint_back
 2479  0A01  3A 00 00    	ld	a,(_map_paper)
 2480  0A04  21 00 00    	ld	hl,_key_ink
@@ -2486,1971 +2486,1973 @@
 2483  0A0B  32 01 00    	ld	((_key_attrib + 0x0001)),a
 2484  0A0E  32 02 00    	ld	((_key_attrib + 0x0002)),a
 2485  0A11  32 03 00    	ld	((_key_attrib + 0x0003)),a
-2486  0A14  AF          	xor	a, a
-2487  0A15  F5          	push	af
-2488  0A16  33          	inc	sp
-2489  0A17  CD AE 12    	call	_game_flash_exit
-2490  0A1A  33          	inc	sp
-2491  0A1B  21 00 00    	ld	hl,_game_song_play_start
-2492  0A1E  36 00       	ld	(hl),0x00
-2493  0A20  CD 00 00    	call	_audio_ingame
-2494  0A23  3A 00 00    	ld	a,(_game_over)
-2495  0A26  B7          	or	a, a
-2496  0A27  20 15       	jr	NZ,l_game_round_init_00120
-2497  0A29  2A 00 00    	ld	hl,(_player_col_scr)
-2498  0A2C  26 08       	ld	h,0x08
-2499  0A2E  3A 00 00    	ld	a,(_player_lin_scr)
-2500  0A31  E5          	push	hl
-2501  0A32  F5          	push	af
-2502  0A33  33          	inc	sp
-2503  0A34  CD 00 00    	call	_player_init
-2504  0A37  F1          	pop	af
-2505  0A38  33          	inc	sp
-2506  0A39  21 00 00    	ld	hl,_player_killed
-2507  0A3C  36 00       	ld	(hl),0x00
-2508  0A3E              l_game_round_init_00120:
-2509  0A3E  21 00 00    	ld	hl,_screen_ink
-2510  0A41  36 30       	ld	(hl),0x30
-2511  0A43  21 11 20    	ld	hl,0x2011
-2512  0A46  E5          	push	hl
-2513  0A47  CD 00 00    	call	_game_fill_row
-2514  0A4A  2A 00 00    	ld	hl,(_scr_curr)
-2515  0A4D  26 00       	ld	h,0x00
-2516  0A4F  29          	add	hl, hl
-2517  0A50  DD 5E FE    	ld	e,(ix-2)
-2518  0A53  DD 56 FF    	ld	d,(ix-1)
-2519  0A56  19          	add	hl, de
-2520  0A57  4E          	ld	c, (hl)
-2521  0A58  23          	inc	hl
-2522  0A59  46          	ld	b, (hl)
-2523  0A5A  C5          	push	bc
-2524  0A5B  21 11 00    	ld	hl,0x0011
-2525  0A5E  E5          	push	hl
-2526  0A5F  CD 00 00    	call	_zx_print_str
-2527  0A62  21 00 00    	ld	hl,_screen_ink
-2528  0A65  36 57       	ld	(hl),0x57
-2529  0A67  21 DF 03    	ld	hl,___str_42
-2530  0A6A  E5          	push	hl
-2531  0A6B  21 12 00    	ld	hl,0x0012
-2532  0A6E  E5          	push	hl
-2533  0A6F  CD 00 00    	call	_zx_print_str
-2534  0A72  21 00 00    	ld	hl,_screen_ink
-2535  0A75  36 67       	ld	(hl),0x67
-2536  0A77  21 EA 03    	ld	hl,___str_43
-2537  0A7A  E5          	push	hl
-2538  0A7B  21 12 0A    	ld	hl,0x0a12
-2539  0A7E  E5          	push	hl
-2540  0A7F  CD 00 00    	call	_zx_print_str
-2541  0A82  21 00 00    	ld	hl,_screen_ink
-2542  0A85  36 06       	ld	(hl),0x06
-2543  0A87  21 01 04    	ld	hl,___str_44
-2544  0A8A  E5          	push	hl
-2545  0A8B  21 14 00    	ld	hl,0x0014
-2546  0A8E  E5          	push	hl
-2547  0A8F  CD 00 00    	call	_zx_print_str
-2548  0A92  CD C4 03    	call	_game_print_score
-2549  0A95  CD E5 03    	call	_game_print_lives
-2550  0A98  21 00 00    	ld	hl,_screen_ink
-2551  0A9B  36 07       	ld	(hl),0x07
-2552  0A9D  76          	halt
-2553  0A9E  DD F9       	ld	sp, ix
-2554  0AA0  DD E1       	pop	ix
-2555  0AA2  C9          	ret
-2556  0AA3              	SECTION rodata_compiler
-2557  0007              _game_borders:
-2558  0007  02          	DEFB +0x02
-2559  0008  02          	DEFB +0x02
-2560  0009  02          	DEFB +0x02
-2561  000A  02          	DEFB +0x02
-2562  000B  01          	DEFB +0x01
-2563  000C  02          	DEFB +0x02
-2564  000D  04          	DEFB +0x04
-2565  000E  02          	DEFB +0x02
-2566  000F  01          	DEFB +0x01
-2567  0010  02          	DEFB +0x02
-2568  0011  02          	DEFB +0x02
-2569  0012  02          	DEFB +0x02
-2570  0013  01          	DEFB +0x01
-2571  0014  06          	DEFB +0x06
-2572  0015  02          	DEFB +0x02
-2573  0016  02          	DEFB +0x02
-2574  0017  02          	DEFB +0x02
-2575  0018  01          	DEFB +0x01
-2576  0019  03          	DEFB +0x03
-2577  001A  02          	DEFB +0x02
-2578  001B              	SECTION rodata_compiler
-2579  001B              ___str_2:
-2580  001B  20 20 20 20 20 20 20 20 20 43 65 6E 74 72 61 6C 20 43 61 76 65 72 6E 
+2486  0A14  21 00 00    	ld	hl,_game_song_play_start
+2487  0A17  36 00       	ld	(hl),0x00
+2488  0A19  CD 00 00    	call	_audio_ingame
+2489  0A1C  CD 00 00    	call	_NIRVANAP_start
+2490  0A1F  CD 20 01    	call	_game_draw_map
+2491  0A22  AF          	xor	a, a
+2492  0A23  F5          	push	af
+2493  0A24  33          	inc	sp
+2494  0A25  CD B4 12    	call	_game_flash_exit
+2495  0A28  33          	inc	sp
+2496  0A29  3A 00 00    	ld	a,(_game_over)
+2497  0A2C  B7          	or	a, a
+2498  0A2D  20 15       	jr	NZ,l_game_round_init_00120
+2499  0A2F  2A 00 00    	ld	hl,(_player_col_scr)
+2500  0A32  26 08       	ld	h,0x08
+2501  0A34  3A 00 00    	ld	a,(_player_lin_scr)
+2502  0A37  E5          	push	hl
+2503  0A38  F5          	push	af
+2504  0A39  33          	inc	sp
+2505  0A3A  CD 00 00    	call	_player_init
+2506  0A3D  F1          	pop	af
+2507  0A3E  33          	inc	sp
+2508  0A3F  21 00 00    	ld	hl,_player_killed
+2509  0A42  36 00       	ld	(hl),0x00
+2510  0A44              l_game_round_init_00120:
+2511  0A44  21 00 00    	ld	hl,_screen_ink
+2512  0A47  36 30       	ld	(hl),0x30
+2513  0A49  21 11 20    	ld	hl,0x2011
+2514  0A4C  E5          	push	hl
+2515  0A4D  CD 00 00    	call	_game_fill_row
+2516  0A50  2A 00 00    	ld	hl,(_scr_curr)
+2517  0A53  26 00       	ld	h,0x00
+2518  0A55  29          	add	hl, hl
+2519  0A56  DD 5E FE    	ld	e,(ix-2)
+2520  0A59  DD 56 FF    	ld	d,(ix-1)
+2521  0A5C  19          	add	hl, de
+2522  0A5D  4E          	ld	c, (hl)
+2523  0A5E  23          	inc	hl
+2524  0A5F  46          	ld	b, (hl)
+2525  0A60  C5          	push	bc
+2526  0A61  21 11 00    	ld	hl,0x0011
+2527  0A64  E5          	push	hl
+2528  0A65  CD 00 00    	call	_zx_print_str
+2529  0A68  21 00 00    	ld	hl,_screen_ink
+2530  0A6B  36 57       	ld	(hl),0x57
+2531  0A6D  21 E3 03    	ld	hl,___str_42
+2532  0A70  E5          	push	hl
+2533  0A71  21 12 00    	ld	hl,0x0012
+2534  0A74  E5          	push	hl
+2535  0A75  CD 00 00    	call	_zx_print_str
+2536  0A78  21 00 00    	ld	hl,_screen_ink
+2537  0A7B  36 67       	ld	(hl),0x67
+2538  0A7D  21 EE 03    	ld	hl,___str_43
+2539  0A80  E5          	push	hl
+2540  0A81  21 12 0A    	ld	hl,0x0a12
+2541  0A84  E5          	push	hl
+2542  0A85  CD 00 00    	call	_zx_print_str
+2543  0A88  21 00 00    	ld	hl,_screen_ink
+2544  0A8B  36 06       	ld	(hl),0x06
+2545  0A8D  21 05 04    	ld	hl,___str_44
+2546  0A90  E5          	push	hl
+2547  0A91  21 14 00    	ld	hl,0x0014
+2548  0A94  E5          	push	hl
+2549  0A95  CD 00 00    	call	_zx_print_str
+2550  0A98  CD C4 03    	call	_game_print_score
+2551  0A9B  CD E5 03    	call	_game_print_lives
+2552  0A9E  21 00 00    	ld	hl,_screen_ink
+2553  0AA1  36 07       	ld	(hl),0x07
+2554  0AA3  76          	halt
+2555  0AA4  DD F9       	ld	sp, ix
+2556  0AA6  DD E1       	pop	ix
+2557  0AA8  C9          	ret
+2558  0AA9              	SECTION rodata_compiler
+2559  0007              _game_borders:
+2560  0007  02          	DEFB +0x02
+2561  0008  02          	DEFB +0x02
+2562  0009  02          	DEFB +0x02
+2563  000A  02          	DEFB +0x02
+2564  000B  01          	DEFB +0x01
+2565  000C  02          	DEFB +0x02
+2566  000D  04          	DEFB +0x04
+2567  000E  02          	DEFB +0x02
+2568  000F  01          	DEFB +0x01
+2569  0010  02          	DEFB +0x02
+2570  0011  02          	DEFB +0x02
+2571  0012  02          	DEFB +0x02
+2572  0013  01          	DEFB +0x01
+2573  0014  06          	DEFB +0x06
+2574  0015  02          	DEFB +0x02
+2575  0016  02          	DEFB +0x02
+2576  0017  02          	DEFB +0x02
+2577  0018  01          	DEFB +0x01
+2578  0019  03          	DEFB +0x03
+2579  001A  02          	DEFB +0x02
+2580  001B              	SECTION rodata_compiler
+2581  001B              ___str_2:
+2582  001B  20 20 20 20 20 20 20 20 20 43 65 6E 74 72 61 6C 20 43 61 76 65 72 6E 
                         	DEFM "         Central Cavern"
-2581  0032  00          	DEFB 0x00
-2582  0033              	SECTION rodata_compiler
-2583  0033              ___str_3:
-2584  0033  20 20 20 20 20 20 20 20 20 20 54 68 65 20 43 6F 6C 64 20 52 6F 6F 6D 
+2583  0032  00          	DEFB 0x00
+2584  0033              	SECTION rodata_compiler
+2585  0033              ___str_3:
+2586  0033  20 20 20 20 20 20 20 20 20 20 54 68 65 20 43 6F 6C 64 20 52 6F 6F 6D 
                         	DEFM "          The Cold Room"
-2585  004A  00          	DEFB 0x00
-2586  004B              	SECTION rodata_compiler
-2587  004B              ___str_4:
-2588  004B  20 20 20 20 20 20 20 20 20 20 54 68 65 20 4D 65 6E 61 67 65 72 69 65 
+2587  004A  00          	DEFB 0x00
+2588  004B              	SECTION rodata_compiler
+2589  004B              ___str_4:
+2590  004B  20 20 20 20 20 20 20 20 20 20 54 68 65 20 4D 65 6E 61 67 65 72 69 65 
                         	DEFM "          The Menagerie"
-2589  0062  00          	DEFB 0x00
-2590  0063              	SECTION rodata_compiler
-2591  0063              ___str_5:
-2592  0063  20 20 20 41 62 61 6E 64 6F 6E 65 64 20 55 72 61 6E 69 75 6D 20 57 6F 72 6B 69 6E 67 73 
+2591  0062  00          	DEFB 0x00
+2592  0063              	SECTION rodata_compiler
+2593  0063              ___str_5:
+2594  0063  20 20 20 41 62 61 6E 64 6F 6E 65 64 20 55 72 61 6E 69 75 6D 20 57 6F 72 6B 69 6E 67 73 
                         	DEFM "   Abandoned Uranium Workings"
-2593  0080  00          	DEFB 0x00
-2594  0081              	SECTION rodata_compiler
-2595  0081              ___str_6:
-2596  0081  20 20 20 20 20 20 20 20 20 45 75 67 65 6E 65 27 73 20 4C 61 69 72 
+2595  0080  00          	DEFB 0x00
+2596  0081              	SECTION rodata_compiler
+2597  0081              ___str_6:
+2598  0081  20 20 20 20 20 20 20 20 20 45 75 67 65 6E 65 27 73 20 4C 61 69 72 
                         	DEFM "         Eugene's Lair"
-2597  0097  00          	DEFB 0x00
-2598  0098              	SECTION rodata_compiler
-2599  0098              ___str_7:
-2600  0098  20 20 20 20 20 20 20 50 72 6F 63 65 73 73 69 6E 67 20 50 6C 61 6E 74 
+2599  0097  00          	DEFB 0x00
+2600  0098              	SECTION rodata_compiler
+2601  0098              ___str_7:
+2602  0098  20 20 20 20 20 20 20 50 72 6F 63 65 73 73 69 6E 67 20 50 6C 61 6E 74 
                         	DEFM "       Processing Plant"
-2601  00AF  00          	DEFB 0x00
-2602  00B0              	SECTION rodata_compiler
-2603  00B0              ___str_8:
-2604  00B0  20 20 20 20 20 20 20 20 20 20 20 20 54 68 65 20 56 61 74 
+2603  00AF  00          	DEFB 0x00
+2604  00B0              	SECTION rodata_compiler
+2605  00B0              ___str_8:
+2606  00B0  20 20 20 20 20 20 20 20 20 20 20 20 54 68 65 20 56 61 74 
                         	DEFM "            The Vat"
-2605  00C3  00          	DEFB 0x00
-2606  00C4              	SECTION rodata_compiler
-2607  00C4              ___str_9:
-2608  00C4  4D 69 6E 65 72 20 57 69 6C 6C 79 20 6D 65 65 74 73 20 74 68 65 20 4B 6F 6E 67 20 42 65 61 73 74 
+2607  00C3  00          	DEFB 0x00
+2608  00C4              	SECTION rodata_compiler
+2609  00C4              ___str_9:
+2610  00C4  4D 69 6E 65 72 20 57 69 6C 6C 79 20 6D 65 65 74 73 20 74 68 65 20 4B 6F 6E 67 20 42 65 61 73 74 
                         	DEFM "Miner Willy meets the Kong Beast"
-2609  00E4  00          	DEFB 0x00
-2610  00E5              	SECTION rodata_compiler
-2611  00E5              ___str_10:
-2612  00E5  20 20 20 20 20 20 20 20 57 61 63 6B 79 20 41 6D 6F 65 62 61 74 72 6F 6E 73 
+2611  00E4  00          	DEFB 0x00
+2612  00E5              	SECTION rodata_compiler
+2613  00E5              ___str_10:
+2614  00E5  20 20 20 20 20 20 20 20 57 61 63 6B 79 20 41 6D 6F 65 62 61 74 72 6F 6E 73 
                         	DEFM "        Wacky Amoebatrons"
-2613  00FE  00          	DEFB 0x00
-2614  00FF              	SECTION rodata_compiler
-2615  00FF              ___str_11:
-2616  00FF  20 20 20 20 20 20 20 54 68 65 20 45 6E 64 6F 72 69 61 6E 20 46 6F 72 65 73 74 
+2615  00FE  00          	DEFB 0x00
+2616  00FF              	SECTION rodata_compiler
+2617  00FF              ___str_11:
+2618  00FF  20 20 20 20 20 20 20 54 68 65 20 45 6E 64 6F 72 69 61 6E 20 46 6F 72 65 73 74 
                         	DEFM "       The Endorian Forest"
-2617  0119  00          	DEFB 0x00
-2618  011A              	SECTION rodata_compiler
-2619  011A              ___str_12:
-2620  011A  41 74 74 61 63 6B 20 6F 66 20 74 68 65 20 4D 75 74 61 6E 74 20 54 65 6C 65 70 68 6F 6E 65 73 
+2619  0119  00          	DEFB 0x00
+2620  011A              	SECTION rodata_compiler
+2621  011A              ___str_12:
+2622  011A  41 74 74 61 63 6B 20 6F 66 20 74 68 65 20 4D 75 74 61 6E 74 20 54 65 6C 65 70 68 6F 6E 65 73 
                         	DEFM "Attack of the Mutant Telephones"
-2621  0139  00          	DEFB 0x00
-2622  013A              	SECTION rodata_compiler
-2623  013A              ___str_13:
-2624  013A  20 52 65 74 75 72 6E 20 6F 66 20 74 68 65 20 41 6C 69 65 6E 20 4B 6F 6E 67 20 42 65 61 73 74 
+2623  0139  00          	DEFB 0x00
+2624  013A              	SECTION rodata_compiler
+2625  013A              ___str_13:
+2626  013A  20 52 65 74 75 72 6E 20 6F 66 20 74 68 65 20 41 6C 69 65 6E 20 4B 6F 6E 67 20 42 65 61 73 74 
                         	DEFM " Return of the Alien Kong Beast"
-2625  0159  00          	DEFB 0x00
-2626  015A              	SECTION rodata_compiler
-2627  015A              ___str_14:
-2628  015A  20 20 20 20 20 20 20 20 20 20 4F 72 65 20 52 65 66 69 6E 65 72 79 
+2627  0159  00          	DEFB 0x00
+2628  015A              	SECTION rodata_compiler
+2629  015A              ___str_14:
+2630  015A  20 20 20 20 20 20 20 20 20 20 4F 72 65 20 52 65 66 69 6E 65 72 79 
                         	DEFM "          Ore Refinery"
-2629  0170  00          	DEFB 0x00
-2630  0171              	SECTION rodata_compiler
-2631  0171              ___str_15:
-2632  0171  20 20 20 20 20 20 20 53 6B 79 6C 61 62 20 4C 61 6E 64 69 6E 67 20 42 61 79 
+2631  0170  00          	DEFB 0x00
+2632  0171              	SECTION rodata_compiler
+2633  0171              ___str_15:
+2634  0171  20 20 20 20 20 20 20 53 6B 79 6C 61 62 20 4C 61 6E 64 69 6E 67 20 42 61 79 
                         	DEFM "       Skylab Landing Bay"
-2633  018A  00          	DEFB 0x00
-2634  018B              	SECTION rodata_compiler
-2635  018B              ___str_16:
-2636  018B  20 20 20 20 20 20 20 20 20 20 20 20 20 54 68 65 20 42 61 6E 6B 
+2635  018A  00          	DEFB 0x00
+2636  018B              	SECTION rodata_compiler
+2637  018B              ___str_16:
+2638  018B  20 20 20 20 20 20 20 20 20 20 20 20 20 54 68 65 20 42 61 6E 6B 
                         	DEFM "             The Bank"
-2637  01A0  00          	DEFB 0x00
-2638  01A1              	SECTION rodata_compiler
-2639  01A1              ___str_17:
-2640  01A1  20 20 20 20 20 20 54 68 65 20 53 69 78 74 65 65 6E 74 68 20 43 61 76 65 72 6E 
+2639  01A0  00          	DEFB 0x00
+2640  01A1              	SECTION rodata_compiler
+2641  01A1              ___str_17:
+2642  01A1  20 20 20 20 20 20 54 68 65 20 53 69 78 74 65 65 6E 74 68 20 43 61 76 65 72 6E 
                         	DEFM "      The Sixteenth Cavern"
-2641  01BB  00          	DEFB 0x00
-2642  01BC              	SECTION rodata_compiler
-2643  01BC              ___str_18:
-2644  01BC  20 20 20 20 20 20 20 20 20 54 68 65 20 57 61 72 65 68 6F 75 73 65 
+2643  01BB  00          	DEFB 0x00
+2644  01BC              	SECTION rodata_compiler
+2645  01BC              ___str_18:
+2646  01BC  20 20 20 20 20 20 20 20 20 54 68 65 20 57 61 72 65 68 6F 75 73 65 
                         	DEFM "         The Warehouse"
-2645  01D2  00          	DEFB 0x00
-2646  01D3              	SECTION rodata_compiler
-2647  01D3              ___str_19:
-2648  01D3  20 20 20 20 20 20 41 6D 6F 65 62 61 74 72 6F 6E 73 20 52 65 76 65 6E 67 65 
+2647  01D2  00          	DEFB 0x00
+2648  01D3              	SECTION rodata_compiler
+2649  01D3              ___str_19:
+2650  01D3  20 20 20 20 20 20 41 6D 6F 65 62 61 74 72 6F 6E 73 20 52 65 76 65 6E 67 65 
                         	DEFM "      Amoebatrons Revenge"
-2649  01EC  00          	DEFB 0x00
-2650  01ED              	SECTION rodata_compiler
-2651  01ED              ___str_20:
-2652  01ED  20 20 20 20 20 53 6F 6C 61 72 20 50 6F 77 65 72 20 47 65 6E 65 72 61 74 6F 72 
+2651  01EC  00          	DEFB 0x00
+2652  01ED              	SECTION rodata_compiler
+2653  01ED              ___str_20:
+2654  01ED  20 20 20 20 20 53 6F 6C 61 72 20 50 6F 77 65 72 20 47 65 6E 65 72 61 74 6F 72 
                         	DEFM "     Solar Power Generator"
-2653  0207  00          	DEFB 0x00
-2654  0208              	SECTION rodata_compiler
-2655  0208              ___str_21:
-2656  0208  20 20 20 20 20 20 20 20 54 68 65 20 46 69 6E 61 6C 20 42 61 72 72 69 65 72 
+2655  0207  00          	DEFB 0x00
+2656  0208              	SECTION rodata_compiler
+2657  0208              ___str_21:
+2658  0208  20 20 20 20 20 20 20 20 54 68 65 20 46 69 6E 61 6C 20 42 61 72 72 69 65 72 
                         	DEFM "        The Final Barrier"
-2657  0221  00          	DEFB 0x00
-2658  0222              	SECTION rodata_compiler
-2659  0222              ___str_22:
-2660  0222  20 20 20 20 20 20 20 46 72 6F 7A 65 6E 20 43 65 6E 74 72 61 6C 20 50 69 70 65 
+2659  0221  00          	DEFB 0x00
+2660  0222              	SECTION rodata_compiler
+2661  0222              ___str_22:
+2662  0222  20 20 20 20 20 20 20 46 72 6F 7A 65 6E 20 43 65 6E 74 72 61 6C 20 50 69 70 65 
                         	DEFM "       Frozen Central Pipe"
-2661  023C  00          	DEFB 0x00
-2662  023D              	SECTION rodata_compiler
-2663  023D              ___str_23:
-2664  023D  20 20 20 20 20 20 20 20 53 75 70 65 72 20 4C 75 69 7A 6F 20 42 72 6F 
+2663  023C  00          	DEFB 0x00
+2664  023D              	SECTION rodata_compiler
+2665  023D              ___str_23:
+2666  023D  20 20 20 20 20 20 20 20 53 75 70 65 72 20 4C 75 69 7A 6F 20 42 72 6F 
                         	DEFM "        Super Luizo Bro"
-2665  0254  00          	DEFB 0x00
-2666  0255              	SECTION rodata_compiler
-2667  0255              ___str_24:
-2668  0255  20 20 20 20 50 69 65 74 72 6F 20 6D 65 65 74 73 20 4D 6F 6E 6B 65 79 20 4B 6F 6E 67 
+2667  0254  00          	DEFB 0x00
+2668  0255              	SECTION rodata_compiler
+2669  0255              ___str_24:
+2670  0255  20 20 20 20 50 69 65 74 72 6F 20 6D 65 65 74 73 20 4D 6F 6E 6B 65 79 20 4B 6F 6E 67 
                         	DEFM "    Pietro meets Monkey Kong"
-2669  0271  00          	DEFB 0x00
-2670  0272              	SECTION rodata_compiler
-2671  0272              ___str_25:
-2672  0272  20 20 20 20 20 20 20 20 20 43 68 75 6E 74 65 79 20 43 72 65 77 
+2671  0271  00          	DEFB 0x00
+2672  0272              	SECTION rodata_compiler
+2673  0272              ___str_25:
+2674  0272  20 20 20 20 20 20 20 20 20 43 68 75 6E 74 65 79 20 43 72 65 77 
                         	DEFM "         Chuntey Crew"
-2673  0287  00          	DEFB 0x00
-2674  0288              	SECTION rodata_compiler
-2675  0288              ___str_26:
-2676  0288  20 20 20 20 20 4B 6F 6E 67 20 4A 72 20 57 61 74 63 68 20 74 68 65 20 47 61 6D 65 
+2675  0287  00          	DEFB 0x00
+2676  0288              	SECTION rodata_compiler
+2677  0288              ___str_26:
+2678  0288  20 20 20 20 20 4B 6F 6E 67 20 4A 72 20 57 61 74 63 68 20 74 68 65 20 47 61 6D 65 
                         	DEFM "     Kong Jr Watch the Game"
-2677  02A3  00          	DEFB 0x00
-2678  02A4              	SECTION rodata_compiler
-2679  02A4              ___str_27:
-2680  02A4  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 35 
-                        	DEFM "            Stage 25"
-2681  02B8  00          	DEFB 0x00
-2682  02B9              	SECTION rodata_compiler
-2683  02B9              ___str_28:
-2684  02B9  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 36 
+2679  02A3  00          	DEFB 0x00
+2680  02A4              	SECTION rodata_compiler
+2681  02A4              ___str_27:
+2682  02A4  20 20 20 20 20 20 20 20 20 20 44 72 2E 20 45 72 72 61 7A 6B 69 6E 67 
+                        	DEFM "          Dr. Errazking"
+2683  02BB  00          	DEFB 0x00
+2684  02BC              	SECTION rodata_compiler
+2685  02BC              ___str_28:
+2686  02BC  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 36 
                         	DEFM "            Stage 26"
-2685  02CD  00          	DEFB 0x00
-2686  02CE              	SECTION rodata_compiler
-2687  02CE              ___str_29:
-2688  02CE  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 37 
+2687  02D0  00          	DEFB 0x00
+2688  02D1              	SECTION rodata_compiler
+2689  02D1              ___str_29:
+2690  02D1  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 37 
                         	DEFM "            Stage 27"
-2689  02E2  00          	DEFB 0x00
-2690  02E3              	SECTION rodata_compiler
-2691  02E3              ___str_30:
-2692  02E3  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 38 
+2691  02E5  00          	DEFB 0x00
+2692  02E6              	SECTION rodata_compiler
+2693  02E6              ___str_30:
+2694  02E6  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 38 
                         	DEFM "            Stage 28"
-2693  02F7  00          	DEFB 0x00
-2694  02F8              	SECTION rodata_compiler
-2695  02F8              ___str_31:
-2696  02F8  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 39 
+2695  02FA  00          	DEFB 0x00
+2696  02FB              	SECTION rodata_compiler
+2697  02FB              ___str_31:
+2698  02FB  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 32 39 
                         	DEFM "            Stage 29"
-2697  030C  00          	DEFB 0x00
-2698  030D              	SECTION rodata_compiler
-2699  030D              ___str_32:
-2700  030D  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 30 
+2699  030F  00          	DEFB 0x00
+2700  0310              	SECTION rodata_compiler
+2701  0310              ___str_32:
+2702  0310  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 30 
                         	DEFM "            Stage 30"
-2701  0321  00          	DEFB 0x00
-2702  0322              	SECTION rodata_compiler
-2703  0322              ___str_33:
-2704  0322  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 31 
+2703  0324  00          	DEFB 0x00
+2704  0325              	SECTION rodata_compiler
+2705  0325              ___str_33:
+2706  0325  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 31 
                         	DEFM "            Stage 31"
-2705  0336  00          	DEFB 0x00
-2706  0337              	SECTION rodata_compiler
-2707  0337              ___str_34:
-2708  0337  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 32 
+2707  0339  00          	DEFB 0x00
+2708  033A              	SECTION rodata_compiler
+2709  033A              ___str_34:
+2710  033A  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 32 
                         	DEFM "            Stage 32"
-2709  034B  00          	DEFB 0x00
-2710  034C              	SECTION rodata_compiler
-2711  034C              ___str_35:
-2712  034C  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 33 
+2711  034E  00          	DEFB 0x00
+2712  034F              	SECTION rodata_compiler
+2713  034F              ___str_35:
+2714  034F  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 33 
                         	DEFM "            Stage 33"
-2713  0360  00          	DEFB 0x00
-2714  0361              	SECTION rodata_compiler
-2715  0361              ___str_36:
-2716  0361  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 34 
+2715  0363  00          	DEFB 0x00
+2716  0364              	SECTION rodata_compiler
+2717  0364              ___str_36:
+2718  0364  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 34 
                         	DEFM "            Stage 34"
-2717  0375  00          	DEFB 0x00
-2718  0376              	SECTION rodata_compiler
-2719  0376              ___str_37:
-2720  0376  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 35 
+2719  0378  00          	DEFB 0x00
+2720  0379              	SECTION rodata_compiler
+2721  0379              ___str_37:
+2722  0379  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 35 
                         	DEFM "            Stage 35"
-2721  038A  00          	DEFB 0x00
-2722  038B              	SECTION rodata_compiler
-2723  038B              ___str_38:
-2724  038B  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 36 
+2723  038D  00          	DEFB 0x00
+2724  038E              	SECTION rodata_compiler
+2725  038E              ___str_38:
+2726  038E  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 36 
                         	DEFM "            Stage 36"
-2725  039F  00          	DEFB 0x00
-2726  03A0              	SECTION rodata_compiler
-2727  03A0              ___str_39:
-2728  03A0  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 37 
+2727  03A2  00          	DEFB 0x00
+2728  03A3              	SECTION rodata_compiler
+2729  03A3              ___str_39:
+2730  03A3  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 37 
                         	DEFM "            Stage 37"
-2729  03B4  00          	DEFB 0x00
-2730  03B5              	SECTION rodata_compiler
-2731  03B5              ___str_40:
-2732  03B5  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 38 
+2731  03B7  00          	DEFB 0x00
+2732  03B8              	SECTION rodata_compiler
+2733  03B8              ___str_40:
+2734  03B8  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 38 
                         	DEFM "            Stage 38"
-2733  03C9  00          	DEFB 0x00
-2734  03CA              	SECTION rodata_compiler
-2735  03CA              ___str_41:
-2736  03CA  20 20 20 20 20 20 20 20 20 20 20 20 53 74 61 67 65 20 33 39 
-                        	DEFM "            Stage 39"
-2737  03DE  00          	DEFB 0x00
-2738  03DF              	SECTION rodata_compiler
-2739  03DF              ___str_42:
-2740  03DF  41 49 52 20 2D 2D 2D 2D 2D 2D 
+2735  03CC  00          	DEFB 0x00
+2736  03CD              	SECTION rodata_compiler
+2737  03CD              ___str_41:
+2738  03CD  20 20 20 20 20 20 20 20 20 20 20 4E 6F 65 6E 74 69 65 6E 64 6F 
+                        	DEFM "           Noentiendo"
+2739  03E2  00          	DEFB 0x00
+2740  03E3              	SECTION rodata_compiler
+2741  03E3              ___str_42:
+2742  03E3  41 49 52 20 2D 2D 2D 2D 2D 2D 
                         	DEFM "AIR ------"
-2741  03E9  00          	DEFB 0x00
-2742  03EA              	SECTION rodata_compiler
-2743  03EA              ___str_43:
-2744  03EA  2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 
+2743  03ED  00          	DEFB 0x00
+2744  03EE              	SECTION rodata_compiler
+2745  03EE              ___str_43:
+2746  03EE  2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 
                         	DEFM "----------------------"
-2745  0400  00          	DEFB 0x00
-2746  0401              	SECTION rodata_compiler
-2747  0401              ___str_44:
-2748  0401  48 69 67 68 20 53 63 6F 72 65 20 20 20 20 20 20 20 20 20 53 63 6F 72 65 20 20 20 20 20 20 
+2747  0404  00          	DEFB 0x00
+2748  0405              	SECTION rodata_compiler
+2749  0405              ___str_44:
+2750  0405  48 69 67 68 20 53 63 6F 72 65 20 20 20 20 20 20 20 20 20 53 63 6F 72 65 20 20 20 20 20 20 
                         	DEFM "High Score         Score      "
-2749  041F  00          	DEFB 0x00
-2750  0420              	SECTION code_compiler
-2751  0AA3              ;	---------------------------------
-2752  0AA3              ; Function game_print_header
-2753  0AA3              ; ---------------------------------
-2754  0AA3              	defc _game_print_header	=	_game_print_score
-2755  0AA3              	SECTION code_compiler
-2756  0AA3              ;	---------------------------------
-2757  0AA3              ; Function game_check_map
-2758  0AA3              ; ---------------------------------
-2759  0AA3              _game_check_map:
-2760  0AA3  CD 00 00    	call	___sdcc_enter_ix
-2761  0AA6  DD 66 05    	ld	h,(ix+5)
-2762  0AA9  DD 6E 04    	ld	l,(ix+4)
-2763  0AAC  E5          	push	hl
-2764  0AAD  CD 00 00    	call	_spr_calc_index
-2765  0AB0  F1          	pop	af
-2766  0AB1  22 00 00    	ld	(_index1),hl
-2767  0AB4  21 00 00    	ld	hl,_index1
-2768  0AB7  DD E1       	pop	ix
-2769  0AB9  C3 BC 0A    	jp	_game_check_cell
-2770  0ABC              	SECTION code_compiler
-2771  0ABC              ;	---------------------------------
-2772  0ABC              ; Function game_check_cell
-2773  0ABC              ; ---------------------------------
-2774  0ABC              _game_check_cell:
-2775  0ABC  4E          	ld	c, (hl)
-2776  0ABD  23          	inc	hl
-2777  0ABE  46          	ld	b, (hl)
-2778  0ABF  AF          	xor	a, a
-2779  0AC0  B9          	cp	a, c
-2780  0AC1  3E 02       	ld	a,0x02
-2781  0AC3  98          	sbc	a, b
-2782  0AC4  30 04       	jr	NC,l_game_check_cell_00102
-2783  0AC6  2E 01       	ld	l,0x01
-2784  0AC8  18 1A       	jr	l_game_check_cell_00106
-2785  0ACA              l_game_check_cell_00102:
-2786  0ACA  21 00 00    	ld	hl,_scr_map
-2787  0ACD  09          	add	hl, bc
-2788  0ACE  5E          	ld	e, (hl)
-2789  0ACF  16 00       	ld	d,0x00
-2790  0AD1  21 00 00    	ld	hl,_tile_class
-2791  0AD4  19          	add	hl, de
-2792  0AD5  5E          	ld	e, (hl)
-2793  0AD6  ED 43 00 00 	ld	(_index1),bc
-2794  0ADA  7B          	ld	a,e
-2795  0ADB  D6 03       	sub	a,0x03
-2796  0ADD  28 04       	jr	Z,l_game_check_cell_00104
-2797  0ADF  2E 00       	ld	l,0x00
-2798  0AE1  18 01       	jr	l_game_check_cell_00106
-2799  0AE3              l_game_check_cell_00104:
-2800  0AE3  6B          	ld	l, e
-2801  0AE4              l_game_check_cell_00106:
-2802  0AE4  C9          	ret
-2803  0AE5              	SECTION code_compiler
-2804  0AE5              ;	---------------------------------
-2805  0AE5              ; Function game_paint_attrib
-2806  0AE5              ; ---------------------------------
-2807  0AE5              _game_paint_attrib:
-2808  0AE5  CD 00 00    	call	___sdcc_enter_ix
-2809  0AE8  DD 46 06    	ld	b,(ix+6)
-2810  0AEB              l_game_paint_attrib_00103:
-2811  0AEB  78          	ld	a, b
-2812  0AEC  DD 96 07    	sub	a,(ix+7)
-2813  0AEF  30 13       	jr	NC,l_game_paint_attrib_00105
-2814  0AF1  DD 5E 04    	ld	e,(ix+4)
-2815  0AF4  DD 56 05    	ld	d,(ix+5)
-2816  0AF7  C5          	push	bc
-2817  0AF8  DD 4E 08    	ld	c,(ix+8)
-2818  0AFB  C5          	push	bc
-2819  0AFC  D5          	push	de
-2820  0AFD  CD 00 00    	call	_NIRVANAP_paintC_callee
-2821  0B00  C1          	pop	bc
-2822  0B01  04          	inc	b
-2823  0B02  18 E7       	jr	l_game_paint_attrib_00103
-2824  0B04              l_game_paint_attrib_00105:
-2825  0B04  DD E1       	pop	ix
-2826  0B06  C9          	ret
-2827  0B07              	SECTION code_compiler
-2828  0B07              ;	---------------------------------
-2829  0B07              ; Function game_colour_message
-2830  0B07              ; ---------------------------------
-2831  0B07              _game_colour_message:
-2832  0B07  CD 00 00    	call	___sdcc_enter_ix
-2833  0B0A  F5          	push	af
-2834  0B0B  F5          	push	af
-2835  0B0C  F5          	push	af
-2836  0B0D  F5          	push	af
-2837  0B0E  D1          	pop	de
-2838  0B0F  21 00 00    	ld	hl,_v0
-2839  0B12  36 01       	ld	(hl),0x01
-2840  0B14  2A 00 00    	ld	hl,(_curr_time)
-2841  0B17  22 00 00    	ld	(_frame_time),hl
-2842  0B1A  E5          	push	hl
-2843  0B1B  DD 7E 04    	ld	a,(ix+4)
-2844  0B1E  4D          	ld	c,l
-2845  0B1F  07          	rlca
-2846  0B20  07          	rlca
-2847  0B21  07          	rlca
-2848  0B22  E6 F8       	and	a,0xf8
-2849  0B24  DD 77 FF    	ld	(ix-1),a
-2850  0B27  C6 08       	add	a,0x08
-2851  0B29  DD 77 FE    	ld	(ix-2),a
-2852  0B2C  DD 77 FD    	ld	(ix-3),a
-2853  0B2F              l_game_colour_message_00112:
-2854  0B2F  3A 00 00    	ld	a,(_v0)
-2855  0B32  B7          	or	a, a
-2856  0B33  CA CF 0B    	jp	Z, l_game_colour_message_00114
-2857  0B36  DD 46 07    	ld	b,(ix+7)
-2858  0B39  21 00 00    	ld	hl,0x0000
-2859  0B3C  39          	add	hl, sp
-2860  0B3D  EB          	ex	de,hl
-2861  0B3E  C5          	push	bc
-2862  0B3F  33          	inc	sp
-2863  0B40  D5          	push	de
-2864  0B41  CD 45 0C    	call	_game_check_time
-2865  0B44  F1          	pop	af
-2866  0B45  33          	inc	sp
-2867  0B46  7D          	ld	a, l
-2868  0B47  B7          	or	a, a
-2869  0B48  C2 CF 0B    	jp	NZ, l_game_colour_message_00114
-2870  0B4B  3E 05       	ld	a,0x05
-2871  0B4D  F5          	push	af
-2872  0B4E  33          	inc	sp
-2873  0B4F  21 00 00    	ld	hl,_frame_time
-2874  0B52  E5          	push	hl
-2875  0B53  CD 45 0C    	call	_game_check_time
-2876  0B56  F1          	pop	af
-2877  0B57  33          	inc	sp
-2878  0B58  DD 75 FC    	ld	(ix-4),l
-2879  0B5B  7D          	ld	a, l
-2880  0B5C  B7          	or	a, a
-2881  0B5D  28 4A       	jr	Z,l_game_colour_message_00105
-2882  0B5F  2A 00 00    	ld	hl,(_curr_time)
-2883  0B62  DD 74 FB    	ld	(ix-5),h
-2884  0B65  DD 75 FA    	ld	(ix-6),l
-2885  0B68  7D          	ld	a, l
-2886  0B69  21 00 00    	ld	hl,_frame_time
-2887  0B6C  77          	ld	(hl), a
-2888  0B6D  DD 7E FB    	ld	a,(ix-5)
-2889  0B70  23          	inc	hl
-2890  0B71  77          	ld	(hl), a
-2891  0B72  3A 00 00    	ld	a,(_game_over)
-2892  0B75  B7          	or	a, a
-2893  0B76  28 18       	jr	Z,l_game_colour_message_00102
-2894  0B78  DD 66 FD    	ld	h,(ix-3)
-2895  0B7B  DD 6E 06    	ld	l,(ix+6)
-2896  0B7E  E5          	push	hl
-2897  0B7F  DD 7E 05    	ld	a,(ix+5)
-2898  0B82  F5          	push	af
-2899  0B83  33          	inc	sp
-2900  0B84  21 00 00    	ld	hl,_attrib_hl
-2901  0B87  E5          	push	hl
-2902  0B88  CD E5 0A    	call	_game_paint_attrib
-2903  0B8B  F1          	pop	af
-2904  0B8C  F1          	pop	af
-2905  0B8D  33          	inc	sp
-2906  0B8E  18 19       	jr	l_game_colour_message_00105
-2907  0B90              l_game_colour_message_00102:
-2908  0B90  DD 66 FE    	ld	h,(ix-2)
-2909  0B93  DD 6E 06    	ld	l,(ix+6)
-2910  0B96  E5          	push	hl
-2911  0B97  DD 7E 05    	ld	a,(ix+5)
-2912  0B9A  F5          	push	af
-2913  0B9B  33          	inc	sp
-2914  0B9C  21 00 00    	ld	hl,_attrib_osd
-2915  0B9F  E5          	push	hl
-2916  0BA0  CD E5 0A    	call	_game_paint_attrib
-2917  0BA3  F1          	pop	af
-2918  0BA4  F1          	pop	af
-2919  0BA5  33          	inc	sp
-2920  0BA6  CD ED 0C    	call	_game_rotate_attrib_osd
-2921  0BA9              l_game_colour_message_00105:
-2922  0BA9  DD 7E 09    	ld	a,(ix+9)
-2923  0BAC  B7          	or	a, a
-2924  0BAD  CA 2F 0B    	jp	Z, l_game_colour_message_00112
-2925  0BB0              l_game_colour_message_00106:
-2926  0BB0  21 00 00    	ld	hl,_k1
-2927  0BB3  E5          	push	hl
-2928  0BB4  2A 00 00    	ld	hl,(_joyfunc1)
-2929  0BB7  CD 00 00    	call	___sdcc_call_hl
-2930  0BBA  F1          	pop	af
-2931  0BBB  DD 74 FB    	ld	(ix-5),h
-2932  0BBE  DD 75 FA    	ld	(ix-6),l
-2933  0BC1  7C          	ld	a,h
-2934  0BC2  DD B6 FA    	or	a,(ix-6)
-2935  0BC5  CA 2F 0B    	jp	Z, l_game_colour_message_00112
-2936  0BC8  21 00 00    	ld	hl,_v0
-2937  0BCB  36 00       	ld	(hl),0x00
-2938  0BCD  18 E1       	jr	l_game_colour_message_00106
-2939  0BCF              l_game_colour_message_00114:
-2940  0BCF  DD 7E 06    	ld	a,(ix+6)
-2941  0BD2  DD 96 05    	sub	a,(ix+5)
-2942  0BD5  4F          	ld	c, a
-2943  0BD6  3A 00 00    	ld	a,(_game_over)
-2944  0BD9  B7          	or	a, a
-2945  0BDA  28 2F       	jr	Z,l_game_colour_message_00118
-2946  0BDC  21 00 00    	ld	hl,_v1
-2947  0BDF  71          	ld	(hl), c
-2948  0BE0  21 00 00    	ld	hl,_v0
-2949  0BE3  36 00       	ld	(hl),0x00
-2950  0BE5              l_game_colour_message_00121:
-2951  0BE5  3A 00 00    	ld	a,(_v0)
-2952  0BE8  21 00 00    	ld	hl,_v1
-2953  0BEB  96          	sub	a, (hl)
-2954  0BEC  30 52       	jr	NC,l_game_colour_message_00126
-2955  0BEE  DD 7E 05    	ld	a,(ix+5)
-2956  0BF1  21 00 00    	ld	hl,_v0
-2957  0BF4  86          	add	a, (hl)
-2958  0BF5  4F          	ld	c, a
-2959  0BF6  21 20 04    	ld	hl,___str_45
-2960  0BF9  E5          	push	hl
-2961  0BFA  79          	ld	a, c
-2962  0BFB  F5          	push	af
-2963  0BFC  33          	inc	sp
-2964  0BFD  DD 7E 04    	ld	a,(ix+4)
-2965  0C00  F5          	push	af
-2966  0C01  33          	inc	sp
-2967  0C02  CD 00 00    	call	_zx_print_str
-2968  0C05  21 00 00    	ld	hl,_v0
-2969  0C08  34          	inc	(hl)
-2970  0C09  18 DA       	jr	l_game_colour_message_00121
-2971  0C0B              l_game_colour_message_00118:
-2972  0C0B  21 00 00    	ld	hl,_v1
-2973  0C0E  71          	ld	(hl), c
-2974  0C0F  DD 7E FF    	ld	a,(ix-1)
-2975  0C12  32 00 00    	ld	(_s_lin0),a
-2976  0C15  DD 7E 05    	ld	a,(ix+5)
-2977  0C18  CB 3F       	srl	a
-2978  0C1A  87          	add	a, a
-2979  0C1B  32 00 00    	ld	(_s_col1),a
-2980  0C1E  21 00 00    	ld	hl,_v2
-2981  0C21  36 00       	ld	(hl),0x00
-2982  0C23              l_game_colour_message_00124:
-2983  0C23  3A 00 00    	ld	a,(_v2)
-2984  0C26  21 00 00    	ld	hl,_v1
-2985  0C29  96          	sub	a, (hl)
-2986  0C2A  30 14       	jr	NC,l_game_colour_message_00126
-2987  0C2C  3A 00 00    	ld	a,(_s_col1)
-2988  0C2F  21 00 00    	ld	hl,_v2
-2989  0C32  86          	add	a, (hl)
-2990  0C33  32 00 00    	ld	(_s_col0),a
-2991  0C36  CD 00 00    	call	_spr_back_repaint
-2992  0C39  21 00 00    	ld	hl,_v2
-2993  0C3C  34          	inc	(hl)
-2994  0C3D  34          	inc	(hl)
-2995  0C3E  18 E3       	jr	l_game_colour_message_00124
-2996  0C40              l_game_colour_message_00126:
-2997  0C40  DD F9       	ld	sp, ix
-2998  0C42  DD E1       	pop	ix
-2999  0C44  C9          	ret
-3000  0C45              	SECTION rodata_compiler
-3001  0420              ___str_45:
-3002  0420  20          	DEFM " "
-3003  0421  00          	DEFB 0x00
-3004  0422              	SECTION code_compiler
-3005  0C45              ;	---------------------------------
-3006  0C45              ; Function game_check_time
-3007  0C45              ; ---------------------------------
-3008  0C45              _game_check_time:
-3009  0C45  CD 00 00    	call	___sdcc_enter_ix
-3010  0C48  2A 00 00    	ld	hl,(_curr_time)
-3011  0C4B  4D          	ld	c, l
-3012  0C4C  DD 6E 04    	ld	l,(ix+4)
-3013  0C4F  44          	ld	b,h
-3014  0C50  DD 66 05    	ld	h,(ix+5)
-3015  0C53  5E          	ld	e, (hl)
-3016  0C54  23          	inc	hl
-3017  0C55  56          	ld	d, (hl)
-3018  0C56  79          	ld	a, c
-3019  0C57  93          	sub	a, e
-3020  0C58  4F          	ld	c, a
-3021  0C59  78          	ld	a, b
-3022  0C5A  9A          	sbc	a, d
-3023  0C5B  47          	ld	b, a
-3024  0C5C  DD 7E 06    	ld	a,(ix+6)
-3025  0C5F  16 00       	ld	d,0x00
-3026  0C61  91          	sub	a, c
-3027  0C62  7A          	ld	a, d
-3028  0C63  98          	sbc	a, b
-3029  0C64  30 04       	jr	NC,l_game_check_time_00102
-3030  0C66  2E 01       	ld	l,0x01
-3031  0C68  18 02       	jr	l_game_check_time_00104
-3032  0C6A              l_game_check_time_00102:
-3033  0C6A  2E 00       	ld	l,0x00
-3034  0C6C              l_game_check_time_00104:
-3035  0C6C  DD E1       	pop	ix
-3036  0C6E  C9          	ret
-3037  0C6F              	SECTION code_compiler
-3038  0C6F              ;	---------------------------------
-3039  0C6F              ; Function game_key_paint
-3040  0C6F              ; ---------------------------------
-3041  0C6F              _game_key_paint:
-3042  0C6F  3A 00 00    	ld	a,(_game_playing)
-3043  0C72  B7          	or	a, a
-3044  0C73  CA EC 0C    	jp	Z, l_game_key_paint_00117
-3045  0C76  3A 00 00    	ld	a,(_obj_count)
-3046  0C79  B7          	or	a, a
-3047  0C7A  28 70       	jr	Z,l_game_key_paint_00117
-3048  0C7C  21 00 00    	ld	hl,_key_last
-3049  0C7F  4E          	ld	c, (hl)
-3050  0C80  59          	ld	e, c
-3051  0C81              l_game_key_paint_00105:
-3052  0C81  7B          	ld	a, e
-3053  0C82  D6 08       	sub	a,0x08
-3054  0C84  30 4A       	jr	NC,l_game_key_paint_00107
-3055  0C86  16 00       	ld	d,0x00
-3056  0C88  21 00 00    	ld	hl,_obj_col
-3057  0C8B  19          	add	hl, de
-3058  0C8C  7E          	ld	a,(hl)
-3059  0C8D  47          	ld	b,a
-3060  0C8E  3C          	inc	a
-3061  0C8F  28 3B       	jr	Z,l_game_key_paint_00104
-3062  0C91  11 00 00    	ld	de,_obj_lin+0
-3063  0C94  69          	ld	l,c
-3064  0C95  26 00       	ld	h,0x00
-3065  0C97  19          	add	hl, de
-3066  0C98  5E          	ld	e, (hl)
-3067  0C99  C5          	push	bc
-3068  0C9A  C5          	push	bc
-3069  0C9B  33          	inc	sp
-3070  0C9C  7B          	ld	a, e
-3071  0C9D  F5          	push	af
-3072  0C9E  33          	inc	sp
-3073  0C9F  21 00 00    	ld	hl,_key_attrib
-3074  0CA2  E5          	push	hl
-3075  0CA3  CD 00 00    	call	_NIRVANAP_paintC_callee
-3076  0CA6  C1          	pop	bc
-3077  0CA7  3A 00 00    	ld	a,(_map_paper)
-3078  0CAA  21 00 00    	ld	hl,_key_ink
-3079  0CAD  B6          	or	a, (hl)
-3080  0CAE  32 00 00    	ld	(_key_attrib),a
-3081  0CB1  32 01 00    	ld	((_key_attrib + 0x0001)),a
-3082  0CB4  32 02 00    	ld	((_key_attrib + 0x0002)),a
-3083  0CB7  32 03 00    	ld	((_key_attrib + 0x0003)),a
-3084  0CBA  21 00 00    	ld	hl,_key_ink
-3085  0CBD  34          	inc	(hl)
-3086  0CBE  3E 06       	ld	a,0x06
-3087  0CC0  96          	sub	a, (hl)
-3088  0CC1  30 02       	jr	NC,l_game_key_paint_00102
-3089  0CC3  36 03       	ld	(hl),0x03
-3090  0CC5              l_game_key_paint_00102:
-3091  0CC5  79          	ld	a, c
-3092  0CC6  3C          	inc	a
-3093  0CC7  32 00 00    	ld	(_key_last),a
-3094  0CCA  18 04       	jr	l_game_key_paint_00107
-3095  0CCC              l_game_key_paint_00104:
-3096  0CCC  1C          	inc	e
-3097  0CCD  4B          	ld	c, e
-3098  0CCE  18 B1       	jr	l_game_key_paint_00105
-3099  0CD0              l_game_key_paint_00107:
-3100  0CD0  79          	ld	a, c
-3101  0CD1  D6 08       	sub	a,0x08
-3102  0CD3  38 17       	jr	C,l_game_key_paint_00117
-3103  0CD5  3A 00 00    	ld	a,(_obj_count)
-3104  0CD8  D6 04       	sub	a,0x04
-3105  0CDA  20 0B       	jr	NZ,l_game_key_paint_00111
-3106  0CDC  21 00 00    	ld	hl,_key_ink
-3107  0CDF  34          	inc	(hl)
-3108  0CE0  3E 06       	ld	a,0x06
-3109  0CE2  96          	sub	a, (hl)
-3110  0CE3  30 02       	jr	NC,l_game_key_paint_00111
-3111  0CE5  36 03       	ld	(hl),0x03
-3112  0CE7              l_game_key_paint_00111:
-3113  0CE7  21 00 00    	ld	hl,_key_last
-3114  0CEA  36 00       	ld	(hl),0x00
-3115  0CEC              l_game_key_paint_00117:
-3116  0CEC  C9          	ret
-3117  0CED              	SECTION code_compiler
-3118  0CED              ;	---------------------------------
-3119  0CED              ; Function game_rotate_attrib_osd
-3120  0CED              ; ---------------------------------
-3121  0CED              _game_rotate_attrib_osd:
-3122  0CED  3A 00 00    	ld	a,(_game_attrib_osd)
-3123  0CF0  D6 07       	sub	a,0x07
-3124  0CF2  20 05       	jr	NZ,l_game_rotate_attrib_osd_00102
-3125  0CF4  21 00 00    	ld	hl,_game_attrib_osd
-3126  0CF7  36 01       	ld	(hl),0x01
-3127  0CF9              l_game_rotate_attrib_osd_00102:
-3128  0CF9  21 00 00    	ld	hl,_game_attrib_osd
-3129  0CFC  34          	inc	(hl)
-3130  0CFD  01 00 00    	ld	bc,_attrib_osd+0
-3131  0D00  0A          	ld	a, (bc)
-3132  0D01  32 00 00    	ld	(_v0),a
-3133  0D04  3A 03 00    	ld	a,(_attrib_osd + 0x0003)
-3134  0D07  02          	ld	(bc), a
-3135  0D08  59          	ld	e, c
-3136  0D09  50          	ld	d, b
-3137  0D0A  13          	inc	de
-3138  0D0B  03          	inc	bc
-3139  0D0C  03          	inc	bc
-3140  0D0D  0A          	ld	a, (bc)
-3141  0D0E  12          	ld	(de), a
-3142  0D0F  02          	ld	(bc), a
-3143  0D10  3A 00 00    	ld	a,(_v0)
-3144  0D13  32 03 00    	ld	((_attrib_osd + 0x0003)),a
-3145  0D16  C9          	ret
-3146  0D17              	SECTION code_compiler
-3147  0D17              ;	---------------------------------
-3148  0D17              ; Function game_attribs
-3149  0D17              ; ---------------------------------
-3150  0D17              _game_attribs:
-3151  0D17  01 00 00    	ld	bc,_attrib+0
-3152  0D1A  21 00 00    	ld	hl,_map_paper
-3153  0D1D  7E          	ld	a, (hl)
-3154  0D1E  F6 06       	or	a,0x06
-3155  0D20  02          	ld	(bc), a
-3156  0D21  59          	ld	e, c
-3157  0D22  50          	ld	d, b
-3158  0D23  13          	inc	de
-3159  0D24  7E          	ld	a, (hl)
-3160  0D25  F6 46       	or	a,0x46
-3161  0D27  12          	ld	(de), a
-3162  0D28  7E          	ld	a, (hl)
-3163  0D29  F6 07       	or	a,0x07
-3164  0D2B  32 02 00    	ld	((_attrib + 0x0002)),a
-3165  0D2E  03          	inc	bc
-3166  0D2F  03          	inc	bc
-3167  0D30  03          	inc	bc
-3168  0D31  21 00 00    	ld	hl,_map_paper
-3169  0D34  7E          	ld	a, (hl)
-3170  0D35  F6 06       	or	a,0x06
-3171  0D37  02          	ld	(bc), a
-3172  0D38  01 00 00    	ld	bc,_attrib_hl+0
-3173  0D3B  7E          	ld	a, (hl)
-3174  0D3C  F6 15       	or	a,0x15
-3175  0D3E  02          	ld	(bc), a
-3176  0D3F  59          	ld	e, c
-3177  0D40  50          	ld	d, b
-3178  0D41  13          	inc	de
-3179  0D42  7E          	ld	a, (hl)
-3180  0D43  F6 55       	or	a,0x55
-3181  0D45  12          	ld	(de), a
-3182  0D46  7E          	ld	a, (hl)
-3183  0D47  F6 17       	or	a,0x17
-3184  0D49  32 02 00    	ld	((_attrib_hl + 0x0002)),a
-3185  0D4C  03          	inc	bc
-3186  0D4D  03          	inc	bc
-3187  0D4E  03          	inc	bc
-3188  0D4F  3A 00 00    	ld	a,(_map_paper)
-3189  0D52  F6 15       	or	a,0x15
-3190  0D54  02          	ld	(bc), a
-3191  0D55  21 70 71    	ld	hl,0x7170
-3192  0D58  22 00 00    	ld	(_attrib_osd),hl
-3193  0D5B  21 71 73    	ld	hl,0x7371
-3194  0D5E  22 02 00    	ld	(_attrib_osd + 2),hl
-3195  0D61  C9          	ret
-3196  0D62              	SECTION code_compiler
-3197  0D62              ;	---------------------------------
-3198  0D62              ; Function game_page_map
-3199  0D62              ; ---------------------------------
-3200  0D62              _game_page_map:
-3201  0D62  CD 00 00    	call	___sdcc_enter_ix
-3202  0D65  21 B5 FF    	ld	hl, -75
-3203  0D68  39          	add	hl, sp
-3204  0D69  F9          	ld	sp, hl
-3205  0D6A  F3          	di
-3206  0D6B  21 00 00    	ld	hl,_game_world
-3207  0D6E  4E          	ld	c, (hl)
-3208  0D6F  21 00 00    	ld	hl,_scr_curr
-3209  0D72  46          	ld	b, (hl)
-3210  0D73  DD 70 E8    	ld	(ix-24),b
-3211  0D76  DD 70 E7    	ld	(ix-25),b
-3212  0D79  3E 13       	ld	a,0x13
-3213  0D7B  90          	sub	a, b
-3214  0D7C  30 06       	jr	NC,l_game_page_map_00102
-3215  0D7E  78          	ld	a, b
-3216  0D7F  C6 EC       	add	a,0xec
-3217  0D81  DD 77 E7    	ld	(ix-25),a
-3218  0D84              l_game_page_map_00102:
-3219  0D84  79          	ld	a, c
-3220  0D85  07          	rlca
-3221  0D86  07          	rlca
-3222  0D87  07          	rlca
-3223  0D88  07          	rlca
-3224  0D89  E6 F0       	and	a,0xf0
-3225  0D8B  80          	add	a, b
-3226  0D8C  DD 77 E6    	ld	(ix-26),a
-3227  0D8F  4F          	ld	c,a
-3228  0D90  3A 00 00    	ld	a,(_game_tileset)
-3229  0D93  DD 77 E5    	ld	(ix-27),a
-3230  0D96  C5          	push	bc
-3231  0D97  3E 06       	ld	a,0x06
-3232  0D99  F5          	push	af
-3233  0D9A  33          	inc	sp
-3234  0D9B  CD 57 16    	call	_page
-3235  0D9E  33          	inc	sp
-3236  0D9F  C1          	pop	bc
-3237  0DA0  04          	inc	b
-3238  0DA1  20 03       	jr	NZ,l_game_page_map_00104
-3239  0DA3  DD 71 E6    	ld	(ix-26),c
-3240  0DA6              l_game_page_map_00104:
-3241  0DA6  01 00 00    	ld	bc,_paper0+0
-3242  0DA9  DD 6E E6    	ld	l,(ix-26)
-3243  0DAC  26 00       	ld	h,0x00
-3244  0DAE  09          	add	hl, bc
-3245  0DAF  7E          	ld	a, (hl)
-3246  0DB0  DD 77 E9    	ld	(ix-23),a
-3247  0DB3  AF          	xor	a, a
-3248  0DB4  F5          	push	af
-3249  0DB5  33          	inc	sp
-3250  0DB6  CD 57 16    	call	_page
-3251  0DB9  33          	inc	sp
-3252  0DBA  DD 6E E7    	ld	l,(ix-25)
-3253  0DBD  26 00       	ld	h,0x00
-3254  0DBF  4D          	ld	c,l
-3255  0DC0  44          	ld	b,h
-3256  0DC1  29          	add	hl, hl
-3257  0DC2  09          	add	hl, bc
-3258  0DC3  29          	add	hl, hl
-3259  0DC4  29          	add	hl, hl
-3260  0DC5  29          	add	hl, hl
-3261  0DC6  29          	add	hl, hl
-3262  0DC7  DD 75 F6    	ld	(ix-10),l
-3263  0DCA  DD 74 F7    	ld	(ix-9),h
-3264  0DCD  3E 03       	ld	a,0x03
-3265  0DCF  F5          	push	af
-3266  0DD0  33          	inc	sp
-3267  0DD1  CD 57 16    	call	_page
-3268  0DD4  33          	inc	sp
-3269  0DD5  21 00 00    	ld	hl,0x0000
-3270  0DD8  39          	add	hl, sp
-3271  0DD9  DD 75 FE    	ld	(ix-2),l
-3272  0DDC  DD 74 FF    	ld	(ix-1),h
-3273  0DDF  DD 75 FC    	ld	(ix-4),l
-3274  0DE2  DD 74 FD    	ld	(ix-3),h
-3275  0DE5  DD 36 F2 00 	ld	(ix-14),0x00
-3276  0DE9  DD 36 F3 00 	ld	(ix-13),0x00
-3277  0DED              l_game_page_map_00108:
-3278  0DED  DD 7E F2    	ld	a,(ix-14)
-3279  0DF0  D6 30       	sub	a,0x30
-3280  0DF2  DD 7E F3    	ld	a,(ix-13)
-3281  0DF5  DE 00       	sbc	a,0x00
-3282  0DF7  30 64       	jr	NC,l_game_page_map_00110
-3283  0DF9  DD 7E F6    	ld	a,(ix-10)
-3284  0DFC  DD 86 F2    	add	a,(ix-14)
-3285  0DFF  DD 77 FA    	ld	(ix-6),a
-3286  0E02  DD 7E F7    	ld	a,(ix-9)
-3287  0E05  DD 8E F3    	adc	a,(ix-13)
-3288  0E08  DD 77 FB    	ld	(ix-5),a
-3289  0E0B  DD 7E E5    	ld	a,(ix-27)
-3290  0E0E  B7          	or	a, a
-3291  0E0F  20 1E       	jr	NZ,l_game_page_map_00106
-3292  0E11  DD 7E FC    	ld	a,(ix-4)
-3293  0E14  DD 86 F2    	add	a,(ix-14)
-3294  0E17  4F          	ld	c, a
-3295  0E18  DD 7E FD    	ld	a,(ix-3)
-3296  0E1B  DD 8E F3    	adc	a,(ix-13)
-3297  0E1E  47          	ld	b, a
-3298  0E1F  3E 00       	ld	a, +((_hidoors1) & 0xFF)
-3299  0E21  DD 86 FA    	add	a,(ix-6)
-3300  0E24  5F          	ld	e, a
-3301  0E25  3E 00       	ld	a, +((_hidoors1) / 256)
-3302  0E27  DD 8E FB    	adc	a,(ix-5)
-3303  0E2A  57          	ld	d, a
-3304  0E2B  1A          	ld	a, (de)
-3305  0E2C  02          	ld	(bc), a
-3306  0E2D  18 24       	jr	l_game_page_map_00107
-3307  0E2F              l_game_page_map_00106:
-3308  0E2F  DD 7E FE    	ld	a,(ix-2)
-3309  0E32  DD 86 F2    	add	a,(ix-14)
-3310  0E35  DD 77 F8    	ld	(ix-8),a
-3311  0E38  DD 7E FF    	ld	a,(ix-1)
-3312  0E3B  DD 8E F3    	adc	a,(ix-13)
-3313  0E3E  DD 77 F9    	ld	(ix-7),a
-3314  0E41  01 00 00    	ld	bc,_hidoors2
-3315  0E44  DD 6E FA    	ld	l,(ix-6)
-3316  0E47  DD 66 FB    	ld	h,(ix-5)
-3317  0E4A  09          	add	hl,bc
-3318  0E4B  4E          	ld	c, (hl)
-3319  0E4C  DD 6E F8    	ld	l,(ix-8)
-3320  0E4F  DD 66 F9    	ld	h,(ix-7)
-3321  0E52  71          	ld	(hl), c
-3322  0E53              l_game_page_map_00107:
-3323  0E53  DD 34 F2    	inc	(ix-14)
-3324  0E56  20 95       	jr	NZ,l_game_page_map_00108
-3325  0E58  DD 34 F3    	inc	(ix-13)
-3326  0E5B  18 90       	jr	l_game_page_map_00108
-3327  0E5D              l_game_page_map_00110:
-3328  0E5D  AF          	xor	a, a
-3329  0E5E  F5          	push	af
-3330  0E5F  33          	inc	sp
-3331  0E60  CD 57 16    	call	_page
-3332  0E63  33          	inc	sp
-3333  0E64  21 D0 11    	ld	hl,0x11d0
-3334  0E67  22 00 00    	ld	(_index1),hl
-3335  0E6A  DD 4E FE    	ld	c,(ix-2)
-3336  0E6D  DD 46 FF    	ld	b,(ix-1)
-3337  0E70  11 00 00    	ld	de,0x0000
-3338  0E73              l_game_page_map_00111:
-3339  0E73  7B          	ld	a, e
-3340  0E74  D6 30       	sub	a,0x30
-3341  0E76  7A          	ld	a, d
-3342  0E77  DE 00       	sbc	a,0x00
-3343  0E79  30 1E       	jr	NC,l_game_page_map_00113
-3344  0E7B  21 D0 11    	ld	hl,0x11d0
-3345  0E7E  19          	add	hl, de
-3346  0E7F  3E 00       	ld	a, +((_btiles) & 0xFF)
-3347  0E81  85          	add	a, l
-3348  0E82  DD 77 F8    	ld	(ix-8),a
-3349  0E85  3E 00       	ld	a, +((_btiles) / 256)
-3350  0E87  8C          	adc	a, h
-3351  0E88  DD 77 F9    	ld	(ix-7),a
-3352  0E8B  69          	ld	l, c
-3353  0E8C  60          	ld	h, b
-3354  0E8D  19          	add	hl, de
-3355  0E8E  7E          	ld	a, (hl)
-3356  0E8F  DD 6E F8    	ld	l,(ix-8)
-3357  0E92  DD 66 F9    	ld	h,(ix-7)
-3358  0E95  77          	ld	(hl), a
-3359  0E96  13          	inc	de
-3360  0E97  18 DA       	jr	l_game_page_map_00111
-3361  0E99              l_game_page_map_00113:
-3362  0E99  DD 6E E7    	ld	l,(ix-25)
-3363  0E9C  26 00       	ld	h,0x00
-3364  0E9E  4D          	ld	c,l
-3365  0E9F  44          	ld	b,h
-3366  0EA0  29          	add	hl, hl
-3367  0EA1  09          	add	hl, bc
-3368  0EA2  AF          	xor	a,a
-3369  0EA3  CB 3C       	srl	h
-3370  0EA5  CB 1D       	rr	l
-3371  0EA7  1F          	rra
-3372  0EA8  CB 3C       	srl	h
-3373  0EAA  CB 1D       	rr	l
-3374  0EAC  1F          	rra
-3375  0EAD  DD 77 EC    	ld	(ix-20),a
-3376  0EB0  DD 75 ED    	ld	(ix-19),l
-3377  0EB3  DD 7E FE    	ld	a,(ix-2)
-3378  0EB6  DD 77 F8    	ld	(ix-8),a
-3379  0EB9  DD 7E FF    	ld	a,(ix-1)
-3380  0EBC  DD 77 F9    	ld	(ix-7),a
-3381  0EBF  DD 7E FE    	ld	a,(ix-2)
-3382  0EC2  DD 77 FA    	ld	(ix-6),a
-3383  0EC5  DD 7E FF    	ld	a,(ix-1)
-3384  0EC8  DD 77 FB    	ld	(ix-5),a
-3385  0ECB  DD 7E FE    	ld	a,(ix-2)
-3386  0ECE  DD 77 FC    	ld	(ix-4),a
-3387  0ED1  DD 7E FF    	ld	a,(ix-1)
-3388  0ED4  DD 77 FD    	ld	(ix-3),a
-3389  0ED7  DD 36 EE 00 	ld	(ix-18),0x00
-3390  0EDB  DD 36 EF 00 	ld	(ix-17),0x00
-3391  0EDF              l_game_page_map_00123:
-3392  0EDF  DD 7E EE    	ld	a,(ix-18)
-3393  0EE2  D6 C0       	sub	a,0xc0
-3394  0EE4  DD 7E EF    	ld	a,(ix-17)
-3395  0EE7  DE 00       	sbc	a,0x00
-3396  0EE9  D2 A9 0F    	jp	NC, l_game_page_map_00125
-3397  0EEC  3E 06       	ld	a,0x06
-3398  0EEE  F5          	push	af
-3399  0EEF  33          	inc	sp
-3400  0EF0  CD 57 16    	call	_page
-3401  0EF3  33          	inc	sp
-3402  0EF4  01 00 00    	ld	bc,0x0000
-3403  0EF7              l_game_page_map_00117:
-3404  0EF7  79          	ld	a, c
-3405  0EF8  D6 30       	sub	a,0x30
-3406  0EFA  78          	ld	a, b
-3407  0EFB  DE 00       	sbc	a,0x00
-3408  0EFD  30 50       	jr	NC,l_game_page_map_00119
-3409  0EFF  DD 6E EC    	ld	l,(ix-20)
-3410  0F02  DD 66 ED    	ld	h,(ix-19)
-3411  0F05  09          	add	hl, bc
-3412  0F06  7D          	ld	a, l
-3413  0F07  DD 86 EE    	add	a,(ix-18)
-3414  0F0A  5F          	ld	e, a
-3415  0F0B  7C          	ld	a, h
-3416  0F0C  DD 8E EF    	adc	a,(ix-17)
-3417  0F0F  57          	ld	d, a
-3418  0F10  DD 7E E5    	ld	a,(ix-27)
-3419  0F13  B7          	or	a, a
-3420  0F14  20 1C       	jr	NZ,l_game_page_map_00115
-3421  0F16  DD 7E FA    	ld	a,(ix-6)
-3422  0F19  81          	add	a, c
-3423  0F1A  DD 77 FE    	ld	(ix-2),a
-3424  0F1D  DD 7E FB    	ld	a,(ix-5)
-3425  0F20  88          	adc	a, b
-3426  0F21  DD 77 FF    	ld	(ix-1),a
-3427  0F24  21 00 00    	ld	hl,_hitiles1
-3428  0F27  19          	add	hl, de
-3429  0F28  5E          	ld	e, (hl)
-3430  0F29  DD 6E FE    	ld	l,(ix-2)
-3431  0F2C  DD 66 FF    	ld	h,(ix-1)
-3432  0F2F  73          	ld	(hl), e
-3433  0F30  18 1A       	jr	l_game_page_map_00116
-3434  0F32              l_game_page_map_00115:
-3435  0F32  DD 7E F8    	ld	a,(ix-8)
-3436  0F35  81          	add	a, c
-3437  0F36  DD 77 FE    	ld	(ix-2),a
-3438  0F39  DD 7E F9    	ld	a,(ix-7)
-3439  0F3C  88          	adc	a, b
-3440  0F3D  DD 77 FF    	ld	(ix-1),a
-3441  0F40  21 00 00    	ld	hl,_hitiles2
-3442  0F43  19          	add	hl, de
-3443  0F44  5E          	ld	e, (hl)
-3444  0F45  DD 6E FE    	ld	l,(ix-2)
-3445  0F48  DD 66 FF    	ld	h,(ix-1)
-3446  0F4B  73          	ld	(hl), e
-3447  0F4C              l_game_page_map_00116:
-3448  0F4C  03          	inc	bc
-3449  0F4D  18 A8       	jr	l_game_page_map_00117
-3450  0F4F              l_game_page_map_00119:
-3451  0F4F  AF          	xor	a, a
-3452  0F50  F5          	push	af
-3453  0F51  33          	inc	sp
-3454  0F52  CD 57 16    	call	_page
-3455  0F55  33          	inc	sp
-3456  0F56  DD 36 F2 00 	ld	(ix-14),0x00
-3457  0F5A  DD 36 F3 00 	ld	(ix-13),0x00
-3458  0F5E              l_game_page_map_00120:
-3459  0F5E  DD 7E F2    	ld	a,(ix-14)
-3460  0F61  D6 30       	sub	a,0x30
-3461  0F63  DD 7E F3    	ld	a,(ix-13)
-3462  0F66  DE 00       	sbc	a,0x00
-3463  0F68  30 2C       	jr	NC,l_game_page_map_00122
-3464  0F6A  DD 7E EE    	ld	a,(ix-18)
-3465  0F6D  DD 86 F2    	add	a,(ix-14)
-3466  0F70  4F          	ld	c, a
-3467  0F71  DD 7E EF    	ld	a,(ix-17)
-3468  0F74  DD 8E F3    	adc	a,(ix-13)
-3469  0F77  47          	ld	b, a
-3470  0F78  21 00 00    	ld	hl,_btiles
-3471  0F7B  09          	add	hl,bc
-3472  0F7C  DD 7E FC    	ld	a,(ix-4)
-3473  0F7F  DD 86 F2    	add	a,(ix-14)
-3474  0F82  5F          	ld	e,a
-3475  0F83  DD 7E FD    	ld	a,(ix-3)
-3476  0F86  DD 8E F3    	adc	a,(ix-13)
-3477  0F89  57          	ld	d,a
-3478  0F8A  1A          	ld	a,(de)
-3479  0F8B  77          	ld	(hl),a
-3480  0F8C  DD 34 F2    	inc	(ix-14)
-3481  0F8F  20 CD       	jr	NZ,l_game_page_map_00120
-3482  0F91  DD 34 F3    	inc	(ix-13)
-3483  0F94  18 C8       	jr	l_game_page_map_00120
-3484  0F96              l_game_page_map_00122:
-3485  0F96  DD 7E EE    	ld	a,(ix-18)
-3486  0F99  C6 30       	add	a,0x30
-3487  0F9B  DD 77 EE    	ld	(ix-18),a
-3488  0F9E  DD 7E EF    	ld	a,(ix-17)
-3489  0FA1  CE 00       	adc	a,0x00
-3490  0FA3  DD 77 EF    	ld	(ix-17),a
-3491  0FA6  C3 DF 0E    	jp	l_game_page_map_00123
-3492  0FA9              l_game_page_map_00125:
-3493  0FA9  DD 36 F2 C0 	ld	(ix-14),0xc0
-3494  0FAD  DD 36 F3 00 	ld	(ix-13),0x00
-3495  0FB1              l_game_page_map_00134:
-3496  0FB1  DD 7E F2    	ld	a,(ix-14)
-3497  0FB4  D6 80       	sub	a,0x80
-3498  0FB6  DD 7E F3    	ld	a,(ix-13)
-3499  0FB9  DE 01       	sbc	a,0x01
-3500  0FBB  30 68       	jr	NC,l_game_page_map_00136
-3501  0FBD  21 30 00    	ld	hl,0x0030
-3502  0FC0  E5          	push	hl
-3503  0FC1  DD 6E F2    	ld	l,(ix-14)
-3504  0FC4  DD 66 F3    	ld	h,(ix-13)
-3505  0FC7  E5          	push	hl
-3506  0FC8  CD 00 00    	call	__moduint_callee
-3507  0FCB  7D          	ld	a,l
-3508  0FCC  32 00 00    	ld	(_v0),a
-3509  0FCF  D6 10       	sub	a,0x10
-3510  0FD1  30 0E       	jr	NC,l_game_page_map_00127
-3511  0FD3  3E 00       	ld	a, +((_btiles) & 0xFF)
-3512  0FD5  DD 86 F2    	add	a,(ix-14)
-3513  0FD8  4F          	ld	c, a
-3514  0FD9  3E 00       	ld	a, +((_btiles) / 256)
-3515  0FDB  DD 8E F3    	adc	a,(ix-13)
-3516  0FDE  47          	ld	b, a
-3517  0FDF  AF          	xor	a, a
-3518  0FE0  02          	ld	(bc), a
-3519  0FE1              l_game_page_map_00127:
-3520  0FE1  21 00 00    	ld	hl,_v0
-3521  0FE4  7E          	ld	a, (hl)
-3522  0FE5  D6 20       	sub	a,0x20
-3523  0FE7  38 15       	jr	C,l_game_page_map_00129
-3524  0FE9  7E          	ld	a, (hl)
-3525  0FEA  D6 24       	sub	a,0x24
-3526  0FEC  30 10       	jr	NC,l_game_page_map_00129
-3527  0FEE  3E 00       	ld	a, +((_btiles) & 0xFF)
-3528  0FF0  DD 86 F2    	add	a,(ix-14)
-3529  0FF3  4F          	ld	c, a
-3530  0FF4  3E 00       	ld	a, +((_btiles) / 256)
-3531  0FF6  DD 8E F3    	adc	a,(ix-13)
-3532  0FF9  47          	ld	b, a
-3533  0FFA  DD 7E E9    	ld	a,(ix-23)
-3534  0FFD  02          	ld	(bc), a
-3535  0FFE              l_game_page_map_00129:
-3536  0FFE  21 00 00    	ld	hl,_v0
-3537  1001  7E          	ld	a, (hl)
-3538  1002  D6 28       	sub	a,0x28
-3539  1004  38 15       	jr	C,l_game_page_map_00132
-3540  1006  7E          	ld	a, (hl)
-3541  1007  D6 2C       	sub	a,0x2c
-3542  1009  30 10       	jr	NC,l_game_page_map_00132
-3543  100B  3E 00       	ld	a, +((_btiles) & 0xFF)
-3544  100D  DD 86 F2    	add	a,(ix-14)
-3545  1010  4F          	ld	c, a
-3546  1011  3E 00       	ld	a, +((_btiles) / 256)
-3547  1013  DD 8E F3    	adc	a,(ix-13)
-3548  1016  47          	ld	b, a
-3549  1017  DD 7E E9    	ld	a,(ix-23)
-3550  101A  02          	ld	(bc), a
-3551  101B              l_game_page_map_00132:
-3552  101B  DD 34 F2    	inc	(ix-14)
-3553  101E  20 91       	jr	NZ,l_game_page_map_00134
-3554  1020  DD 34 F3    	inc	(ix-13)
-3555  1023  18 8C       	jr	l_game_page_map_00134
-3556  1025              l_game_page_map_00136:
-3557  1025  21 61 01    	ld	hl,0x0161
-3558  1028  22 00 00    	ld	(_index1),hl
-3559  102B  DD 36 F2 00 	ld	(ix-14),0x00
-3560  102F  DD 36 F3 00 	ld	(ix-13),0x00
-3561  1033              l_game_page_map_00137:
-3562  1033  DD 7E F2    	ld	a,(ix-14)
-3563  1036  D6 10       	sub	a,0x10
-3564  1038  DD 7E F3    	ld	a,(ix-13)
-3565  103B  DE 00       	sbc	a,0x00
-3566  103D  30 33       	jr	NC,l_game_page_map_00139
-3567  103F  DD 7E F2    	ld	a,(ix-14)
-3568  1042  C6 61       	add	a,0x61
-3569  1044  4F          	ld	c, a
-3570  1045  DD 7E F3    	ld	a,(ix-13)
-3571  1048  CE 01       	adc	a,0x01
-3572  104A  47          	ld	b, a
-3573  104B  21 00 00    	ld	hl,_btiles
-3574  104E  09          	add	hl,bc
-3575  104F  3E 00       	ld	a,+((_btiles) & 0xFF)
-3576  1051  EB          	ex	de,hl
-3577  1052  DD 86 F2    	add	a,(ix-14)
-3578  1055  4F          	ld	c, a
-3579  1056  3E 00       	ld	a, +((_btiles) / 256)
-3580  1058  DD 8E F3    	adc	a,(ix-13)
-3581  105B  47          	ld	b, a
-3582  105C  0A          	ld	a, (bc)
-3583  105D  12          	ld	(de), a
-3584  105E  AF          	xor	a, a
-3585  105F  02          	ld	(bc), a
-3586  1060  DD 7E F2    	ld	a,(ix-14)
-3587  1063  C6 02       	add	a,0x02
-3588  1065  DD 77 F2    	ld	(ix-14),a
-3589  1068  DD 7E F3    	ld	a,(ix-13)
-3590  106B  CE 00       	adc	a,0x00
-3591  106D  DD 77 F3    	ld	(ix-13),a
-3592  1070  18 C1       	jr	l_game_page_map_00137
-3593  1072              l_game_page_map_00139:
-3594  1072  21 7C 01    	ld	hl,0x017c
-3595  1075  22 00 00    	ld	(_index1),hl
-3596  1078  DD 7E E9    	ld	a,(ix-23)
-3597  107B  F6 07       	or	a,0x07
-3598  107D  DD 77 F8    	ld	(ix-8),a
-3599  1080  DD 36 F2 00 	ld	(ix-14),0x00
-3600  1084  DD 36 F3 00 	ld	(ix-13),0x00
-3601  1088              l_game_page_map_00140:
-3602  1088  DD 7E F2    	ld	a,(ix-14)
-3603  108B  D6 04       	sub	a,0x04
-3604  108D  DD 7E F3    	ld	a,(ix-13)
-3605  1090  DE 00       	sbc	a,0x00
-3606  1092  30 1E       	jr	NC,l_game_page_map_00142
-3607  1094  DD 7E F2    	ld	a,(ix-14)
-3608  1097  C6 7C       	add	a,0x7c
-3609  1099  4F          	ld	c, a
-3610  109A  DD 7E F3    	ld	a,(ix-13)
-3611  109D  CE 01       	adc	a,0x01
-3612  109F  47          	ld	b, a
-3613  10A0  21 00 00    	ld	hl,_btiles
-3614  10A3  09          	add	hl, bc
-3615  10A4  DD 7E F8    	ld	a,(ix-8)
-3616  10A7  77          	ld	(hl), a
-3617  10A8  DD 34 F2    	inc	(ix-14)
-3618  10AB  20 DB       	jr	NZ,l_game_page_map_00140
-3619  10AD  DD 34 F3    	inc	(ix-13)
-3620  10B0  18 D6       	jr	l_game_page_map_00140
-3621  10B2              l_game_page_map_00142:
-3622  10B2  3A 30 00    	ld	a,(_btiles + 0x0030)
-3623  10B5  32 C5 00    	ld	((_btiles + 0x00c5)),a
-3624  10B8  01 32 00    	ld	bc,_btiles + 50
-3625  10BB  0A          	ld	a, (bc)
-3626  10BC  32 C7 00    	ld	((_btiles + 0x00c7)),a
-3627  10BF  3A 34 00    	ld	a,(_btiles + 0x0034)
-3628  10C2  32 C9 00    	ld	((_btiles + 0x00c9)),a
-3629  10C5  3A 36 00    	ld	a,(_btiles + 0x0036)
-3630  10C8  32 CB 00    	ld	((_btiles + 0x00cb)),a
-3631  10CB  3A 38 00    	ld	a, (_btiles + 56)
-3632  10CE  32 CD 00    	ld	((_btiles + 0x00cd)),a
-3633  10D1  3A 3A 00    	ld	a, (_btiles + 58)
-3634  10D4  32 CF 00    	ld	((_btiles + 0x00cf)),a
-3635  10D7  11 50 00    	ld	de,_btiles + 80
-3636  10DA  1A          	ld	a, (de)
-3637  10DB  32 E9 00    	ld	((_btiles + 0x00e9)),a
-3638  10DE  3A 51 00    	ld	a,(_btiles + 0x0051)
-3639  10E1  32 EA 00    	ld	((_btiles + 0x00ea)),a
-3640  10E4  3A 52 00    	ld	a, (_btiles + 82)
-3641  10E7  32 EB 00    	ld	((_btiles + 0x00eb)),a
-3642  10EA  3A 30 00    	ld	a,(_btiles + 0x0030)
-3643  10ED  32 FA 00    	ld	((_btiles + 0x00fa)),a
-3644  10F0  0A          	ld	a, (bc)
-3645  10F1  32 FC 00    	ld	((_btiles + 0x00fc)),a
-3646  10F4  3A 34 00    	ld	a,(_btiles + 0x0034)
-3647  10F7  32 FE 00    	ld	((_btiles + 0x00fe)),a
-3648  10FA  3A 36 00    	ld	a,(_btiles + 0x0036)
-3649  10FD  32 00 01    	ld	((_btiles + 0x0100)),a
-3650  1100  1A          	ld	a, (de)
-3651  1101  32 12 01    	ld	((_btiles + 0x0112)),a
-3652  1104  3A 51 00    	ld	a,(_btiles + 0x0051)
-3653  1107  32 13 01    	ld	((_btiles + 0x0113)),a
-3654  110A  3A 30 00    	ld	a,(_btiles + 0x0030)
-3655  110D  32 FD 00    	ld	((_btiles + 0x00fd)),a
-3656  1110  0A          	ld	a, (bc)
-3657  1111  32 FF 00    	ld	((_btiles + 0x00ff)),a
-3658  1114  1A          	ld	a, (de)
-3659  1115  32 1B 01    	ld	((_btiles + 0x011b)),a
-3660  1118  21 00 00    	ld	hl,_i
-3661  111B  36 00       	ld	(hl),0x00
-3662  111D              l_game_page_map_00143:
-3663  111D  21 00 00    	ld	hl,_i
-3664  1120  7E          	ld	a, (hl)
-3665  1121  D6 10       	sub	a,0x10
-3666  1123  30 23       	jr	NC,l_game_page_map_00145
-3667  1125  5E          	ld	e, (hl)
-3668  1126  16 00       	ld	d,0x00
-3669  1128  21 D0 00    	ld	hl,0x00d0 + _btiles
-3670  112B  19          	add	hl,de
-3671  112C  4D          	ld	c, l
-3672  112D  44          	ld	b, h
-3673  112E  21 91 00    	ld	hl,0x0090+1
-3674  1131  19          	add	hl,de
-3675  1132  11 00 00    	ld	de,_btiles
-3676  1135  19          	add	hl, de
-3677  1136  56          	ld	d, (hl)
-3678  1137  C5          	push	bc
-3679  1138  D5          	push	de
-3680  1139  33          	inc	sp
-3681  113A  CD 14 16    	call	_reverse
-3682  113D  33          	inc	sp
-3683  113E  C1          	pop	bc
-3684  113F  7D          	ld	a,l
-3685  1140  02          	ld	(bc), a
-3686  1141  21 00 00    	ld	hl,_i
-3687  1144  34          	inc	(hl)
-3688  1145  34          	inc	(hl)
-3689  1146  18 D5       	jr	l_game_page_map_00143
-3690  1148              l_game_page_map_00145:
-3691  1148  21 00 00    	ld	hl,_i
-3692  114B  36 00       	ld	(hl),0x00
-3693  114D              l_game_page_map_00146:
-3694  114D  21 00 00    	ld	hl,_i
-3695  1150  7E          	ld	a, (hl)
-3696  1151  D6 04       	sub	a,0x04
-3697  1153  30 1D       	jr	NC,l_game_page_map_00148
-3698  1155  5E          	ld	e, (hl)
-3699  1156  16 00       	ld	d,0x00
-3700  1158  21 E4 00    	ld	hl,0x00e4 + _btiles
-3701  115B  19          	add	hl,de
-3702  115C  4D          	ld	c, l
-3703  115D  44          	ld	b, h
-3704  115E  21 90 00    	ld	hl,0x0090
-3705  1161  19          	add	hl, de
-3706  1162  11 28 00    	ld	de,0x0028
-3707  1165  19          	add	hl, de
-3708  1166  11 00 00    	ld	de,_btiles
-3709  1169  19          	add	hl, de
-3710  116A  7E          	ld	a, (hl)
-3711  116B  02          	ld	(bc), a
-3712  116C  21 00 00    	ld	hl,_i
-3713  116F  34          	inc	(hl)
-3714  1170  18 DB       	jr	l_game_page_map_00146
-3715  1172              l_game_page_map_00148:
-3716  1172  3E 00       	ld	a,0x00
-3717  1174  DD 77 EE    	ld	(ix-18),a
-3718  1177  DD 77 EF    	ld	(ix-17),a
-3719  117A  DD 77 EA    	ld	(ix-22),a
-3720  117D  DD 77 EB    	ld	(ix-21),a
-3721  1180  3E 06       	ld	a,0x06
-3722  1182  F5          	push	af
-3723  1183  33          	inc	sp
-3724  1184  CD 57 16    	call	_page
-3725  1187  33          	inc	sp
-3726  1188  DD 36 F0 00 	ld	(ix-16),0x00
-3727  118C  DD 36 F1 00 	ld	(ix-15),0x00
-3728  1190              l_game_page_map_00149:
-3729  1190  DD 4E E6    	ld	c,(ix-26)
-3730  1193  06 00       	ld	b,0x00
-3731  1195  DD 7E F0    	ld	a,(ix-16)
-3732  1198  91          	sub	a, c
-3733  1199  DD 7E F1    	ld	a,(ix-15)
-3734  119C  98          	sbc	a, b
-3735  119D  30 26       	jr	NC,l_game_page_map_00151
-3736  119F  DD 6E F0    	ld	l,(ix-16)
-3737  11A2  DD 66 F1    	ld	h,(ix-15)
-3738  11A5  29          	add	hl, hl
-3739  11A6  11 00 00    	ld	de,_lenght0
-3740  11A9  19          	add	hl, de
-3741  11AA  4E          	ld	c, (hl)
-3742  11AB  23          	inc	hl
-3743  11AC  46          	ld	b, (hl)
-3744  11AD  DD 7E EA    	ld	a,(ix-22)
-3745  11B0  81          	add	a, c
-3746  11B1  DD 77 EA    	ld	(ix-22),a
-3747  11B4  DD 7E EB    	ld	a,(ix-21)
-3748  11B7  88          	adc	a, b
-3749  11B8  DD 77 EB    	ld	(ix-21),a
-3750  11BB  DD 34 F0    	inc	(ix-16)
-3751  11BE  20 D0       	jr	NZ,l_game_page_map_00149
-3752  11C0  DD 34 F1    	inc	(ix-15)
-3753  11C3  18 CB       	jr	l_game_page_map_00149
-3754  11C5              l_game_page_map_00151:
-3755  11C5  AF          	xor	a, a
-3756  11C6  F5          	push	af
-3757  11C7  33          	inc	sp
-3758  11C8  CD 57 16    	call	_page
-3759  11CB  33          	inc	sp
-3760  11CC  DD 36 F2 00 	ld	(ix-14),0x00
-3761  11D0  DD 36 F3 00 	ld	(ix-13),0x00
-3762  11D4              l_game_page_map_00164:
-3763  11D4  3E 06       	ld	a,0x06
-3764  11D6  F5          	push	af
-3765  11D7  33          	inc	sp
-3766  11D8  CD 57 16    	call	_page
-3767  11DB  33          	inc	sp
-3768  11DC  DD 7E EA    	ld	a,(ix-22)
-3769  11DF  DD 86 F2    	add	a,(ix-14)
-3770  11E2  4F          	ld	c, a
-3771  11E3  DD 7E EB    	ld	a,(ix-21)
-3772  11E6  DD 8E F3    	adc	a,(ix-13)
-3773  11E9  47          	ld	b, a
-3774  11EA  21 00 00    	ld	hl,_world0
-3775  11ED  09          	add	hl, bc
-3776  11EE  5E          	ld	e, (hl)
-3777  11EF  03          	inc	bc
-3778  11F0  21 00 00    	ld	hl,_world0
-3779  11F3  09          	add	hl, bc
-3780  11F4  7E          	ld	a, (hl)
-3781  11F5  DD 77 F5    	ld	(ix-11),a
-3782  11F8  D5          	push	de
-3783  11F9  AF          	xor	a, a
-3784  11FA  F5          	push	af
-3785  11FB  33          	inc	sp
-3786  11FC  CD 57 16    	call	_page
-3787  11FF  33          	inc	sp
-3788  1200  D1          	pop	de
-3789  1201  7B          	ld	a, e
-3790  1202  D6 80       	sub	a,0x80
-3791  1204  30 15       	jr	NC,l_game_page_map_00156
-3792  1206  01 00 00    	ld	bc,_scr_map
-3793  1209  DD 6E EE    	ld	l,(ix-18)
-3794  120C  DD 66 EF    	ld	h,(ix-17)
-3795  120F  09          	add	hl,bc
-3796  1210  73          	ld	(hl), e
-3797  1211  DD 34 EE    	inc	(ix-18)
-3798  1214  20 6F       	jr	NZ,l_game_page_map_00157
-3799  1216  DD 34 EF    	inc	(ix-17)
-3800  1219  18 6A       	jr	l_game_page_map_00157
-3801  121B              l_game_page_map_00156:
-3802  121B  7B          	ld	a, e
-3803  121C  C6 80       	add	a,0x80
-3804  121E  DD 77 F4    	ld	(ix-12),a
-3805  1221  DD 7E EE    	ld	a,(ix-18)
-3806  1224  DD 77 F8    	ld	(ix-8),a
-3807  1227  DD 7E EF    	ld	a,(ix-17)
-3808  122A  DD 77 F9    	ld	(ix-7),a
-3809  122D  DD 36 F0 00 	ld	(ix-16),0x00
-3810  1231  DD 36 F1 00 	ld	(ix-15),0x00
-3811  1235              l_game_page_map_00162:
-3812  1235  DD 4E F4    	ld	c,(ix-12)
-3813  1238  06 00       	ld	b,0x00
-3814  123A  DD 7E F0    	ld	a,(ix-16)
-3815  123D  91          	sub	a, c
-3816  123E  DD 7E F1    	ld	a,(ix-15)
-3817  1241  98          	sbc	a, b
-3818  1242  30 2D       	jr	NC,l_game_page_map_00213
-3819  1244  DD 6E F8    	ld	l,(ix-8)
-3820  1247  DD 66 F9    	ld	h,(ix-7)
-3821  124A  01 00 00    	ld	bc,_scr_map
-3822  124D  09          	add	hl,bc
-3823  124E  DD 75 FA    	ld	(ix-6),l
-3824  1251  DD 74 FB    	ld	(ix-5),h
-3825  1254  DD 7E F5    	ld	a,(ix-11)
-3826  1257  77          	ld	(hl), a
-3827  1258  DD 34 F8    	inc	(ix-8)
-3828  125B  20 03       	jr	NZ,l_game_page_map_00334
-3829  125D  DD 34 F9    	inc	(ix-7)
-3830  1260              l_game_page_map_00334:
-3831  1260  DD 7E F9    	ld	a,(ix-7)
-3832  1263  D6 02       	sub	a,0x02
-3833  1265  30 0A       	jr	NC,l_game_page_map_00213
-3834  1267  DD 34 F0    	inc	(ix-16)
-3835  126A  20 C9       	jr	NZ,l_game_page_map_00162
-3836  126C  DD 34 F1    	inc	(ix-15)
-3837  126F  18 C4       	jr	l_game_page_map_00162
-3838  1271              l_game_page_map_00213:
-3839  1271  DD 7E F8    	ld	a,(ix-8)
-3840  1274  DD 77 EE    	ld	(ix-18),a
-3841  1277  DD 7E F9    	ld	a,(ix-7)
-3842  127A  DD 77 EF    	ld	(ix-17),a
-3843  127D  DD 34 F2    	inc	(ix-14)
-3844  1280  20 03       	jr	NZ,l_game_page_map_00336
-3845  1282  DD 34 F3    	inc	(ix-13)
-3846  1285              l_game_page_map_00336:
-3847  1285              l_game_page_map_00157:
-3848  1285  DD 7E EF    	ld	a,(ix-17)
-3849  1288  D6 02       	sub	a,0x02
-3850  128A  30 10       	jr	NC,l_game_page_map_00160
-3851  128C  DD 34 F2    	inc	(ix-14)
-3852  128F  20 03       	jr	NZ,l_game_page_map_00337
-3853  1291  DD 34 F3    	inc	(ix-13)
-3854  1294              l_game_page_map_00337:
-3855  1294  DD 7E F3    	ld	a,(ix-13)
-3856  1297  D6 02       	sub	a,0x02
-3857  1299  DA D4 11    	jp	C, l_game_page_map_00164
-3858  129C              l_game_page_map_00160:
-3859  129C  DD 7E E8    	ld	a,(ix-24)
-3860  129F  32 00 00    	ld	(_scr_curr),a
-3861  12A2  DD 7E E9    	ld	a,(ix-23)
-3862  12A5  32 00 00    	ld	(_map_paper),a
-3863  12A8  FB          	ei
-3864  12A9  DD F9       	ld	sp, ix
-3865  12AB  DD E1       	pop	ix
-3866  12AD  C9          	ret
-3867  12AE              	SECTION code_compiler
-3868  12AE              ;	---------------------------------
-3869  12AE              ; Function game_flash_exit
-3870  12AE              ; ---------------------------------
-3871  12AE              _game_flash_exit:
-3872  12AE  CD 00 00    	call	___sdcc_enter_ix
-3873  12B1  21 00 00    	ld	hl,_i
-3874  12B4  36 00       	ld	(hl),0x00
-3875  12B6  01 F0 11    	ld	bc,0x11f0
-3876  12B9              l_game_flash_exit_00101:
-3877  12B9  3A 00 00    	ld	a,(_i)
-3878  12BC  D6 10       	sub	a,0x10
-3879  12BE  30 14       	jr	NC,l_game_flash_exit_00103
-3880  12C0  21 00 00    	ld	hl,_btiles
-3881  12C3  09          	add	hl,bc
-3882  12C4  7E          	ld	a,(hl)
-3883  12C5  EB          	ex	de,hl
-3884  12C6  E6 7F       	and	a,0x7f
-3885  12C8  12          	ld	(de), a
-3886  12C9  DD B6 04    	or	a,(ix+4)
-3887  12CC  12          	ld	(de), a
-3888  12CD  21 00 00    	ld	hl,_i
-3889  12D0  34          	inc	(hl)
-3890  12D1  03          	inc	bc
-3891  12D2  18 E5       	jr	l_game_flash_exit_00101
-3892  12D4              l_game_flash_exit_00103:
-3893  12D4  2A FF FF    	ld	hl,(_game_exit_col - 1)
-3894  12D7  3A 00 00    	ld	a,(_game_exit_lin)
-3895  12DA  6F          	ld	l,a
-3896  12DB  E5          	push	hl
-3897  12DC  21 06 5F    	ld	hl,0x5f06
-3898  12DF  E5          	push	hl
-3899  12E0  CD 00 00    	call	_NIRVANAP_spriteT_callee
-3900  12E3  76          	halt
-3901  12E4  DD E1       	pop	ix
-3902  12E6  C9          	ret
-3903  12E7              	SECTION code_compiler
-3904  12E7              ;	---------------------------------
-3905  12E7              ; Function game_copy_sprite_std
-3906  12E7              ; ---------------------------------
-3907  12E7              _game_copy_sprite_std:
-3908  12E7  CD 00 00    	call	___sdcc_enter_ix
-3909  12EA  AF          	xor	a, a
-3910  12EB  F5          	push	af
-3911  12EC  33          	inc	sp
-3912  12ED  DD 66 05    	ld	h,(ix+5)
-3913  12F0  DD 6E 04    	ld	l,(ix+4)
-3914  12F3  E5          	push	hl
-3915  12F4  CD 91 13    	call	_game_copy_sprite
-3916  12F7  F1          	pop	af
-3917  12F8  33          	inc	sp
-3918  12F9  DD 46 05    	ld	b,(ix+5)
-3919  12FC  04          	inc	b
-3920  12FD  DD 4E 04    	ld	c,(ix+4)
-3921  1300  0C          	inc	c
-3922  1301  C5          	push	bc
-3923  1302  AF          	xor	a, a
-3924  1303  F5          	push	af
-3925  1304  33          	inc	sp
-3926  1305  C5          	push	bc
-3927  1306  CD 91 13    	call	_game_copy_sprite
-3928  1309  F1          	pop	af
-3929  130A  33          	inc	sp
-3930  130B  C1          	pop	bc
-3931  130C  DD 56 05    	ld	d,(ix+5)
-3932  130F  14          	inc	d
-3933  1310  14          	inc	d
-3934  1311  DD 46 04    	ld	b,(ix+4)
-3935  1314  04          	inc	b
-3936  1315  04          	inc	b
-3937  1316  C5          	push	bc
-3938  1317  AF          	xor	a, a
-3939  1318  5A          	ld	e,d
-3940  1319  57          	ld	d,a
-3941  131A  D5          	push	de
-3942  131B  C5          	push	bc
-3943  131C  33          	inc	sp
-3944  131D  CD 91 13    	call	_game_copy_sprite
-3945  1320  F1          	pop	af
-3946  1321  33          	inc	sp
-3947  1322  C1          	pop	bc
-3948  1323  DD 56 05    	ld	d,(ix+5)
-3949  1326  14          	inc	d
-3950  1327  14          	inc	d
-3951  1328  14          	inc	d
-3952  1329  DD 5E 04    	ld	e,(ix+4)
-3953  132C  1C          	inc	e
-3954  132D  1C          	inc	e
-3955  132E  1C          	inc	e
-3956  132F  C5          	push	bc
-3957  1330  D5          	push	de
-3958  1331  AF          	xor	a, a
-3959  1332  F5          	push	af
-3960  1333  33          	inc	sp
-3961  1334  D5          	push	de
-3962  1335  CD 91 13    	call	_game_copy_sprite
-3963  1338  F1          	pop	af
-3964  1339  33          	inc	sp
-3965  133A  D1          	pop	de
-3966  133B  C1          	pop	bc
-3967  133C  DD 56 05    	ld	d,(ix+5)
-3968  133F  14          	inc	d
-3969  1340  14          	inc	d
-3970  1341  14          	inc	d
-3971  1342  14          	inc	d
-3972  1343  C5          	push	bc
-3973  1344  3E 01       	ld	a,0x01
-3974  1346  F5          	push	af
-3975  1347  33          	inc	sp
-3976  1348  D5          	push	de
-3977  1349  CD 91 13    	call	_game_copy_sprite
-3978  134C  F1          	pop	af
-3979  134D  33          	inc	sp
-3980  134E  C1          	pop	bc
-3981  134F  DD 7E 05    	ld	a,(ix+5)
-3982  1352  C6 05       	add	a,0x05
-3983  1354  57          	ld	d, a
-3984  1355  C5          	push	bc
-3985  1356  3E 01       	ld	a,0x01
-3986  1358  5A          	ld	e,d
-3987  1359  57          	ld	d,a
-3988  135A  D5          	push	de
-3989  135B  C5          	push	bc
-3990  135C  33          	inc	sp
-3991  135D  CD 91 13    	call	_game_copy_sprite
-3992  1360  F1          	pop	af
-3993  1361  33          	inc	sp
-3994  1362  C1          	pop	bc
-3995  1363  DD 7E 05    	ld	a,(ix+5)
-3996  1366  C6 06       	add	a,0x06
-3997  1368  47          	ld	b, a
-3998  1369  3E 01       	ld	a,0x01
-3999  136B  F5          	push	af
-4000  136C  33          	inc	sp
-4001  136D  C5          	push	bc
-4002  136E  CD 91 13    	call	_game_copy_sprite
-4003  1371  F1          	pop	af
-4004  1372  33          	inc	sp
-4005  1373  DD 7E 05    	ld	a,(ix+5)
-4006  1376  C6 07       	add	a,0x07
-4007  1378  47          	ld	b, a
-4008  1379  3E 01       	ld	a,0x01
-4009  137B  48          	ld	c,b
-4010  137C  47          	ld	b,a
-4011  137D  C5          	push	bc
-4012  137E  DD 7E 04    	ld	a,(ix+4)
-4013  1381  F5          	push	af
-4014  1382  33          	inc	sp
-4015  1383  CD 91 13    	call	_game_copy_sprite
-4016  1386  F1          	pop	af
-4017  1387  33          	inc	sp
-4018  1388  DD 7E 05    	ld	a,(ix+5)
-4019  138B  C6 08       	add	a,0x08
-4020  138D  6F          	ld	l, a
-4021  138E  DD E1       	pop	ix
-4022  1390  C9          	ret
-4023  1391              	SECTION code_compiler
-4024  1391              ;	---------------------------------
-4025  1391              ; Function game_copy_sprite
-4026  1391              ; ---------------------------------
-4027  1391              _game_copy_sprite:
-4028  1391  CD 00 00    	call	___sdcc_enter_ix
-4029  1394  21 C2 FF    	ld	hl, -62
-4030  1397  39          	add	hl, sp
-4031  1398  F9          	ld	sp, hl
-4032  1399  3A 00 00    	ld	a,(_game_tileset)
-4033  139C  DD 77 C2    	ld	(ix-62),a
-4034  139F  F3          	di
-4035  13A0  3E 03       	ld	a,0x03
-4036  13A2  F5          	push	af
-4037  13A3  33          	inc	sp
-4038  13A4  CD 57 16    	call	_page
-4039  13A7  33          	inc	sp
-4040  13A8  DD 6E 04    	ld	l,(ix+4)
-4041  13AB  26 00       	ld	h,0x00
-4042  13AD  4D          	ld	c,l
-4043  13AE  44          	ld	b,h
-4044  13AF  29          	add	hl, hl
-4045  13B0  09          	add	hl, bc
-4046  13B1  29          	add	hl, hl
-4047  13B2  29          	add	hl, hl
-4048  13B3  29          	add	hl, hl
-4049  13B4  29          	add	hl, hl
-4050  13B5  DD 75 FE    	ld	(ix-2),l
-4051  13B8  DD 74 FF    	ld	(ix-1),h
-4052  13BB  21 02 00    	ld	hl,0x0002
-4053  13BE  39          	add	hl, sp
-4054  13BF  DD 75 FC    	ld	(ix-4),l
-4055  13C2  DD 74 FD    	ld	(ix-3),h
-4056  13C5  DD 75 FA    	ld	(ix-6),l
-4057  13C8  DD 74 FB    	ld	(ix-5),h
-4058  13CB  DD 7E FC    	ld	a,(ix-4)
-4059  13CE  DD 77 F8    	ld	(ix-8),a
-4060  13D1  DD 7E FD    	ld	a,(ix-3)
-4061  13D4  DD 77 F9    	ld	(ix-7),a
-4062  13D7  DD 36 C3 00 	ld	(ix-61),0x00
-4063  13DB              l_game_copy_sprite_00107:
-4064  13DB  DD 7E C3    	ld	a,(ix-61)
-4065  13DE  D6 30       	sub	a,0x30
-4066  13E0  30 74       	jr	NC,l_game_copy_sprite_00109
-4067  13E2  DD 7E C2    	ld	a,(ix-62)
-4068  13E5  B7          	or	a, a
-4069  13E6  20 1D       	jr	NZ,l_game_copy_sprite_00102
-4070  13E8  DD 7E FA    	ld	a,(ix-6)
-4071  13EB  DD 86 C3    	add	a,(ix-61)
-4072  13EE  4F          	ld	c, a
-4073  13EF  DD 7E FB    	ld	a,(ix-5)
-4074  13F2  CE 00       	adc	a,0x00
-4075  13F4  47          	ld	b, a
-4076  13F5  3E 00       	ld	a, +((_hisprites1) & 0xFF)
-4077  13F7  DD 86 FE    	add	a,(ix-2)
-4078  13FA  5F          	ld	e, a
-4079  13FB  3E 00       	ld	a, +((_hisprites1) / 256)
-4080  13FD  DD 8E FF    	adc	a,(ix-1)
-4081  1400  57          	ld	d, a
-4082  1401  1A          	ld	a, (de)
-4083  1402  02          	ld	(bc), a
-4084  1403  18 23       	jr	l_game_copy_sprite_00103
-4085  1405              l_game_copy_sprite_00102:
-4086  1405  DD 7E FC    	ld	a,(ix-4)
-4087  1408  DD 86 C3    	add	a,(ix-61)
-4088  140B  DD 77 F6    	ld	(ix-10),a
-4089  140E  DD 7E FD    	ld	a,(ix-3)
-4090  1411  CE 00       	adc	a,0x00
-4091  1413  DD 77 F7    	ld	(ix-9),a
-4092  1416  01 00 00    	ld	bc,_hisprites2
-4093  1419  DD 6E FE    	ld	l,(ix-2)
-4094  141C  DD 66 FF    	ld	h,(ix-1)
-4095  141F  09          	add	hl,bc
-4096  1420  4E          	ld	c, (hl)
-4097  1421  DD 6E F6    	ld	l,(ix-10)
-4098  1424  DD 66 F7    	ld	h,(ix-9)
-4099  1427  71          	ld	(hl), c
-4100  1428              l_game_copy_sprite_00103:
-4101  1428  3E 1F       	ld	a,0x1f
-4102  142A  DD 96 C3    	sub	a,(ix-61)
-4103  142D  30 19       	jr	NC,l_game_copy_sprite_00105
-4104  142F  DD 7E F8    	ld	a,(ix-8)
-4105  1432  DD 86 C3    	add	a,(ix-61)
-4106  1435  4F          	ld	c, a
-4107  1436  DD 7E F9    	ld	a,(ix-7)
-4108  1439  CE 00       	adc	a,0x00
-4109  143B  47          	ld	b, a
-4110  143C  0A          	ld	a, (bc)
-4111  143D  5F          	ld	e, a
-4112  143E  3A 00 00    	ld	a,(_spr_init_cin0)
-4113  1441  93          	sub	a, e
-4114  1442  20 04       	jr	NZ,l_game_copy_sprite_00105
-4115  1444  3A 00 00    	ld	a,(_spr_init_cout0)
-4116  1447  02          	ld	(bc), a
-4117  1448              l_game_copy_sprite_00105:
-4118  1448  DD 34 C3    	inc	(ix-61)
-4119  144B  DD 34 FE    	inc	(ix-2)
-4120  144E  20 8B       	jr	NZ,l_game_copy_sprite_00107
-4121  1450  DD 34 FF    	inc	(ix-1)
-4122  1453  C3 DB 13    	jp	l_game_copy_sprite_00107
-4123  1456              l_game_copy_sprite_00109:
-4124  1456  AF          	xor	a, a
-4125  1457  F5          	push	af
-4126  1458  33          	inc	sp
-4127  1459  CD 57 16    	call	_page
-4128  145C  33          	inc	sp
-4129  145D  FB          	ei
-4130  145E  DD 7E FC    	ld	a,(ix-4)
-4131  1461  DD 77 F6    	ld	(ix-10),a
-4132  1464  DD 7E FD    	ld	a,(ix-3)
-4133  1467  DD 77 F7    	ld	(ix-9),a
-4134  146A  DD 36 C3 1F 	ld	(ix-61),0x1f
-4135  146E              l_game_copy_sprite_00121:
-4136  146E  DD 7E C3    	ld	a,(ix-61)
-4137  1471  D6 30       	sub	a,0x30
-4138  1473  30 71       	jr	NC,l_game_copy_sprite_00123
-4139  1475  DD 7E F6    	ld	a,(ix-10)
-4140  1478  DD 86 C3    	add	a,(ix-61)
-4141  147B  DD 77 F8    	ld	(ix-8),a
-4142  147E  6F          	ld	l,a
-4143  147F  DD 7E F7    	ld	a,(ix-9)
-4144  1482  CE 00       	adc	a,0x00
-4145  1484  DD 77 F9    	ld	(ix-7),a
-4146  1487  67          	ld	h,a
-4147  1488  4E          	ld	c, (hl)
-4148  1489  3A 00 00    	ld	a,(_spr_init_cin0)
-4149  148C  91          	sub	a, c
-4150  148D  20 0C       	jr	NZ,l_game_copy_sprite_00119
-4151  148F  DD 6E F8    	ld	l,(ix-8)
-4152  1492  DD 66 F9    	ld	h,(ix-7)
-4153  1495  3A 00 00    	ld	a,(_spr_init_cout0)
-4154  1498  77          	ld	(hl),a
-4155  1499  18 34       	jr	l_game_copy_sprite_00120
-4156  149B              l_game_copy_sprite_00119:
-4157  149B  3A 00 00    	ld	a,(_spr_init_cin1)
-4158  149E  91          	sub	a, c
-4159  149F  20 0C       	jr	NZ,l_game_copy_sprite_00116
-4160  14A1  DD 6E F8    	ld	l,(ix-8)
-4161  14A4  DD 66 F9    	ld	h,(ix-7)
-4162  14A7  3A 00 00    	ld	a,(_spr_init_cout1)
-4163  14AA  77          	ld	(hl),a
-4164  14AB  18 22       	jr	l_game_copy_sprite_00120
-4165  14AD              l_game_copy_sprite_00116:
-4166  14AD  3A 00 00    	ld	a,(_spr_init_cin2)
-4167  14B0  91          	sub	a, c
-4168  14B1  20 0C       	jr	NZ,l_game_copy_sprite_00113
-4169  14B3  DD 6E F8    	ld	l,(ix-8)
-4170  14B6  DD 66 F9    	ld	h,(ix-7)
-4171  14B9  3A 00 00    	ld	a,(_spr_init_cout2)
-4172  14BC  77          	ld	(hl),a
-4173  14BD  18 10       	jr	l_game_copy_sprite_00120
-4174  14BF              l_game_copy_sprite_00113:
-4175  14BF  3A 00 00    	ld	a,(_spr_init_cin3)
-4176  14C2  91          	sub	a, c
-4177  14C3  20 0A       	jr	NZ,l_game_copy_sprite_00120
-4178  14C5  DD 6E F8    	ld	l,(ix-8)
-4179  14C8  DD 66 F9    	ld	h,(ix-7)
-4180  14CB  3A 00 00    	ld	a,(_spr_init_cout3)
-4181  14CE  77          	ld	(hl),a
-4182  14CF              l_game_copy_sprite_00120:
-4183  14CF  DD 6E F8    	ld	l,(ix-8)
-4184  14D2  DD 66 F9    	ld	h,(ix-7)
-4185  14D5  7E          	ld	a, (hl)
-4186  14D6  21 00 00    	ld	hl,_spr_init_bright
-4187  14D9  B6          	or	a, (hl)
-4188  14DA  DD 6E F8    	ld	l,(ix-8)
-4189  14DD  DD 66 F9    	ld	h,(ix-7)
-4190  14E0  77          	ld	(hl), a
-4191  14E1  DD 34 C3    	inc	(ix-61)
-4192  14E4  18 88       	jr	l_game_copy_sprite_00121
-4193  14E6              l_game_copy_sprite_00123:
-4194  14E6  DD 6E 05    	ld	l,(ix+5)
-4195  14E9  26 00       	ld	h,0x00
-4196  14EB  4D          	ld	c,l
-4197  14EC  44          	ld	b,h
-4198  14ED  29          	add	hl, hl
-4199  14EE  09          	add	hl, bc
-4200  14EF  29          	add	hl, hl
-4201  14F0  29          	add	hl, hl
-4202  14F1  29          	add	hl, hl
-4203  14F2  29          	add	hl, hl
-4204  14F3  DD 75 F6    	ld	(ix-10),l
-4205  14F6  DD 74 F7    	ld	(ix-9),h
-4206  14F9  DD 7E FC    	ld	a,(ix-4)
-4207  14FC  DD 77 F8    	ld	(ix-8),a
-4208  14FF  DD 7E FD    	ld	a,(ix-3)
-4209  1502  DD 77 F9    	ld	(ix-7),a
-4210  1505  DD 7E FC    	ld	a,(ix-4)
-4211  1508  DD 77 FA    	ld	(ix-6),a
-4212  150B  DD 7E FD    	ld	a,(ix-3)
-4213  150E  DD 77 FB    	ld	(ix-5),a
-4214  1511  DD 7E FC    	ld	a,(ix-4)
-4215  1514  DD 77 FE    	ld	(ix-2),a
-4216  1517  DD 7E FD    	ld	a,(ix-3)
-4217  151A  DD 77 FF    	ld	(ix-1),a
-4218  151D  DD 7E FC    	ld	a,(ix-4)
-4219  1520  DD 77 F4    	ld	(ix-12),a
-4220  1523  DD 7E FD    	ld	a,(ix-3)
-4221  1526  DD 77 F5    	ld	(ix-11),a
-4222  1529  DD 36 C3 00 	ld	(ix-61),0x00
-4223  152D              l_game_copy_sprite_00136:
-4224  152D  DD 7E C3    	ld	a,(ix-61)
-4225  1530  D6 30       	sub	a,0x30
-4226  1532  D2 0F 16    	jp	NC, l_game_copy_sprite_00139
-4227  1535  DD 4E C3    	ld	c,(ix-61)
-4228  1538  0C          	inc	c
-4229  1539  DD 7E 06    	ld	a,(ix+6)
-4230  153C  B7          	or	a, a
-4231  153D  CA E5 15    	jp	Z, l_game_copy_sprite_00134
-4232  1540  DD 7E C3    	ld	a,(ix-61)
-4233  1543  D6 20       	sub	a,0x20
-4234  1545  30 55       	jr	NC,l_game_copy_sprite_00131
-4235  1547  DD CB C3 46 	bit	0,(ix-61)
-4236  154B  20 25       	jr	NZ,l_game_copy_sprite_00125
-4237  154D  3E 00       	ld	a, +((_btiles) & 0xFF)
-4238  154F  DD 86 F6    	add	a,(ix-10)
-4239  1552  5F          	ld	e, a
-4240  1553  3E 00       	ld	a, +((_btiles) / 256)
-4241  1555  DD 8E F7    	adc	a,(ix-9)
-4242  1558  57          	ld	d, a
-4243  1559  DD 6E FC    	ld	l,(ix-4)
-4244  155C  DD 66 FD    	ld	h,(ix-3)
-4245  155F  06 00       	ld	b,0x00
-4246  1561  09          	add	hl, bc
-4247  1562  46          	ld	b, (hl)
-4248  1563  C5          	push	bc
-4249  1564  D5          	push	de
-4250  1565  C5          	push	bc
-4251  1566  33          	inc	sp
-4252  1567  CD 14 16    	call	_reverse
-4253  156A  33          	inc	sp
-4254  156B  D1          	pop	de
-4255  156C  C1          	pop	bc
-4256  156D  7D          	ld	a,l
-4257  156E  12          	ld	(de), a
-4258  156F  C3 00 16    	jp	l_game_copy_sprite_00135
-4259  1572              l_game_copy_sprite_00125:
-4260  1572  3E 00       	ld	a, +((_btiles) & 0xFF)
-4261  1574  DD 86 F6    	add	a,(ix-10)
-4262  1577  5F          	ld	e, a
-4263  1578  3E 00       	ld	a, +((_btiles) / 256)
-4264  157A  DD 8E F7    	adc	a,(ix-9)
-4265  157D  57          	ld	d, a
-4266  157E  DD 46 C3    	ld	b,(ix-61)
-4267  1581  05          	dec	b
-4268  1582  DD 7E F4    	ld	a,(ix-12)
-4269  1585  80          	add	a, b
-4270  1586  6F          	ld	l, a
-4271  1587  DD 7E F5    	ld	a,(ix-11)
-4272  158A  CE 00       	adc	a,0x00
-4273  158C  67          	ld	h, a
-4274  158D  46          	ld	b, (hl)
-4275  158E  C5          	push	bc
-4276  158F  D5          	push	de
-4277  1590  C5          	push	bc
-4278  1591  33          	inc	sp
-4279  1592  CD 14 16    	call	_reverse
-4280  1595  33          	inc	sp
-4281  1596  D1          	pop	de
-4282  1597  C1          	pop	bc
-4283  1598  7D          	ld	a,l
-4284  1599  12          	ld	(de), a
-4285  159A  18 64       	jr	l_game_copy_sprite_00135
-4286  159C              l_game_copy_sprite_00131:
-4287  159C  DD 7E C3    	ld	a,(ix-61)
-4288  159F  D6 28       	sub	a,0x28
-4289  15A1  30 21       	jr	NC,l_game_copy_sprite_00128
-4290  15A3  3E 00       	ld	a, +((_btiles) & 0xFF)
-4291  15A5  DD 86 F6    	add	a,(ix-10)
-4292  15A8  5F          	ld	e, a
-4293  15A9  3E 00       	ld	a, +((_btiles) / 256)
-4294  15AB  DD 8E F7    	adc	a,(ix-9)
-4295  15AE  57          	ld	d, a
-4296  15AF  DD 7E C3    	ld	a,(ix-61)
-4297  15B2  C6 08       	add	a,0x08
-4298  15B4  47          	ld	b, a
-4299  15B5  DD 7E FE    	ld	a,(ix-2)
-4300  15B8  80          	add	a, b
-4301  15B9  6F          	ld	l, a
-4302  15BA  DD 7E FF    	ld	a,(ix-1)
-4303  15BD  CE 00       	adc	a,0x00
-4304  15BF  67          	ld	h, a
-4305  15C0  7E          	ld	a, (hl)
-4306  15C1  12          	ld	(de), a
-4307  15C2  18 3C       	jr	l_game_copy_sprite_00135
-4308  15C4              l_game_copy_sprite_00128:
-4309  15C4  3E 00       	ld	a, +((_btiles) & 0xFF)
-4310  15C6  DD 86 F6    	add	a,(ix-10)
-4311  15C9  5F          	ld	e, a
-4312  15CA  3E 00       	ld	a, +((_btiles) / 256)
-4313  15CC  DD 8E F7    	adc	a,(ix-9)
-4314  15CF  57          	ld	d, a
-4315  15D0  DD 7E C3    	ld	a,(ix-61)
-4316  15D3  C6 F8       	add	a,0xf8
-4317  15D5  47          	ld	b, a
-4318  15D6  DD 7E FA    	ld	a,(ix-6)
-4319  15D9  80          	add	a, b
-4320  15DA  6F          	ld	l, a
-4321  15DB  DD 7E FB    	ld	a,(ix-5)
-4322  15DE  CE 00       	adc	a,0x00
-4323  15E0  67          	ld	h, a
-4324  15E1  7E          	ld	a, (hl)
-4325  15E2  12          	ld	(de), a
-4326  15E3  18 1B       	jr	l_game_copy_sprite_00135
-4327  15E5              l_game_copy_sprite_00134:
-4328  15E5  3E 00       	ld	a, +((_btiles) & 0xFF)
-4329  15E7  DD 86 F6    	add	a,(ix-10)
-4330  15EA  5F          	ld	e, a
-4331  15EB  3E 00       	ld	a, +((_btiles) / 256)
-4332  15ED  DD 8E F7    	adc	a,(ix-9)
-4333  15F0  57          	ld	d, a
-4334  15F1  DD 7E F8    	ld	a,(ix-8)
-4335  15F4  DD 86 C3    	add	a,(ix-61)
-4336  15F7  6F          	ld	l, a
-4337  15F8  DD 7E F9    	ld	a,(ix-7)
-4338  15FB  CE 00       	adc	a,0x00
-4339  15FD  67          	ld	h, a
-4340  15FE  7E          	ld	a, (hl)
-4341  15FF  12          	ld	(de), a
-4342  1600              l_game_copy_sprite_00135:
-4343  1600  DD 71 C3    	ld	(ix-61),c
-4344  1603  DD 34 F6    	inc	(ix-10)
-4345  1606  C2 2D 15    	jp	NZ,l_game_copy_sprite_00136
-4346  1609  DD 34 F7    	inc	(ix-9)
-4347  160C  C3 2D 15    	jp	l_game_copy_sprite_00136
-4348  160F              l_game_copy_sprite_00139:
-4349  160F  DD F9       	ld	sp, ix
-4350  1611  DD E1       	pop	ix
-4351  1613  C9          	ret
-4352  1614              	SECTION code_compiler
-4353  1614              ;	---------------------------------
-4354  1614              ; Function reverse
-4355  1614              ; ---------------------------------
-4356  1614              _reverse:
-4357  1614  CD 00 00    	call	___sdcc_enter_ix
-4358  1617  DD 7E 04    	ld	a,(ix+4)
-4359  161A  E6 F0       	and	a,0xf0
-4360  161C  07          	rlca
-4361  161D  07          	rlca
-4362  161E  07          	rlca
-4363  161F  07          	rlca
-4364  1620  E6 0F       	and	a,0x0f
-4365  1622  4F          	ld	c, a
-4366  1623  DD 7E 04    	ld	a,(ix+4)
-4367  1626  E6 0F       	and	a,0x0f
-4368  1628  07          	rlca
-4369  1629  07          	rlca
-4370  162A  07          	rlca
-4371  162B  07          	rlca
-4372  162C  E6 F0       	and	a,0xf0
-4373  162E  B1          	or	a, c
-4374  162F  DD 77 04    	ld	(ix+4),a
-4375  1632  E6 CC       	and	a,0xcc
-4376  1634  4F          	ld	c, a
-4377  1635  CB 39       	srl	c
-4378  1637  CB 39       	srl	c
-4379  1639  DD 7E 04    	ld	a,(ix+4)
-4380  163C  E6 33       	and	a,0x33
-4381  163E  87          	add	a, a
-4382  163F  87          	add	a, a
-4383  1640  B1          	or	a, c
-4384  1641  DD 77 04    	ld	(ix+4),a
-4385  1644  E6 AA       	and	a,0xaa
-4386  1646  4F          	ld	c, a
-4387  1647  CB 39       	srl	c
-4388  1649  DD 7E 04    	ld	a,(ix+4)
-4389  164C  E6 55       	and	a,0x55
-4390  164E  87          	add	a, a
-4391  164F  B1          	or	a, c
-4392  1650  DD 77 04    	ld	(ix+4),a
-4393  1653  6F          	ld	l, a
-4394  1654  DD E1       	pop	ix
-4395  1656  C9          	ret
-4396  1657              	SECTION code_compiler
-4397  1657              ;	---------------------------------
-4398  1657              ; Function page
-4399  1657              ; ---------------------------------
-4400  1657              _page:
-4401  1657  CD 00 00    	call	___sdcc_enter_ix
-4402  165A  DD 7E 04    	ld	a,(ix+4)
-4403  165D  C6 10       	add	a,0x10
-4404  165F  32 00 00    	ld	(_GLOBAL_ZX_PORT_7FFD),a
-4405  1662  01 FD 7F    	ld	bc,_IO_7FFD
-4406  1665  ED 79       	out	(c),a
-4407  1667  DD E1       	pop	ix
-4408  1669  C9          	ret
-4409  166A              	SECTION IGNORE
-4410  0000              
+2751  0423  00          	DEFB 0x00
+2752  0424              	SECTION code_compiler
+2753  0AA9              ;	---------------------------------
+2754  0AA9              ; Function game_print_header
+2755  0AA9              ; ---------------------------------
+2756  0AA9              	defc _game_print_header	=	_game_print_score
+2757  0AA9              	SECTION code_compiler
+2758  0AA9              ;	---------------------------------
+2759  0AA9              ; Function game_check_map
+2760  0AA9              ; ---------------------------------
+2761  0AA9              _game_check_map:
+2762  0AA9  CD 00 00    	call	___sdcc_enter_ix
+2763  0AAC  DD 66 05    	ld	h,(ix+5)
+2764  0AAF  DD 6E 04    	ld	l,(ix+4)
+2765  0AB2  E5          	push	hl
+2766  0AB3  CD 00 00    	call	_spr_calc_index
+2767  0AB6  F1          	pop	af
+2768  0AB7  22 00 00    	ld	(_index1),hl
+2769  0ABA  21 00 00    	ld	hl,_index1
+2770  0ABD  DD E1       	pop	ix
+2771  0ABF  C3 C2 0A    	jp	_game_check_cell
+2772  0AC2              	SECTION code_compiler
+2773  0AC2              ;	---------------------------------
+2774  0AC2              ; Function game_check_cell
+2775  0AC2              ; ---------------------------------
+2776  0AC2              _game_check_cell:
+2777  0AC2  4E          	ld	c, (hl)
+2778  0AC3  23          	inc	hl
+2779  0AC4  46          	ld	b, (hl)
+2780  0AC5  AF          	xor	a, a
+2781  0AC6  B9          	cp	a, c
+2782  0AC7  3E 02       	ld	a,0x02
+2783  0AC9  98          	sbc	a, b
+2784  0ACA  30 04       	jr	NC,l_game_check_cell_00102
+2785  0ACC  2E 01       	ld	l,0x01
+2786  0ACE  18 1A       	jr	l_game_check_cell_00106
+2787  0AD0              l_game_check_cell_00102:
+2788  0AD0  21 00 00    	ld	hl,_scr_map
+2789  0AD3  09          	add	hl, bc
+2790  0AD4  5E          	ld	e, (hl)
+2791  0AD5  16 00       	ld	d,0x00
+2792  0AD7  21 00 00    	ld	hl,_tile_class
+2793  0ADA  19          	add	hl, de
+2794  0ADB  5E          	ld	e, (hl)
+2795  0ADC  ED 43 00 00 	ld	(_index1),bc
+2796  0AE0  7B          	ld	a,e
+2797  0AE1  D6 03       	sub	a,0x03
+2798  0AE3  28 04       	jr	Z,l_game_check_cell_00104
+2799  0AE5  2E 00       	ld	l,0x00
+2800  0AE7  18 01       	jr	l_game_check_cell_00106
+2801  0AE9              l_game_check_cell_00104:
+2802  0AE9  6B          	ld	l, e
+2803  0AEA              l_game_check_cell_00106:
+2804  0AEA  C9          	ret
+2805  0AEB              	SECTION code_compiler
+2806  0AEB              ;	---------------------------------
+2807  0AEB              ; Function game_paint_attrib
+2808  0AEB              ; ---------------------------------
+2809  0AEB              _game_paint_attrib:
+2810  0AEB  CD 00 00    	call	___sdcc_enter_ix
+2811  0AEE  DD 46 06    	ld	b,(ix+6)
+2812  0AF1              l_game_paint_attrib_00103:
+2813  0AF1  78          	ld	a, b
+2814  0AF2  DD 96 07    	sub	a,(ix+7)
+2815  0AF5  30 13       	jr	NC,l_game_paint_attrib_00105
+2816  0AF7  DD 5E 04    	ld	e,(ix+4)
+2817  0AFA  DD 56 05    	ld	d,(ix+5)
+2818  0AFD  C5          	push	bc
+2819  0AFE  DD 4E 08    	ld	c,(ix+8)
+2820  0B01  C5          	push	bc
+2821  0B02  D5          	push	de
+2822  0B03  CD 00 00    	call	_NIRVANAP_paintC_callee
+2823  0B06  C1          	pop	bc
+2824  0B07  04          	inc	b
+2825  0B08  18 E7       	jr	l_game_paint_attrib_00103
+2826  0B0A              l_game_paint_attrib_00105:
+2827  0B0A  DD E1       	pop	ix
+2828  0B0C  C9          	ret
+2829  0B0D              	SECTION code_compiler
+2830  0B0D              ;	---------------------------------
+2831  0B0D              ; Function game_colour_message
+2832  0B0D              ; ---------------------------------
+2833  0B0D              _game_colour_message:
+2834  0B0D  CD 00 00    	call	___sdcc_enter_ix
+2835  0B10  F5          	push	af
+2836  0B11  F5          	push	af
+2837  0B12  F5          	push	af
+2838  0B13  F5          	push	af
+2839  0B14  D1          	pop	de
+2840  0B15  21 00 00    	ld	hl,_v0
+2841  0B18  36 01       	ld	(hl),0x01
+2842  0B1A  2A 00 00    	ld	hl,(_curr_time)
+2843  0B1D  22 00 00    	ld	(_frame_time),hl
+2844  0B20  E5          	push	hl
+2845  0B21  DD 7E 04    	ld	a,(ix+4)
+2846  0B24  4D          	ld	c,l
+2847  0B25  07          	rlca
+2848  0B26  07          	rlca
+2849  0B27  07          	rlca
+2850  0B28  E6 F8       	and	a,0xf8
+2851  0B2A  DD 77 FF    	ld	(ix-1),a
+2852  0B2D  C6 08       	add	a,0x08
+2853  0B2F  DD 77 FC    	ld	(ix-4),a
+2854  0B32  DD 77 FB    	ld	(ix-5),a
+2855  0B35              l_game_colour_message_00112:
+2856  0B35  3A 00 00    	ld	a,(_v0)
+2857  0B38  B7          	or	a, a
+2858  0B39  CA D5 0B    	jp	Z, l_game_colour_message_00114
+2859  0B3C  DD 46 07    	ld	b,(ix+7)
+2860  0B3F  21 00 00    	ld	hl,0x0000
+2861  0B42  39          	add	hl, sp
+2862  0B43  EB          	ex	de,hl
+2863  0B44  C5          	push	bc
+2864  0B45  33          	inc	sp
+2865  0B46  D5          	push	de
+2866  0B47  CD 4B 0C    	call	_game_check_time
+2867  0B4A  F1          	pop	af
+2868  0B4B  33          	inc	sp
+2869  0B4C  7D          	ld	a, l
+2870  0B4D  B7          	or	a, a
+2871  0B4E  C2 D5 0B    	jp	NZ, l_game_colour_message_00114
+2872  0B51  3E 05       	ld	a,0x05
+2873  0B53  F5          	push	af
+2874  0B54  33          	inc	sp
+2875  0B55  21 00 00    	ld	hl,_frame_time
+2876  0B58  E5          	push	hl
+2877  0B59  CD 4B 0C    	call	_game_check_time
+2878  0B5C  F1          	pop	af
+2879  0B5D  33          	inc	sp
+2880  0B5E  DD 75 FA    	ld	(ix-6),l
+2881  0B61  7D          	ld	a, l
+2882  0B62  B7          	or	a, a
+2883  0B63  28 4A       	jr	Z,l_game_colour_message_00105
+2884  0B65  2A 00 00    	ld	hl,(_curr_time)
+2885  0B68  DD 74 FE    	ld	(ix-2),h
+2886  0B6B  DD 75 FD    	ld	(ix-3),l
+2887  0B6E  7D          	ld	a, l
+2888  0B6F  21 00 00    	ld	hl,_frame_time
+2889  0B72  77          	ld	(hl), a
+2890  0B73  DD 7E FE    	ld	a,(ix-2)
+2891  0B76  23          	inc	hl
+2892  0B77  77          	ld	(hl), a
+2893  0B78  3A 00 00    	ld	a,(_game_over)
+2894  0B7B  B7          	or	a, a
+2895  0B7C  28 18       	jr	Z,l_game_colour_message_00102
+2896  0B7E  DD 66 FB    	ld	h,(ix-5)
+2897  0B81  DD 6E 06    	ld	l,(ix+6)
+2898  0B84  E5          	push	hl
+2899  0B85  DD 7E 05    	ld	a,(ix+5)
+2900  0B88  F5          	push	af
+2901  0B89  33          	inc	sp
+2902  0B8A  21 00 00    	ld	hl,_attrib_hl
+2903  0B8D  E5          	push	hl
+2904  0B8E  CD EB 0A    	call	_game_paint_attrib
+2905  0B91  F1          	pop	af
+2906  0B92  F1          	pop	af
+2907  0B93  33          	inc	sp
+2908  0B94  18 19       	jr	l_game_colour_message_00105
+2909  0B96              l_game_colour_message_00102:
+2910  0B96  DD 66 FC    	ld	h,(ix-4)
+2911  0B99  DD 6E 06    	ld	l,(ix+6)
+2912  0B9C  E5          	push	hl
+2913  0B9D  DD 7E 05    	ld	a,(ix+5)
+2914  0BA0  F5          	push	af
+2915  0BA1  33          	inc	sp
+2916  0BA2  21 00 00    	ld	hl,_attrib_osd
+2917  0BA5  E5          	push	hl
+2918  0BA6  CD EB 0A    	call	_game_paint_attrib
+2919  0BA9  F1          	pop	af
+2920  0BAA  F1          	pop	af
+2921  0BAB  33          	inc	sp
+2922  0BAC  CD F3 0C    	call	_game_rotate_attrib_osd
+2923  0BAF              l_game_colour_message_00105:
+2924  0BAF  DD 7E 09    	ld	a,(ix+9)
+2925  0BB2  B7          	or	a, a
+2926  0BB3  CA 35 0B    	jp	Z, l_game_colour_message_00112
+2927  0BB6              l_game_colour_message_00106:
+2928  0BB6  21 00 00    	ld	hl,_k1
+2929  0BB9  E5          	push	hl
+2930  0BBA  2A 00 00    	ld	hl,(_joyfunc1)
+2931  0BBD  CD 00 00    	call	___sdcc_call_hl
+2932  0BC0  F1          	pop	af
+2933  0BC1  DD 74 FE    	ld	(ix-2),h
+2934  0BC4  DD 75 FD    	ld	(ix-3),l
+2935  0BC7  7C          	ld	a,h
+2936  0BC8  DD B6 FD    	or	a,(ix-3)
+2937  0BCB  CA 35 0B    	jp	Z, l_game_colour_message_00112
+2938  0BCE  21 00 00    	ld	hl,_v0
+2939  0BD1  36 00       	ld	(hl),0x00
+2940  0BD3  18 E1       	jr	l_game_colour_message_00106
+2941  0BD5              l_game_colour_message_00114:
+2942  0BD5  DD 7E 06    	ld	a,(ix+6)
+2943  0BD8  DD 96 05    	sub	a,(ix+5)
+2944  0BDB  4F          	ld	c, a
+2945  0BDC  3A 00 00    	ld	a,(_game_over)
+2946  0BDF  B7          	or	a, a
+2947  0BE0  28 2F       	jr	Z,l_game_colour_message_00118
+2948  0BE2  21 00 00    	ld	hl,_v1
+2949  0BE5  71          	ld	(hl), c
+2950  0BE6  21 00 00    	ld	hl,_v0
+2951  0BE9  36 00       	ld	(hl),0x00
+2952  0BEB              l_game_colour_message_00121:
+2953  0BEB  3A 00 00    	ld	a,(_v0)
+2954  0BEE  21 00 00    	ld	hl,_v1
+2955  0BF1  96          	sub	a, (hl)
+2956  0BF2  30 52       	jr	NC,l_game_colour_message_00126
+2957  0BF4  DD 7E 05    	ld	a,(ix+5)
+2958  0BF7  21 00 00    	ld	hl,_v0
+2959  0BFA  86          	add	a, (hl)
+2960  0BFB  4F          	ld	c, a
+2961  0BFC  21 24 04    	ld	hl,___str_45
+2962  0BFF  E5          	push	hl
+2963  0C00  79          	ld	a, c
+2964  0C01  F5          	push	af
+2965  0C02  33          	inc	sp
+2966  0C03  DD 7E 04    	ld	a,(ix+4)
+2967  0C06  F5          	push	af
+2968  0C07  33          	inc	sp
+2969  0C08  CD 00 00    	call	_zx_print_str
+2970  0C0B  21 00 00    	ld	hl,_v0
+2971  0C0E  34          	inc	(hl)
+2972  0C0F  18 DA       	jr	l_game_colour_message_00121
+2973  0C11              l_game_colour_message_00118:
+2974  0C11  21 00 00    	ld	hl,_v1
+2975  0C14  71          	ld	(hl), c
+2976  0C15  DD 7E FF    	ld	a,(ix-1)
+2977  0C18  32 00 00    	ld	(_s_lin0),a
+2978  0C1B  DD 7E 05    	ld	a,(ix+5)
+2979  0C1E  CB 3F       	srl	a
+2980  0C20  87          	add	a, a
+2981  0C21  32 00 00    	ld	(_s_col1),a
+2982  0C24  21 00 00    	ld	hl,_v2
+2983  0C27  36 00       	ld	(hl),0x00
+2984  0C29              l_game_colour_message_00124:
+2985  0C29  3A 00 00    	ld	a,(_v2)
+2986  0C2C  21 00 00    	ld	hl,_v1
+2987  0C2F  96          	sub	a, (hl)
+2988  0C30  30 14       	jr	NC,l_game_colour_message_00126
+2989  0C32  3A 00 00    	ld	a,(_s_col1)
+2990  0C35  21 00 00    	ld	hl,_v2
+2991  0C38  86          	add	a, (hl)
+2992  0C39  32 00 00    	ld	(_s_col0),a
+2993  0C3C  CD 00 00    	call	_spr_back_repaint
+2994  0C3F  21 00 00    	ld	hl,_v2
+2995  0C42  34          	inc	(hl)
+2996  0C43  34          	inc	(hl)
+2997  0C44  18 E3       	jr	l_game_colour_message_00124
+2998  0C46              l_game_colour_message_00126:
+2999  0C46  DD F9       	ld	sp, ix
+3000  0C48  DD E1       	pop	ix
+3001  0C4A  C9          	ret
+3002  0C4B              	SECTION rodata_compiler
+3003  0424              ___str_45:
+3004  0424  20          	DEFM " "
+3005  0425  00          	DEFB 0x00
+3006  0426              	SECTION code_compiler
+3007  0C4B              ;	---------------------------------
+3008  0C4B              ; Function game_check_time
+3009  0C4B              ; ---------------------------------
+3010  0C4B              _game_check_time:
+3011  0C4B  CD 00 00    	call	___sdcc_enter_ix
+3012  0C4E  2A 00 00    	ld	hl,(_curr_time)
+3013  0C51  4D          	ld	c, l
+3014  0C52  DD 6E 04    	ld	l,(ix+4)
+3015  0C55  44          	ld	b,h
+3016  0C56  DD 66 05    	ld	h,(ix+5)
+3017  0C59  5E          	ld	e, (hl)
+3018  0C5A  23          	inc	hl
+3019  0C5B  56          	ld	d, (hl)
+3020  0C5C  79          	ld	a, c
+3021  0C5D  93          	sub	a, e
+3022  0C5E  4F          	ld	c, a
+3023  0C5F  78          	ld	a, b
+3024  0C60  9A          	sbc	a, d
+3025  0C61  47          	ld	b, a
+3026  0C62  DD 7E 06    	ld	a,(ix+6)
+3027  0C65  16 00       	ld	d,0x00
+3028  0C67  91          	sub	a, c
+3029  0C68  7A          	ld	a, d
+3030  0C69  98          	sbc	a, b
+3031  0C6A  30 04       	jr	NC,l_game_check_time_00102
+3032  0C6C  2E 01       	ld	l,0x01
+3033  0C6E  18 02       	jr	l_game_check_time_00104
+3034  0C70              l_game_check_time_00102:
+3035  0C70  2E 00       	ld	l,0x00
+3036  0C72              l_game_check_time_00104:
+3037  0C72  DD E1       	pop	ix
+3038  0C74  C9          	ret
+3039  0C75              	SECTION code_compiler
+3040  0C75              ;	---------------------------------
+3041  0C75              ; Function game_key_paint
+3042  0C75              ; ---------------------------------
+3043  0C75              _game_key_paint:
+3044  0C75  3A 00 00    	ld	a,(_game_playing)
+3045  0C78  B7          	or	a, a
+3046  0C79  CA F2 0C    	jp	Z, l_game_key_paint_00117
+3047  0C7C  3A 00 00    	ld	a,(_obj_count)
+3048  0C7F  B7          	or	a, a
+3049  0C80  28 70       	jr	Z,l_game_key_paint_00117
+3050  0C82  21 00 00    	ld	hl,_key_last
+3051  0C85  4E          	ld	c, (hl)
+3052  0C86  59          	ld	e, c
+3053  0C87              l_game_key_paint_00105:
+3054  0C87  7B          	ld	a, e
+3055  0C88  D6 08       	sub	a,0x08
+3056  0C8A  30 4A       	jr	NC,l_game_key_paint_00107
+3057  0C8C  16 00       	ld	d,0x00
+3058  0C8E  21 00 00    	ld	hl,_obj_col
+3059  0C91  19          	add	hl, de
+3060  0C92  7E          	ld	a,(hl)
+3061  0C93  47          	ld	b,a
+3062  0C94  3C          	inc	a
+3063  0C95  28 3B       	jr	Z,l_game_key_paint_00104
+3064  0C97  11 00 00    	ld	de,_obj_lin+0
+3065  0C9A  69          	ld	l,c
+3066  0C9B  26 00       	ld	h,0x00
+3067  0C9D  19          	add	hl, de
+3068  0C9E  5E          	ld	e, (hl)
+3069  0C9F  C5          	push	bc
+3070  0CA0  C5          	push	bc
+3071  0CA1  33          	inc	sp
+3072  0CA2  7B          	ld	a, e
+3073  0CA3  F5          	push	af
+3074  0CA4  33          	inc	sp
+3075  0CA5  21 00 00    	ld	hl,_key_attrib
+3076  0CA8  E5          	push	hl
+3077  0CA9  CD 00 00    	call	_NIRVANAP_paintC_callee
+3078  0CAC  C1          	pop	bc
+3079  0CAD  3A 00 00    	ld	a,(_map_paper)
+3080  0CB0  21 00 00    	ld	hl,_key_ink
+3081  0CB3  B6          	or	a, (hl)
+3082  0CB4  32 00 00    	ld	(_key_attrib),a
+3083  0CB7  32 01 00    	ld	((_key_attrib + 0x0001)),a
+3084  0CBA  32 02 00    	ld	((_key_attrib + 0x0002)),a
+3085  0CBD  32 03 00    	ld	((_key_attrib + 0x0003)),a
+3086  0CC0  21 00 00    	ld	hl,_key_ink
+3087  0CC3  34          	inc	(hl)
+3088  0CC4  3E 06       	ld	a,0x06
+3089  0CC6  96          	sub	a, (hl)
+3090  0CC7  30 02       	jr	NC,l_game_key_paint_00102
+3091  0CC9  36 03       	ld	(hl),0x03
+3092  0CCB              l_game_key_paint_00102:
+3093  0CCB  79          	ld	a, c
+3094  0CCC  3C          	inc	a
+3095  0CCD  32 00 00    	ld	(_key_last),a
+3096  0CD0  18 04       	jr	l_game_key_paint_00107
+3097  0CD2              l_game_key_paint_00104:
+3098  0CD2  1C          	inc	e
+3099  0CD3  4B          	ld	c, e
+3100  0CD4  18 B1       	jr	l_game_key_paint_00105
+3101  0CD6              l_game_key_paint_00107:
+3102  0CD6  79          	ld	a, c
+3103  0CD7  D6 08       	sub	a,0x08
+3104  0CD9  38 17       	jr	C,l_game_key_paint_00117
+3105  0CDB  3A 00 00    	ld	a,(_obj_count)
+3106  0CDE  D6 04       	sub	a,0x04
+3107  0CE0  20 0B       	jr	NZ,l_game_key_paint_00111
+3108  0CE2  21 00 00    	ld	hl,_key_ink
+3109  0CE5  34          	inc	(hl)
+3110  0CE6  3E 06       	ld	a,0x06
+3111  0CE8  96          	sub	a, (hl)
+3112  0CE9  30 02       	jr	NC,l_game_key_paint_00111
+3113  0CEB  36 03       	ld	(hl),0x03
+3114  0CED              l_game_key_paint_00111:
+3115  0CED  21 00 00    	ld	hl,_key_last
+3116  0CF0  36 00       	ld	(hl),0x00
+3117  0CF2              l_game_key_paint_00117:
+3118  0CF2  C9          	ret
+3119  0CF3              	SECTION code_compiler
+3120  0CF3              ;	---------------------------------
+3121  0CF3              ; Function game_rotate_attrib_osd
+3122  0CF3              ; ---------------------------------
+3123  0CF3              _game_rotate_attrib_osd:
+3124  0CF3  3A 00 00    	ld	a,(_game_attrib_osd)
+3125  0CF6  D6 07       	sub	a,0x07
+3126  0CF8  20 05       	jr	NZ,l_game_rotate_attrib_osd_00102
+3127  0CFA  21 00 00    	ld	hl,_game_attrib_osd
+3128  0CFD  36 01       	ld	(hl),0x01
+3129  0CFF              l_game_rotate_attrib_osd_00102:
+3130  0CFF  21 00 00    	ld	hl,_game_attrib_osd
+3131  0D02  34          	inc	(hl)
+3132  0D03  01 00 00    	ld	bc,_attrib_osd+0
+3133  0D06  0A          	ld	a, (bc)
+3134  0D07  32 00 00    	ld	(_v0),a
+3135  0D0A  3A 03 00    	ld	a,(_attrib_osd + 0x0003)
+3136  0D0D  02          	ld	(bc), a
+3137  0D0E  59          	ld	e, c
+3138  0D0F  50          	ld	d, b
+3139  0D10  13          	inc	de
+3140  0D11  03          	inc	bc
+3141  0D12  03          	inc	bc
+3142  0D13  0A          	ld	a, (bc)
+3143  0D14  12          	ld	(de), a
+3144  0D15  02          	ld	(bc), a
+3145  0D16  3A 00 00    	ld	a,(_v0)
+3146  0D19  32 03 00    	ld	((_attrib_osd + 0x0003)),a
+3147  0D1C  C9          	ret
+3148  0D1D              	SECTION code_compiler
+3149  0D1D              ;	---------------------------------
+3150  0D1D              ; Function game_attribs
+3151  0D1D              ; ---------------------------------
+3152  0D1D              _game_attribs:
+3153  0D1D  01 00 00    	ld	bc,_attrib+0
+3154  0D20  21 00 00    	ld	hl,_map_paper
+3155  0D23  7E          	ld	a, (hl)
+3156  0D24  F6 06       	or	a,0x06
+3157  0D26  02          	ld	(bc), a
+3158  0D27  59          	ld	e, c
+3159  0D28  50          	ld	d, b
+3160  0D29  13          	inc	de
+3161  0D2A  7E          	ld	a, (hl)
+3162  0D2B  F6 46       	or	a,0x46
+3163  0D2D  12          	ld	(de), a
+3164  0D2E  7E          	ld	a, (hl)
+3165  0D2F  F6 07       	or	a,0x07
+3166  0D31  32 02 00    	ld	((_attrib + 0x0002)),a
+3167  0D34  03          	inc	bc
+3168  0D35  03          	inc	bc
+3169  0D36  03          	inc	bc
+3170  0D37  21 00 00    	ld	hl,_map_paper
+3171  0D3A  7E          	ld	a, (hl)
+3172  0D3B  F6 06       	or	a,0x06
+3173  0D3D  02          	ld	(bc), a
+3174  0D3E  01 00 00    	ld	bc,_attrib_hl+0
+3175  0D41  7E          	ld	a, (hl)
+3176  0D42  F6 15       	or	a,0x15
+3177  0D44  02          	ld	(bc), a
+3178  0D45  59          	ld	e, c
+3179  0D46  50          	ld	d, b
+3180  0D47  13          	inc	de
+3181  0D48  7E          	ld	a, (hl)
+3182  0D49  F6 55       	or	a,0x55
+3183  0D4B  12          	ld	(de), a
+3184  0D4C  7E          	ld	a, (hl)
+3185  0D4D  F6 17       	or	a,0x17
+3186  0D4F  32 02 00    	ld	((_attrib_hl + 0x0002)),a
+3187  0D52  03          	inc	bc
+3188  0D53  03          	inc	bc
+3189  0D54  03          	inc	bc
+3190  0D55  3A 00 00    	ld	a,(_map_paper)
+3191  0D58  F6 15       	or	a,0x15
+3192  0D5A  02          	ld	(bc), a
+3193  0D5B  21 70 71    	ld	hl,0x7170
+3194  0D5E  22 00 00    	ld	(_attrib_osd),hl
+3195  0D61  21 71 73    	ld	hl,0x7371
+3196  0D64  22 02 00    	ld	(_attrib_osd + 2),hl
+3197  0D67  C9          	ret
+3198  0D68              	SECTION code_compiler
+3199  0D68              ;	---------------------------------
+3200  0D68              ; Function game_page_map
+3201  0D68              ; ---------------------------------
+3202  0D68              _game_page_map:
+3203  0D68  CD 00 00    	call	___sdcc_enter_ix
+3204  0D6B  21 B5 FF    	ld	hl, -75
+3205  0D6E  39          	add	hl, sp
+3206  0D6F  F9          	ld	sp, hl
+3207  0D70  F3          	di
+3208  0D71  21 00 00    	ld	hl,_game_world
+3209  0D74  4E          	ld	c, (hl)
+3210  0D75  21 00 00    	ld	hl,_scr_curr
+3211  0D78  46          	ld	b, (hl)
+3212  0D79  DD 70 E8    	ld	(ix-24),b
+3213  0D7C  DD 70 E7    	ld	(ix-25),b
+3214  0D7F  3E 13       	ld	a,0x13
+3215  0D81  90          	sub	a, b
+3216  0D82  30 06       	jr	NC,l_game_page_map_00102
+3217  0D84  78          	ld	a, b
+3218  0D85  C6 EC       	add	a,0xec
+3219  0D87  DD 77 E7    	ld	(ix-25),a
+3220  0D8A              l_game_page_map_00102:
+3221  0D8A  79          	ld	a, c
+3222  0D8B  07          	rlca
+3223  0D8C  07          	rlca
+3224  0D8D  07          	rlca
+3225  0D8E  07          	rlca
+3226  0D8F  E6 F0       	and	a,0xf0
+3227  0D91  80          	add	a, b
+3228  0D92  DD 77 E6    	ld	(ix-26),a
+3229  0D95  4F          	ld	c,a
+3230  0D96  3A 00 00    	ld	a,(_game_tileset)
+3231  0D99  DD 77 E5    	ld	(ix-27),a
+3232  0D9C  C5          	push	bc
+3233  0D9D  3E 06       	ld	a,0x06
+3234  0D9F  F5          	push	af
+3235  0DA0  33          	inc	sp
+3236  0DA1  CD 5D 16    	call	_page
+3237  0DA4  33          	inc	sp
+3238  0DA5  C1          	pop	bc
+3239  0DA6  04          	inc	b
+3240  0DA7  20 03       	jr	NZ,l_game_page_map_00104
+3241  0DA9  DD 71 E6    	ld	(ix-26),c
+3242  0DAC              l_game_page_map_00104:
+3243  0DAC  01 00 00    	ld	bc,_paper0+0
+3244  0DAF  DD 6E E6    	ld	l,(ix-26)
+3245  0DB2  26 00       	ld	h,0x00
+3246  0DB4  09          	add	hl, bc
+3247  0DB5  7E          	ld	a, (hl)
+3248  0DB6  DD 77 E9    	ld	(ix-23),a
+3249  0DB9  AF          	xor	a, a
+3250  0DBA  F5          	push	af
+3251  0DBB  33          	inc	sp
+3252  0DBC  CD 5D 16    	call	_page
+3253  0DBF  33          	inc	sp
+3254  0DC0  DD 6E E7    	ld	l,(ix-25)
+3255  0DC3  26 00       	ld	h,0x00
+3256  0DC5  4D          	ld	c,l
+3257  0DC6  44          	ld	b,h
+3258  0DC7  29          	add	hl, hl
+3259  0DC8  09          	add	hl, bc
+3260  0DC9  29          	add	hl, hl
+3261  0DCA  29          	add	hl, hl
+3262  0DCB  29          	add	hl, hl
+3263  0DCC  29          	add	hl, hl
+3264  0DCD  DD 75 F6    	ld	(ix-10),l
+3265  0DD0  DD 74 F7    	ld	(ix-9),h
+3266  0DD3  3E 03       	ld	a,0x03
+3267  0DD5  F5          	push	af
+3268  0DD6  33          	inc	sp
+3269  0DD7  CD 5D 16    	call	_page
+3270  0DDA  33          	inc	sp
+3271  0DDB  21 00 00    	ld	hl,0x0000
+3272  0DDE  39          	add	hl, sp
+3273  0DDF  DD 75 FE    	ld	(ix-2),l
+3274  0DE2  DD 74 FF    	ld	(ix-1),h
+3275  0DE5  DD 75 FC    	ld	(ix-4),l
+3276  0DE8  DD 74 FD    	ld	(ix-3),h
+3277  0DEB  DD 36 F2 00 	ld	(ix-14),0x00
+3278  0DEF  DD 36 F3 00 	ld	(ix-13),0x00
+3279  0DF3              l_game_page_map_00108:
+3280  0DF3  DD 7E F2    	ld	a,(ix-14)
+3281  0DF6  D6 30       	sub	a,0x30
+3282  0DF8  DD 7E F3    	ld	a,(ix-13)
+3283  0DFB  DE 00       	sbc	a,0x00
+3284  0DFD  30 64       	jr	NC,l_game_page_map_00110
+3285  0DFF  DD 7E F6    	ld	a,(ix-10)
+3286  0E02  DD 86 F2    	add	a,(ix-14)
+3287  0E05  DD 77 FA    	ld	(ix-6),a
+3288  0E08  DD 7E F7    	ld	a,(ix-9)
+3289  0E0B  DD 8E F3    	adc	a,(ix-13)
+3290  0E0E  DD 77 FB    	ld	(ix-5),a
+3291  0E11  DD 7E E5    	ld	a,(ix-27)
+3292  0E14  B7          	or	a, a
+3293  0E15  20 1E       	jr	NZ,l_game_page_map_00106
+3294  0E17  DD 7E FC    	ld	a,(ix-4)
+3295  0E1A  DD 86 F2    	add	a,(ix-14)
+3296  0E1D  4F          	ld	c, a
+3297  0E1E  DD 7E FD    	ld	a,(ix-3)
+3298  0E21  DD 8E F3    	adc	a,(ix-13)
+3299  0E24  47          	ld	b, a
+3300  0E25  3E 00       	ld	a, +((_hidoors1) & 0xFF)
+3301  0E27  DD 86 FA    	add	a,(ix-6)
+3302  0E2A  5F          	ld	e, a
+3303  0E2B  3E 00       	ld	a, +((_hidoors1) / 256)
+3304  0E2D  DD 8E FB    	adc	a,(ix-5)
+3305  0E30  57          	ld	d, a
+3306  0E31  1A          	ld	a, (de)
+3307  0E32  02          	ld	(bc), a
+3308  0E33  18 24       	jr	l_game_page_map_00107
+3309  0E35              l_game_page_map_00106:
+3310  0E35  DD 7E FE    	ld	a,(ix-2)
+3311  0E38  DD 86 F2    	add	a,(ix-14)
+3312  0E3B  DD 77 F8    	ld	(ix-8),a
+3313  0E3E  DD 7E FF    	ld	a,(ix-1)
+3314  0E41  DD 8E F3    	adc	a,(ix-13)
+3315  0E44  DD 77 F9    	ld	(ix-7),a
+3316  0E47  01 00 00    	ld	bc,_hidoors2
+3317  0E4A  DD 6E FA    	ld	l,(ix-6)
+3318  0E4D  DD 66 FB    	ld	h,(ix-5)
+3319  0E50  09          	add	hl,bc
+3320  0E51  4E          	ld	c, (hl)
+3321  0E52  DD 6E F8    	ld	l,(ix-8)
+3322  0E55  DD 66 F9    	ld	h,(ix-7)
+3323  0E58  71          	ld	(hl), c
+3324  0E59              l_game_page_map_00107:
+3325  0E59  DD 34 F2    	inc	(ix-14)
+3326  0E5C  20 95       	jr	NZ,l_game_page_map_00108
+3327  0E5E  DD 34 F3    	inc	(ix-13)
+3328  0E61  18 90       	jr	l_game_page_map_00108
+3329  0E63              l_game_page_map_00110:
+3330  0E63  AF          	xor	a, a
+3331  0E64  F5          	push	af
+3332  0E65  33          	inc	sp
+3333  0E66  CD 5D 16    	call	_page
+3334  0E69  33          	inc	sp
+3335  0E6A  21 D0 11    	ld	hl,0x11d0
+3336  0E6D  22 00 00    	ld	(_index1),hl
+3337  0E70  DD 4E FE    	ld	c,(ix-2)
+3338  0E73  DD 46 FF    	ld	b,(ix-1)
+3339  0E76  11 00 00    	ld	de,0x0000
+3340  0E79              l_game_page_map_00111:
+3341  0E79  7B          	ld	a, e
+3342  0E7A  D6 30       	sub	a,0x30
+3343  0E7C  7A          	ld	a, d
+3344  0E7D  DE 00       	sbc	a,0x00
+3345  0E7F  30 1E       	jr	NC,l_game_page_map_00113
+3346  0E81  21 D0 11    	ld	hl,0x11d0
+3347  0E84  19          	add	hl, de
+3348  0E85  3E 00       	ld	a, +((_btiles) & 0xFF)
+3349  0E87  85          	add	a, l
+3350  0E88  DD 77 F8    	ld	(ix-8),a
+3351  0E8B  3E 00       	ld	a, +((_btiles) / 256)
+3352  0E8D  8C          	adc	a, h
+3353  0E8E  DD 77 F9    	ld	(ix-7),a
+3354  0E91  69          	ld	l, c
+3355  0E92  60          	ld	h, b
+3356  0E93  19          	add	hl, de
+3357  0E94  7E          	ld	a, (hl)
+3358  0E95  DD 6E F8    	ld	l,(ix-8)
+3359  0E98  DD 66 F9    	ld	h,(ix-7)
+3360  0E9B  77          	ld	(hl), a
+3361  0E9C  13          	inc	de
+3362  0E9D  18 DA       	jr	l_game_page_map_00111
+3363  0E9F              l_game_page_map_00113:
+3364  0E9F  DD 6E E7    	ld	l,(ix-25)
+3365  0EA2  26 00       	ld	h,0x00
+3366  0EA4  4D          	ld	c,l
+3367  0EA5  44          	ld	b,h
+3368  0EA6  29          	add	hl, hl
+3369  0EA7  09          	add	hl, bc
+3370  0EA8  AF          	xor	a,a
+3371  0EA9  CB 3C       	srl	h
+3372  0EAB  CB 1D       	rr	l
+3373  0EAD  1F          	rra
+3374  0EAE  CB 3C       	srl	h
+3375  0EB0  CB 1D       	rr	l
+3376  0EB2  1F          	rra
+3377  0EB3  DD 77 EC    	ld	(ix-20),a
+3378  0EB6  DD 75 ED    	ld	(ix-19),l
+3379  0EB9  DD 7E FE    	ld	a,(ix-2)
+3380  0EBC  DD 77 F8    	ld	(ix-8),a
+3381  0EBF  DD 7E FF    	ld	a,(ix-1)
+3382  0EC2  DD 77 F9    	ld	(ix-7),a
+3383  0EC5  DD 7E FE    	ld	a,(ix-2)
+3384  0EC8  DD 77 FA    	ld	(ix-6),a
+3385  0ECB  DD 7E FF    	ld	a,(ix-1)
+3386  0ECE  DD 77 FB    	ld	(ix-5),a
+3387  0ED1  DD 7E FE    	ld	a,(ix-2)
+3388  0ED4  DD 77 FC    	ld	(ix-4),a
+3389  0ED7  DD 7E FF    	ld	a,(ix-1)
+3390  0EDA  DD 77 FD    	ld	(ix-3),a
+3391  0EDD  DD 36 EE 00 	ld	(ix-18),0x00
+3392  0EE1  DD 36 EF 00 	ld	(ix-17),0x00
+3393  0EE5              l_game_page_map_00123:
+3394  0EE5  DD 7E EE    	ld	a,(ix-18)
+3395  0EE8  D6 C0       	sub	a,0xc0
+3396  0EEA  DD 7E EF    	ld	a,(ix-17)
+3397  0EED  DE 00       	sbc	a,0x00
+3398  0EEF  D2 AF 0F    	jp	NC, l_game_page_map_00125
+3399  0EF2  3E 06       	ld	a,0x06
+3400  0EF4  F5          	push	af
+3401  0EF5  33          	inc	sp
+3402  0EF6  CD 5D 16    	call	_page
+3403  0EF9  33          	inc	sp
+3404  0EFA  01 00 00    	ld	bc,0x0000
+3405  0EFD              l_game_page_map_00117:
+3406  0EFD  79          	ld	a, c
+3407  0EFE  D6 30       	sub	a,0x30
+3408  0F00  78          	ld	a, b
+3409  0F01  DE 00       	sbc	a,0x00
+3410  0F03  30 50       	jr	NC,l_game_page_map_00119
+3411  0F05  DD 6E EC    	ld	l,(ix-20)
+3412  0F08  DD 66 ED    	ld	h,(ix-19)
+3413  0F0B  09          	add	hl, bc
+3414  0F0C  7D          	ld	a, l
+3415  0F0D  DD 86 EE    	add	a,(ix-18)
+3416  0F10  5F          	ld	e, a
+3417  0F11  7C          	ld	a, h
+3418  0F12  DD 8E EF    	adc	a,(ix-17)
+3419  0F15  57          	ld	d, a
+3420  0F16  DD 7E E5    	ld	a,(ix-27)
+3421  0F19  B7          	or	a, a
+3422  0F1A  20 1C       	jr	NZ,l_game_page_map_00115
+3423  0F1C  DD 7E FA    	ld	a,(ix-6)
+3424  0F1F  81          	add	a, c
+3425  0F20  DD 77 FE    	ld	(ix-2),a
+3426  0F23  DD 7E FB    	ld	a,(ix-5)
+3427  0F26  88          	adc	a, b
+3428  0F27  DD 77 FF    	ld	(ix-1),a
+3429  0F2A  21 00 00    	ld	hl,_hitiles1
+3430  0F2D  19          	add	hl, de
+3431  0F2E  5E          	ld	e, (hl)
+3432  0F2F  DD 6E FE    	ld	l,(ix-2)
+3433  0F32  DD 66 FF    	ld	h,(ix-1)
+3434  0F35  73          	ld	(hl), e
+3435  0F36  18 1A       	jr	l_game_page_map_00116
+3436  0F38              l_game_page_map_00115:
+3437  0F38  DD 7E F8    	ld	a,(ix-8)
+3438  0F3B  81          	add	a, c
+3439  0F3C  DD 77 FE    	ld	(ix-2),a
+3440  0F3F  DD 7E F9    	ld	a,(ix-7)
+3441  0F42  88          	adc	a, b
+3442  0F43  DD 77 FF    	ld	(ix-1),a
+3443  0F46  21 00 00    	ld	hl,_hitiles2
+3444  0F49  19          	add	hl, de
+3445  0F4A  5E          	ld	e, (hl)
+3446  0F4B  DD 6E FE    	ld	l,(ix-2)
+3447  0F4E  DD 66 FF    	ld	h,(ix-1)
+3448  0F51  73          	ld	(hl), e
+3449  0F52              l_game_page_map_00116:
+3450  0F52  03          	inc	bc
+3451  0F53  18 A8       	jr	l_game_page_map_00117
+3452  0F55              l_game_page_map_00119:
+3453  0F55  AF          	xor	a, a
+3454  0F56  F5          	push	af
+3455  0F57  33          	inc	sp
+3456  0F58  CD 5D 16    	call	_page
+3457  0F5B  33          	inc	sp
+3458  0F5C  DD 36 F2 00 	ld	(ix-14),0x00
+3459  0F60  DD 36 F3 00 	ld	(ix-13),0x00
+3460  0F64              l_game_page_map_00120:
+3461  0F64  DD 7E F2    	ld	a,(ix-14)
+3462  0F67  D6 30       	sub	a,0x30
+3463  0F69  DD 7E F3    	ld	a,(ix-13)
+3464  0F6C  DE 00       	sbc	a,0x00
+3465  0F6E  30 2C       	jr	NC,l_game_page_map_00122
+3466  0F70  DD 7E EE    	ld	a,(ix-18)
+3467  0F73  DD 86 F2    	add	a,(ix-14)
+3468  0F76  4F          	ld	c, a
+3469  0F77  DD 7E EF    	ld	a,(ix-17)
+3470  0F7A  DD 8E F3    	adc	a,(ix-13)
+3471  0F7D  47          	ld	b, a
+3472  0F7E  21 00 00    	ld	hl,_btiles
+3473  0F81  09          	add	hl,bc
+3474  0F82  DD 7E FC    	ld	a,(ix-4)
+3475  0F85  DD 86 F2    	add	a,(ix-14)
+3476  0F88  5F          	ld	e,a
+3477  0F89  DD 7E FD    	ld	a,(ix-3)
+3478  0F8C  DD 8E F3    	adc	a,(ix-13)
+3479  0F8F  57          	ld	d,a
+3480  0F90  1A          	ld	a,(de)
+3481  0F91  77          	ld	(hl),a
+3482  0F92  DD 34 F2    	inc	(ix-14)
+3483  0F95  20 CD       	jr	NZ,l_game_page_map_00120
+3484  0F97  DD 34 F3    	inc	(ix-13)
+3485  0F9A  18 C8       	jr	l_game_page_map_00120
+3486  0F9C              l_game_page_map_00122:
+3487  0F9C  DD 7E EE    	ld	a,(ix-18)
+3488  0F9F  C6 30       	add	a,0x30
+3489  0FA1  DD 77 EE    	ld	(ix-18),a
+3490  0FA4  DD 7E EF    	ld	a,(ix-17)
+3491  0FA7  CE 00       	adc	a,0x00
+3492  0FA9  DD 77 EF    	ld	(ix-17),a
+3493  0FAC  C3 E5 0E    	jp	l_game_page_map_00123
+3494  0FAF              l_game_page_map_00125:
+3495  0FAF  DD 36 F2 C0 	ld	(ix-14),0xc0
+3496  0FB3  DD 36 F3 00 	ld	(ix-13),0x00
+3497  0FB7              l_game_page_map_00134:
+3498  0FB7  DD 7E F2    	ld	a,(ix-14)
+3499  0FBA  D6 80       	sub	a,0x80
+3500  0FBC  DD 7E F3    	ld	a,(ix-13)
+3501  0FBF  DE 01       	sbc	a,0x01
+3502  0FC1  30 68       	jr	NC,l_game_page_map_00136
+3503  0FC3  21 30 00    	ld	hl,0x0030
+3504  0FC6  E5          	push	hl
+3505  0FC7  DD 6E F2    	ld	l,(ix-14)
+3506  0FCA  DD 66 F3    	ld	h,(ix-13)
+3507  0FCD  E5          	push	hl
+3508  0FCE  CD 00 00    	call	__moduint_callee
+3509  0FD1  7D          	ld	a,l
+3510  0FD2  32 00 00    	ld	(_v0),a
+3511  0FD5  D6 10       	sub	a,0x10
+3512  0FD7  30 0E       	jr	NC,l_game_page_map_00127
+3513  0FD9  3E 00       	ld	a, +((_btiles) & 0xFF)
+3514  0FDB  DD 86 F2    	add	a,(ix-14)
+3515  0FDE  4F          	ld	c, a
+3516  0FDF  3E 00       	ld	a, +((_btiles) / 256)
+3517  0FE1  DD 8E F3    	adc	a,(ix-13)
+3518  0FE4  47          	ld	b, a
+3519  0FE5  AF          	xor	a, a
+3520  0FE6  02          	ld	(bc), a
+3521  0FE7              l_game_page_map_00127:
+3522  0FE7  21 00 00    	ld	hl,_v0
+3523  0FEA  7E          	ld	a, (hl)
+3524  0FEB  D6 20       	sub	a,0x20
+3525  0FED  38 15       	jr	C,l_game_page_map_00129
+3526  0FEF  7E          	ld	a, (hl)
+3527  0FF0  D6 24       	sub	a,0x24
+3528  0FF2  30 10       	jr	NC,l_game_page_map_00129
+3529  0FF4  3E 00       	ld	a, +((_btiles) & 0xFF)
+3530  0FF6  DD 86 F2    	add	a,(ix-14)
+3531  0FF9  4F          	ld	c, a
+3532  0FFA  3E 00       	ld	a, +((_btiles) / 256)
+3533  0FFC  DD 8E F3    	adc	a,(ix-13)
+3534  0FFF  47          	ld	b, a
+3535  1000  DD 7E E9    	ld	a,(ix-23)
+3536  1003  02          	ld	(bc), a
+3537  1004              l_game_page_map_00129:
+3538  1004  21 00 00    	ld	hl,_v0
+3539  1007  7E          	ld	a, (hl)
+3540  1008  D6 28       	sub	a,0x28
+3541  100A  38 15       	jr	C,l_game_page_map_00132
+3542  100C  7E          	ld	a, (hl)
+3543  100D  D6 2C       	sub	a,0x2c
+3544  100F  30 10       	jr	NC,l_game_page_map_00132
+3545  1011  3E 00       	ld	a, +((_btiles) & 0xFF)
+3546  1013  DD 86 F2    	add	a,(ix-14)
+3547  1016  4F          	ld	c, a
+3548  1017  3E 00       	ld	a, +((_btiles) / 256)
+3549  1019  DD 8E F3    	adc	a,(ix-13)
+3550  101C  47          	ld	b, a
+3551  101D  DD 7E E9    	ld	a,(ix-23)
+3552  1020  02          	ld	(bc), a
+3553  1021              l_game_page_map_00132:
+3554  1021  DD 34 F2    	inc	(ix-14)
+3555  1024  20 91       	jr	NZ,l_game_page_map_00134
+3556  1026  DD 34 F3    	inc	(ix-13)
+3557  1029  18 8C       	jr	l_game_page_map_00134
+3558  102B              l_game_page_map_00136:
+3559  102B  21 61 01    	ld	hl,0x0161
+3560  102E  22 00 00    	ld	(_index1),hl
+3561  1031  DD 36 F2 00 	ld	(ix-14),0x00
+3562  1035  DD 36 F3 00 	ld	(ix-13),0x00
+3563  1039              l_game_page_map_00137:
+3564  1039  DD 7E F2    	ld	a,(ix-14)
+3565  103C  D6 10       	sub	a,0x10
+3566  103E  DD 7E F3    	ld	a,(ix-13)
+3567  1041  DE 00       	sbc	a,0x00
+3568  1043  30 33       	jr	NC,l_game_page_map_00139
+3569  1045  DD 7E F2    	ld	a,(ix-14)
+3570  1048  C6 61       	add	a,0x61
+3571  104A  4F          	ld	c, a
+3572  104B  DD 7E F3    	ld	a,(ix-13)
+3573  104E  CE 01       	adc	a,0x01
+3574  1050  47          	ld	b, a
+3575  1051  21 00 00    	ld	hl,_btiles
+3576  1054  09          	add	hl,bc
+3577  1055  3E 00       	ld	a,+((_btiles) & 0xFF)
+3578  1057  EB          	ex	de,hl
+3579  1058  DD 86 F2    	add	a,(ix-14)
+3580  105B  4F          	ld	c, a
+3581  105C  3E 00       	ld	a, +((_btiles) / 256)
+3582  105E  DD 8E F3    	adc	a,(ix-13)
+3583  1061  47          	ld	b, a
+3584  1062  0A          	ld	a, (bc)
+3585  1063  12          	ld	(de), a
+3586  1064  AF          	xor	a, a
+3587  1065  02          	ld	(bc), a
+3588  1066  DD 7E F2    	ld	a,(ix-14)
+3589  1069  C6 02       	add	a,0x02
+3590  106B  DD 77 F2    	ld	(ix-14),a
+3591  106E  DD 7E F3    	ld	a,(ix-13)
+3592  1071  CE 00       	adc	a,0x00
+3593  1073  DD 77 F3    	ld	(ix-13),a
+3594  1076  18 C1       	jr	l_game_page_map_00137
+3595  1078              l_game_page_map_00139:
+3596  1078  21 7C 01    	ld	hl,0x017c
+3597  107B  22 00 00    	ld	(_index1),hl
+3598  107E  DD 7E E9    	ld	a,(ix-23)
+3599  1081  F6 07       	or	a,0x07
+3600  1083  DD 77 F8    	ld	(ix-8),a
+3601  1086  DD 36 F2 00 	ld	(ix-14),0x00
+3602  108A  DD 36 F3 00 	ld	(ix-13),0x00
+3603  108E              l_game_page_map_00140:
+3604  108E  DD 7E F2    	ld	a,(ix-14)
+3605  1091  D6 04       	sub	a,0x04
+3606  1093  DD 7E F3    	ld	a,(ix-13)
+3607  1096  DE 00       	sbc	a,0x00
+3608  1098  30 1E       	jr	NC,l_game_page_map_00142
+3609  109A  DD 7E F2    	ld	a,(ix-14)
+3610  109D  C6 7C       	add	a,0x7c
+3611  109F  4F          	ld	c, a
+3612  10A0  DD 7E F3    	ld	a,(ix-13)
+3613  10A3  CE 01       	adc	a,0x01
+3614  10A5  47          	ld	b, a
+3615  10A6  21 00 00    	ld	hl,_btiles
+3616  10A9  09          	add	hl, bc
+3617  10AA  DD 7E F8    	ld	a,(ix-8)
+3618  10AD  77          	ld	(hl), a
+3619  10AE  DD 34 F2    	inc	(ix-14)
+3620  10B1  20 DB       	jr	NZ,l_game_page_map_00140
+3621  10B3  DD 34 F3    	inc	(ix-13)
+3622  10B6  18 D6       	jr	l_game_page_map_00140
+3623  10B8              l_game_page_map_00142:
+3624  10B8  3A 30 00    	ld	a,(_btiles + 0x0030)
+3625  10BB  32 C5 00    	ld	((_btiles + 0x00c5)),a
+3626  10BE  01 32 00    	ld	bc,_btiles + 50
+3627  10C1  0A          	ld	a, (bc)
+3628  10C2  32 C7 00    	ld	((_btiles + 0x00c7)),a
+3629  10C5  3A 34 00    	ld	a,(_btiles + 0x0034)
+3630  10C8  32 C9 00    	ld	((_btiles + 0x00c9)),a
+3631  10CB  3A 36 00    	ld	a,(_btiles + 0x0036)
+3632  10CE  32 CB 00    	ld	((_btiles + 0x00cb)),a
+3633  10D1  3A 38 00    	ld	a, (_btiles + 56)
+3634  10D4  32 CD 00    	ld	((_btiles + 0x00cd)),a
+3635  10D7  3A 3A 00    	ld	a, (_btiles + 58)
+3636  10DA  32 CF 00    	ld	((_btiles + 0x00cf)),a
+3637  10DD  11 50 00    	ld	de,_btiles + 80
+3638  10E0  1A          	ld	a, (de)
+3639  10E1  32 E9 00    	ld	((_btiles + 0x00e9)),a
+3640  10E4  3A 51 00    	ld	a,(_btiles + 0x0051)
+3641  10E7  32 EA 00    	ld	((_btiles + 0x00ea)),a
+3642  10EA  3A 52 00    	ld	a, (_btiles + 82)
+3643  10ED  32 EB 00    	ld	((_btiles + 0x00eb)),a
+3644  10F0  3A 30 00    	ld	a,(_btiles + 0x0030)
+3645  10F3  32 FA 00    	ld	((_btiles + 0x00fa)),a
+3646  10F6  0A          	ld	a, (bc)
+3647  10F7  32 FC 00    	ld	((_btiles + 0x00fc)),a
+3648  10FA  3A 34 00    	ld	a,(_btiles + 0x0034)
+3649  10FD  32 FE 00    	ld	((_btiles + 0x00fe)),a
+3650  1100  3A 36 00    	ld	a,(_btiles + 0x0036)
+3651  1103  32 00 01    	ld	((_btiles + 0x0100)),a
+3652  1106  1A          	ld	a, (de)
+3653  1107  32 12 01    	ld	((_btiles + 0x0112)),a
+3654  110A  3A 51 00    	ld	a,(_btiles + 0x0051)
+3655  110D  32 13 01    	ld	((_btiles + 0x0113)),a
+3656  1110  3A 30 00    	ld	a,(_btiles + 0x0030)
+3657  1113  32 FD 00    	ld	((_btiles + 0x00fd)),a
+3658  1116  0A          	ld	a, (bc)
+3659  1117  32 FF 00    	ld	((_btiles + 0x00ff)),a
+3660  111A  1A          	ld	a, (de)
+3661  111B  32 1B 01    	ld	((_btiles + 0x011b)),a
+3662  111E  21 00 00    	ld	hl,_i
+3663  1121  36 00       	ld	(hl),0x00
+3664  1123              l_game_page_map_00143:
+3665  1123  21 00 00    	ld	hl,_i
+3666  1126  7E          	ld	a, (hl)
+3667  1127  D6 10       	sub	a,0x10
+3668  1129  30 23       	jr	NC,l_game_page_map_00145
+3669  112B  5E          	ld	e, (hl)
+3670  112C  16 00       	ld	d,0x00
+3671  112E  21 D0 00    	ld	hl,0x00d0 + _btiles
+3672  1131  19          	add	hl,de
+3673  1132  4D          	ld	c, l
+3674  1133  44          	ld	b, h
+3675  1134  21 91 00    	ld	hl,0x0090+1
+3676  1137  19          	add	hl,de
+3677  1138  11 00 00    	ld	de,_btiles
+3678  113B  19          	add	hl, de
+3679  113C  56          	ld	d, (hl)
+3680  113D  C5          	push	bc
+3681  113E  D5          	push	de
+3682  113F  33          	inc	sp
+3683  1140  CD 1A 16    	call	_reverse
+3684  1143  33          	inc	sp
+3685  1144  C1          	pop	bc
+3686  1145  7D          	ld	a,l
+3687  1146  02          	ld	(bc), a
+3688  1147  21 00 00    	ld	hl,_i
+3689  114A  34          	inc	(hl)
+3690  114B  34          	inc	(hl)
+3691  114C  18 D5       	jr	l_game_page_map_00143
+3692  114E              l_game_page_map_00145:
+3693  114E  21 00 00    	ld	hl,_i
+3694  1151  36 00       	ld	(hl),0x00
+3695  1153              l_game_page_map_00146:
+3696  1153  21 00 00    	ld	hl,_i
+3697  1156  7E          	ld	a, (hl)
+3698  1157  D6 04       	sub	a,0x04
+3699  1159  30 1D       	jr	NC,l_game_page_map_00148
+3700  115B  5E          	ld	e, (hl)
+3701  115C  16 00       	ld	d,0x00
+3702  115E  21 E4 00    	ld	hl,0x00e4 + _btiles
+3703  1161  19          	add	hl,de
+3704  1162  4D          	ld	c, l
+3705  1163  44          	ld	b, h
+3706  1164  21 90 00    	ld	hl,0x0090
+3707  1167  19          	add	hl, de
+3708  1168  11 28 00    	ld	de,0x0028
+3709  116B  19          	add	hl, de
+3710  116C  11 00 00    	ld	de,_btiles
+3711  116F  19          	add	hl, de
+3712  1170  7E          	ld	a, (hl)
+3713  1171  02          	ld	(bc), a
+3714  1172  21 00 00    	ld	hl,_i
+3715  1175  34          	inc	(hl)
+3716  1176  18 DB       	jr	l_game_page_map_00146
+3717  1178              l_game_page_map_00148:
+3718  1178  3E 00       	ld	a,0x00
+3719  117A  DD 77 EE    	ld	(ix-18),a
+3720  117D  DD 77 EF    	ld	(ix-17),a
+3721  1180  DD 77 EA    	ld	(ix-22),a
+3722  1183  DD 77 EB    	ld	(ix-21),a
+3723  1186  3E 06       	ld	a,0x06
+3724  1188  F5          	push	af
+3725  1189  33          	inc	sp
+3726  118A  CD 5D 16    	call	_page
+3727  118D  33          	inc	sp
+3728  118E  DD 36 F0 00 	ld	(ix-16),0x00
+3729  1192  DD 36 F1 00 	ld	(ix-15),0x00
+3730  1196              l_game_page_map_00149:
+3731  1196  DD 4E E6    	ld	c,(ix-26)
+3732  1199  06 00       	ld	b,0x00
+3733  119B  DD 7E F0    	ld	a,(ix-16)
+3734  119E  91          	sub	a, c
+3735  119F  DD 7E F1    	ld	a,(ix-15)
+3736  11A2  98          	sbc	a, b
+3737  11A3  30 26       	jr	NC,l_game_page_map_00151
+3738  11A5  DD 6E F0    	ld	l,(ix-16)
+3739  11A8  DD 66 F1    	ld	h,(ix-15)
+3740  11AB  29          	add	hl, hl
+3741  11AC  11 00 00    	ld	de,_lenght0
+3742  11AF  19          	add	hl, de
+3743  11B0  4E          	ld	c, (hl)
+3744  11B1  23          	inc	hl
+3745  11B2  46          	ld	b, (hl)
+3746  11B3  DD 7E EA    	ld	a,(ix-22)
+3747  11B6  81          	add	a, c
+3748  11B7  DD 77 EA    	ld	(ix-22),a
+3749  11BA  DD 7E EB    	ld	a,(ix-21)
+3750  11BD  88          	adc	a, b
+3751  11BE  DD 77 EB    	ld	(ix-21),a
+3752  11C1  DD 34 F0    	inc	(ix-16)
+3753  11C4  20 D0       	jr	NZ,l_game_page_map_00149
+3754  11C6  DD 34 F1    	inc	(ix-15)
+3755  11C9  18 CB       	jr	l_game_page_map_00149
+3756  11CB              l_game_page_map_00151:
+3757  11CB  AF          	xor	a, a
+3758  11CC  F5          	push	af
+3759  11CD  33          	inc	sp
+3760  11CE  CD 5D 16    	call	_page
+3761  11D1  33          	inc	sp
+3762  11D2  DD 36 F2 00 	ld	(ix-14),0x00
+3763  11D6  DD 36 F3 00 	ld	(ix-13),0x00
+3764  11DA              l_game_page_map_00164:
+3765  11DA  3E 06       	ld	a,0x06
+3766  11DC  F5          	push	af
+3767  11DD  33          	inc	sp
+3768  11DE  CD 5D 16    	call	_page
+3769  11E1  33          	inc	sp
+3770  11E2  DD 7E EA    	ld	a,(ix-22)
+3771  11E5  DD 86 F2    	add	a,(ix-14)
+3772  11E8  4F          	ld	c, a
+3773  11E9  DD 7E EB    	ld	a,(ix-21)
+3774  11EC  DD 8E F3    	adc	a,(ix-13)
+3775  11EF  47          	ld	b, a
+3776  11F0  21 00 00    	ld	hl,_world0
+3777  11F3  09          	add	hl, bc
+3778  11F4  5E          	ld	e, (hl)
+3779  11F5  03          	inc	bc
+3780  11F6  21 00 00    	ld	hl,_world0
+3781  11F9  09          	add	hl, bc
+3782  11FA  7E          	ld	a, (hl)
+3783  11FB  DD 77 F5    	ld	(ix-11),a
+3784  11FE  D5          	push	de
+3785  11FF  AF          	xor	a, a
+3786  1200  F5          	push	af
+3787  1201  33          	inc	sp
+3788  1202  CD 5D 16    	call	_page
+3789  1205  33          	inc	sp
+3790  1206  D1          	pop	de
+3791  1207  7B          	ld	a, e
+3792  1208  D6 80       	sub	a,0x80
+3793  120A  30 15       	jr	NC,l_game_page_map_00156
+3794  120C  01 00 00    	ld	bc,_scr_map
+3795  120F  DD 6E EE    	ld	l,(ix-18)
+3796  1212  DD 66 EF    	ld	h,(ix-17)
+3797  1215  09          	add	hl,bc
+3798  1216  73          	ld	(hl), e
+3799  1217  DD 34 EE    	inc	(ix-18)
+3800  121A  20 6F       	jr	NZ,l_game_page_map_00157
+3801  121C  DD 34 EF    	inc	(ix-17)
+3802  121F  18 6A       	jr	l_game_page_map_00157
+3803  1221              l_game_page_map_00156:
+3804  1221  7B          	ld	a, e
+3805  1222  C6 80       	add	a,0x80
+3806  1224  DD 77 F4    	ld	(ix-12),a
+3807  1227  DD 7E EE    	ld	a,(ix-18)
+3808  122A  DD 77 F8    	ld	(ix-8),a
+3809  122D  DD 7E EF    	ld	a,(ix-17)
+3810  1230  DD 77 F9    	ld	(ix-7),a
+3811  1233  DD 36 F0 00 	ld	(ix-16),0x00
+3812  1237  DD 36 F1 00 	ld	(ix-15),0x00
+3813  123B              l_game_page_map_00162:
+3814  123B  DD 4E F4    	ld	c,(ix-12)
+3815  123E  06 00       	ld	b,0x00
+3816  1240  DD 7E F0    	ld	a,(ix-16)
+3817  1243  91          	sub	a, c
+3818  1244  DD 7E F1    	ld	a,(ix-15)
+3819  1247  98          	sbc	a, b
+3820  1248  30 2D       	jr	NC,l_game_page_map_00213
+3821  124A  DD 6E F8    	ld	l,(ix-8)
+3822  124D  DD 66 F9    	ld	h,(ix-7)
+3823  1250  01 00 00    	ld	bc,_scr_map
+3824  1253  09          	add	hl,bc
+3825  1254  DD 75 FA    	ld	(ix-6),l
+3826  1257  DD 74 FB    	ld	(ix-5),h
+3827  125A  DD 7E F5    	ld	a,(ix-11)
+3828  125D  77          	ld	(hl), a
+3829  125E  DD 34 F8    	inc	(ix-8)
+3830  1261  20 03       	jr	NZ,l_game_page_map_00334
+3831  1263  DD 34 F9    	inc	(ix-7)
+3832  1266              l_game_page_map_00334:
+3833  1266  DD 7E F9    	ld	a,(ix-7)
+3834  1269  D6 02       	sub	a,0x02
+3835  126B  30 0A       	jr	NC,l_game_page_map_00213
+3836  126D  DD 34 F0    	inc	(ix-16)
+3837  1270  20 C9       	jr	NZ,l_game_page_map_00162
+3838  1272  DD 34 F1    	inc	(ix-15)
+3839  1275  18 C4       	jr	l_game_page_map_00162
+3840  1277              l_game_page_map_00213:
+3841  1277  DD 7E F8    	ld	a,(ix-8)
+3842  127A  DD 77 EE    	ld	(ix-18),a
+3843  127D  DD 7E F9    	ld	a,(ix-7)
+3844  1280  DD 77 EF    	ld	(ix-17),a
+3845  1283  DD 34 F2    	inc	(ix-14)
+3846  1286  20 03       	jr	NZ,l_game_page_map_00336
+3847  1288  DD 34 F3    	inc	(ix-13)
+3848  128B              l_game_page_map_00336:
+3849  128B              l_game_page_map_00157:
+3850  128B  DD 7E EF    	ld	a,(ix-17)
+3851  128E  D6 02       	sub	a,0x02
+3852  1290  30 10       	jr	NC,l_game_page_map_00160
+3853  1292  DD 34 F2    	inc	(ix-14)
+3854  1295  20 03       	jr	NZ,l_game_page_map_00337
+3855  1297  DD 34 F3    	inc	(ix-13)
+3856  129A              l_game_page_map_00337:
+3857  129A  DD 7E F3    	ld	a,(ix-13)
+3858  129D  D6 02       	sub	a,0x02
+3859  129F  DA DA 11    	jp	C, l_game_page_map_00164
+3860  12A2              l_game_page_map_00160:
+3861  12A2  DD 7E E8    	ld	a,(ix-24)
+3862  12A5  32 00 00    	ld	(_scr_curr),a
+3863  12A8  DD 7E E9    	ld	a,(ix-23)
+3864  12AB  32 00 00    	ld	(_map_paper),a
+3865  12AE  FB          	ei
+3866  12AF  DD F9       	ld	sp, ix
+3867  12B1  DD E1       	pop	ix
+3868  12B3  C9          	ret
+3869  12B4              	SECTION code_compiler
+3870  12B4              ;	---------------------------------
+3871  12B4              ; Function game_flash_exit
+3872  12B4              ; ---------------------------------
+3873  12B4              _game_flash_exit:
+3874  12B4  CD 00 00    	call	___sdcc_enter_ix
+3875  12B7  21 00 00    	ld	hl,_i
+3876  12BA  36 00       	ld	(hl),0x00
+3877  12BC  01 F0 11    	ld	bc,0x11f0
+3878  12BF              l_game_flash_exit_00101:
+3879  12BF  3A 00 00    	ld	a,(_i)
+3880  12C2  D6 10       	sub	a,0x10
+3881  12C4  30 14       	jr	NC,l_game_flash_exit_00103
+3882  12C6  21 00 00    	ld	hl,_btiles
+3883  12C9  09          	add	hl,bc
+3884  12CA  7E          	ld	a,(hl)
+3885  12CB  EB          	ex	de,hl
+3886  12CC  E6 7F       	and	a,0x7f
+3887  12CE  12          	ld	(de), a
+3888  12CF  DD B6 04    	or	a,(ix+4)
+3889  12D2  12          	ld	(de), a
+3890  12D3  21 00 00    	ld	hl,_i
+3891  12D6  34          	inc	(hl)
+3892  12D7  03          	inc	bc
+3893  12D8  18 E5       	jr	l_game_flash_exit_00101
+3894  12DA              l_game_flash_exit_00103:
+3895  12DA  2A FF FF    	ld	hl,(_game_exit_col - 1)
+3896  12DD  3A 00 00    	ld	a,(_game_exit_lin)
+3897  12E0  6F          	ld	l,a
+3898  12E1  E5          	push	hl
+3899  12E2  21 06 5F    	ld	hl,0x5f06
+3900  12E5  E5          	push	hl
+3901  12E6  CD 00 00    	call	_NIRVANAP_spriteT_callee
+3902  12E9  76          	halt
+3903  12EA  DD E1       	pop	ix
+3904  12EC  C9          	ret
+3905  12ED              	SECTION code_compiler
+3906  12ED              ;	---------------------------------
+3907  12ED              ; Function game_copy_sprite_std
+3908  12ED              ; ---------------------------------
+3909  12ED              _game_copy_sprite_std:
+3910  12ED  CD 00 00    	call	___sdcc_enter_ix
+3911  12F0  AF          	xor	a, a
+3912  12F1  F5          	push	af
+3913  12F2  33          	inc	sp
+3914  12F3  DD 66 05    	ld	h,(ix+5)
+3915  12F6  DD 6E 04    	ld	l,(ix+4)
+3916  12F9  E5          	push	hl
+3917  12FA  CD 97 13    	call	_game_copy_sprite
+3918  12FD  F1          	pop	af
+3919  12FE  33          	inc	sp
+3920  12FF  DD 46 05    	ld	b,(ix+5)
+3921  1302  04          	inc	b
+3922  1303  DD 4E 04    	ld	c,(ix+4)
+3923  1306  0C          	inc	c
+3924  1307  C5          	push	bc
+3925  1308  AF          	xor	a, a
+3926  1309  F5          	push	af
+3927  130A  33          	inc	sp
+3928  130B  C5          	push	bc
+3929  130C  CD 97 13    	call	_game_copy_sprite
+3930  130F  F1          	pop	af
+3931  1310  33          	inc	sp
+3932  1311  C1          	pop	bc
+3933  1312  DD 56 05    	ld	d,(ix+5)
+3934  1315  14          	inc	d
+3935  1316  14          	inc	d
+3936  1317  DD 46 04    	ld	b,(ix+4)
+3937  131A  04          	inc	b
+3938  131B  04          	inc	b
+3939  131C  C5          	push	bc
+3940  131D  AF          	xor	a, a
+3941  131E  5A          	ld	e,d
+3942  131F  57          	ld	d,a
+3943  1320  D5          	push	de
+3944  1321  C5          	push	bc
+3945  1322  33          	inc	sp
+3946  1323  CD 97 13    	call	_game_copy_sprite
+3947  1326  F1          	pop	af
+3948  1327  33          	inc	sp
+3949  1328  C1          	pop	bc
+3950  1329  DD 56 05    	ld	d,(ix+5)
+3951  132C  14          	inc	d
+3952  132D  14          	inc	d
+3953  132E  14          	inc	d
+3954  132F  DD 5E 04    	ld	e,(ix+4)
+3955  1332  1C          	inc	e
+3956  1333  1C          	inc	e
+3957  1334  1C          	inc	e
+3958  1335  C5          	push	bc
+3959  1336  D5          	push	de
+3960  1337  AF          	xor	a, a
+3961  1338  F5          	push	af
+3962  1339  33          	inc	sp
+3963  133A  D5          	push	de
+3964  133B  CD 97 13    	call	_game_copy_sprite
+3965  133E  F1          	pop	af
+3966  133F  33          	inc	sp
+3967  1340  D1          	pop	de
+3968  1341  C1          	pop	bc
+3969  1342  DD 56 05    	ld	d,(ix+5)
+3970  1345  14          	inc	d
+3971  1346  14          	inc	d
+3972  1347  14          	inc	d
+3973  1348  14          	inc	d
+3974  1349  C5          	push	bc
+3975  134A  3E 01       	ld	a,0x01
+3976  134C  F5          	push	af
+3977  134D  33          	inc	sp
+3978  134E  D5          	push	de
+3979  134F  CD 97 13    	call	_game_copy_sprite
+3980  1352  F1          	pop	af
+3981  1353  33          	inc	sp
+3982  1354  C1          	pop	bc
+3983  1355  DD 7E 05    	ld	a,(ix+5)
+3984  1358  C6 05       	add	a,0x05
+3985  135A  57          	ld	d, a
+3986  135B  C5          	push	bc
+3987  135C  3E 01       	ld	a,0x01
+3988  135E  5A          	ld	e,d
+3989  135F  57          	ld	d,a
+3990  1360  D5          	push	de
+3991  1361  C5          	push	bc
+3992  1362  33          	inc	sp
+3993  1363  CD 97 13    	call	_game_copy_sprite
+3994  1366  F1          	pop	af
+3995  1367  33          	inc	sp
+3996  1368  C1          	pop	bc
+3997  1369  DD 7E 05    	ld	a,(ix+5)
+3998  136C  C6 06       	add	a,0x06
+3999  136E  47          	ld	b, a
+4000  136F  3E 01       	ld	a,0x01
+4001  1371  F5          	push	af
+4002  1372  33          	inc	sp
+4003  1373  C5          	push	bc
+4004  1374  CD 97 13    	call	_game_copy_sprite
+4005  1377  F1          	pop	af
+4006  1378  33          	inc	sp
+4007  1379  DD 7E 05    	ld	a,(ix+5)
+4008  137C  C6 07       	add	a,0x07
+4009  137E  47          	ld	b, a
+4010  137F  3E 01       	ld	a,0x01
+4011  1381  48          	ld	c,b
+4012  1382  47          	ld	b,a
+4013  1383  C5          	push	bc
+4014  1384  DD 7E 04    	ld	a,(ix+4)
+4015  1387  F5          	push	af
+4016  1388  33          	inc	sp
+4017  1389  CD 97 13    	call	_game_copy_sprite
+4018  138C  F1          	pop	af
+4019  138D  33          	inc	sp
+4020  138E  DD 7E 05    	ld	a,(ix+5)
+4021  1391  C6 08       	add	a,0x08
+4022  1393  6F          	ld	l, a
+4023  1394  DD E1       	pop	ix
+4024  1396  C9          	ret
+4025  1397              	SECTION code_compiler
+4026  1397              ;	---------------------------------
+4027  1397              ; Function game_copy_sprite
+4028  1397              ; ---------------------------------
+4029  1397              _game_copy_sprite:
+4030  1397  CD 00 00    	call	___sdcc_enter_ix
+4031  139A  21 C2 FF    	ld	hl, -62
+4032  139D  39          	add	hl, sp
+4033  139E  F9          	ld	sp, hl
+4034  139F  3A 00 00    	ld	a,(_game_tileset)
+4035  13A2  DD 77 C2    	ld	(ix-62),a
+4036  13A5  F3          	di
+4037  13A6  3E 03       	ld	a,0x03
+4038  13A8  F5          	push	af
+4039  13A9  33          	inc	sp
+4040  13AA  CD 5D 16    	call	_page
+4041  13AD  33          	inc	sp
+4042  13AE  DD 6E 04    	ld	l,(ix+4)
+4043  13B1  26 00       	ld	h,0x00
+4044  13B3  4D          	ld	c,l
+4045  13B4  44          	ld	b,h
+4046  13B5  29          	add	hl, hl
+4047  13B6  09          	add	hl, bc
+4048  13B7  29          	add	hl, hl
+4049  13B8  29          	add	hl, hl
+4050  13B9  29          	add	hl, hl
+4051  13BA  29          	add	hl, hl
+4052  13BB  DD 75 FE    	ld	(ix-2),l
+4053  13BE  DD 74 FF    	ld	(ix-1),h
+4054  13C1  21 02 00    	ld	hl,0x0002
+4055  13C4  39          	add	hl, sp
+4056  13C5  DD 75 FC    	ld	(ix-4),l
+4057  13C8  DD 74 FD    	ld	(ix-3),h
+4058  13CB  DD 75 FA    	ld	(ix-6),l
+4059  13CE  DD 74 FB    	ld	(ix-5),h
+4060  13D1  DD 7E FC    	ld	a,(ix-4)
+4061  13D4  DD 77 F8    	ld	(ix-8),a
+4062  13D7  DD 7E FD    	ld	a,(ix-3)
+4063  13DA  DD 77 F9    	ld	(ix-7),a
+4064  13DD  DD 36 C3 00 	ld	(ix-61),0x00
+4065  13E1              l_game_copy_sprite_00107:
+4066  13E1  DD 7E C3    	ld	a,(ix-61)
+4067  13E4  D6 30       	sub	a,0x30
+4068  13E6  30 74       	jr	NC,l_game_copy_sprite_00109
+4069  13E8  DD 7E C2    	ld	a,(ix-62)
+4070  13EB  B7          	or	a, a
+4071  13EC  20 1D       	jr	NZ,l_game_copy_sprite_00102
+4072  13EE  DD 7E FA    	ld	a,(ix-6)
+4073  13F1  DD 86 C3    	add	a,(ix-61)
+4074  13F4  4F          	ld	c, a
+4075  13F5  DD 7E FB    	ld	a,(ix-5)
+4076  13F8  CE 00       	adc	a,0x00
+4077  13FA  47          	ld	b, a
+4078  13FB  3E 00       	ld	a, +((_hisprites1) & 0xFF)
+4079  13FD  DD 86 FE    	add	a,(ix-2)
+4080  1400  5F          	ld	e, a
+4081  1401  3E 00       	ld	a, +((_hisprites1) / 256)
+4082  1403  DD 8E FF    	adc	a,(ix-1)
+4083  1406  57          	ld	d, a
+4084  1407  1A          	ld	a, (de)
+4085  1408  02          	ld	(bc), a
+4086  1409  18 23       	jr	l_game_copy_sprite_00103
+4087  140B              l_game_copy_sprite_00102:
+4088  140B  DD 7E FC    	ld	a,(ix-4)
+4089  140E  DD 86 C3    	add	a,(ix-61)
+4090  1411  DD 77 F6    	ld	(ix-10),a
+4091  1414  DD 7E FD    	ld	a,(ix-3)
+4092  1417  CE 00       	adc	a,0x00
+4093  1419  DD 77 F7    	ld	(ix-9),a
+4094  141C  01 00 00    	ld	bc,_hisprites2
+4095  141F  DD 6E FE    	ld	l,(ix-2)
+4096  1422  DD 66 FF    	ld	h,(ix-1)
+4097  1425  09          	add	hl,bc
+4098  1426  4E          	ld	c, (hl)
+4099  1427  DD 6E F6    	ld	l,(ix-10)
+4100  142A  DD 66 F7    	ld	h,(ix-9)
+4101  142D  71          	ld	(hl), c
+4102  142E              l_game_copy_sprite_00103:
+4103  142E  3E 1F       	ld	a,0x1f
+4104  1430  DD 96 C3    	sub	a,(ix-61)
+4105  1433  30 19       	jr	NC,l_game_copy_sprite_00105
+4106  1435  DD 7E F8    	ld	a,(ix-8)
+4107  1438  DD 86 C3    	add	a,(ix-61)
+4108  143B  4F          	ld	c, a
+4109  143C  DD 7E F9    	ld	a,(ix-7)
+4110  143F  CE 00       	adc	a,0x00
+4111  1441  47          	ld	b, a
+4112  1442  0A          	ld	a, (bc)
+4113  1443  5F          	ld	e, a
+4114  1444  3A 00 00    	ld	a,(_spr_init_cin0)
+4115  1447  93          	sub	a, e
+4116  1448  20 04       	jr	NZ,l_game_copy_sprite_00105
+4117  144A  3A 00 00    	ld	a,(_spr_init_cout0)
+4118  144D  02          	ld	(bc), a
+4119  144E              l_game_copy_sprite_00105:
+4120  144E  DD 34 C3    	inc	(ix-61)
+4121  1451  DD 34 FE    	inc	(ix-2)
+4122  1454  20 8B       	jr	NZ,l_game_copy_sprite_00107
+4123  1456  DD 34 FF    	inc	(ix-1)
+4124  1459  C3 E1 13    	jp	l_game_copy_sprite_00107
+4125  145C              l_game_copy_sprite_00109:
+4126  145C  AF          	xor	a, a
+4127  145D  F5          	push	af
+4128  145E  33          	inc	sp
+4129  145F  CD 5D 16    	call	_page
+4130  1462  33          	inc	sp
+4131  1463  FB          	ei
+4132  1464  DD 7E FC    	ld	a,(ix-4)
+4133  1467  DD 77 F6    	ld	(ix-10),a
+4134  146A  DD 7E FD    	ld	a,(ix-3)
+4135  146D  DD 77 F7    	ld	(ix-9),a
+4136  1470  DD 36 C3 20 	ld	(ix-61),0x20
+4137  1474              l_game_copy_sprite_00121:
+4138  1474  DD 7E C3    	ld	a,(ix-61)
+4139  1477  D6 30       	sub	a,0x30
+4140  1479  30 71       	jr	NC,l_game_copy_sprite_00123
+4141  147B  DD 7E F6    	ld	a,(ix-10)
+4142  147E  DD 86 C3    	add	a,(ix-61)
+4143  1481  DD 77 F8    	ld	(ix-8),a
+4144  1484  6F          	ld	l,a
+4145  1485  DD 7E F7    	ld	a,(ix-9)
+4146  1488  CE 00       	adc	a,0x00
+4147  148A  DD 77 F9    	ld	(ix-7),a
+4148  148D  67          	ld	h,a
+4149  148E  4E          	ld	c, (hl)
+4150  148F  3A 00 00    	ld	a,(_spr_init_cin0)
+4151  1492  91          	sub	a, c
+4152  1493  20 0C       	jr	NZ,l_game_copy_sprite_00119
+4153  1495  DD 6E F8    	ld	l,(ix-8)
+4154  1498  DD 66 F9    	ld	h,(ix-7)
+4155  149B  3A 00 00    	ld	a,(_spr_init_cout0)
+4156  149E  77          	ld	(hl),a
+4157  149F  18 34       	jr	l_game_copy_sprite_00120
+4158  14A1              l_game_copy_sprite_00119:
+4159  14A1  3A 00 00    	ld	a,(_spr_init_cin1)
+4160  14A4  91          	sub	a, c
+4161  14A5  20 0C       	jr	NZ,l_game_copy_sprite_00116
+4162  14A7  DD 6E F8    	ld	l,(ix-8)
+4163  14AA  DD 66 F9    	ld	h,(ix-7)
+4164  14AD  3A 00 00    	ld	a,(_spr_init_cout1)
+4165  14B0  77          	ld	(hl),a
+4166  14B1  18 22       	jr	l_game_copy_sprite_00120
+4167  14B3              l_game_copy_sprite_00116:
+4168  14B3  3A 00 00    	ld	a,(_spr_init_cin2)
+4169  14B6  91          	sub	a, c
+4170  14B7  20 0C       	jr	NZ,l_game_copy_sprite_00113
+4171  14B9  DD 6E F8    	ld	l,(ix-8)
+4172  14BC  DD 66 F9    	ld	h,(ix-7)
+4173  14BF  3A 00 00    	ld	a,(_spr_init_cout2)
+4174  14C2  77          	ld	(hl),a
+4175  14C3  18 10       	jr	l_game_copy_sprite_00120
+4176  14C5              l_game_copy_sprite_00113:
+4177  14C5  3A 00 00    	ld	a,(_spr_init_cin3)
+4178  14C8  91          	sub	a, c
+4179  14C9  20 0A       	jr	NZ,l_game_copy_sprite_00120
+4180  14CB  DD 6E F8    	ld	l,(ix-8)
+4181  14CE  DD 66 F9    	ld	h,(ix-7)
+4182  14D1  3A 00 00    	ld	a,(_spr_init_cout3)
+4183  14D4  77          	ld	(hl),a
+4184  14D5              l_game_copy_sprite_00120:
+4185  14D5  DD 6E F8    	ld	l,(ix-8)
+4186  14D8  DD 66 F9    	ld	h,(ix-7)
+4187  14DB  7E          	ld	a, (hl)
+4188  14DC  21 00 00    	ld	hl,_spr_init_bright
+4189  14DF  B6          	or	a, (hl)
+4190  14E0  DD 6E F8    	ld	l,(ix-8)
+4191  14E3  DD 66 F9    	ld	h,(ix-7)
+4192  14E6  77          	ld	(hl), a
+4193  14E7  DD 34 C3    	inc	(ix-61)
+4194  14EA  18 88       	jr	l_game_copy_sprite_00121
+4195  14EC              l_game_copy_sprite_00123:
+4196  14EC  DD 6E 05    	ld	l,(ix+5)
+4197  14EF  26 00       	ld	h,0x00
+4198  14F1  4D          	ld	c,l
+4199  14F2  44          	ld	b,h
+4200  14F3  29          	add	hl, hl
+4201  14F4  09          	add	hl, bc
+4202  14F5  29          	add	hl, hl
+4203  14F6  29          	add	hl, hl
+4204  14F7  29          	add	hl, hl
+4205  14F8  29          	add	hl, hl
+4206  14F9  DD 75 F6    	ld	(ix-10),l
+4207  14FC  DD 74 F7    	ld	(ix-9),h
+4208  14FF  DD 7E FC    	ld	a,(ix-4)
+4209  1502  DD 77 F8    	ld	(ix-8),a
+4210  1505  DD 7E FD    	ld	a,(ix-3)
+4211  1508  DD 77 F9    	ld	(ix-7),a
+4212  150B  DD 7E FC    	ld	a,(ix-4)
+4213  150E  DD 77 FA    	ld	(ix-6),a
+4214  1511  DD 7E FD    	ld	a,(ix-3)
+4215  1514  DD 77 FB    	ld	(ix-5),a
+4216  1517  DD 7E FC    	ld	a,(ix-4)
+4217  151A  DD 77 FE    	ld	(ix-2),a
+4218  151D  DD 7E FD    	ld	a,(ix-3)
+4219  1520  DD 77 FF    	ld	(ix-1),a
+4220  1523  DD 7E FC    	ld	a,(ix-4)
+4221  1526  DD 77 F4    	ld	(ix-12),a
+4222  1529  DD 7E FD    	ld	a,(ix-3)
+4223  152C  DD 77 F5    	ld	(ix-11),a
+4224  152F  DD 36 C3 00 	ld	(ix-61),0x00
+4225  1533              l_game_copy_sprite_00136:
+4226  1533  DD 7E C3    	ld	a,(ix-61)
+4227  1536  D6 30       	sub	a,0x30
+4228  1538  D2 15 16    	jp	NC, l_game_copy_sprite_00139
+4229  153B  DD 4E C3    	ld	c,(ix-61)
+4230  153E  0C          	inc	c
+4231  153F  DD 7E 06    	ld	a,(ix+6)
+4232  1542  B7          	or	a, a
+4233  1543  CA EB 15    	jp	Z, l_game_copy_sprite_00134
+4234  1546  DD 7E C3    	ld	a,(ix-61)
+4235  1549  D6 20       	sub	a,0x20
+4236  154B  30 55       	jr	NC,l_game_copy_sprite_00131
+4237  154D  DD CB C3 46 	bit	0,(ix-61)
+4238  1551  20 25       	jr	NZ,l_game_copy_sprite_00125
+4239  1553  3E 00       	ld	a, +((_btiles) & 0xFF)
+4240  1555  DD 86 F6    	add	a,(ix-10)
+4241  1558  5F          	ld	e, a
+4242  1559  3E 00       	ld	a, +((_btiles) / 256)
+4243  155B  DD 8E F7    	adc	a,(ix-9)
+4244  155E  57          	ld	d, a
+4245  155F  DD 6E FC    	ld	l,(ix-4)
+4246  1562  DD 66 FD    	ld	h,(ix-3)
+4247  1565  06 00       	ld	b,0x00
+4248  1567  09          	add	hl, bc
+4249  1568  46          	ld	b, (hl)
+4250  1569  C5          	push	bc
+4251  156A  D5          	push	de
+4252  156B  C5          	push	bc
+4253  156C  33          	inc	sp
+4254  156D  CD 1A 16    	call	_reverse
+4255  1570  33          	inc	sp
+4256  1571  D1          	pop	de
+4257  1572  C1          	pop	bc
+4258  1573  7D          	ld	a,l
+4259  1574  12          	ld	(de), a
+4260  1575  C3 06 16    	jp	l_game_copy_sprite_00135
+4261  1578              l_game_copy_sprite_00125:
+4262  1578  3E 00       	ld	a, +((_btiles) & 0xFF)
+4263  157A  DD 86 F6    	add	a,(ix-10)
+4264  157D  5F          	ld	e, a
+4265  157E  3E 00       	ld	a, +((_btiles) / 256)
+4266  1580  DD 8E F7    	adc	a,(ix-9)
+4267  1583  57          	ld	d, a
+4268  1584  DD 46 C3    	ld	b,(ix-61)
+4269  1587  05          	dec	b
+4270  1588  DD 7E F4    	ld	a,(ix-12)
+4271  158B  80          	add	a, b
+4272  158C  6F          	ld	l, a
+4273  158D  DD 7E F5    	ld	a,(ix-11)
+4274  1590  CE 00       	adc	a,0x00
+4275  1592  67          	ld	h, a
+4276  1593  46          	ld	b, (hl)
+4277  1594  C5          	push	bc
+4278  1595  D5          	push	de
+4279  1596  C5          	push	bc
+4280  1597  33          	inc	sp
+4281  1598  CD 1A 16    	call	_reverse
+4282  159B  33          	inc	sp
+4283  159C  D1          	pop	de
+4284  159D  C1          	pop	bc
+4285  159E  7D          	ld	a,l
+4286  159F  12          	ld	(de), a
+4287  15A0  18 64       	jr	l_game_copy_sprite_00135
+4288  15A2              l_game_copy_sprite_00131:
+4289  15A2  DD 7E C3    	ld	a,(ix-61)
+4290  15A5  D6 28       	sub	a,0x28
+4291  15A7  30 21       	jr	NC,l_game_copy_sprite_00128
+4292  15A9  3E 00       	ld	a, +((_btiles) & 0xFF)
+4293  15AB  DD 86 F6    	add	a,(ix-10)
+4294  15AE  5F          	ld	e, a
+4295  15AF  3E 00       	ld	a, +((_btiles) / 256)
+4296  15B1  DD 8E F7    	adc	a,(ix-9)
+4297  15B4  57          	ld	d, a
+4298  15B5  DD 7E C3    	ld	a,(ix-61)
+4299  15B8  C6 08       	add	a,0x08
+4300  15BA  47          	ld	b, a
+4301  15BB  DD 7E FE    	ld	a,(ix-2)
+4302  15BE  80          	add	a, b
+4303  15BF  6F          	ld	l, a
+4304  15C0  DD 7E FF    	ld	a,(ix-1)
+4305  15C3  CE 00       	adc	a,0x00
+4306  15C5  67          	ld	h, a
+4307  15C6  7E          	ld	a, (hl)
+4308  15C7  12          	ld	(de), a
+4309  15C8  18 3C       	jr	l_game_copy_sprite_00135
+4310  15CA              l_game_copy_sprite_00128:
+4311  15CA  3E 00       	ld	a, +((_btiles) & 0xFF)
+4312  15CC  DD 86 F6    	add	a,(ix-10)
+4313  15CF  5F          	ld	e, a
+4314  15D0  3E 00       	ld	a, +((_btiles) / 256)
+4315  15D2  DD 8E F7    	adc	a,(ix-9)
+4316  15D5  57          	ld	d, a
+4317  15D6  DD 7E C3    	ld	a,(ix-61)
+4318  15D9  C6 F8       	add	a,0xf8
+4319  15DB  47          	ld	b, a
+4320  15DC  DD 7E FA    	ld	a,(ix-6)
+4321  15DF  80          	add	a, b
+4322  15E0  6F          	ld	l, a
+4323  15E1  DD 7E FB    	ld	a,(ix-5)
+4324  15E4  CE 00       	adc	a,0x00
+4325  15E6  67          	ld	h, a
+4326  15E7  7E          	ld	a, (hl)
+4327  15E8  12          	ld	(de), a
+4328  15E9  18 1B       	jr	l_game_copy_sprite_00135
+4329  15EB              l_game_copy_sprite_00134:
+4330  15EB  3E 00       	ld	a, +((_btiles) & 0xFF)
+4331  15ED  DD 86 F6    	add	a,(ix-10)
+4332  15F0  5F          	ld	e, a
+4333  15F1  3E 00       	ld	a, +((_btiles) / 256)
+4334  15F3  DD 8E F7    	adc	a,(ix-9)
+4335  15F6  57          	ld	d, a
+4336  15F7  DD 7E F8    	ld	a,(ix-8)
+4337  15FA  DD 86 C3    	add	a,(ix-61)
+4338  15FD  6F          	ld	l, a
+4339  15FE  DD 7E F9    	ld	a,(ix-7)
+4340  1601  CE 00       	adc	a,0x00
+4341  1603  67          	ld	h, a
+4342  1604  7E          	ld	a, (hl)
+4343  1605  12          	ld	(de), a
+4344  1606              l_game_copy_sprite_00135:
+4345  1606  DD 71 C3    	ld	(ix-61),c
+4346  1609  DD 34 F6    	inc	(ix-10)
+4347  160C  C2 33 15    	jp	NZ,l_game_copy_sprite_00136
+4348  160F  DD 34 F7    	inc	(ix-9)
+4349  1612  C3 33 15    	jp	l_game_copy_sprite_00136
+4350  1615              l_game_copy_sprite_00139:
+4351  1615  DD F9       	ld	sp, ix
+4352  1617  DD E1       	pop	ix
+4353  1619  C9          	ret
+4354  161A              	SECTION code_compiler
+4355  161A              ;	---------------------------------
+4356  161A              ; Function reverse
+4357  161A              ; ---------------------------------
+4358  161A              _reverse:
+4359  161A  CD 00 00    	call	___sdcc_enter_ix
+4360  161D  DD 7E 04    	ld	a,(ix+4)
+4361  1620  E6 F0       	and	a,0xf0
+4362  1622  07          	rlca
+4363  1623  07          	rlca
+4364  1624  07          	rlca
+4365  1625  07          	rlca
+4366  1626  E6 0F       	and	a,0x0f
+4367  1628  4F          	ld	c, a
+4368  1629  DD 7E 04    	ld	a,(ix+4)
+4369  162C  E6 0F       	and	a,0x0f
+4370  162E  07          	rlca
+4371  162F  07          	rlca
+4372  1630  07          	rlca
+4373  1631  07          	rlca
+4374  1632  E6 F0       	and	a,0xf0
+4375  1634  B1          	or	a, c
+4376  1635  DD 77 04    	ld	(ix+4),a
+4377  1638  E6 CC       	and	a,0xcc
+4378  163A  4F          	ld	c, a
+4379  163B  CB 39       	srl	c
+4380  163D  CB 39       	srl	c
+4381  163F  DD 7E 04    	ld	a,(ix+4)
+4382  1642  E6 33       	and	a,0x33
+4383  1644  87          	add	a, a
+4384  1645  87          	add	a, a
+4385  1646  B1          	or	a, c
+4386  1647  DD 77 04    	ld	(ix+4),a
+4387  164A  E6 AA       	and	a,0xaa
+4388  164C  4F          	ld	c, a
+4389  164D  CB 39       	srl	c
+4390  164F  DD 7E 04    	ld	a,(ix+4)
+4391  1652  E6 55       	and	a,0x55
+4392  1654  87          	add	a, a
+4393  1655  B1          	or	a, c
+4394  1656  DD 77 04    	ld	(ix+4),a
+4395  1659  6F          	ld	l, a
+4396  165A  DD E1       	pop	ix
+4397  165C  C9          	ret
+4398  165D              	SECTION code_compiler
+4399  165D              ;	---------------------------------
+4400  165D              ; Function page
+4401  165D              ; ---------------------------------
+4402  165D              _page:
+4403  165D  CD 00 00    	call	___sdcc_enter_ix
+4404  1660  DD 7E 04    	ld	a,(ix+4)
+4405  1663  C6 10       	add	a,0x10
+4406  1665  32 00 00    	ld	(_GLOBAL_ZX_PORT_7FFD),a
+4407  1668  01 FD 7F    	ld	bc,_IO_7FFD
+4408  166B  ED 79       	out	(c),a
+4409  166D  DD E1       	pop	ix
+4410  166F  C9          	ret
+4411  1670              	SECTION IGNORE
+4412  0000              

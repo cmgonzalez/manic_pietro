@@ -30,7 +30,7 @@
 //Nirvana Related
 #define NIRV_SPRITE_P1               5 //Sprite to be used by P1 (Have transparency)
 #define NIRV_SPRITE_DOOR             6 //Sprite to be used by P1 (Have transparency)
-#define NIRV_TOTAL_SPRITES           8 //Maximun of sprites to handle (NIRVANA == 8)
+#define NIRV_TOTAL_SPRITES           7 //Maximun of sprites to handle (Nirvana == 8) (CUSTOM Nirvana == 7)
 
 #define GAME_GRAVITY                 1
 #define GAME_VELOCITY               -6

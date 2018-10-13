@@ -402,7 +402,7 @@ void game_round_init(void) {
       "    Pietro meets Monkey Kong",
       "         Chuntey Crew",
       "     Kong Jr Watch the Game",
-      "            Stage 25",
+      "          Dr. Errazking",
       "            Stage 26",
       "            Stage 27",
       "            Stage 28",
@@ -416,36 +416,36 @@ void game_round_init(void) {
       "            Stage 36",
       "            Stage 37",
       "            Stage 38",
-      "            Stage 39",
+      "           Noentiendo",
 
   };
 
   // TODO Just use start to simplify
 
+  ay_reset();
+  spr_clear_scr();
+  for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
+    NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
+  }
+  NIRVANAP_halt();
+  NIRVANAP_stop();
+
   /* screen init */
   /*PHASE INIT*/
   map_border = game_borders[scr_curr];
-
   loop_count = 0;
   zx_set_clock(0);
   frame_time = 0;
   player_coins = 0;
   air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
   // Init Sprites
-  for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
-    NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
-  }
 
-  NIRVANAP_halt();
 
-  spr_clear_scr();
+
 
   // Read Tiles from bank 3
 
   // Page Player from bank 3
-  spr_init_cin0 = 0;
-  spr_init_cout0 = 0;
-
 
   // Coin HIGHLIGHT init
   key_last = 0;
@@ -457,7 +457,6 @@ void game_round_init(void) {
     ++i;
   }
 
-  ay_reset();
 
   zx_border(map_border);
   zx_print_ink(map_border | (map_border << 3));
@@ -495,25 +494,26 @@ void game_round_init(void) {
       spr_init_cout0 = PAPER_BLACK | INK_WHITE;
       spr_init_cin1 = PAPER_BLACK | INK_RED;
       spr_init_cout1 = PAPER_BLACK | INK_GREEN;
-      spr_init_cin2 = PAPER_YELLOW | INK_RED;
-      spr_init_cout2 = PAPER_YELLOW | INK_GREEN;
+      spr_init_cin2 = PAPER_RED | INK_YELLOW;
+      spr_init_cout2 = PAPER_GREEN | INK_WHITE;
     }
+
     if (map_paper == (PAPER_WHITE | BRIGHT) ) {
       spr_init_bright = BRIGHT;
 
 
       spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
-      spr_init_cout0 = PAPER_BLACK | INK_MAGENTA;
+      spr_init_cout0 = PAPER_BLACK | INK_BLACK;
 
       spr_init_cin1 = PAPER_BLACK | INK_BLUE;
-      spr_init_cout1 = PAPER_BLACK | INK_BLACK;
+      spr_init_cout1 = PAPER_BLACK | INK_BLUE;
 
 
       spr_init_cin2 = PAPER_BLACK | INK_RED;
-      spr_init_cout2 = PAPER_BLACK | INK_BLUE;
+      spr_init_cout2 = PAPER_BLACK | INK_MAGENTA;
 
-      spr_init_cin3 = PAPER_YELLOW | INK_RED;
-      spr_init_cout3 = PAPER_MAGENTA | INK_BLUE;
+      spr_init_cin3 = PAPER_RED | INK_YELLOW;
+      spr_init_cout3 = PAPER_BLUE | INK_BLACK;
 
       //spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
       //spr_init_cout3 = PAPER_BLACK | INK_BLACK;
@@ -526,17 +526,21 @@ void game_round_init(void) {
   spr_init_cout1 = 0;
   spr_init_cin2 = 0;
   spr_init_cout2 = 0;
+  spr_init_cin3 = 0;
+  spr_init_cout3 = 0;
 
 
-  game_draw_map();
   spr_btile_paint_back();
   key_attrib[0] = map_paper | key_ink;
   key_attrib[1] = key_attrib[0];
   key_attrib[2] = key_attrib[0];
   key_attrib[3] = key_attrib[0];
-  game_flash_exit(!FLASH);
+
   game_song_play_start = 0;
   audio_ingame();
+  NIRVANAP_start();
+  game_draw_map();
+  game_flash_exit(!FLASH);
 
   if (!game_over) {
     player_init(player_lin_scr, player_col_scr, TILE_P1_RIGHT);
@@ -1031,7 +1035,7 @@ void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
   intrinsic_ei();
 
   // Paint Variants
-  i = 31;
+  i = 32;
   while (i < 48) {
     if (btile[i] == spr_init_cin0) {
       btile[i] = spr_init_cout0;

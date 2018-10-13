@@ -44,18 +44,16 @@ extern void ay_song_stop(void) __preserves_regs(b,c,d,e,h,l);
 
 extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 
-
+//BANK 1 NOT USED
 //BANK 3 Sprites
 extern unsigned char hisprites1[];
 extern unsigned char hisprites2[];
 extern unsigned char hidoors1[];
 extern unsigned char hidoors2[];
-
 //BANK 4 Songs
 extern unsigned char ay_song_ingame0[];
 extern unsigned char ay_song_ingame1[];
 extern unsigned char ay_song_menu[];
-
 //BANK 4 Sound fx
 extern unsigned char ay_fx_coin[];
 extern unsigned char ay_fx_dead[];
@@ -64,8 +62,8 @@ extern unsigned char ay_fx_fall[];
 extern unsigned char ay_fx_game_start[];
 extern unsigned char ay_fx_tick[];
 extern unsigned char ay_fx_door[];
-
-//BANK 6 Tiles
+//BANK 6 Map
+//BANK 7 Tiles
 extern unsigned char hitiles1[];
 extern unsigned char hitiles2[];
 

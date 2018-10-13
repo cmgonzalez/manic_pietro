@@ -39,14 +39,14 @@ void main(void) {
   // DEBUG
   zx_border(INK_BLACK);
   zx_print_ink(INK_WHITE);
-  
+
   z80_delay_ms(666);  //SATANIC DELAY
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_debug = 1;
   game_fps_show = 1;
   game_world = 0;
-  scr_curr = 24;
+  scr_curr = 25;
   nirv_sprite_index = 0;
 
   game_song_play = 1;

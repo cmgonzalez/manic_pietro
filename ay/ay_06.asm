@@ -10,6 +10,6 @@ PUBLIC _hitiles2
 
 ;Tiles 8x8
 _hitiles1:
-   BINARY "game_tiles_1.btile"
+  BINARY "game_tiles_1.btile"
 _hitiles2:
-   BINARY "game_tiles_2.btile"
+  BINARY "game_tiles_2.btile"
