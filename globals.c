@@ -301,28 +301,31 @@ const unsigned char tile_class[] = {
     TILE_DEADLY,    //05
     TILE_DEADLY,    //06
     TILE_EXTRA,     //07 Switch
-    TILE_EMPTY,     //08 Not Used autodraw
+
+    TILE_FLOOR,     //08 Switch Off
     TILE_CRUMB,     //09 Crumb1
     TILE_CRUMB,     //10 Crumb2
     TILE_CRUMB,     //11 Crumb3
-    TILE_EMPTY,     //12 Not Used autodraw
-    TILE_EMPTY,     //13 Not Used autodraw
-    TILE_EMPTY,     //14 Not Used autodraw
-    TILE_EMPTY,     //15 Not Used autodraw
-    TILE_EMPTY,     //16 Backgound 2
-    TILE_FLOOR,     //17 Platform
-    TILE_FLOOR,     //18 Platform
-    TILE_FLOOR,     //19 Platform
+    TILE_FLOOR,     //12 Misc Platform
+    TILE_OBJECT,    //13 Object
+    TILE_EMPTY,     //14 Reverved Exit
+    TILE_EMPTY,     //15 Reverved Exit
+
+    TILE_EMPTY,     //16 Backgound
+    TILE_EMPTY,     //17 Backgound
+    TILE_EMPTY,     //18 Backgound
+    TILE_EMPTY,     //19 Backgound
     TILE_FLOOR,     //20 Platform
     TILE_FLOOR,     //21 Platform
-    TILE_WALL,      //22
-    TILE_DEADLY,    //23
-    TILE_FLOOR,     //24 Switch Off
-    TILE_EMPTY,     //25 Not Used autodraw
-    TILE_EMPTY,     //26 Not Used autodraw
-    TILE_EMPTY,     //27 Not Used autodraw
-    TILE_EMPTY,     //28 Not Used autodraw
-    TILE_EMPTY,     //29 Not Used autodraw
-    TILE_EMPTY,     //30 Not Used autodraw
-    TILE_OBJECT,    //31 Key autodraw
+    TILE_FLOOR,     //22 Platform
+    TILE_FLOOR,     //23 Platform
+
+    TILE_WALL,      //24 Wall
+    TILE_WALL,      //25 Wall
+    TILE_WALL,      //26 Wall
+    TILE_WALL,      //27 Wall
+    TILE_DEADLY,    //28
+    TILE_DEADLY,    //29
+    TILE_EMPTY,     //30 Reverved Exit
+    TILE_EMPTY,     //31 Reverved Exit
 };

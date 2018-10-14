@@ -105,6 +105,17 @@ void player_turn(void) {
       z80_delay_ms(250);
       in_wait_nokey();
     }
+
+    if (c == 53) {
+      if (scr_curr > 20) {
+        scr_curr = 0;
+      } else {
+        scr_curr = 20;
+      }
+      game_round_up = 1;
+      z80_delay_ms(250);
+      in_wait_nokey();
+    }
     // zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
     dirs = (joyfunc1)(&k1);
 
@@ -367,6 +378,7 @@ unsigned char player_move_walk(void) {
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
       // spr_move_horizontal();
+      zx_border(INK_YELLOW);
       player_jump_top = lin[GAME_INDEX_P1];
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);

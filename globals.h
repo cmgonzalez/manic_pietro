@@ -51,9 +51,9 @@
 #define TILE_CONVEYOR                4  //CONVEYORS
 #define TILE_DEADLY                  5  //DEADLY
 #define TILE_EXTRA                   6  //EXTRA SWITCH
-#define TILE_OBJECT                  8
+#define TILE_OBJECT                  8  //KEY
 
-#define TILE_EXTRA_OFF               24 //EXTRA SWITCH OFF
+#define TILE_EXTRA_OFF               8 //EXTRA SWITCH OFF
 
 
 #define TILE_CRUMB_INIT              2 //TODO MOVE ON BTILE AND PLACE ADJACENT TO CRUMBLING TILES
@@ -63,7 +63,7 @@
 
 #define SPRITE_EXIT                  32
 #define SPRITE_EMPTY                 94
-#define SPRITE_DOOR                  95
+#define SPRITE_DOOR                  7
 
 
 #define TILE_BACKGROUND_S             0  //START OF BACKGROUND
@@ -76,7 +76,6 @@
 
 #define TILE_CEIL                     72 //START CEILS TILES
 
-#define TILE_DOOR_E                   88 //END OF DOOR TILES
 #define TILE_END                      96 //END OF TILES
 
 

@@ -48,8 +48,7 @@ extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 //BANK 3 Sprites
 extern unsigned char hisprites1[];
 extern unsigned char hisprites2[];
-extern unsigned char hidoors1[];
-extern unsigned char hidoors2[];
+
 //BANK 4 Songs
 extern unsigned char ay_song_ingame0[];
 extern unsigned char ay_song_ingame1[];

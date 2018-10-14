@@ -777,19 +777,6 @@ void game_page_map(void) {
   l_paper = paper0[l_scr_map];
   page(0);
 
-  // Get Door Sprite @Bank 3
-  l_start = l_scr0 * 48;
-  page(3);
-  li = 0;
-  while (li < 48) {
-    if (l_tileset == 0) {
-      l_btile[li] = hidoors1[l_start + li];
-    } else {
-      l_btile[li] = hidoors2[l_start + li];
-    }
-    ++li;
-  }
-  page(0);
   // Store
   index1 = 48 * SPRITE_DOOR;
   li = 0;
@@ -799,12 +786,40 @@ void game_page_map(void) {
   }
   ++lk;
 
+  // Tiles (8x8) @Bank7
+  l_start = l_scr0 * 48 * 8;
+
+  lk = 0;
+  while (lk < 48 * 8) {
+    page(7);
+
+    li = 0;
+    while (li < 48) {
+      if (l_tileset == 0) {
+        l_btile[li] = hitiles1[l_start + li + lk];
+      } else {
+        l_btile[li] = hitiles2[l_start + li + lk];
+      }
+      ++li;
+    }
+    page(0);
+    // Store btile in low mem
+    li = 0;
+    while (li < 48) {
+      btiles[lk + li] = l_btile[li];
+      ++li;
+    }
+    lk = lk + 48; // Next btile
+  }
+
+
+/*
   // Tiles (8x8) @Bank6
   l_start = l_scr0 * 48 * 4;
 
   lk = 0;
   while (lk < 48 * 4) {
-    page(6);
+    page(7);
 
     li = 0;
     while (li < 48) {
@@ -903,7 +918,7 @@ void game_page_map(void) {
     btiles[lk + i] = btiles[li + i + 32 + 8];
     ++i;
   }
-
+*/
   // Get Map data
   lj = 0;
   lk = 0;
