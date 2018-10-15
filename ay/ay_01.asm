@@ -1,7 +1,7 @@
 SECTION BANK_1_DATA
 
-PUBLIC bank1_filler
+PUBLIC _img1
 
-bank1_filler:
-
-   defs 128
+;Tiles 8x8
+_img1:
+  BINARY "game_img1.btile"

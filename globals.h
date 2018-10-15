@@ -257,7 +257,6 @@ extern unsigned char player_jumpcount;
 
 
 extern signed   int  game_gravity;
-extern unsigned char game_world;
 extern unsigned char game_song_play;
 extern unsigned char game_song_play_start;
 extern unsigned char game_conveyor_dir;

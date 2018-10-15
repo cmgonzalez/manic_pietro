@@ -43,7 +43,6 @@ void game_loop(void) {
   player_score = 0;
   game_over = 0;
   game_round_up = 0;
-  game_world = 0;
   // scr_curr = 0xFF;
   map_paper = PAPER_BLACK;
   player_lin_scr = GAME_LIN_FLOOR - 24;
@@ -71,7 +70,8 @@ void game_loop(void) {
         if (game_conveyor_col0 > 0) {
           game_anim_conveyor();
         }
-        NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin, game_exit_col);
+        NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
+                         game_exit_col);
       }
 
       if (game_check_time(&air_time, 25)) {
@@ -94,7 +94,8 @@ void game_loop(void) {
     if (game_round_up) {
       game_playing = 0;
       game_round_init();
-      NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin, game_exit_col);
+      NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
+                       game_exit_col);
       NIRVANAP_halt();
       game_round_up = 0;
       game_playing = 1;
@@ -139,6 +140,7 @@ void game_draw_map(void) {
   game_conveyor_col0 = 0;
   game_conveyor_col1 = 0;
   NIRVANAP_stop();
+  intrinsic_di();
   attrib_hl[0] = map_paper | (map_paper >> 3);
   attrib_hl[1] = attrib_hl[0];
   attrib_hl[2] = attrib_hl[0];
@@ -193,7 +195,7 @@ void game_draw_map(void) {
         scr_map[index1 + 33] = SPRITE_EXIT;
       }
       // Enemy
-      if (val0 >= ENEMY_START_INDEX && val0 < 120) {
+      if (val0 >= ENEMY_START_INDEX && val0 <= 120) {
         spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1); // Draw a Block with Paper
         enemy_init();
         scr_map[index1] = TILE_EMPTY;
@@ -216,9 +218,54 @@ void game_draw_map(void) {
       s_col1 = 0;
     }
   }
+  if (scr_curr == 19) {
+    game_img1();
+  }
+  intrinsic_ei();
   NIRVANAP_start();
 }
 
+void game_img1() {
+  unsigned char btile[48];
+  unsigned int li;
+  unsigned char i;
+  unsigned char k;
+
+  k = 0;
+  v0 = 16;
+  v1 = 0;
+
+  while (k < (16 * 4)) {
+
+    i = 0;
+    li = k * 48;
+    page(1);
+    while (i < 48) {
+      btile[i] = img1[li];
+      ++i;
+      ++li;
+    }
+    page(0);
+    NIRVANAP_halt();
+    i = 0;
+    li = 48 * 64;
+    while (i < 48) {
+      btiles[li] = btile[i];
+      ++i;
+      ++li;
+    }
+
+    NIRVANAP_drawT_raw(64, v0, v1);
+    if ( v1 == 30 ) {
+      v0 = v0 + 16;
+      v1 = 0;
+    } else {
+      v1 = v1 + 2;
+    }
+
+    ++k;
+  }
+}
 void game_cell_paint_index() {
 
   s_col1 = index1 % 32;
@@ -373,6 +420,26 @@ unsigned const char game_borders[] = {
     INK_BLUE,    // 17
     INK_MAGENTA, // 18
     INK_RED,     // 19
+    INK_BLACK,   // 0
+    INK_BLUE,    // 1
+    INK_BLACK,   // 2
+    INK_BLACK,   // 3
+    INK_GREEN,   // 4
+    INK_BLACK,   // 5
+    INK_BLACK,   // 6
+    INK_BLACK,   // 7
+    INK_BLACK,   // 8
+    INK_BLACK,   // 9
+    INK_BLACK,   // 10
+    INK_BLACK,   // 11
+    INK_BLACK,   // 12
+    INK_BLACK,   // 13
+    INK_BLACK,   // 14
+    INK_BLACK,   // 15
+    INK_BLACK,   // 16
+    INK_BLACK,   // 17
+    INK_BLACK,   // 18
+    INK_BLACK,   // 19
 };
 
 void game_round_init(void) {
@@ -403,7 +470,7 @@ void game_round_init(void) {
       "         Chuntey Crew",
       "     Kong Jr Watch the Game",
       "          Dr. Errazking",
-      "            Stage 26",
+      "         No tengo nombre",
       "            Stage 27",
       "            Stage 28",
       "            Stage 29",
@@ -440,9 +507,6 @@ void game_round_init(void) {
   air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
   // Init Sprites
 
-
-
-
   // Read Tiles from bank 3
 
   // Page Player from bank 3
@@ -457,7 +521,6 @@ void game_round_init(void) {
     ++i;
   }
 
-
   zx_border(map_border);
   zx_print_ink(map_border | (map_border << 3));
   game_fill_row(0, 32);
@@ -465,8 +528,6 @@ void game_round_init(void) {
     zx_print_ink(INK_BLACK | PAPER_YELLOW);
     game_fill_row(17, 32);
   }
-
-
 
   if (scr_curr < 20) {
     game_tileset = 0;
@@ -479,9 +540,9 @@ void game_round_init(void) {
 
   // Copy player tile
 
-  //Hack player colors TODO  Configureable
+  // Hack player colors TODO  Configureable
 
-  spr_init_bright = 0;
+  game_copy_sprite_color_reset();
 
   if (scr_curr < 20) {
     if (map_paper == PAPER_RED) {
@@ -498,9 +559,10 @@ void game_round_init(void) {
       spr_init_cout2 = PAPER_GREEN | INK_WHITE;
     }
 
-    if (map_paper == (PAPER_WHITE | BRIGHT) ) {
-      spr_init_bright = BRIGHT;
+    // if (map_paper == (PAPER_WHITE | BRIGHT)) {
 
+    if (map_paper == PAPER_WHITE) {
+      // spr_init_bright = BRIGHT;
 
       spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
       spr_init_cout0 = PAPER_BLACK | INK_BLACK;
@@ -508,27 +570,17 @@ void game_round_init(void) {
       spr_init_cin1 = PAPER_BLACK | INK_BLUE;
       spr_init_cout1 = PAPER_BLACK | INK_BLUE;
 
-
       spr_init_cin2 = PAPER_BLACK | INK_RED;
       spr_init_cout2 = PAPER_BLACK | INK_MAGENTA;
 
       spr_init_cin3 = PAPER_RED | INK_YELLOW;
       spr_init_cout3 = PAPER_BLUE | INK_BLACK;
 
-      //spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
-      //spr_init_cout3 = PAPER_BLACK | INK_BLACK;
-
-
+      // spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
+      // spr_init_cout3 = PAPER_BLACK | INK_BLACK;
     }
   }
   game_tile_cnt = game_copy_sprite_std(0, 8);
-  spr_init_cin1 = 0;
-  spr_init_cout1 = 0;
-  spr_init_cin2 = 0;
-  spr_init_cout2 = 0;
-  spr_init_cin3 = 0;
-  spr_init_cout3 = 0;
-
 
   spr_btile_paint_back();
   key_attrib[0] = map_paper | key_ink;
@@ -759,7 +811,6 @@ void game_page_map(void) {
   intrinsic_di();
 
   // Get Map from Bank 6
-  l_world = game_world;
   l_scr = scr_curr;
   l_scr0 = scr_curr;
   if (l_scr > 19) {
@@ -812,113 +863,6 @@ void game_page_map(void) {
     lk = lk + 48; // Next btile
   }
 
-
-/*
-  // Tiles (8x8) @Bank6
-  l_start = l_scr0 * 48 * 4;
-
-  lk = 0;
-  while (lk < 48 * 4) {
-    page(7);
-
-    li = 0;
-    while (li < 48) {
-      if (l_tileset == 0) {
-        l_btile[li] = hitiles1[l_start + li + lk];
-      } else {
-        l_btile[li] = hitiles2[l_start + li + lk];
-      }
-      ++li;
-    }
-    page(0);
-    // Store btile in low mem
-    li = 0;
-    while (li < 48) {
-      btiles[lk + li] = l_btile[li];
-      ++li;
-    }
-    lk = lk + 48; // Next btile
-  }
-
-  // Clear Key n Crumb upper row
-  li = 4 * 48;
-  while (li < (8 * 48)) {
-    v0 = li % 48;
-    // clean uper pixels col1 n col2
-    if (v0 < 16) {
-      btiles[li] = 0;
-    }
-    // Clear upper attibs col1
-    if (v0 >= 32 && v0 < 36) {
-      btiles[li] = l_paper;
-    }
-    // Clear upper attibs col2
-    if (v0 >= 40 && v0 < 44) {
-      btiles[li] = l_paper;
-    }
-    ++li;
-  }
-
-  // Move Key to tile 7
-  li = 0;
-  index1 = (48 * 7) + 16 + 1;
-  while (li < 16) {
-    btiles[index1 + li] = btiles[li];
-    btiles[li] = 0; // Clear Empty Tile (with key) but keep attribs for ingame
-    li = li + 2;
-  }
-  li = 0;
-  index1 = (48 * 7) + 32 + 8 + 4;
-  while (li < 4) {
-    btiles[index1 + li] = INK_WHITE | l_paper;
-    li = li + 1;
-  }
-  // CRUMB 1
-  btiles[192 + 5] = btiles[48 + 0];
-  btiles[192 + 7] = btiles[48 + 2];
-  btiles[192 + 9] = btiles[48 + 4];
-  btiles[192 + 11] = btiles[48 + 6];
-  btiles[192 + 13] = btiles[48 + 8];
-  btiles[192 + 15] = btiles[48 + 10];
-  // Atribs
-  btiles[192 + 41] = btiles[48 + 32];
-  btiles[192 + 42] = btiles[48 + 33];
-  btiles[192 + 43] = btiles[48 + 34];
-  // CRUMB 2
-  btiles[240 + 10] = btiles[48 + 0];
-  btiles[240 + 12] = btiles[48 + 2];
-  btiles[240 + 14] = btiles[48 + 4];
-  btiles[240 + 16] = btiles[48 + 6];
-  // Atribs
-  btiles[240 + 34] = btiles[48 + 32];
-  btiles[240 + 35] = btiles[48 + 33];
-  // CRUMB 3
-  // Pixels
-  btiles[240 + 13] = btiles[48 + 0];
-  btiles[240 + 15] = btiles[48 + 2];
-  // Atribs
-  btiles[240 + 43] = btiles[48 + 32];
-
-  // TILE EXTRA OFF (Switch, pipe)
-  // Write Local
-  li = (48 * 3);
-  lk = (48 * 4);
-
-  // Pixels
-  i = 0;
-  while (i < 16) {
-    btiles[lk + 16 + i] = reverse(btiles[li + i + 1]);
-    ++i;
-    ++i;
-  }
-  // Attribs
-  lk = lk + 32 + 4;
-  i = 0;
-  while (i < 4) {
-    btiles[lk + i] = btiles[li + i + 32 + 8];
-    ++i;
-  }
-*/
   // Get Map data
   lj = 0;
   lk = 0;
@@ -927,13 +871,15 @@ void game_page_map(void) {
   add_index = 0;
   page(6);
   while (lj < l_scr_map) {
-
     add_index = lenght0[lj]; // TODO n LEVELS
-
     start_index = start_index + add_index;
     ++lj;
   }
   page(0);
+  // TODO IF I REMOVE THESE LINES THE ENGINE FAILS!!! WHY???
+  scr_curr = l_scr;
+  map_paper = l_paper;
+  // END TODO
   for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
 
     // Page in BANK 06 - Note that global variables are in page 0
@@ -961,32 +907,12 @@ void game_page_map(void) {
       break;
     }
   }
-  scr_curr = l_scr;
-  map_paper = l_paper;
 
   intrinsic_ei();
 }
 
 void game_flash_exit(unsigned char f_attrib) {
   unsigned int li;
-  /*
-    // Set Flash bits on 8x8 Exits Tiles
-    li = 192;
-    while (li < 384) {
-      v0 = li % 48;
-      // Set flash bit on 8x8 exit tiles
-      if ((v0 >= 36 && v0 < 40) || (v0 >= 44 && v0 < 48)) {
-        btiles[li] = btiles[li] & 127;
-        btiles[li] = btiles[li] | f_attrib;
-      }
-      ++li;
-    }
-
-    spr_draw8(28, game_exit_lin - 8, game_exit_col);
-    spr_draw8(29, game_exit_lin - 8, game_exit_col + 1);
-    spr_draw8(30, game_exit_lin, game_exit_col);
-    spr_draw8(31, game_exit_lin, game_exit_col + 1);
-  */
   // Set Flash bits on Exit Sprite
   li = (48 * (SPRITE_DOOR)) + 32; // 80 ==> TILE EXIT
   i = 0;
@@ -998,6 +924,18 @@ void game_flash_exit(unsigned char f_attrib) {
   }
   NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin, game_exit_col);
   NIRVANAP_halt();
+}
+
+void game_copy_sprite_color_reset(void) {
+  spr_init_bright = 0;
+  spr_init_cin0 = 0;
+  spr_init_cout0 = 0;
+  spr_init_cin1 = 0;
+  spr_init_cout1 = 0;
+  spr_init_cin2 = 0;
+  spr_init_cout2 = 0;
+  spr_init_cin3 = 0;
+  spr_init_cout3 = 0;
 }
 
 unsigned char game_copy_sprite_std(unsigned char f_hi_sprite,
@@ -1012,7 +950,7 @@ unsigned char game_copy_sprite_std(unsigned char f_hi_sprite,
   game_copy_sprite(f_hi_sprite + 2, f_low_sprite + 5, 1);
   game_copy_sprite(f_hi_sprite + 1, f_low_sprite + 6, 1);
   game_copy_sprite(f_hi_sprite + 0, f_low_sprite + 7, 1);
-
+  game_copy_sprite_color_reset();
   return f_low_sprite + 8;
 }
 
@@ -1067,7 +1005,7 @@ void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
         }
       }
     }
-    btile[i] = (btile[i]  | spr_init_bright);
+    btile[i] = (btile[i] | spr_init_bright);
     ++i;
   }
 

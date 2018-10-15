@@ -102,7 +102,6 @@ unsigned char player_fall_start;
 unsigned char nirv_sprite_index;
 
 signed int game_gravity;
-unsigned char game_world;
 unsigned char game_song_play;
 unsigned char game_song_play_start;
 unsigned char game_conveyor_dir;
@@ -233,7 +232,7 @@ unsigned char const spr_init[] = {
     68,  12, 4, E_HORIZONTAL, 0x03, 0x02, 0x04, 0xFF, // CHICKEN
     70,  16, 4, E_HORIZONTAL, 0x05, 0x03, 0xFF, 0xFF, // FOCA
     72,  20, 4, E_HORIZONTAL, 0x07, 0x00, 0xFF, 0xFF, // WATER
-    74, 108, 1, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
+    74, 112, 1, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
     76,  24, 4, E_HORIZONTAL, 0x46, 0x43, 0x45, 0x06, // PAC
     78,  28, 4, E_HORIZONTAL, 0x05, 0x03, 0x06, 0x02, // KANGOROO
     80,  32, 4, E_HORIZONTAL, 0x45, 0x43, 0x44, 0x42, // BARRELL
@@ -256,7 +255,7 @@ unsigned char const spr_init[] = {
    114, 100, 4, E_HORIZONTAL, 0x26, 0x21, 0x22, 0x27, // WEA SOLAR (PAPER GREEN)
    116, 106, 6, E_FALL      , 0xFF, 0xFF, 0xFF, 0xFF, // KONG FALLING
    118, 112, 2, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG JR
-
+   120, 108, 4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // CARRITO FINAL
 };
 
 //Sprite color change

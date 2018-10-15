@@ -45,6 +45,8 @@ extern void ay_song_stop(void) __preserves_regs(b,c,d,e,h,l);
 extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 
 //BANK 1 NOT USED
+extern unsigned char img1[];
+
 //BANK 3 Sprites
 extern unsigned char hisprites1[];
 extern unsigned char hisprites2[];
