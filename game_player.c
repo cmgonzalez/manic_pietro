@@ -355,7 +355,6 @@ unsigned char player_move_walk(void) {
         index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
         if (scr_map[index1] == TILE_CONVEYOR ||
             scr_map[index1 + 1] == TILE_CONVEYOR) {
-          zx_border(INK_CYAN);
           BIT_SET(*p_state, STAT_CONVEYOR);
         }
       }
@@ -378,7 +377,6 @@ unsigned char player_move_walk(void) {
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
       // spr_move_horizontal();
-      zx_border(INK_YELLOW);
       player_jump_top = lin[GAME_INDEX_P1];
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
@@ -492,6 +490,15 @@ unsigned char player_get_floor() {
     v0 = tile_class[v0];
     v1 = tile_class[v1];
 
+    // HACK CRUMB
+    if (colint[GAME_INDEX_P1] == 3) {
+      v0 = TILE_EMPTY;
+    }
+    if (colint[GAME_INDEX_P1] == 0) {
+      v1 = TILE_EMPTY;
+    }
+
+
     if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) &&
         (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY)) {
       index1 = index1 + 32;
@@ -544,12 +551,10 @@ void player_score_add(unsigned int f_score) __z88dk_fastcall {
 unsigned char player_pick_item(unsigned char l_val, int l_index) {
 
   if (l_val == TILE_OBJECT) {
-    zx_border(INK_YELLOW);
     player_score_add(100);
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
     audio_coin();
-    zx_border(INK_WHITE);
     if (obj_count == player_coins) {
       game_flash_exit(FLASH);
       obj_count = 0xFF;
@@ -641,6 +646,8 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
     v0 = TILE_EMPTY;
   if (v1 > 31)
     v1 = TILE_EMPTY;
+
+
 
 
 

@@ -44,7 +44,7 @@ void main(void) {
   z80_delay_ms(666);  //SATANIC DELAY
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
-  game_debug = 1;
+  game_debug = 0;
   game_fps_show = 1;
   scr_curr = 0;
   nirv_sprite_index = 0;
