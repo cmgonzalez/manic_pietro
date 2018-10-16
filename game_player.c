@@ -107,7 +107,7 @@ void player_turn(void) {
     }
 
     if (c == 53) {
-      if (scr_curr > 20) {
+      if (scr_curr >= 20) {
         scr_curr = 0;
       } else {
         scr_curr = 20;

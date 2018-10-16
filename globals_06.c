@@ -6,47 +6,134 @@
 / Compressed MAP Data for game paging
 */
 const unsigned char paper0[] = {
-PAPER_BLACK,
-PAPER_BLUE,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_RED,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLUE,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_GREEN,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLUE,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_WHITE,
-PAPER_BLACK,
-PAPER_CYAN,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLUE,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_BLACK,
-PAPER_GREEN,
-PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLUE,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_RED,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLUE,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_GREEN,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLUE,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_WHITE,
+  PAPER_BLACK,
+  PAPER_CYAN,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLUE,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_BLACK,
+  PAPER_GREEN,
+  PAPER_BLACK,
 };
+const unsigned char game_borders0[] = {
+  INK_RED,     // 0
+  INK_RED,     // 1
+  INK_RED,     // 2
+  INK_RED,     // 3
+  INK_BLUE,    // 4
+  INK_RED,     // 5
+  INK_GREEN,   // 6
+  INK_RED,     // 7
+  INK_BLUE,    // 8
+  INK_RED,     // 9
+  INK_RED,     // 10
+  INK_RED,     // 11
+  INK_BLUE,    // 12
+  INK_YELLOW,  // 13
+  INK_RED,     // 14
+  INK_RED,     // 15
+  INK_RED,     // 16
+  INK_BLUE,    // 17
+  INK_MAGENTA, // 18
+  INK_RED,     // 19
+  INK_BLACK,   // 0
+  INK_BLUE,    // 1
+  INK_BLACK,   // 2
+  INK_BLACK,   // 3
+  INK_GREEN,   // 4 Kong Jr Watch the game
+  INK_MAGENTA, // 5 Dr. Errazking
+  INK_CYAN,    // 6
+  INK_BLACK,   // 7
+  INK_BLACK,   // 8
+  INK_BLACK,   // 9
+  INK_BLACK,   // 10
+  INK_BLACK,   // 11
+  INK_BLACK,   // 12
+  INK_BLACK,   // 13
+  INK_BLACK,   // 14
+  INK_BLACK,   // 15
+  INK_BLACK,   // 16
+  INK_BLACK,   // 17
+  INK_BLACK,   // 18
+  INK_BLACK,   // 19
+  };
+
+const unsigned char map_names0[1312]  = {
+      "         Central Cavern         "
+      "          The Cold Room         "
+      "          The Menagerie         "
+      "   Abandoned Uranium Workings   "
+      "         Eugene's Lair          "
+      "       Processing Plant         "
+      "            The Vat             "
+      "Miner Willy meets the Kong Beast"
+      "        Wacky Amoebatrons       "
+      "       The Endorian Forest      "
+      "Attack of the Mutant Telephones "
+      " Return of the Alien Kong Beast "
+      "          Ore Refinery          "
+      "       Skylab Landing Bay       "
+      "             The Bank           "
+      "      The Sixteenth Cavern      "
+      "         The Warehouse          "
+      "      Amoebatrons Revenge       "
+      "     Solar Power Generator      "
+      "        The Final Barrier       "
+      "       Frozen Central Pipe      "
+      "        Super Luizo Bro         "
+      "    Pietro meets Monkey Kong    "
+      "         Chuntey Crew           "
+      "     Kong Jr Watch the Game     "
+      "          Dr. Errazking         "
+      "         No tengo nombre        "
+      "            Stage 27            "
+      "            Stage 28            "
+      "            Stage 29            "
+      "            Stage 30            "
+      "            Stage 31            "
+      "            Stage 32            "
+      "            Stage 33            "
+      "            Stage 34            "
+      "            Stage 35            "
+      "            Stage 36            "
+      "            Stage 37            "
+      "            Stage 38            "
+      "           Noentiendo           "
+  };
+
+//Auto Generated
 const unsigned int lenght0[] = {
 133,172,141,154,162,168,169,212,173,200,203,213,198,159,192,165,236
 ,193

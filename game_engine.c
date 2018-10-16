@@ -256,7 +256,7 @@ void game_img1() {
     }
 
     NIRVANAP_drawT_raw(64, v0, v1);
-    if ( v1 == 30 ) {
+    if (v1 == 30) {
       v0 = v0 + 16;
       v1 = 0;
     } else {
@@ -397,95 +397,12 @@ void game_anim_conveyor() {
     }
   }
 }
-
-// TODO move to 128 bank's
-unsigned const char game_borders[] = {
-    INK_RED,     // 0
-    INK_RED,     // 1
-    INK_RED,     // 2
-    INK_RED,     // 3
-    INK_BLUE,    // 4
-    INK_RED,     // 5
-    INK_GREEN,   // 6
-    INK_RED,     // 7
-    INK_BLUE,    // 8
-    INK_RED,     // 9
-    INK_RED,     // 10
-    INK_RED,     // 11
-    INK_BLUE,    // 12
-    INK_YELLOW,  // 13
-    INK_RED,     // 14
-    INK_RED,     // 15
-    INK_RED,     // 16
-    INK_BLUE,    // 17
-    INK_MAGENTA, // 18
-    INK_RED,     // 19
-    INK_BLACK,   // 0
-    INK_BLUE,    // 1
-    INK_BLACK,   // 2
-    INK_BLACK,   // 3
-    INK_GREEN,   // 4
-    INK_BLACK,   // 5
-    INK_BLACK,   // 6
-    INK_BLACK,   // 7
-    INK_BLACK,   // 8
-    INK_BLACK,   // 9
-    INK_BLACK,   // 10
-    INK_BLACK,   // 11
-    INK_BLACK,   // 12
-    INK_BLACK,   // 13
-    INK_BLACK,   // 14
-    INK_BLACK,   // 15
-    INK_BLACK,   // 16
-    INK_BLACK,   // 17
-    INK_BLACK,   // 18
-    INK_BLACK,   // 19
-};
-
 void game_round_init(void) {
-  unsigned const char *map_names[] = {
-      "         Central Cavern",          // 0
-      "          The Cold Room",          // 1
-      "          The Menagerie",          // 2
-      "   Abandoned Uranium Workings",    // 3
-      "         Eugene's Lair",           // 4
-      "       Processing Plant",          // 5
-      "            The Vat",              // 6
-      "Miner Willy meets the Kong Beast", // 7
-      "        Wacky Amoebatrons",        // 8
-      "       The Endorian Forest",       // 9
-      "Attack of the Mutant Telephones",  // 10
-      " Return of the Alien Kong Beast",  // 11
-      "          Ore Refinery",           // 12
-      "       Skylab Landing Bay",        // 13
-      "             The Bank",            // 14
-      "      The Sixteenth Cavern",       // 15
-      "         The Warehouse",           // 16
-      "      Amoebatrons Revenge",        // 17
-      "     Solar Power Generator",       // 18
-      "        The Final Barrier",        // 19
-      "       Frozen Central Pipe",
-      "        Super Luizo Bro",
-      "    Pietro meets Monkey Kong",
-      "         Chuntey Crew",
-      "     Kong Jr Watch the Game",
-      "          Dr. Errazking",
-      "         No tengo nombre",
-      "            Stage 27",
-      "            Stage 28",
-      "            Stage 29",
-      "            Stage 30",
-      "            Stage 31",
-      "            Stage 32",
-      "            Stage 33",
-      "            Stage 34",
-      "            Stage 35",
-      "            Stage 36",
-      "            Stage 37",
-      "            Stage 38",
-      "           Noentiendo",
-
-  };
+  // TODO move to 128 bank's
+  unsigned char i;
+  unsigned int j;
+  unsigned char game_borders;
+  unsigned char map_names[32];
 
   // TODO Just use start to simplify
 
@@ -497,9 +414,24 @@ void game_round_init(void) {
   NIRVANAP_halt();
   NIRVANAP_stop();
 
+  i = scr_curr;
+  page(6);
+  //Get Border Data
+  game_borders = game_borders0[i];
+  //Get Map Name
+  j = i * 32;
+  i = 0;
+  while( i < 32 ) {
+    map_names[i] = map_names0[j];
+    ++i;
+    ++j;
+  }
+  page(0);
+  map_names[32] = '\0';
+  map_border = game_borders;
   /* screen init */
   /*PHASE INIT*/
-  map_border = game_borders[scr_curr];
+
   loop_count = 0;
   zx_set_clock(0);
   frame_time = 0;
@@ -601,7 +533,9 @@ void game_round_init(void) {
 
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   game_fill_row(17, 32);
-  zx_print_str(17, 0, map_names[scr_curr]);
+
+  zx_print_str(17, 0, &map_names[0] );
+
 
   zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
   zx_print_str(18, 0, "AIR ------");

@@ -360,6 +360,9 @@ extern const unsigned char world0[];
 extern const unsigned int lenght0[];
 extern const unsigned char paper0[];
 
+extern const unsigned char game_borders0[];
+extern const unsigned char map_names0[];
+
 extern unsigned char scr_curr;
 extern unsigned char map_width;
 extern unsigned char map_heigth;
