@@ -212,6 +212,7 @@ extern udk_t k1;
 
 
 extern unsigned char dirs;
+extern unsigned char dirs_last;
 
 extern unsigned char class[GAME_MAX_SPRITES];
 extern unsigned char state[GAME_MAX_SPRITES];

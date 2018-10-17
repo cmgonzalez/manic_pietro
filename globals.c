@@ -50,6 +50,7 @@ uint16_t (*joyfunc1)(udk_t *); // pointer to joystick function Player 1
 udk_t k1;
 
 unsigned char dirs;
+unsigned char dirs_last;
 
 // SPRITES GAME ARRAYS
 unsigned char class[GAME_MAX_SPRITES]; // CLASS OF SPRITE

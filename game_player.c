@@ -120,7 +120,6 @@ void player_turn(void) {
       in_wait_nokey();
     }
     // zx_border(INK_RED); // TODO REMOVE ME ONLY FOR COLISION DETECTION
-    dirs = (joyfunc1)(&k1);
 
     /* Player initial Values */
     p_state = &state[GAME_INDEX_P1];
@@ -131,10 +130,14 @@ void player_turn(void) {
     s_col0 = col[GAME_INDEX_P1];
     s_tile0 = tile[GAME_INDEX_P1];
     s_class = 0;
+
+    dirs = (joyfunc1)(&k1);
     // Key Lock
-    if (dirs == 0) {
-      // Release the Lock
+    if (dirs != dirs_last || dirs == 0) {
       BIT_CLR(*p_state_a, STAT_LOCK);
+      dirs_last = dirs;
+    } else {
+      BIT_SET(*p_state_a, STAT_LOCK);
     }
 
     player_move();
@@ -286,150 +289,127 @@ unsigned char player_move_jump(void) {
 }
 
 unsigned char player_move_walk(void) {
-  // TODO CLEAN THIS!
-  /* User have pressed valid input */
-
+  //Handle of player walk
   if (player_check_input()) {
-
     if (dirs & IN_STICK_FIRE) {
-      // Pre CHECK
-      if (player_check_ceil(lin[GAME_INDEX_P1] - 2, col[GAME_INDEX_P1])) {
-        // NEW JUMP
-        if (game_mode == 0) {
-          // Willy
-          game_gravity = 100;                  // GAME_GRAVITY;
-          player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
-        } else {
-          // Pietro
-          game_gravity = 100; // GAME_GRAVITY;
-          // player_vel_y0 = -(game_gravity * 7); // GAME_VELOCITY;
-          player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
-        }
-
-        player_vel_inc = 1;
-        player_jump_count = 0xFF;
-
-        audio_jump();
-        spr_set_up();
-        player_vel_y = player_vel_y0;
-        // Set the Lock
-        BIT_SET(*p_state_a, STAT_LOCK);
-
-        BIT_CLR(*p_state, STAT_DIRL);
-        BIT_CLR(*p_state, STAT_DIRR);
-
-        if (BIT_CHK(*p_state, STAT_CONVEYOR) && !BIT_CHK(*p_state, STAT_DIRL) &&
-            !BIT_CHK(*p_state, STAT_DIRR)) {
-
-          if (game_conveyor_dir == DIR_LEFT) {
-            spr_set_left();
-          }
-          if (game_conveyor_dir == DIR_RIGHT) {
-            spr_set_right();
-          }
-        } else {
-
-          if (dirs & IN_STICK_LEFT) {
-            spr_set_left();
-          }
-
-          if (dirs & IN_STICK_RIGHT) {
-            spr_set_right();
-          }
-        }
-
-        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
-      }
-
+      player_new_jump();
       return 1;
-    } // END IN_STICK_FIRE
-
-    if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
-
-      if (!BIT_CHK(*p_state, STAT_DIRL) && !BIT_CHK(*p_state, STAT_DIRR)) {
-
-      } else {
-        /* Move Right */
-        if (game_conveyor_dir == DIR_RIGHT) {
-          spr_set_right();
-          spr_move_horizontal();
-        }
-
-        /* Move Left */
-        if (game_conveyor_dir == DIR_LEFT) {
-          spr_set_left();
-          spr_move_horizontal();
-        }
-      }
-
-    } else {
-
-      // CONVEYOR DETECTION
-      player_check_conveyor();
-      /* Move Right */
-      if (dirs & IN_STICK_RIGHT) {
-        if ( BIT_CHK(*p_state , STAT_DIRL) ) {
-          colint[GAME_INDEX_P1]--;
-        }
-        spr_set_right();
-        spr_move_horizontal();
-      }
-
-      /* Move Left */
-      if (dirs & IN_STICK_LEFT) {
-        if ( BIT_CHK(*p_state , STAT_DIRR) ) {
-          colint[GAME_INDEX_P1]++;
-        }
-        spr_set_left();
-        spr_move_horizontal();
-      }
     }
-
-    /* Set Tile according to current direction */
-    player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
-    /* Check if the player have floor, and set fall if not */
-    if (player_check_floor(0) && player_check_floor(1)) {
-      // spr_move_horizontal();
-      player_jump_top = lin[GAME_INDEX_P1];
-      BIT_SET(*p_state, STAT_FALL);
-      BIT_CLR(*p_state, STAT_DIRL);
-      BIT_CLR(*p_state, STAT_DIRR);
-      player_fall_start = 1;
-      player_jump_count = 0xFF;
-      audio_fall();
-    }
+    player_handle_conveyor();
+    player_handle_walk();
+    player_handle_fall();
     return 1;
   } else {
-    // TODO CONVEYOR DETECTION
-    player_check_conveyor();
-    /* Check if the player have floor, and set fall if not */
-    if (player_check_floor(0) && player_check_floor(1)) {
+    // NO INPUT FROM Player
+    player_handle_conveyor();
+    player_handle_fall();
+  }
+  return 0;
+}
 
-      player_jump_top = lin[GAME_INDEX_P1];
-      BIT_SET(*p_state, STAT_FALL);
-      BIT_CLR(*p_state, STAT_DIRL);
-      BIT_CLR(*p_state, STAT_DIRR);
-      player_jump_count = 0xFF;
-      // player_fall_start = 1;
-      // audio_fall();
+void player_handle_walk() {
+  if (!BIT_CHK(*p_state, STAT_CONVEYOR)) {
+    if (dirs & IN_STICK_RIGHT) {
+      if (BIT_CHK(*p_state, STAT_DIRL)) {
+        colint[GAME_INDEX_P1]--;
+      }
+      spr_set_right();
+      spr_move_horizontal();
     }
 
-    if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
-
-      if (game_conveyor_dir == DIR_LEFT) {
-        BIT_SET(*p_state, STAT_DIRL);
-        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
-
-      } else {
-        BIT_SET(*p_state, STAT_DIRR);
-        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+    /* Move Left */
+    if (dirs & IN_STICK_LEFT) {
+      if (BIT_CHK(*p_state, STAT_DIRR)) {
+        colint[GAME_INDEX_P1]++;
       }
+      spr_set_left();
+      spr_move_horizontal();
+    }
+    // Set Tile according to current direction
+    player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+  }
+}
 
+void player_handle_fall() {
+  /* Check if the player have floor, and set fall if not */
+  if (player_check_floor(0) && player_check_floor(1)) {
+    player_jump_top = lin[GAME_INDEX_P1];
+    BIT_SET(*p_state, STAT_FALL);
+    BIT_CLR(*p_state, STAT_DIRL);
+    BIT_CLR(*p_state, STAT_DIRR);
+    player_jump_count = 0xFF;
+    audio_fall();
+  }
+
+}
+void player_handle_conveyor() {
+  player_check_conveyor();
+  if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
+
+    /* Move Right */
+    if (game_conveyor_dir == DIR_RIGHT) {
+      spr_set_right();
+      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+      spr_move_horizontal();
+    }
+
+    /* Move Left */
+    if (game_conveyor_dir == DIR_LEFT) {
+      spr_set_left();
+      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
       spr_move_horizontal();
     }
   }
+}
+void player_new_jump() {
 
-  return 0;
+  // Pre CHECK
+  if (player_check_ceil(lin[GAME_INDEX_P1] - 2, col[GAME_INDEX_P1])) {
+    // NEW JUMP
+    if (game_mode == 0) {
+      // Willy
+      game_gravity = 100;                  // GAME_GRAVITY;
+      player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
+    } else {
+      // Pietro
+      game_gravity = 100; // GAME_GRAVITY;
+      // player_vel_y0 = -(game_gravity * 7); // GAME_VELOCITY;
+      player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
+    }
+
+    player_vel_inc = 1;
+    player_jump_count = 0xFF;
+
+    audio_jump();
+    spr_set_up();
+    player_vel_y = player_vel_y0;
+    // Set the Lock
+
+    BIT_CLR(*p_state, STAT_DIRL);
+    BIT_CLR(*p_state, STAT_DIRR);
+
+    if (BIT_CHK(*p_state, STAT_CONVEYOR) && !BIT_CHK(*p_state, STAT_DIRL) &&
+        !BIT_CHK(*p_state, STAT_DIRR)) {
+
+      if (game_conveyor_dir == DIR_LEFT) {
+        spr_set_left();
+      }
+      if (game_conveyor_dir == DIR_RIGHT) {
+        spr_set_right();
+      }
+    } else {
+
+      if (dirs & IN_STICK_LEFT) {
+        spr_set_left();
+      }
+
+      if (dirs & IN_STICK_RIGHT) {
+        spr_set_right();
+      }
+    }
+
+    player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+  }
 }
 
 void player_collision() {
@@ -641,13 +621,15 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
 
 void player_check_conveyor() {
 
-  index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
+  if (!BIT_CHK(*p_state_a, STAT_LOCK)) {
 
-  v0 = tile_class[scr_map[index1]];
-  v1 = tile_class[scr_map[index1 + 1]];
+    index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
 
-  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
-    BIT_SET(*p_state, STAT_CONVEYOR);
+    v0 = tile_class[scr_map[index1]];
+    v1 = tile_class[scr_map[index1 + 1]];
+    if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+      BIT_SET(*p_state, STAT_CONVEYOR);
+    }
   }
 }
 
@@ -667,8 +649,6 @@ unsigned char player_check_floor(unsigned char f_inc) {
       colint[GAME_INDEX_P1] == 3) {
     v0 = TILE_EMPTY;
   }
-
-
 
   if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) {
     return 1;
@@ -714,8 +694,8 @@ unsigned char player_get_floor() {
     v1 = tile_class[v1];
 
     // HACK CRUMB
-    
-    if ( player_jump_count < 10 ) {
+
+    if (player_jump_count < 10) {
       if ((v1 != TILE_EMPTY) && colint[GAME_INDEX_P1] == 0) {
         v1 = TILE_EMPTY;
       }
@@ -724,7 +704,6 @@ unsigned char player_get_floor() {
         v0 = TILE_EMPTY;
       }
     }
-
 
     if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) &&
         (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY)) {
