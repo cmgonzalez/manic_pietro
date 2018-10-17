@@ -46,8 +46,7 @@ unsigned char map_heigth;
 //###############################################################################################
 
 uint16_t (*joyfunc1)(udk_t *); // pointer to joystick function Player 1
-uint16_t (*joyfunc2)(
-    udk_t *); // pointer to joystick function for game_control_mode
+//uint16_t (*joyfunc2)(udk_t *); // pointer to joystick function for game_control_mode
 udk_t k1;
 
 unsigned char dirs;
@@ -231,7 +230,7 @@ unsigned char const spr_init[] = {
     66,   8, 4, E_HORIZONTAL, 0x05, 0x07, 0xFF, 0xFF, // PENGUIN
     68,  12, 4, E_HORIZONTAL, 0x03, 0x02, 0x04, 0xFF, // CHICKEN
     70,  16, 4, E_HORIZONTAL, 0x05, 0x03, 0xFF, 0xFF, // FOCA
-    72,  20, 4, E_HORIZONTAL, 0x07, 0x00, 0xFF, 0xFF, // WATER
+    72,  20, 4, E_HORIZONTAL, 0x17, 0x10, 0xFF, 0xFF, // WATER
     74, 112, 1, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
     76,  24, 4, E_HORIZONTAL, 0x46, 0x43, 0x45, 0x06, // PAC
     78,  28, 4, E_HORIZONTAL, 0x05, 0x03, 0x06, 0x02, // KANGOROO
@@ -276,7 +275,7 @@ const unsigned char key_map[] = {
     111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
 };
 
-unsigned int scan_map[] = {
+const unsigned int scan_map[] = {
     IN_KEY_SCANCODE_ENTER, IN_KEY_SCANCODE_SPACE, IN_KEY_SCANCODE_0,
     IN_KEY_SCANCODE_1,     IN_KEY_SCANCODE_2,     IN_KEY_SCANCODE_3,
     IN_KEY_SCANCODE_4,     IN_KEY_SCANCODE_5,     IN_KEY_SCANCODE_6,
@@ -289,7 +288,8 @@ unsigned int scan_map[] = {
     IN_KEY_SCANCODE_p,     IN_KEY_SCANCODE_q,     IN_KEY_SCANCODE_r,
     IN_KEY_SCANCODE_s,     IN_KEY_SCANCODE_t,     IN_KEY_SCANCODE_u,
     IN_KEY_SCANCODE_v,     IN_KEY_SCANCODE_w,     IN_KEY_SCANCODE_x,
-    IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z};
+    IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z
+};
 
 const unsigned char tile_class[] = {
     TILE_EMPTY,     //00

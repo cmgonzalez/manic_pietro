@@ -153,11 +153,12 @@ void menu_main_print(void) {
 }
 
 void menu_redefine() {
-  intrinsic_halt();
-  zx_paper_fill(INK_BLACK | PAPER_BLACK);
-  for (v0 = 8; v0 < 14; ++v0)
-    game_paint_attrib(&attrib, 0, 31, (v0 << 3) + 8);
 
+  for (v0 = 5; v0 < 14; ++v0) {
+    game_paint_attrib(&attrib, 0, 31, (v0 << 3) + 8);
+  }
+  zx_paper_fill(INK_BLACK | PAPER_BLACK);
+  intrinsic_halt();
 
   zx_print_str(10, 10, "LEFT");
   k1.left = menu_define_key();
@@ -166,8 +167,9 @@ void menu_redefine() {
   zx_print_str(12, 10, "JUMP");
   k1.fire = menu_define_key();
 
-
-  game_fill_row(12, 32);
+  k1.up = IN_KEY_SCANCODE_DISABLE;
+  k1.down = IN_KEY_SCANCODE_DISABLE;
+  //game_fill_row(12, 32);
   menu_main_print();
 }
 

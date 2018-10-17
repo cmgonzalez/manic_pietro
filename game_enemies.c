@@ -46,19 +46,19 @@ void enemy_turn(void) {
 
         enemy_move();
         spr_paint();
+        //NIRVANAP_halt(); NO GLITCHES!! BUT SLOW
+
         last_time[sprite] = zx_clock();
       }
     }
     ++sprite;
     ++nirv_sprite_index;
-    if (nirv_sprite_index >= NIRV_TOTAL_SPRITES) {
+    if (nirv_sprite_index >= NIRV_SPRITE_P1) {
       nirv_sprite_index = 0;
       NIRVANAP_halt();
     }
   }
-  if (spr_count > NIRV_TOTAL_SPRITES) {
-    NIRVANAP_halt();
-  }
+
 }
 
 void enemy_move(void) {
@@ -295,9 +295,9 @@ void enemy_init() {
         break;
       case E_VERTICAL:
         if (f_variant) {
-          BIT_SET(*p_state, STAT_DIRU);
+          BIT_SET(*p_state, STAT_JUMP);
         } else {
-          BIT_SET(*p_state, STAT_DIRD);
+          BIT_SET(*p_state, STAT_FALL);
         }
         break;
       }

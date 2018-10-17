@@ -84,7 +84,7 @@ void game_loop(void) {
 
         frame_time = zx_clock();
         // intrinsic_halt();
-        if (game_debug)
+        if (game_fps_show)
           game_fps();
       }
 
@@ -92,6 +92,8 @@ void game_loop(void) {
       ++fps;
     }
     if (game_round_up) {
+      zx_print_ink(INK_BLACK | PAPER_YELLOW);
+      game_fill_row(17, 32);
       game_playing = 0;
       game_round_init();
       NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
@@ -195,7 +197,7 @@ void game_draw_map(void) {
         scr_map[index1 + 33] = SPRITE_EXIT;
       }
       // Enemy
-      if (val0 >= ENEMY_START_INDEX && val0 <= 120) {
+      if (val0 >= ENEMY_START_INDEX && val0 <= 121) {
         spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1); // Draw a Block with Paper
         enemy_init();
         scr_map[index1] = TILE_EMPTY;
@@ -402,11 +404,17 @@ void game_round_init(void) {
   unsigned char i;
   unsigned int j;
   unsigned char game_borders;
-  unsigned char map_names[32];
+  unsigned char map_names[33];
 
   // TODO Just use start to simplify
-
   ay_reset();
+
+  //All Black
+  zx_border(INK_BLACK);
+  zx_print_ink(INK_BLACK | (INK_BLACK << 3));
+  game_fill_row(0, 32);
+
+
   spr_clear_scr();
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
@@ -453,13 +461,11 @@ void game_round_init(void) {
     ++i;
   }
 
-  zx_border(map_border);
-  zx_print_ink(map_border | (map_border << 3));
-  game_fill_row(0, 32);
-  if (scr_curr > 0) {
-    zx_print_ink(INK_BLACK | PAPER_YELLOW);
-    game_fill_row(17, 32);
-  }
+
+  //if (scr_curr > 0) {
+  //  zx_print_ink(INK_BLACK | PAPER_YELLOW);
+  //  game_fill_row(17, 32);
+  //}
 
   if (scr_curr < 20) {
     game_tileset = 0;
@@ -512,7 +518,7 @@ void game_round_init(void) {
       // spr_init_cout3 = PAPER_BLACK | INK_BLACK;
     }
   }
-  game_tile_cnt = game_copy_sprite_std(0, 8);
+  game_tile_cnt = game_copy_sprite_std(0, TILE_P1_RIGHT);
 
   spr_btile_paint_back();
   key_attrib[0] = map_paper | key_ink;
@@ -525,7 +531,9 @@ void game_round_init(void) {
   NIRVANAP_start();
   game_draw_map();
   game_flash_exit(!FLASH);
-
+  zx_border(map_border);
+  zx_print_ink(map_border | (map_border << 3));
+  game_fill_row(0, 32);
   if (!game_over) {
     player_init(player_lin_scr, player_col_scr, TILE_P1_RIGHT);
     player_killed = 0;

@@ -42,7 +42,7 @@ void player_init(unsigned char f_lin, unsigned char f_col,
   state_a[GAME_INDEX_P1] = 0;
   last_time[GAME_INDEX_P1] = zx_clock();
   player_vel_y = 0;
-  colint[GAME_INDEX_P1] = 0;
+
   spr_frames[GAME_INDEX_P1] = 4;
   p_state = &state[GAME_INDEX_P1];
   p_state_a = &state_a[GAME_INDEX_P1];
@@ -52,15 +52,18 @@ void player_init(unsigned char f_lin, unsigned char f_col,
     BIT_SET(*p_state, STAT_DIRR);
     BIT_SET(*p_state_a, STAT_LDIRR);
     tile[GAME_INDEX_P1] = f_tile;
+    colint[GAME_INDEX_P1] = 0;
   } else {
     colint[GAME_INDEX_P1] = 3;
     BIT_SET(*p_state, STAT_DIRL);
     BIT_SET(*p_state_a, STAT_LDIRL);
-    tile[GAME_INDEX_P1] = f_tile + spr_frames[GAME_INDEX_P1];
+    tile[GAME_INDEX_P1] = f_tile + 4;
+    colint[GAME_INDEX_P1] = 3;
   }
   // TODO PERF remove +16 and ajust all game
-  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16,
-                   col[GAME_INDEX_P1]);
+  // NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1], lin[GAME_INDEX_P1] +
+  // 16,
+  //                 col[GAME_INDEX_P1]);
 }
 
 void player_turn(void) {
@@ -190,6 +193,13 @@ unsigned char player_move_jump(void) {
     BIT_CLR(*p_state, STAT_DIRR);
   }
 
+  if (BIT_CHK(*p_state, STAT_CONVEYOR)) {
+    // FIX Conveyor FALL
+    BIT_CLR(*p_state, STAT_DIRR);
+    BIT_CLR(*p_state, STAT_DIRL);
+    BIT_CLR(*p_state, STAT_CONVEYOR);
+  }
+
   // JUMP HACK! TO BE LIKE REAL MMINER WE JUST INSERT HORIZONTAL EXTRA
   // MOVEMENT jump_count 0=>16
   if (BIT_CHK(*p_state, STAT_DIRL) || BIT_CHK(*p_state, STAT_DIRR))
@@ -239,8 +249,11 @@ unsigned char player_move_jump(void) {
 
     player_jump_top = s_lin1;
   } else {
-    if (player_jump_count == 14)
+
+    if (player_jump_count == 14) {
       audio_fall();
+    }
+
     // Falling
     v0 = player_get_floor();
 
@@ -256,10 +269,13 @@ unsigned char player_move_jump(void) {
       // Jump end
       lin[GAME_INDEX_P1] = v0;
       player_vel_y = 0;
+      // if (!player_check_floor(0) || !player_check_floor(1)) {
       BIT_CLR(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_JUMP);
       BIT_CLR(*p_state, STAT_CONVEYOR);
       ay_fx_stop();
+      //}
+
       return 0;
     }
     spr_set_down();
@@ -311,7 +327,6 @@ unsigned char player_move_walk(void) {
           if (game_conveyor_dir == DIR_RIGHT) {
             spr_set_right();
           }
-
         } else {
 
           if (dirs & IN_STICK_LEFT) {
@@ -350,23 +365,21 @@ unsigned char player_move_walk(void) {
     } else {
 
       // CONVEYOR DETECTION
-      BIT_CLR(*p_state, STAT_CONVEYOR);
-      if (!BIT_CHK(*p_state_a, STAT_LOCK)) {
-        index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
-        if (scr_map[index1] == TILE_CONVEYOR ||
-            scr_map[index1 + 1] == TILE_CONVEYOR) {
-          BIT_SET(*p_state, STAT_CONVEYOR);
-        }
-      }
-
+      player_check_conveyor();
       /* Move Right */
       if (dirs & IN_STICK_RIGHT) {
+        if ( BIT_CHK(*p_state , STAT_DIRL) ) {
+          colint[GAME_INDEX_P1]--;
+        }
         spr_set_right();
         spr_move_horizontal();
       }
 
       /* Move Left */
       if (dirs & IN_STICK_LEFT) {
+        if ( BIT_CHK(*p_state , STAT_DIRR) ) {
+          colint[GAME_INDEX_P1]++;
+        }
         spr_set_left();
         spr_move_horizontal();
       }
@@ -382,24 +395,13 @@ unsigned char player_move_walk(void) {
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
       player_fall_start = 1;
+      player_jump_count = 0xFF;
       audio_fall();
     }
     return 1;
   } else {
     // TODO CONVEYOR DETECTION
-    BIT_CLR(*p_state, STAT_CONVEYOR);
-    index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
-
-    v0 = tile_class[scr_map[index1]];
-    v1 = tile_class[scr_map[index1]];
-
-    if (v0 == TILE_CONVEYOR ||
-        v1 == TILE_CONVEYOR) {
-      BIT_SET(*p_state, STAT_CONVEYOR);
-      BIT_CLR(*p_state, STAT_DIRL);
-      BIT_CLR(*p_state, STAT_DIRR);
-    }
-
+    player_check_conveyor();
     /* Check if the player have floor, and set fall if not */
     if (player_check_floor(0) && player_check_floor(1)) {
 
@@ -407,6 +409,7 @@ unsigned char player_move_walk(void) {
       BIT_SET(*p_state, STAT_FALL);
       BIT_CLR(*p_state, STAT_DIRL);
       BIT_CLR(*p_state, STAT_DIRR);
+      player_jump_count = 0xFF;
       // player_fall_start = 1;
       // audio_fall();
     }
@@ -428,6 +431,7 @@ unsigned char player_move_walk(void) {
 
   return 0;
 }
+
 void player_collision() {
   // Left
 
@@ -451,8 +455,24 @@ void player_collision() {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[GAME_INDEX_P1]);
       if (v0 < 2) {
+
         v0 = abs(lin[i] - lin[GAME_INDEX_P1]);
-        if (v0 < 14) {
+        if (lin[i] < lin[GAME_INDEX_P1]) {
+          if (v0 < 16) {
+            v0 = 1;
+          } else {
+            v0 = 0;
+          }
+        } else {
+          // TODO SPRITE HEIGHT'S FOR MORE PREC
+          if (v0 < 14) {
+            v0 = 1;
+          } else {
+            v0 = 0;
+          }
+        }
+        // v0 = abs(lin[i] - lin[GAME_INDEX_P1]);
+        if (v0) {
           v0 = abs(colint[i] - colint[GAME_INDEX_P1]);
           if (v0 < 2) {
             player_kill_index = 0xFFFF;
@@ -470,44 +490,6 @@ void player_pick(void) {
   v0 = player_pick_exit(v0);
   v0 = player_pick_item(v0, index1);
   v0 = player_pick_extra(v0);
-}
-
-unsigned char player_get_floor() {
-  index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
-
-  i = 0;
-  while (i < 16) {
-
-    v0 = scr_map[index1];
-    v1 = scr_map[index1 + 1];
-
-    // Remove sprites 16x16, exits,
-    if (v0 > 31)
-      v0 = TILE_EMPTY;
-    if (v1 > 31)
-      v1 = TILE_EMPTY;
-
-    v0 = tile_class[v0];
-    v1 = tile_class[v1];
-
-    // HACK CRUMB
-    if (colint[GAME_INDEX_P1] == 3) {
-      v0 = TILE_EMPTY;
-    }
-    if (colint[GAME_INDEX_P1] == 0) {
-      v1 = TILE_EMPTY;
-    }
-
-
-    if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) &&
-        (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY)) {
-      index1 = index1 + 32;
-      ++i;
-    } else {
-      return ((index1 >> 5) << 3) - 16; // /32 *8 -16 Optimizar
-    }
-  }
-  return GAME_LIN_FLOOR - 24;
 }
 
 unsigned char player_check_input(void) {
@@ -647,14 +629,8 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   if (v1 > 31)
     v1 = TILE_EMPTY;
 
-
-
-
-
-
   v0 = tile_class[v0];
   v1 = tile_class[v1];
-
 
   if (v0 != TILE_WALL && v1 != TILE_WALL) {
     return 1;
@@ -663,26 +639,36 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   return 0;
 }
 
+void player_check_conveyor() {
+
+  index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
+
+  v0 = tile_class[scr_map[index1]];
+  v1 = tile_class[scr_map[index1 + 1]];
+
+  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+    BIT_SET(*p_state, STAT_CONVEYOR);
+  }
+}
+
 unsigned char player_check_floor(unsigned char f_inc) {
 
   index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1] + f_inc);
 
-  v0 = scr_map[index1];
-
   if (v0 > 31) {
     v0 = TILE_EMPTY;
   }
-
-  // HACK CRUMB
-  if (f_inc == 0 && colint[GAME_INDEX_P1] == 3) {
+  v0 = tile_class[scr_map[index1]];
+  if (BIT_CHK(*p_state, STAT_DIRR) && f_inc == 1 &&
+      colint[GAME_INDEX_P1] == 0) {
     v0 = TILE_EMPTY;
   }
-  if (f_inc == 1 && colint[GAME_INDEX_P1] == 0) {
+  if (BIT_CHK(*p_state, STAT_DIRL) && f_inc == 0 &&
+      colint[GAME_INDEX_P1] == 3) {
     v0 = TILE_EMPTY;
   }
-  // END HACK
 
-  v0 = tile_class[v0];
+
 
   if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) {
     return 1;
@@ -707,6 +693,48 @@ unsigned char player_check_floor(unsigned char f_inc) {
   }
 
   return 0;
+}
+
+unsigned char player_get_floor() {
+  index1 = spr_calc_index(lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
+
+  i = 0;
+  while (i < 16) {
+
+    v0 = scr_map[index1];
+    v1 = scr_map[index1 + 1];
+
+    // Remove sprites 16x16, exits,
+    if (v0 > 31)
+      v0 = TILE_EMPTY;
+    if (v1 > 31)
+      v1 = TILE_EMPTY;
+
+    v0 = tile_class[v0];
+    v1 = tile_class[v1];
+
+    // HACK CRUMB
+    
+    if ( player_jump_count < 10 ) {
+      if ((v1 != TILE_EMPTY) && colint[GAME_INDEX_P1] == 0) {
+        v1 = TILE_EMPTY;
+      }
+
+      if ((v0 != TILE_EMPTY) && colint[GAME_INDEX_P1] == 3) {
+        v0 = TILE_EMPTY;
+      }
+    }
+
+
+    if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) &&
+        (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY)) {
+      index1 = index1 + 32;
+      ++i;
+    } else {
+      return ((index1 >> 5) << 3) - 16; // /32 *8 -16 Optimizar
+    }
+  }
+  return GAME_LIN_FLOOR - 24;
 }
 
 void player_lost_life() {

@@ -207,7 +207,7 @@ extern unsigned char v3;
 
 extern unsigned char btiles[];
 extern uint16_t (*joyfunc1)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
-extern uint16_t (*joyfunc2)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
+//extern uint16_t (*joyfunc2)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
 extern udk_t k1;
 
 
@@ -382,7 +382,7 @@ extern unsigned char map_paper_clr;
 extern unsigned char map_paper_last;
 
 extern const unsigned char key_map[];
-extern unsigned int scan_map[];
+extern const unsigned int scan_map[];
 
 extern const unsigned char tile_class[];
 //extern unsigned char *map_names[];

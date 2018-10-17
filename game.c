@@ -40,17 +40,16 @@ void main(void) {
   zx_border(INK_BLACK);
   zx_print_ink(INK_WHITE);
 
-
-  z80_delay_ms(666);  //SATANIC DELAY
+  z80_delay_ms(666);  // SATANIC DELAY
+  game_gravity = 100; // GAME_GRAVITY;
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_debug = 0;
-  game_fps_show = 1;
+  game_fps_show = 0;
   scr_curr = 0;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
-
 
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -59,28 +58,24 @@ void main(void) {
   // Init Game
   game_start_timer();
 
-
-
   // ENABLE SOUND BASED ON DETECTED MODEL
   game_sound = spec128 ? (GAME_SOUND_AY_FX_ON | GAME_SOUND_AY_MUS_ON)
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
-
 
   // Keyboard Handling
   k1.fire = IN_KEY_SCANCODE_m;
   // TODO k1.fire1 = IN_KEY_SCANCODE_SPACE;
   k1.left = IN_KEY_SCANCODE_o;
   k1.right = IN_KEY_SCANCODE_p;
-  k1.up = IN_KEY_SCANCODE_q;   // must be defined otherwise up is always true
-  k1.down = IN_KEY_SCANCODE_a; // must be defined otherwise down is always true
+  k1.up = IN_KEY_SCANCODE_DISABLE;   // must be defined otherwise up is always true
+  k1.down = IN_KEY_SCANCODE_DISABLE; // must be defined otherwise down is always true
 
   // Wait for Keypress and Randomize //
   /* Default Values for menu */
   joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
-  joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
+  //joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
 
-
-  //NIRVANAP_stop();
+  // NIRVANAP_stop();
   in_wait_nokey();
   for (counter = 31416; !in_test_key(); counter += 10061)
     ;
@@ -101,7 +96,6 @@ void main(void) {
   menu_curr_sel = 1;
   map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
 
-
   while (1) {
 
     // MENU
@@ -113,16 +107,17 @@ void main(void) {
     // GAME
     game_cls();
     game_loop();
+    for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
+      NIRVANAP_spriteT(i, 0, 0, 0);
+    }
+    game_cls();
 
-
-    // spr_flatten();
+    game_paint_attrib(&attrib, 0, 31, (11 << 3) + 8);
     zx_print_str(11, 12, "SHOE HERE!");
     z80_delay_ms(250);
     game_over = 0; // Hack game_colour_message to render background
 
-    for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
-      NIRVANAP_spriteT(i, 0, 0, 0);
-    }
+
     // GAME OVER
     scr_curr = 20;
     game_cls();
