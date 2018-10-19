@@ -115,7 +115,6 @@ unsigned char game_attrib_osd;
 unsigned char game_tileset;
 unsigned char game_mode;
 
-unsigned char game_playing;
 unsigned char game_round_up;
 unsigned char menu_curr_sel;
 
@@ -155,7 +154,10 @@ unsigned char *p_state_a;
 
 unsigned int curr_time;
 unsigned int frame_time;
-unsigned int air_time;
+unsigned int time_air;
+unsigned int time_conv;
+unsigned int time_key;
+
 unsigned int anim_time;
 unsigned char key_last;
 unsigned char key_ink;

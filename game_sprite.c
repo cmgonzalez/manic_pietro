@@ -118,43 +118,40 @@ unsigned char spr_move_up(void) {
   }
 }
 
+void spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col) {
+  unsigned char *f_byte_src0;
+  unsigned char f_spr16;
 
+  // f_byte_src0 = &btiles[0] + (((f_spr8 >> 2) + game_tileset) * 48);
+  if (f_spr8 < 16) {
+    // si es mayor que 16 puedo sacar los graficos de la segunda linea
+    f_spr16 = f_spr8 >> 1;
+    // f_spr8 = f_spr8 % 2;
+    f_spr8 = f_spr8 & 1;
+  } else {
+    // si es mayor que 16 puedo sacar los graficos de la segunda linea
+    f_spr8 = f_spr8 - 16;
+    f_spr16 = f_spr8 >> 1;
+    // f_spr8 = 2 + (f_spr8 % 2);
+    f_spr8 = 2 + (f_spr8 & 1);
+  }
 
-void spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col)
-{
-    unsigned char *f_byte_src0;
-    unsigned char f_spr16;
+  f_byte_src0 = &btiles[0] + (48 * f_spr16);
 
-    //f_byte_src0 = &btiles[0] + (((f_spr8 >> 2) + game_tileset) * 48);
-    if (f_spr8 < 16) {
-      // si es mayor que 16 puedo sacar los graficos de la segunda linea
-      f_spr16 = f_spr8 >> 1;
-      // f_spr8 = f_spr8 % 2;
-      f_spr8 = f_spr8 & 1;
-    } else {
-      // si es mayor que 16 puedo sacar los graficos de la segunda linea
-      f_spr8 = f_spr8 - 16;
-      f_spr16 = f_spr8 >> 1;
-      // f_spr8 = 2 + (f_spr8 % 2);
-      f_spr8 = 2 + (f_spr8 & 1);
-    }
-
-    f_byte_src0 = &btiles[0] + (48 * f_spr16);
-
-    switch(f_spr8 & 3) {
-         case 0:
-             NIRVANAP_printQ(f_byte_src0, f_byte_src0+32, f_lin+8, f_col);
-             break;
-         case 1:
-             NIRVANAP_printQ(f_byte_src0+1, f_byte_src0+40, f_lin+8, f_col);
-             break;
-         case 2:
-             NIRVANAP_printQ(f_byte_src0+16, f_byte_src0+36, f_lin+8, f_col);
-             break;
-         case 3:
-             NIRVANAP_printQ(f_byte_src0+17, f_byte_src0+44, f_lin+8, f_col);
-             break;
-    }
+  switch (f_spr8 & 3) {
+  case 0:
+    NIRVANAP_printQ(f_byte_src0, f_byte_src0 + 32, f_lin + 8, f_col);
+    break;
+  case 1:
+    NIRVANAP_printQ(f_byte_src0 + 1, f_byte_src0 + 40, f_lin + 8, f_col);
+    break;
+  case 2:
+    NIRVANAP_printQ(f_byte_src0 + 16, f_byte_src0 + 36, f_lin + 8, f_col);
+    break;
+  case 3:
+    NIRVANAP_printQ(f_byte_src0 + 17, f_byte_src0 + 44, f_lin + 8, f_col);
+    break;
+  }
 }
 
 unsigned char spr_move_down(void) {
@@ -380,34 +377,36 @@ void spr_clear_scr() {
 
 unsigned char spr_paint_player(void) {
 
-  //TODO PERF remove +16 and ajust all game
-  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1], lin[GAME_INDEX_P1] + 16, col[GAME_INDEX_P1]);
+  // TODO PERF remove +16 and ajust all game
+  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1] + colint[INDEX_P1],
+                   lin[INDEX_P1] + 16, col[INDEX_P1]);
   spr_back_repaint();
   return 0;
 
   /*
-  s_col1 = col[GAME_INDEX_P1];
-  s_lin1 = lin[GAME_INDEX_P1];
+  s_col1 = col[INDEX_P1];
+  s_lin1 = lin[INDEX_P1];
 
   if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
     // Column or lin Movement
-    s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
+    s_tile1 = tile[INDEX_P1] + colint[INDEX_P1];
     NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
     spr_back_repaint();
     return 1;
   } else {
 
-    s_tile1 = tile[GAME_INDEX_P1] + colint[GAME_INDEX_P1];
+    s_tile1 = tile[INDEX_P1] + colint[INDEX_P1];
     //TODO PERF remove +16 and ajust all game
     NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + 16, s_col1);
     spr_back_repaint();
     return 0;
   }
   */
-
 }
 
 unsigned char spr_paint(void) {
+  unsigned char *f_byte_src0;
+  unsigned char *f_byte_src1;
 
   s_col1 = col[sprite];
   s_lin1 = lin[sprite];
@@ -417,10 +416,27 @@ unsigned char spr_paint(void) {
 
     s_tile1 = tile[sprite] + colint[sprite];
 
-    NIRVANAP_fillT(map_paper_clr, s_lin0 + GAME_OFFSET_Y, s_col0);
-    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + GAME_OFFSET_Y,
-                     s_col1);
+    // NIRVANAP_fillT(map_paper_clr, s_lin0 + GAME_OFFSET_Y, s_col0);
+    // intrinsic_di();
 
+    // intrinsic_ei();
+    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
+    //spr_back_repaint(); //TODO just clean background to speed up
+
+    f_byte_src0 = &btiles[0];
+    f_byte_src1 = &btiles[0]+32;
+    index1 = index0+32;
+    v2 = s_lin0 + GAME_OFFSET_Y;
+    v3 = s_col0 + 1;
+    NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, s_col0);
+    NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, v3);
+    v2 = v2+8;
+    NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, s_col0);
+    NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, v3);
+
+    //NIRVANAP_printQ(0, 0,  s_lin0 + GAME_OFFSET_Y + 8, s_col0);
+
+    // NIRVANAP_fillT(map_paper_clr, s_lin0 + GAME_OFFSET_Y, s_col0);
     return 1;
   } else {
     s_tile1 = tile[sprite] + colint[sprite];
@@ -594,7 +610,8 @@ void spr_btile_paint_back() {
     // Internal
     while (i < 16) {
       f_char = &btiles[0] + index0 + i + 32; // TODO SPEED UP INC MEMORY ADDRESS
-      if ( (*f_char & 0x38) == PAPER_BLACK ) {          // 00111000 DEFAULT ON HI MEM BTILES
+      if ((*f_char & 0x38) ==
+          PAPER_BLACK) {          // 00111000 DEFAULT ON HI MEM BTILES
         *f_char = *f_char & 0xC7; // 11000111
         *f_char = *f_char | map_paper;
       }
@@ -619,6 +636,6 @@ void spr_flatten(void) {
 }
 
 void spr_unflattenP1(void) {
-  // Only for GAME_INDEX_P1
-  NIRVANAP_drawT(s_tile1, lin[GAME_INDEX_P1], col[GAME_INDEX_P1]);
+  // Only for INDEX_P1
+  NIRVANAP_drawT(s_tile1, lin[INDEX_P1], col[INDEX_P1]);
 }

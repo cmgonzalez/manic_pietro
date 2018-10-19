@@ -53,7 +53,7 @@ void game_loop(void) {
   while (!game_over) {
     /*Player Init*/
     dirs = 0x00;
-    game_playing = 1;
+
     while (!game_round_up && !game_over) {
       zx_border(map_border);
       /// Enemies turn
@@ -63,21 +63,27 @@ void game_loop(void) {
 
       // Cicling events
 
-      if ((loop_count & 3) == 0) {
-        game_key_paint();
-      }
-      if ((loop_count & 15) == 0) {
+
+      game_key_paint();
+
+      if (game_check_time(&time_conv, 5)) {
         if (game_conveyor_col0 > 0) {
           game_anim_conveyor();
         }
-        NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
-                         game_exit_col);
+        time_conv = zx_clock();
       }
 
-      if (game_check_time(&air_time, 25)) {
+      //if (game_check_time(&time_key, 1)) {
+
+        //time_key = zx_clock();
+      //}
+
+      if (game_check_time(&time_air, 25)) {
         game_anim_air();
-        air_time = zx_clock();
-        NIRVANAP_halt();
+        time_air = zx_clock();
+        //NIRVANAP_halt();
+        //NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
+        //                 game_exit_col);
       }
       // Each second aprox - update fps/score/phase left/phase advance
       if (game_check_time(&frame_time, TIME_EVENT)) {
@@ -94,13 +100,13 @@ void game_loop(void) {
     if (game_round_up) {
       zx_print_ink(INK_BLACK | PAPER_YELLOW);
       game_fill_row(17, 32);
-      game_playing = 0;
+
       game_round_init();
       NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
                        game_exit_col);
       NIRVANAP_halt();
       game_round_up = 0;
-      game_playing = 1;
+
     }
   }
 }
@@ -119,7 +125,7 @@ void game_draw_map(void) {
   intrinsic_halt();
   zx_print_ink(INK_WHITE); // For Debug
   v0 = 0;
-  while (v0 < GAME_INDEX_P1) {
+  while (v0 < INDEX_P1) {
     // TODO SINGLE CLEAR FUNC
     // Clear enemies related tables
     class[v0] = 0;
@@ -444,7 +450,7 @@ void game_round_init(void) {
   zx_set_clock(0);
   frame_time = 0;
   player_coins = 0;
-  air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
+  air_curr_byte = (unsigned int) air_start_byte; // Remaing Air anim
   // Init Sprites
 
   // Read Tiles from bank 3
@@ -483,9 +489,15 @@ void game_round_init(void) {
   game_copy_sprite_color_reset();
 
   if (scr_curr < 20) {
+    //Eugene's Lair
     if (map_paper == PAPER_RED) {
       spr_init_cin0 = 2;
       spr_init_cout0 = 3;
+    }
+    //Solar Power
+    if (map_paper == PAPER_GREEN) {
+      spr_init_cin0 = 5;
+      spr_init_cout0 = 1;
     }
   } else {
     if (map_paper == PAPER_BLUE) {
@@ -655,7 +667,7 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
 void game_key_paint(void) {
   unsigned char li;
 
-  if (game_playing && obj_count > 0) {
+  if (obj_count > 0) {
     // TODO PERFOMANCE (ASM)
     li = key_last;
 

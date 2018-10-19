@@ -25,7 +25,7 @@
 #define GAME_MAX_ENEMIES             15 //GAME_MAX_SPRITES - PLAYERS
 
 /* Player indexes */
-#define GAME_INDEX_P1                15 //Index of P1 == GAME_MAX_PRITES - 1
+#define INDEX_P1                15 //Index of P1 == GAME_MAX_PRITES - 1
 
 //Nirvana Related
 #define NIRV_SPRITE_P1               5 //Sprite to be used by P1 (Have transparency)
@@ -157,7 +157,7 @@
 
 /*Stats alt (bit position number)*/
 #define STAT_LOCK                     0
-#define STAT_TURN                     1
+#define STAT_CONVJMP                  1
 #define STAT_PUSH                     2
 #define STAT_LDIRL                    3
 #define STAT_LDIRR                    4
@@ -267,7 +267,6 @@ extern unsigned char game_conveyor_col1;
 extern unsigned char game_exit_col;
 extern unsigned char game_exit_lin;
 
-extern unsigned char game_playing;
 extern unsigned char game_round_up;
 extern unsigned char menu_curr_sel;
 extern unsigned char game_tileset;
@@ -319,7 +318,11 @@ extern unsigned char *p_state_a;
 
 extern unsigned int curr_time;
 extern unsigned int frame_time;
-extern unsigned int air_time;
+
+extern unsigned int time_air;
+extern unsigned int time_conv;
+extern unsigned int time_key;
+
 extern unsigned int anim_time;
 extern unsigned char key_last;
 extern unsigned char key_ink;

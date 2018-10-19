@@ -30,6 +30,7 @@ extern unsigned char player_pick_item(unsigned char l_val, int l_index);
 extern unsigned char player_pick_deadly(unsigned char l_val);
 extern unsigned char player_pick_exit(unsigned char l_val);
 extern unsigned char player_pick_extra(unsigned char l_val);
+extern unsigned char player_handle_conveyor();
 
 
 extern void          player_tile( unsigned char f_tile, unsigned char f_inc );

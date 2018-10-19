@@ -45,7 +45,7 @@ void main(void) {
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_debug = 0;
-  game_fps_show = 0;
+  game_fps_show = 1;
   scr_curr = 0;
   nirv_sprite_index = 0;
 
@@ -119,7 +119,7 @@ void main(void) {
 
 
     // GAME OVER
-    scr_curr = 20;
+    scr_curr = 0;
     game_cls();
   }
 }
