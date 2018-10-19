@@ -252,10 +252,6 @@ extern unsigned char player_col_scr;
 extern unsigned char player_lin_scr;
 
 
-extern unsigned int player_hit_time;
-extern unsigned char player_hit;
-extern unsigned char player_jumpcount;
-
 
 extern signed   int  game_gravity;
 extern unsigned char game_song_play;
@@ -300,7 +296,6 @@ extern unsigned int index_tmp;
 extern unsigned int index0;
 extern unsigned int index1;
 extern unsigned int tmp_ui;
-extern unsigned char enemies;
 extern unsigned char zx_val_asm;
 extern unsigned char attrib[4];
 extern unsigned char attrib_hl[4];
@@ -323,12 +318,10 @@ extern unsigned int time_air;
 extern unsigned int time_conv;
 extern unsigned int time_key;
 
-extern unsigned int anim_time;
 extern unsigned char key_last;
 extern unsigned char key_ink;
 
 extern unsigned char spr_count;
-extern unsigned char sprite_curr_index;
 
 
 extern unsigned char game_inmune;
@@ -371,14 +364,6 @@ extern unsigned char scr_curr;
 extern unsigned char map_width;
 extern unsigned char map_heigth;
 
-extern unsigned char anim_lin[]; //TODO REMOVE ANIM?
-extern unsigned char anim_col[];
-extern unsigned char anim_tile[];
-extern unsigned char anim_int[];
-extern unsigned char anim_end[];
-extern unsigned char anim_loop[];
-
-extern unsigned char anim_count;
 
 extern unsigned char map_border;
 extern unsigned char map_paper;

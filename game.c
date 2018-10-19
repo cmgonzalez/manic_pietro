@@ -37,6 +37,7 @@ void main(void) {
   unsigned int counter;
 
   // DEBUG
+
   zx_border(INK_BLACK);
   zx_print_ink(INK_WHITE);
 

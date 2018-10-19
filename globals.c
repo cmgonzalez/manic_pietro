@@ -94,9 +94,6 @@ unsigned char player_col_scr;
 unsigned char player_lin_scr;
 unsigned char player_killed;
 unsigned int player_kill_index;
-unsigned int player_hit_time;
-unsigned char player_hit;
-unsigned char player_jumpcount;
 unsigned char player_fall_start;
 
 unsigned char nirv_sprite_index;
@@ -139,7 +136,6 @@ unsigned int index0;
 unsigned int index1;
 
 unsigned int tmp_ui;
-unsigned char enemies;
 unsigned char zx_val_asm;
 unsigned char attrib[4];
 unsigned char attrib_hl[4];
@@ -158,21 +154,11 @@ unsigned int time_air;
 unsigned int time_conv;
 unsigned int time_key;
 
-unsigned int anim_time;
 unsigned char key_last;
 unsigned char key_ink;
 
-unsigned char anim_count;
-
 unsigned char spr_count;
-unsigned char sprite_curr_index;
-// ANIMATIONS
-unsigned char anim_lin[GAME_MAX_SPRITES];
-unsigned char anim_col[GAME_MAX_SPRITES];
-unsigned char anim_tile[GAME_MAX_SPRITES];
-unsigned char anim_int[GAME_MAX_SPRITES];
-unsigned char anim_end[GAME_MAX_SPRITES];
-unsigned char anim_loop[GAME_MAX_SPRITES];
+
 
 //###############################################################################################
 //# # # GAME VARIABLES
