@@ -19,10 +19,8 @@
 
 extern void          enemy_vertical(void);
 extern void          enemy_horizontal(void);
-extern void          enemy_walk(void);
 extern void          enemy_static(void);
 extern void          enemy_turn(void);
 extern void          enemy_move(void);
 extern void          enemy_init();
-extern void          enemy_kill( unsigned char f_sprite) __z88dk_fastcall;
 #endif

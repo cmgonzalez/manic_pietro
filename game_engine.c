@@ -52,10 +52,10 @@ void game_loop(void) {
 
   while (!game_over) {
     /*Player Init*/
-    dirs = 0x00;
+    // dirs = 0x00;
 
     while (!game_round_up && !game_over) {
-      zx_border(map_border);
+      // zx_border(map_border);
       /// Enemies turn
       enemy_turn();
       // Player 1 turn
@@ -65,39 +65,29 @@ void game_loop(void) {
 
       if (loop_count & 1) {
         game_key_paint();
-      }
+      } else {
 
-      if (game_check_time(&time_conv, 5)) {
-        if (game_conveyor_col0 > 0) {
+        if (game_conveyor_col0 > 0 && game_check_time(&time_conv, 5)) {
           game_anim_conveyor();
+          time_conv = zx_clock();
         }
-        time_conv = zx_clock();
-      }
 
-      // if (game_check_time(&time_key, 1)) {
+        if (game_check_time(&time_air, 25)) {
+          game_anim_air();
+          time_air = zx_clock();
+          // Each second aprox - update fps
+          if (game_fps_show && game_check_time(&frame_time, TIME_EVENT)) {
+            game_fps();
+            frame_time = zx_clock();
+          }
+        }
 
-      // time_key = zx_clock();
-      //}
-
-      if (game_check_time(&time_air, 25)) {
-        game_anim_air();
-        time_air = zx_clock();
-        // NIRVANAP_halt();
-        // NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
-        //                 game_exit_col);
-      }
-      // Each second aprox - update fps/score/phase left/phase advance
-      if (game_check_time(&frame_time, TIME_EVENT)) {
-
-        frame_time = zx_clock();
-        // intrinsic_halt();
-        if (game_fps_show)
-          game_fps();
       }
 
       ++loop_count;
       ++fps;
     }
+
     if (game_round_up) {
       zx_print_ink(INK_BLACK | PAPER_YELLOW);
       game_fill_row(17, 32);
@@ -612,46 +602,6 @@ void game_paint_attrib(unsigned char *f_attrib[], char f_start,
   }
 }
 
-void game_colour_message(unsigned char f_row, unsigned char f_col,
-                         unsigned char f_col2, unsigned int f_microsecs,
-                         unsigned char skip) {
-  unsigned int entry_time;
-
-  v0 = 1;
-  frame_time = zx_clock();
-  entry_time = zx_clock();
-  while (v0 && !game_check_time(&entry_time, f_microsecs)) {
-    if (game_check_time(&frame_time, 5)) {
-      // ROTATE ATTRIB ARRAY
-      frame_time = zx_clock();
-      if (game_over) {
-        game_paint_attrib(&attrib_hl, f_col, f_col2, (f_row << 3) + 8);
-      } else {
-        game_paint_attrib(&attrib_osd, f_col, f_col2, (f_row << 3) + 8);
-        game_rotate_attrib_osd();
-      }
-    }
-    if (skip) {
-      while ((joyfunc1)(&k1) != 0)
-        v0 = 0;
-    };
-  };
-  if (game_over) {
-    // Clear Message
-    v1 = f_col2 - f_col;
-    for (v0 = 0; v0 < v1; v0++) {
-      zx_print_str(f_row, f_col + v0, " "); // SPACE
-    }
-  } else {
-    v1 = f_col2 - f_col;
-    s_lin0 = f_row << 3;        //* 8; // TODO OPTIMIZE
-    s_col1 = (f_col >> 1) << 1; // (x*2)/2
-    for (v2 = 0; v2 < v1; v2 = v2 + 2) {
-      s_col0 = s_col1 + v2;
-      spr_back_repaint();
-    }
-  }
-}
 
 unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
   if (zx_clock() - *start > lapse) {
@@ -701,18 +651,6 @@ void game_key_paint(void) {
   }
 }
 
-void game_rotate_attrib_osd(void) {
-
-  if (game_attrib_osd == 7) {
-    game_attrib_osd = 1;
-  }
-  ++game_attrib_osd;
-  v0 = attrib_osd[0];
-  attrib_osd[0] = attrib_osd[3];
-  attrib_osd[1] = attrib_osd[2];
-  attrib_osd[2] = attrib_osd[1];
-  attrib_osd[3] = v0;
-}
 
 void game_attribs() {
 

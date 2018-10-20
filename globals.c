@@ -105,7 +105,6 @@ unsigned char game_conveyor_col1;
 unsigned char game_exit_col;
 unsigned char game_exit_lin;
 
-unsigned char game_attrib_osd;
 unsigned char game_tileset;
 unsigned char game_mode;
 
@@ -118,21 +117,16 @@ unsigned char sprite;
 unsigned char game_debug;
 unsigned char game_fps_show;
 
-unsigned char s_tile0;
-unsigned char s_tile1;
 unsigned char s_lin0;
 unsigned char s_lin1;
 unsigned char s_col0;
 unsigned char s_col1;
 unsigned char s_row1;
-unsigned char s_class;
 unsigned int loop_count;
 
-unsigned int index_tmp;
 unsigned int index0;
 unsigned int index1;
 
-unsigned int tmp_ui;
 unsigned char zx_val_asm;
 unsigned char attrib[4];
 unsigned char attrib_hl[4];
@@ -140,8 +134,7 @@ unsigned char attrib_osd[4];
 // TILE ATTRIB TODO REMOVE UNUSED
 unsigned char key_attrib[4];
 
-unsigned char *p_state;
-unsigned char *p_state_a;
+
 
 
 
@@ -254,6 +247,8 @@ unsigned char spr_init_cin3;
 unsigned char spr_init_cout3;
 unsigned char spr_init_bright;
 
+unsigned char spr_clr;
+
 
 const unsigned char key_map[] = {
     13,  32,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  97,
@@ -320,6 +315,7 @@ const unsigned char tile_class[] = {
 unsigned char player_jump_count;
 unsigned char player_jump_top;
 unsigned char player_fall_start;
+
 const unsigned char player_jump_hor[] = {
   0, //0
   0, //1

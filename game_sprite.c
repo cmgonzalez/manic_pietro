@@ -34,43 +34,44 @@ unsigned int spr_calc_index(unsigned char f_lin, unsigned char f_col) {
   ;
 }
 
-unsigned char spr_chktime(unsigned char *sprite) __z88dk_fastcall {
-  if (zx_clock() - last_time[*sprite] >= spr_speed[*sprite]) {
-    last_time[*sprite] = zx_clock();
+unsigned char spr_chktime(void) {
+  if (zx_clock() - last_time[sprite] >= spr_speed[sprite]) {
+    last_time[sprite] = zx_clock();
     return 1;
   }
   return 0;
 }
 
 void spr_set_up() {
-  BIT_SET(*p_state, STAT_JUMP);
-  BIT_CLR(*p_state, STAT_FALL);
+  BIT_SET(state[sprite], STAT_JUMP);
+  BIT_CLR(state[sprite], STAT_FALL);
 }
 void spr_set_down() {
-  BIT_SET(*p_state, STAT_FALL);
-  BIT_CLR(*p_state, STAT_JUMP);
+  BIT_SET(state[sprite], STAT_FALL);
+  BIT_CLR(state[sprite], STAT_JUMP);
 }
 
 void spr_set_left() {
-  BIT_CLR(*p_state_a, STAT_LDIRR);
-  BIT_SET(*p_state_a, STAT_LDIRL);
+  BIT_CLR(state_a[sprite], STAT_LDIRR);
+  BIT_SET(state_a[sprite], STAT_LDIRL);
 
-  BIT_CLR(*p_state, STAT_DIRR);
-  BIT_SET(*p_state, STAT_DIRL);
+  BIT_CLR(state[sprite], STAT_DIRR);
+  BIT_SET(state[sprite], STAT_DIRL);
 }
 
 void spr_set_right() {
-  BIT_CLR(*p_state_a, STAT_LDIRL);
-  BIT_SET(*p_state_a, STAT_LDIRR);
+  BIT_CLR(state_a[sprite], STAT_LDIRL);
+  BIT_SET(state_a[sprite], STAT_LDIRR);
 
-  BIT_CLR(*p_state, STAT_DIRL);
-  BIT_SET(*p_state, STAT_DIRR);
+  BIT_CLR(state[sprite], STAT_DIRL);
+  BIT_SET(state[sprite], STAT_DIRR);
 }
 
 unsigned char spr_move_up_f(void) {
 
   if (lin[sprite] != 0) {
     lin[sprite] = lin[sprite] - SPRITE_LIN_INC;
+    spr_clr = 1;
   }
   return 0;
 }
@@ -79,6 +80,7 @@ unsigned char spr_move_down_f(void) {
 
   if (lin[sprite] <= GAME_LIN_FLOOR) {
     lin[sprite] = lin[sprite] + SPRITE_LIN_INC;
+    spr_clr = 1;
   }
   return 0;
 }
@@ -119,47 +121,21 @@ void spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col) {
   }
 }
 
-unsigned char spr_move_horizontal(void) {
-
-  unsigned char l_ret;
-
-  if (BIT_CHK(*p_state, STAT_DIRR)) {
-    l_ret = spr_move_right();
-  }
-
-  if (BIT_CHK(*p_state, STAT_DIRL)) {
-    l_ret = spr_move_left();
-  }
-  return l_ret;
-}
-
-unsigned char spr_move_right_f(void) {
-  unsigned char *f_colint;
-  unsigned char *f_col;
-  f_colint = &colint[sprite];
-  f_col = &col[sprite];
-
-  ++*f_colint;
-  if (*f_colint >= spr_frames[sprite]) {
-
-    s_lin1 = lin[sprite];
-    if (*f_col < 31) {
-      ++*f_col;
-      *f_colint = 0;
-      if (*f_col > SCR_COLS_M) {
-        *f_col = SCR_COLS_M;
-        return 1;
-      }
+void spr_move_horizontal(void) {
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
+    spr_move_right();
+  } else {
+    if (BIT_CHK(state[sprite], STAT_DIRL)) {
+      spr_move_left();
     }
   }
 
-  return 0;
 }
 
-unsigned char spr_horizontal_check(unsigned char f_col) {
+unsigned char spr_horizontal_check(unsigned char f_col) __z88dk_fastcall {
   // TODO ESTO FALLA CUANDO EL COLINT ES 0 Y ESTA JUSTO AL LADO UN
   s_lin1 = lin[sprite];
-  if (BIT_CHK(*p_state, STAT_JUMP) || BIT_CHK(*p_state, STAT_FALL)) {
+  if (BIT_CHK(state[sprite], STAT_JUMP) || BIT_CHK(state[sprite], STAT_FALL)) {
     return game_check_map(s_lin1, f_col) || game_check_map(s_lin1 + 8, f_col) ||
            game_check_map(s_lin1 + 16, f_col);
   } else {
@@ -173,7 +149,7 @@ unsigned char spr_move_right(void) {
   unsigned char *f_col;
   f_colint = &colint[sprite];
   f_col = &col[sprite];
-  if (!spr_horizontal_check(*f_col+1)) {
+  if (!spr_horizontal_check(*f_col + 1)) {
     ++*f_colint;
     if (*f_colint >= spr_frames[sprite]) {
 
@@ -261,16 +237,22 @@ unsigned char spr_move_left(void) {
 unsigned char spr_move_left_f(void) {
   --colint[sprite];
   if (colint[sprite] >= spr_frames[sprite]) {
-    s_lin1 = lin[sprite];
-    if (col[sprite] > 0) {
-      --col[sprite];
-      colint[sprite] = spr_frames[sprite] - 1;
+    --col[sprite];
+    spr_clr = 1;
+    colint[sprite] = spr_frames[sprite] - 1;
+    return 1;
+  }
+  return 0;
+}
 
-      if (col[sprite] == 255) {
-        col[sprite] = 0;
-        return 1;
-      }
-    }
+unsigned char spr_move_right_f(void) {
+
+  ++colint[sprite];
+  if (colint[sprite] >= spr_frames[sprite]) {
+    ++col[sprite];
+    spr_clr = 1;
+    colint[sprite] = 0;
+    return 1;
   }
   return 0;
 }
@@ -303,48 +285,17 @@ void spr_clear_scr() {
 
 unsigned char spr_paint_player(void) {
 
-  // TODO PERF remove +16 and ajust all game
   NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1] + colint[INDEX_P1],
                    lin[INDEX_P1] + 16, col[INDEX_P1]);
   spr_back_repaint();
   return 0;
-
-  /*
-  s_col1 = col[INDEX_P1];
-  s_lin1 = lin[INDEX_P1];
-
-  if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
-    // Column or lin Movement
-    s_tile1 = tile[INDEX_P1] + colint[INDEX_P1];
-    NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + GAME_OFFSET_Y, s_col1);
-    spr_back_repaint();
-    return 1;
-  } else {
-
-    s_tile1 = tile[INDEX_P1] + colint[INDEX_P1];
-    //TODO PERF remove +16 and ajust all game
-    NIRVANAP_spriteT(NIRV_SPRITE_P1, s_tile1, s_lin1 + 16, s_col1);
-    spr_back_repaint();
-    return 0;
-  }
-  */
 }
 
-unsigned char spr_paint(void) {
-  // unsigned char *f_byte_src0;
-  // unsigned char *f_byte_src1;
+void spr_paint(void) {
 
-  s_col1 = col[sprite];
-  s_lin1 = lin[sprite];
-
-  if ((s_lin1 != s_lin0) || (s_col1 != s_col0)) {
-    /* Column or lin Movement */
-
-    s_tile1 = tile[sprite] + colint[sprite];
-
-    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + GAME_OFFSET_Y,
-                     s_col1);
-
+  NIRVANAP_spriteT(nirv_sprite_index, tile[sprite] + colint[sprite],
+                   lin[sprite] + GAME_OFFSET_Y, col[sprite]);
+  if (spr_clr) {
     // Method0 Using printC
     v2 = s_lin0 + GAME_OFFSET_Y;
     v3 = s_col0 + 1;
@@ -378,13 +329,6 @@ unsigned char spr_paint(void) {
         NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, s_col0);
         NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, v3);
     */
-
-    return 1;
-  } else {
-    s_tile1 = tile[sprite] + colint[sprite];
-    NIRVANAP_spriteT(nirv_sprite_index, s_tile1, s_lin1 + 16, s_col1);
-
-    return 0;
   }
 }
 
@@ -393,11 +337,10 @@ void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
   s_lin0 = lin[f_sprite];
   s_col0 = col[f_sprite];
   index0 = spr_calc_index(s_lin0, s_col0);
-  s_tile0 = TILE_EMPTY;
-  NIRVANAP_spriteT(f_sprite, s_tile0, 0, 0);
+  NIRVANAP_spriteT(f_sprite, TILE_EMPTY, 0, 0);
   spr_back_repaint();
 
-  tile[f_sprite] = s_tile0;
+  tile[f_sprite] = TILE_EMPTY;
   col[f_sprite] = 0;
   lin[f_sprite] = 0;
   class[f_sprite] = 0;
@@ -412,16 +355,16 @@ unsigned char spr_get_tile(unsigned char *f_sprite) __z88dk_fastcall {
 
 unsigned char spr_get_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {
 
-  if (BIT_CHK(*p_state, STAT_DIRR)) {
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
     return *f_tile;
   }
-  if (BIT_CHK(*p_state, STAT_DIRL)) {
+  if (BIT_CHK(state[sprite], STAT_DIRL)) {
     return *f_tile + *f_inc;
   }
-  if (BIT_CHK(*p_state_a, STAT_LDIRR)) {
+  if (BIT_CHK(state_a[sprite], STAT_LDIRR)) {
     return *f_tile;
   }
-  if (BIT_CHK(*p_state_a, STAT_LDIRL)) {
+  if (BIT_CHK(state_a[sprite], STAT_LDIRL)) {
     return *f_tile + *f_inc;
   }
   return *f_tile;
@@ -457,19 +400,18 @@ void spr_back_repaint(void) {
 }
 
 void spr_turn_horizontal(void) {
-  if (BIT_CHK(*p_state, STAT_DIRR)) {
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
     spr_set_left();
   } else {
     spr_set_right();
   }
-  // state[sprite] = *p_state;
+  // state[sprite] = state[sprite];
   tile[sprite] = spr_get_tile(&sprite);
 }
 
 void spr_btile_paint_back() {
   unsigned char *f_char;
 
-  tmp_ui = 0;
   map_paper_clr = map_paper | (map_paper >> 3);
 
   index0 = 48 * 16;
@@ -497,15 +439,12 @@ void spr_btile_paint_back() {
 void spr_flatten(void) {
   unsigned char i;
   for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
-    s_lin1 = *SPRITELIN(i);
-    s_col1 = *SPRITECOL(i);
-    s_tile1 = *SPRITEVAL(i);
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
-    NIRVANAP_drawT(s_tile1, s_lin1, s_col1);
+    NIRVANAP_drawT(*SPRITEVAL(i), *SPRITELIN(i), *SPRITELIN(i));
   }
 }
 
 void spr_unflattenP1(void) {
   // Only for INDEX_P1
-  NIRVANAP_drawT(s_tile1, lin[INDEX_P1], col[INDEX_P1]);
+  NIRVANAP_drawT(tile[INDEX_P1], lin[INDEX_P1], col[INDEX_P1]);
 }

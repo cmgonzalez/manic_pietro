@@ -285,32 +285,24 @@ extern unsigned int  player_kill_index;
 extern unsigned char nirv_sprite_index;
 
 
-extern unsigned char s_tile0;
-extern unsigned char s_tile1;
 extern unsigned char s_lin0;
 extern unsigned char s_lin1;
 extern unsigned char s_col0;
 extern unsigned char s_col1;
 extern unsigned char s_row1;
-extern unsigned char s_class;
 extern unsigned int loop_count;
-extern unsigned int index_tmp;
 extern unsigned int index0;
 extern unsigned int index1;
-extern unsigned int tmp_ui;
 extern unsigned char zx_val_asm;
 extern unsigned char attrib[4];
 extern unsigned char attrib_hl[4];
 extern unsigned char attrib_osd[4];
-extern unsigned char game_attrib_osd;
 
 
 //TILE ATTRIB
 extern unsigned char key_attrib[4];
 
 
-extern unsigned char *p_state;
-extern unsigned char *p_state_a;
 //TODO REVIEW 128 bytes! needs loop on final target without udg's
 
 extern unsigned int curr_time;
@@ -391,6 +383,8 @@ extern unsigned char spr_init_cout2;
 extern unsigned char spr_init_cin3;
 extern unsigned char spr_init_cout3;
 extern unsigned char spr_init_bright;
+
+extern unsigned char spr_clr;
 
 extern unsigned char *air_curr_byte;
 extern const unsigned int air_start_byte;

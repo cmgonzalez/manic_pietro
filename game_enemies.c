@@ -34,31 +34,21 @@ void enemy_turn(void) {
   nirv_sprite_index = 0;
   while (sprite < spr_count) {
 
-    s_class = class[sprite];
-    if (s_class != 0) { //TODO UNIFY WITH SPR_KIND!!!
-      if (spr_chktime(&sprite)) {
-
+    if (class[sprite] != 0 && spr_chktime()) {
         s_lin0 = lin[sprite];
         s_col0 = col[sprite];
-        s_tile0 = tile[sprite];
-        p_state = &state[sprite];
-        p_state_a = &state_a[sprite];
-
+        spr_clr = 0;
         enemy_move();
         spr_paint();
-        //NIRVANAP_halt(); NO GLITCHES!! BUT SLOW
+    }
 
-        last_time[sprite] = zx_clock();
-      }
+    ++nirv_sprite_index;
+    if (nirv_sprite_index == NIRV_SPRITE_P1) { //This Nirvana have only 7 sprites -1 door -1 player
+      NIRVANAP_halt();
+      nirv_sprite_index = 0;
     }
     ++sprite;
-    ++nirv_sprite_index;
-    if (nirv_sprite_index >= NIRV_SPRITE_P1) {
-      nirv_sprite_index = 0;
-      NIRVANAP_halt();
-    }
   }
-
 }
 
 void enemy_move(void) {
@@ -135,11 +125,11 @@ void enemy_fall() {
   spr_move_down_f();
   index1 = spr_calc_index(s_lin0, s_col0);
   game_cell_paint_index();
-  index1 = spr_calc_index(s_lin0, s_col0+1);
+  index1 = spr_calc_index(s_lin0, s_col0 + 1);
   game_cell_paint_index();
   if (lin[sprite] >= 104) {
     class[sprite] = 0;
-    NIRVANAP_spriteT(sprite,0,0,0);
+    NIRVANAP_spriteT(sprite, 0, 0, 0);
   }
 }
 
@@ -152,23 +142,18 @@ void enemy_static() {
 }
 
 void enemy_horizontal() {
-  if (BIT_CHK(*p_state, STAT_DIRR)) {
-
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
     spr_move_right_f();
-    if ((col[sprite] >= value_b[sprite] && colint[sprite] == 3) ||
-        col[sprite] > 30) { // HACK spr_frames[sprite] - 1
+    if ((col[sprite] >= value_b[sprite] &&
+         colint[sprite] == 3)) { // HACK spr_frames[sprite] - 1
       spr_set_left();
-      state[sprite] = *p_state;
       tile[sprite] = spr_get_tile(&sprite);
     }
+
   } else {
-
     spr_move_left_f();
-    if ((col[sprite] <= value_a[sprite] && colint[sprite] == 0) ||
-        col[sprite] <= 1) {
+    if ((col[sprite] <= value_a[sprite] && colint[sprite] == 0)) {
       spr_set_right();
-
-      state[sprite] = *p_state;
       tile[sprite] = spr_get_tile(&sprite);
     }
   }
@@ -181,26 +166,19 @@ void enemy_vertical() {
     colint[sprite] = 0;
   }
 
-  if (BIT_CHK(*p_state, STAT_JUMP)) {
+  if (BIT_CHK(state[sprite], STAT_JUMP)) {
     spr_move_up_f();
-    if (lin[sprite] == value_a[sprite] || lin[sprite] > GAME_LIN_FLOOR) {
+    if (lin[sprite] == value_a[sprite]) {
       spr_set_down();
     }
   } else {
     spr_move_down_f();
-    if (lin[sprite] == value_b[sprite] || lin[sprite] > GAME_LIN_FLOOR) {
+    if (lin[sprite] == value_b[sprite]) {
       spr_set_up();
     }
   }
 }
 
-void enemy_walk(void) {}
-
-void enemy_kill(unsigned char f_sprite) __z88dk_fastcall {
-  s_lin0 = lin[f_sprite];
-  s_col0 = col[f_sprite];
-  spr_destroy(f_sprite);
-}
 
 void enemy_init() {
   unsigned char f_sprite;
@@ -281,23 +259,20 @@ void enemy_init() {
       col[f_sprite] = index1 & 31;
       colint[f_sprite] = 0;
 
-      p_state = &state[f_sprite];
-      p_state_a = &state_a[f_sprite];
-
       switch (spr_kind[f_sprite]) {
       case E_HORIZONTAL:
         if (f_variant) {
-          BIT_SET(*p_state, STAT_DIRR);
+          BIT_SET(state[f_sprite], STAT_DIRR);
         } else {
-          BIT_SET(*p_state, STAT_DIRL);
+          BIT_SET(state[f_sprite], STAT_DIRL);
           colint[f_sprite] = 3;
         }
         break;
       case E_VERTICAL:
         if (f_variant) {
-          BIT_SET(*p_state, STAT_JUMP);
+          BIT_SET(state[f_sprite], STAT_JUMP);
         } else {
-          BIT_SET(*p_state, STAT_FALL);
+          BIT_SET(state[f_sprite], STAT_FALL);
         }
         break;
       }
