@@ -161,13 +161,7 @@ void player_turn(void) {
         player_score_add(25);
       }
     }
-    if (game_debug) {
-      zx_print_chr(21, 0, colint[INDEX_P1]);
-      zx_print_chr(22, 0, BIT_CHK(*p_state, STAT_DIRR));
-      zx_print_chr(22, 4, BIT_CHK(*p_state, STAT_DIRL));
-      zx_print_chr(22, 8, BIT_CHK(*p_state, STAT_CONVEYOR));
-      zx_print_chr(22, 12, BIT_CHK(*p_state_a, STAT_LOCK));
-    }
+    //Debug player
   }
 }
 
@@ -188,7 +182,8 @@ unsigned char player_move(void) {
 unsigned char player_move_jump(void) {
 
   signed int val_yc;
-  ++player_jump_count;
+
+  ++player_jump_count; // 0xFF -> 16 normal horizontal jump
   player_vel_y = player_vel_y + game_gravity;
   // END JUMP HORIZONTAL MOVEMENT
   if (player_jump_count == 17) {
@@ -203,26 +198,6 @@ unsigned char player_move_jump(void) {
     BIT_CLR(*p_state, STAT_CONVEYOR);
   }
 
-  // JUMP HACK! TO BE LIKE REAL MMINER WE JUST INSERT HORIZONTAL EXTRA
-  // MOVEMENT jump_count 0=>16
-  if (BIT_CHK(*p_state, STAT_DIRL) || BIT_CHK(*p_state, STAT_DIRR))
-     {
-      // TODO Ugly should fix
-      if ((player_jump_count == 1 || player_jump_count == 4 ||
-           player_jump_count == 7 || player_jump_count == 9 ||
-           player_jump_count == 12) &&
-          player_jump_hack) {
-        player_jump_hack = 0;
-        // Force anim on next loop
-
-        player_vel_y = player_vel_y - game_gravity;
-        spr_move_horizontal();
-        last_time[INDEX_P1] = 0;
-        z80_delay_ms(2);
-        return 0;
-      }
-      player_jump_hack = 1;
-    }
   // END JUMP HACK
   // CONVER TO PIXEL'S
   val_yc = player_vel_y / 100;
@@ -242,7 +217,7 @@ unsigned char player_move_jump(void) {
     if (s_lin1 > GAME_LIN_FLOOR) {
       s_lin1 = 0;
     }
-    if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
+    if ( !player_check_ceil(s_lin1, col[INDEX_P1]) ) {
       player_vel_y = 0;
       BIT_CLR(*p_state, STAT_DIRR);
       BIT_CLR(*p_state, STAT_DIRL);
@@ -252,12 +227,11 @@ unsigned char player_move_jump(void) {
 
     player_jump_top = s_lin1;
   } else {
-
+    // Falling
     if (player_jump_count == 14) {
       audio_fall();
     }
 
-    // Falling
     v0 = player_get_floor();
 
     if ((s_lin1 >= 120) || // Out of screen
@@ -285,7 +259,22 @@ unsigned char player_move_jump(void) {
     spr_set_down();
     lin[INDEX_P1] = s_lin1;
   }
-  spr_move_horizontal();
+
+  // JUMP HACK! TO BE LIKE REAL MMINER WE JUST INSERT HORIZONTAL EXTRA
+  // MOVEMENT jump_count 0=>16
+  if (BIT_CHK(*p_state, STAT_DIRL) || BIT_CHK(*p_state, STAT_DIRR))
+     {
+      // TODO Ugly should fix
+      if (player_jump_hor[player_jump_count]) {
+        // Force anim on next loop
+        player_vel_y = player_vel_y - game_gravity;
+        spr_move_horizontal();
+        //last_time[INDEX_P1] = 0;
+        //z80_delay_ms(2);
+        return 0;
+      }
+      spr_move_horizontal();
+    }
   return 1;
 }
 
@@ -320,10 +309,12 @@ void player_handle_lock() {
       !BIT_CHK(*p_state, STAT_FALL)) {
 
     if (dirs & IN_STICK_RIGHT) {
-      if (dirs_last != DIR_RIGHT) {
+      if (dirs_last != DIR_RIGHT)
+         {
           dirs_last = DIR_RIGHT;
           BIT_CLR(*p_state_a, STAT_LOCK);
-      } else {
+        }
+      else {
         BIT_SET(*p_state_a, STAT_LOCK);
       }
     }
@@ -347,16 +338,16 @@ void player_handle_walk() {
   if (!BIT_CHK(*p_state, STAT_CONVEYOR)) {
 
     if (dirs & IN_STICK_RIGHT) {
-      if (BIT_CHK(*p_state, STAT_DIRL)) {
-        colint[INDEX_P1]--;
+      if (BIT_CHK(*p_state_a, STAT_LDIRL)) {
+        colint[INDEX_P1]--; //DarioPedia
       }
       spr_set_right();
     }
 
     /* Move Left */
     if (dirs & IN_STICK_LEFT) {
-      if (BIT_CHK(*p_state, STAT_DIRR)) {
-        colint[INDEX_P1]++;
+      if (BIT_CHK(*p_state_a, STAT_LDIRR)) {
+        colint[INDEX_P1]++; //DarioPedia
       }
       spr_set_left();
     }
@@ -637,19 +628,19 @@ unsigned char player_pick_extra(unsigned char l_val) {
 
 unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   // TODO OPTIMIZA LIKE CHECK FLOOR JUMP/WALK
-  if (colint[INDEX_P1] < 3) {
+  //if (colint[INDEX_P1] < 3) {
     index1 = spr_calc_index(f_lin, f_col);
     v0 = scr_map[index1];
-  } else {
-    v0 = TILE_EMPTY;
-  }
+  //} else {
+  //  v0 = TILE_EMPTY;
+//}
 
-  if (colint[INDEX_P1] > 0) {
+  //if (colint[INDEX_P1] > 0) {
     index1 = spr_calc_index(f_lin, f_col + 1);
     v1 = scr_map[index1];
-  } else {
-    v1 = TILE_EMPTY;
-  }
+  //} else {
+  //  v1 = TILE_EMPTY;
+  //}
 
   if (v0 > 31)
     v0 = TILE_EMPTY;
@@ -690,18 +681,22 @@ unsigned char player_check_floor(unsigned char f_inc) {
     v0 = TILE_EMPTY;
   }
   v0 = tile_class[scr_map[index1]];
-  if (BIT_CHK(*p_state, STAT_DIRR) && f_inc == 1 && colint[INDEX_P1] == 0) {
-    v0 = TILE_EMPTY;
-  }
-  if (BIT_CHK(*p_state, STAT_DIRL) && f_inc == 0 && colint[INDEX_P1] == 3) {
-    v0 = TILE_EMPTY;
-  }
+
 
   if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) {
     return 1;
   }
 
+
   if (v0 == TILE_CRUMB) { // TODO CAUTION!
+
+    if (BIT_CHK(*p_state, DIR_RIGHT) && f_inc == 1 && colint[INDEX_P1] == 0) {
+      return 1;
+    }
+    if (BIT_CHK(*p_state, DIR_LEFT) && f_inc == 0 && colint[INDEX_P1] == 3) {
+      return 1;
+    }
+
     s_col1 = col[INDEX_P1] + f_inc;
 
     if (scr_map[index1] == TILE_CRUMB_INIT) {
@@ -740,17 +735,7 @@ unsigned char player_get_floor() {
     v0 = tile_class[v0];
     v1 = tile_class[v1];
 
-    // HACK CRUMB
 
-    if (player_jump_count < 10) {
-      if ((v1 != TILE_EMPTY) && colint[INDEX_P1] == 0) {
-        v1 = TILE_EMPTY;
-      }
-
-      if ((v0 != TILE_EMPTY) && colint[INDEX_P1] == 3) {
-        v0 = TILE_EMPTY;
-      }
-    }
 
     if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) &&
         (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY)) {

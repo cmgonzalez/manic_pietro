@@ -241,6 +241,8 @@ extern signed int  player_vel_y0;
 extern signed char  player_vel_inc;
 extern unsigned char player_jump_hack;
 extern unsigned char player_jump_count;
+extern const unsigned char player_jump_hor[];
+
 extern unsigned char player_fall_start;
 
 //PLAYER ATTRIBUTES

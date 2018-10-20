@@ -87,14 +87,11 @@ unsigned char player_coins;
 signed int player_vel_y;
 signed int player_vel_y0;
 signed char player_vel_inc;
-unsigned char player_jump_hack;
-unsigned char player_jump_count;
-unsigned char player_jump_top;
+
 unsigned char player_col_scr;
 unsigned char player_lin_scr;
 unsigned char player_killed;
 unsigned int player_kill_index;
-unsigned char player_fall_start;
 
 unsigned char nirv_sprite_index;
 
@@ -317,3 +314,29 @@ const unsigned char tile_class[] = {
     TILE_EMPTY,     //30 Reverved Exit
     TILE_EMPTY,     //31 Reverved Exit
 };
+
+//Hack for horizontal jump increment
+
+unsigned char player_jump_count;
+unsigned char player_jump_top;
+unsigned char player_fall_start;
+const unsigned char player_jump_hor[] = {
+  0, //0
+  0, //1
+  0, //2
+  0, //3
+  1, //4
+  0, //5
+  1, //6
+  1, //7
+  0, //8
+  1, //9
+  0, //10
+  0, //11
+  1, //12
+  0, //13
+  0, //14
+  1, //15
+  0  //16
+};
+// 1 4 7 9 12

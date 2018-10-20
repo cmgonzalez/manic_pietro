@@ -63,8 +63,9 @@ void game_loop(void) {
 
       // Cicling events
 
-
-      game_key_paint();
+      if (loop_count & 1) {
+        game_key_paint();
+      }
 
       if (game_check_time(&time_conv, 5)) {
         if (game_conveyor_col0 > 0) {
@@ -73,16 +74,16 @@ void game_loop(void) {
         time_conv = zx_clock();
       }
 
-      //if (game_check_time(&time_key, 1)) {
+      // if (game_check_time(&time_key, 1)) {
 
-        //time_key = zx_clock();
+      // time_key = zx_clock();
       //}
 
       if (game_check_time(&time_air, 25)) {
         game_anim_air();
         time_air = zx_clock();
-        //NIRVANAP_halt();
-        //NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
+        // NIRVANAP_halt();
+        // NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
         //                 game_exit_col);
       }
       // Each second aprox - update fps/score/phase left/phase advance
@@ -106,7 +107,6 @@ void game_loop(void) {
                        game_exit_col);
       NIRVANAP_halt();
       game_round_up = 0;
-
     }
   }
 }
@@ -415,11 +415,10 @@ void game_round_init(void) {
   // TODO Just use start to simplify
   ay_reset();
 
-  //All Black
+  // All Black
   zx_border(INK_BLACK);
   zx_print_ink(INK_BLACK | (INK_BLACK << 3));
   game_fill_row(0, 32);
-
 
   spr_clear_scr();
   for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
@@ -430,12 +429,12 @@ void game_round_init(void) {
 
   i = scr_curr;
   page(6);
-  //Get Border Data
+  // Get Border Data
   game_borders = game_borders0[i];
-  //Get Map Name
+  // Get Map Name
   j = i * 32;
   i = 0;
-  while( i < 32 ) {
+  while (i < 32) {
     map_names[i] = map_names0[j];
     ++i;
     ++j;
@@ -450,7 +449,7 @@ void game_round_init(void) {
   zx_set_clock(0);
   frame_time = 0;
   player_coins = 0;
-  air_curr_byte = (unsigned int) air_start_byte; // Remaing Air anim
+  air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
   // Init Sprites
 
   // Read Tiles from bank 3
@@ -467,8 +466,7 @@ void game_round_init(void) {
     ++i;
   }
 
-
-  //if (scr_curr > 0) {
+  // if (scr_curr > 0) {
   //  zx_print_ink(INK_BLACK | PAPER_YELLOW);
   //  game_fill_row(17, 32);
   //}
@@ -489,12 +487,12 @@ void game_round_init(void) {
   game_copy_sprite_color_reset();
 
   if (scr_curr < 20) {
-    //Eugene's Lair
+    // Eugene's Lair
     if (map_paper == PAPER_RED) {
       spr_init_cin0 = 2;
       spr_init_cout0 = 3;
     }
-    //Solar Power
+    // Solar Power
     if (map_paper == PAPER_GREEN) {
       spr_init_cin0 = 5;
       spr_init_cout0 = 1;
@@ -554,8 +552,7 @@ void game_round_init(void) {
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   game_fill_row(17, 32);
 
-  zx_print_str(17, 0, &map_names[0] );
-
+  zx_print_str(17, 0, &map_names[0]);
 
   zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);
   zx_print_str(18, 0, "AIR ------");

@@ -22,8 +22,7 @@ extern void             spr_set_up();
 extern void             spr_set_down();
 extern void             spr_set_left();
 extern void             spr_set_right();
-extern unsigned char    spr_move_up(void);
-extern unsigned char    spr_move_down(void);
+
 extern unsigned char    spr_move_up_f(void);
 extern unsigned char    spr_move_down_f(void);
 extern unsigned char    spr_move_horizontal(void);
@@ -43,6 +42,7 @@ extern void             spr_flatten(void);
 extern void             spr_unflattenP1(void);
 extern void             spr_destroy(unsigned char f_sprite) __z88dk_fastcall;
 extern void             spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col);
+extern unsigned char    spr_horizontal_check(unsigned char f_col);
 
 
 #endif
