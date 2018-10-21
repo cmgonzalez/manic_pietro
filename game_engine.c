@@ -60,7 +60,7 @@ void game_loop(void) {
       enemy_turn();
       // Player 1 turn
       player_turn();
-
+      
       // Cicling events
 
       if (loop_count & 1) {
@@ -202,7 +202,12 @@ void game_draw_map(void) {
       if (val0 == 127) {
         player_lin_scr = s_lin1 - 16;
         player_col_scr = s_col1;
+        value_a[INDEX_P1] = scr_map[index1+1]; //Facing Right/Left
+        value_b[INDEX_P1] = scr_map[index1+32];//Initial Colint
+
         scr_map[index1] = TILE_EMPTY;
+        scr_map[index1+1] = TILE_EMPTY;
+        scr_map[index1+32] = TILE_EMPTY;
         spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
       }
     }
@@ -237,6 +242,7 @@ void game_img1() {
 
     i = 0;
     li = k * 48;
+    NIRVANAP_halt(); ///DONT REMOVE CAUSE HANG!!!!
     page(1);
     while (i < 48) {
       btile[i] = img1[li];
@@ -244,7 +250,9 @@ void game_img1() {
       ++li;
     }
     page(0);
-    NIRVANAP_halt();
+
+
+
     i = 0;
     li = 48 * 64;
     while (i < 48) {

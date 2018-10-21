@@ -35,11 +35,10 @@
 
 void main(void) {
   unsigned int counter;
-
-  // DEBUG
-
   zx_border(INK_BLACK);
   zx_print_ink(INK_WHITE);
+
+  // DEBUG
 
   z80_delay_ms(666);  // SATANIC DELAY
   game_gravity = 100; // GAME_GRAVITY;

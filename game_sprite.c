@@ -350,7 +350,7 @@ void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
 
 unsigned char spr_get_tile(unsigned char *f_sprite) __z88dk_fastcall {
   // Search enemy class associated Values
-  return spr_get_tile_dir(&spr_tile[*f_sprite], &spr_frames[*f_sprite]);
+  return spr_get_tile_dir(&spr_tile[*f_sprite], &spr_altset[*f_sprite]);
 }
 
 unsigned char spr_get_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {

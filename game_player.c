@@ -46,17 +46,19 @@ void player_init(unsigned char f_lin, unsigned char f_col,
   spr_frames[INDEX_P1] = 4;
 
   // PLAYER ONLY VARIABLES
-  if (f_col < 16) {
-    BIT_SET(state[INDEX_P1], STAT_DIRR);
-    BIT_SET(state_a[INDEX_P1], STAT_LDIRR);
-    tile[INDEX_P1] = f_tile;
-    colint[INDEX_P1] = 0;
-  } else {
+
+  if (value_a[INDEX_P1]) {
     colint[INDEX_P1] = 3;
     BIT_SET(state[INDEX_P1], STAT_DIRL);
     BIT_SET(state_a[INDEX_P1], STAT_LDIRL);
     tile[INDEX_P1] = f_tile + 4;
-    colint[INDEX_P1] = 3;
+    colint[INDEX_P1] = value_b[INDEX_P1];
+  } else {
+    BIT_SET(state[INDEX_P1], STAT_DIRR);
+    BIT_SET(state_a[INDEX_P1], STAT_LDIRR);
+    tile[INDEX_P1] = f_tile;
+    colint[INDEX_P1] = value_b[INDEX_P1];
+
   }
   // TODO PERF remove +16 and ajust all game
   // NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1], lin[INDEX_P1] +
@@ -68,7 +70,6 @@ void player_turn(void) {
 
   sprite = INDEX_P1;
   if (spr_chktime()) {
-
     s_lin0 = lin[INDEX_P1];
     s_col0 = col[INDEX_P1];
 
@@ -179,11 +180,7 @@ unsigned char player_move_jump(void) {
 
   ++player_jump_count; // 0xFF -> 16 normal horizontal jump
   player_vel_y = player_vel_y + game_gravity;
-  // END JUMP HORIZONTAL MOVEMENT
-  if (player_jump_count == 17) {
-    BIT_CLR(state[INDEX_P1], STAT_DIRL);
-    BIT_CLR(state[INDEX_P1], STAT_DIRR);
-  }
+
 
   if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
     // FIX Conveyor FALL
@@ -268,7 +265,10 @@ unsigned char player_move_jump(void) {
         // z80_delay_ms(2);
         return 0;
       }
-      spr_move_horizontal();
+      // END JUMP HORIZONTAL MOVEMENT CAUTION CHECK MAX JUMP
+      if (player_jump_count <= 17) {
+        spr_move_horizontal();
+      }
     }
   return 1;
 }
@@ -289,6 +289,7 @@ unsigned char player_move_walk(void) {
     spr_move_horizontal();
     return 1;
   } else {
+
     // NO INPUT FROM Player
     if (player_handle_conveyor()) {
       spr_move_horizontal();

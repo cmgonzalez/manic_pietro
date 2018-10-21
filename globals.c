@@ -63,7 +63,10 @@ unsigned char value_b[GAME_MAX_SPRITES]; // SPRITE VALUE B MAX COL/LIN
 
 unsigned char spr_tile[GAME_MAX_SPRITES];
 unsigned char spr_speed[GAME_MAX_SPRITES];
+unsigned char spr_speed_b[GAME_MAX_SPRITES];
+unsigned char spr_speed_a[GAME_MAX_SPRITES];
 unsigned char spr_frames[GAME_MAX_SPRITES];
+unsigned char spr_altset[GAME_MAX_SPRITES];
 unsigned char spr_kind[GAME_MAX_SPRITES];
 
 unsigned char tile[GAME_MAX_SPRITES]; // TILE
@@ -72,8 +75,9 @@ unsigned char lin[GAME_MAX_SPRITES];  // LINE
 unsigned char col[GAME_MAX_SPRITES];      // COLUMN
 unsigned char colint[GAME_MAX_SPRITES];   // INTERNAL COLUMN/TILE INCREMENT
 unsigned int spr_timer[GAME_MAX_SPRITES]; // SPRITE GENERAL TIMER MILISECONDS
-unsigned int
-    last_time[GAME_MAX_SPRITES]; // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
+unsigned int last_time[GAME_MAX_SPRITES];   // LAST TIME OF MOVEMENT FOR ANIMATIONS / SPEED
+unsigned int last_time_a[GAME_MAX_SPRITES]; // LAST TIME A
+unsigned int last_time_b[GAME_MAX_SPRITES]; // LAST TIME B
 
 unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
 unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
@@ -194,6 +198,7 @@ const unsigned int air_end_byte = 21059;
 //Sprite Index on MAP Data
 //Index on btile from bank 3
 //Frames
+//Horizontal Dir Set (should be equal to frames if the sprite have diferent tiles for right left)
 //Sprite KIND
 //Base INK for REPLACE
 //Variant INK1
@@ -205,35 +210,35 @@ const unsigned int air_end_byte = 21059;
 const unsigned char spr_init_len = 8; //Columns on SPR_INIT
 
 unsigned char const spr_init[] = {
-    64,   4, 4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // ROBOT
-    66,   8, 4, E_HORIZONTAL, 0x05, 0x07, 0xFF, 0xFF, // PENGUIN
-    68,  12, 4, E_HORIZONTAL, 0x03, 0x02, 0x04, 0xFF, // CHICKEN
-    70,  16, 4, E_HORIZONTAL, 0x05, 0x03, 0xFF, 0xFF, // FOCA
-    72,  20, 4, E_HORIZONTAL, 0x17, 0x10, 0xFF, 0xFF, // WATER
-    74, 112, 1, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
-    76,  24, 4, E_HORIZONTAL, 0x46, 0x43, 0x45, 0x06, // PAC
-    78,  28, 4, E_HORIZONTAL, 0x05, 0x03, 0x06, 0x02, // KANGOROO
-    80,  32, 4, E_HORIZONTAL, 0x45, 0x43, 0x44, 0x42, // BARRELL
-    82, 104, 4, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG
-    84,  52, 4, E_VERTICAL  , 0x03, 0x05, 0x04, 0x02, // AMEBATRON
-    86,  36, 4, E_HORIZONTAL, 0x04, 0x05, 0x02, 0x06, // CARRITO
-    88,  40, 4, E_HORIZONTAL, 0x05, 0x06, 0x02, 0x07, // EWOK
-    90,  44, 4, E_VERTICAL  , 0x03, 0x02, 0x04, 0x06, // TELEF
-    92,  48, 4, E_HORIZONTAL, 0x06, 0x04, 0x02, 0x04, // WEA
-    94,  56, 4, E_HORIZONTAL, 0x03, 0x04, 0x06, 0x02, // WEA 2
-    96,  60, 4, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EYE
-    98,  64, 8, E_SKYLAB    , 0x07, 0x04, 0x06, 0xFF, // SKYLAB
-   100,  72, 4, E_VERTICAL  , 0x46, 0x47, 0x44, 0x43, // SAFE
-   102,  76, 4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // BILL
-   104,  80, 4, E_HORIZONTAL, 0x45, 0x43, 0x46, 0x44, // MOFETA
-   106,  84, 4, E_VERTICAL  , 0x03, 0x06, 0x05, 0x01, // WEA 3
-   108,  88, 4, E_HORIZONTAL, 0x02, 0x05, 0xFF, 0xFF, // WEA CON PATAS
-   110,  92, 4, E_VERTICAL  , 0x06, 0x04, 0x03, 0x05, // AMEBATRON 2
-   112,  96, 4, E_VERTICAL  , 0x22, 0x21, 0x26, 0x24, // PELOTA(PAPER GREEN)
-   114, 100, 4, E_HORIZONTAL, 0x26, 0x21, 0x22, 0x27, // WEA SOLAR (PAPER GREEN)
-   116, 106, 6, E_FALL      , 0xFF, 0xFF, 0xFF, 0xFF, // KONG FALLING
-   118, 112, 2, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG JR
-   120, 108, 4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // CARRITO FINAL
+    64,   4, 4,   4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // ROBOT
+    66,   8, 4,   4, E_HORIZONTAL, 0x05, 0x07, 0xFF, 0xFF, // PENGUIN
+    68,  12, 4,   4, E_HORIZONTAL, 0x03, 0x02, 0x04, 0xFF, // CHICKEN
+    70,  16, 4,   4, E_HORIZONTAL, 0x05, 0x03, 0xFF, 0xFF, // FOCA
+    72,  20, 4,   4, E_HORIZONTAL, 0x17, 0x10, 0xFF, 0xFF, // WATER
+    74, 112, 1, 255, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
+    76,  24, 4,   4, E_HORIZONTAL, 0x46, 0x43, 0x45, 0x06, // PAC
+    78,  28, 4,   4, E_HORIZONTAL, 0x05, 0x03, 0x06, 0x02, // KANGOROO
+    80,  32, 4,   4, E_HORIZONTAL, 0x45, 0x43, 0x44, 0x42, // BARRELL
+    82, 104, 4,   0, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG
+    84,  52, 4,   4, E_VERTICAL  , 0x03, 0x05, 0x04, 0x02, // AMEBATRON
+    86,  36, 4,   4, E_HORIZONTAL, 0x04, 0x05, 0x02, 0x06, // CARRITO
+    88,  40, 4,   4, E_HORIZONTAL, 0x05, 0x06, 0x02, 0x07, // EWOK
+    90,  44, 4,   4, E_VERTICAL  , 0x03, 0x02, 0x04, 0x06, // TELEF
+    92,  48, 4,   4, E_HORIZONTAL, 0x06, 0x04, 0x02, 0x04, // WEA
+    94,  56, 4,   4, E_HORIZONTAL, 0x03, 0x04, 0x06, 0x02, // WEA 2
+    96,  60, 4,   4, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EYE
+    98,  64, 8,   0, E_SKYLAB    , 0x07, 0x04, 0x06, 0xFF, // SKYLAB
+   100,  72, 4,   4, E_VERTICAL  , 0x46, 0x47, 0x44, 0x43, // SAFE
+   102,  76, 4,   0, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // BILL
+   104,  80, 4,   4, E_HORIZONTAL, 0x45, 0x43, 0x46, 0x44, // MOFETA
+   106,  84, 4,   4, E_VERTICAL  , 0x03, 0x06, 0x47, 0x01, // WEA 3
+   108,  88, 4,   4, E_HORIZONTAL, 0x02, 0x05, 0xFF, 0xFF, // WEA CON PATAS
+   110,  92, 4,   4, E_VERTICAL  , 0x03, 0x04, 0x05, 0x06, // AMEBATRON 2
+   112,  96, 4,   4, E_VERTICAL  , 0x22, 0x21, 0x26, 0x24, // PELOTA(PAPER GREEN)
+   114, 100, 4,   0, E_HORIZONTAL, 0x26, 0x21, 0x22, 0x27, // WEA SOLAR (PAPER GREEN)
+   116, 106, 6,   0, E_FALL      , 0xFF, 0xFF, 0xFF, 0xFF, // KONG FALLING
+   118, 112, 2,   0, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG JR
+   120, 108, 4,   4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // CARRITO FINAL
 };
 
 //Sprite color change

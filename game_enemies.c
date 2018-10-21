@@ -45,10 +45,15 @@ void enemy_turn(void) {
     ++nirv_sprite_index;
     if (nirv_sprite_index == NIRV_SPRITE_P1) { //This Nirvana have only 7 sprites -1 door -1 player
       NIRVANAP_halt();
+      //z80_delay_ms(2);
       nirv_sprite_index = 0;
     }
     ++sprite;
   }
+  if (spr_count > NIRV_SPRITE_P1) {
+    NIRVANAP_halt();
+  }
+
 }
 
 void enemy_move(void) {
@@ -161,11 +166,14 @@ void enemy_horizontal() {
 
 void enemy_vertical() {
 
+if ( game_check_time(&last_time_a[sprite], spr_speed_a[sprite]) ) {
   ++colint[sprite];
   if (colint[sprite] == spr_frames[sprite]) {
     colint[sprite] = 0;
   }
-
+  last_time_a[sprite] = zx_clock();
+}
+if ( game_check_time(&last_time_b[sprite], spr_speed_b[sprite]) ) {
   if (BIT_CHK(state[sprite], STAT_JUMP)) {
     spr_move_up_f();
     if (lin[sprite] == value_a[sprite]) {
@@ -177,15 +185,19 @@ void enemy_vertical() {
       spr_set_up();
     }
   }
+  last_time_b[sprite] = zx_clock();
+}
+
 }
 
 
 void enemy_init() {
-  unsigned char f_sprite;
+
   unsigned char f_tot_class;
   unsigned char f_class;
   unsigned char f_variant;
   unsigned char f_basetile;
+  unsigned int f_pos;
 
   // Defines
   f_class = scr_map[index1];
@@ -198,31 +210,32 @@ void enemy_init() {
 
   // Found an empty sprite slot
   f_tot_class = 0;
-  f_sprite = 0;
-  while (f_sprite < GAME_MAX_ENEMIES) {
-    if (class[f_sprite] == 0) {
+  sprite = 0;
+  while (sprite < GAME_MAX_ENEMIES) {
+    if (class[sprite] == 0) {
       break;
     }
-    if (class[f_sprite] == f_class) {
+    if (class[sprite] == f_class) {
       ++f_tot_class;
     }
-    ++f_sprite;
+    ++sprite;
   }
 
   // Search for Sprite Attribs on spr_init
-  v0 = 0;
+  f_pos = 0;
+  //Size of spr_init attributes
+  while (f_pos <= (GAME_TOTAL_INDEX_CLASSES * GAME_SPR_INIT_SIZE)) {
 
-  while (v0 <= (GAME_TOTAL_INDEX_CLASSES * 8)) {
-
-    if (spr_init[v0] == f_class) {
+    if (spr_init[f_pos] == f_class) {
 
       // Read from ARRAY
-      f_basetile = spr_init[v0 + 1];
-      spr_frames[f_sprite] = spr_init[v0 + 2];
-      spr_kind[f_sprite] = spr_init[v0 + 3];
+      f_basetile = spr_init[f_pos + 1];
+      spr_frames[sprite] = spr_init[f_pos + 2];
+      spr_altset[sprite] = spr_init[f_pos + 3];
+      spr_kind[sprite] = spr_init[f_pos + 4];
 
       // Color Alternates
-      spr_init_cin0 = spr_init[v0 + 4];
+      spr_init_cin0 = spr_init[f_pos + 5];
 
       switch (f_tot_class) {
       case 0:
@@ -230,21 +243,21 @@ void enemy_init() {
         spr_init_cout0 = 0;
         break;
       case 1:
-        spr_init_cout0 = spr_init[v0 + 5];
+        spr_init_cout0 = spr_init[f_pos + 6];
         break;
       case 2:
-        spr_init_cout0 = spr_init[v0 + 6];
+        spr_init_cout0 = spr_init[f_pos + 7];
         break;
       case 3:
-        spr_init_cout0 = spr_init[v0 + 7];
+        spr_init_cout0 = spr_init[f_pos + 8];
         break;
       }
 
       // Read From Map
-      class[f_sprite] = f_class;
-      spr_speed[f_sprite] = scr_map[index1 + 1];
-      value_a[f_sprite] = scr_map[index1 + 32];
-      value_b[f_sprite] = scr_map[index1 + 33];
+      class[sprite] = f_class;
+      spr_speed[sprite] = scr_map[index1 + 1];
+      value_a[sprite] = scr_map[index1 + 32];
+      value_b[sprite] = scr_map[index1 + 33];
 
       // Clear Adjancent tiles
       scr_map[index1] = TILE_EMPTY;
@@ -252,41 +265,45 @@ void enemy_init() {
       scr_map[index1 + 32] = TILE_EMPTY;
       scr_map[index1 + 33] = TILE_EMPTY;
       // Class Found!
-      state[f_sprite] = 0;
-      state_a[f_sprite] = 0;
+      state[sprite] = 0;
+      state_a[sprite] = 0;
       // Position
-      lin[f_sprite] = (index1 >> 5) << 3;
-      col[f_sprite] = index1 & 31;
-      colint[f_sprite] = 0;
+      lin[sprite] = (index1 >> 5) << 3;
+      col[sprite] = index1 & 31;
+      colint[sprite] = 0;
 
-      switch (spr_kind[f_sprite]) {
+      switch (spr_kind[sprite]) {
       case E_HORIZONTAL:
         if (f_variant) {
-          BIT_SET(state[f_sprite], STAT_DIRR);
+          BIT_SET(state[sprite], STAT_DIRR);
         } else {
-          BIT_SET(state[f_sprite], STAT_DIRL);
-          colint[f_sprite] = 3;
+          BIT_SET(state[sprite], STAT_DIRL);
+          colint[sprite] = 3;
         }
         break;
       case E_VERTICAL:
+
+        spr_speed_a[sprite] = spr_altset[sprite];
+        spr_speed_b[sprite] = spr_speed[sprite];
+        spr_speed[sprite] = 2; //CAUTION USE 2 MULTIPLES
         if (f_variant) {
-          BIT_SET(state[f_sprite], STAT_JUMP);
+          BIT_SET(state[sprite], STAT_JUMP);
         } else {
-          BIT_SET(state[f_sprite], STAT_FALL);
+          BIT_SET(state[sprite], STAT_FALL);
         }
         break;
       }
 
       // Tile paging
-      if (spr_frames[f_sprite] == 4) {
+      if (spr_frames[sprite] == 4) {
         // Standard 4 tiles animation
-        spr_tile[f_sprite] = game_tile_cnt;
+        spr_tile[sprite] = game_tile_cnt;
         game_tile_cnt = game_copy_sprite_std(f_basetile, game_tile_cnt);
       } else {
         // Others animations
         i = 0;
-        spr_tile[f_sprite] = game_tile_cnt;
-        while (i < spr_frames[f_sprite]) {
+        spr_tile[sprite] = game_tile_cnt;
+        while (i < spr_frames[sprite]) {
           game_copy_sprite(f_basetile + i, game_tile_cnt, 0);
           ++game_tile_cnt;
           ++i;
@@ -294,21 +311,21 @@ void enemy_init() {
       }
 
       // End Tile Paging
-      tile[f_sprite] = spr_get_tile(&f_sprite);
+      tile[sprite] = spr_get_tile(&sprite);
 
       // Hack Kong
       if (f_class == 82) {
-        spr_frames[f_sprite] = 2;
+        spr_frames[sprite] = 2;
       }
       ++spr_count;
 
-      spr_timer[f_sprite] = zx_clock();
-      last_time[f_sprite] = 0;
+      spr_timer[sprite] = zx_clock();
+      last_time[sprite] = 0;
 
       break;
     } else {
       // Next Class increment
-      v0 = v0 + 8; // N variables on spr_init
+      f_pos = f_pos + GAME_SPR_INIT_SIZE; // N variables on spr_init
     }
   }
 }

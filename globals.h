@@ -20,12 +20,11 @@
 
 #define GAME_SCR_MAX_INDEX           512 // 32 * 16
 
-#define GAME_MAX_SPRITES             16
-#define GAME_MAX_OBJECTS             8  //OBJECTS OR COINS
-#define GAME_MAX_ENEMIES             15 //GAME_MAX_SPRITES - PLAYERS
-
+#define GAME_MAX_OBJECTS             8 //OBJECTS OR COINS
+#define GAME_MAX_SPRITES             9 //MAX OF OBJECTS (ENEMIES + PLAYERS)
+#define GAME_MAX_ENEMIES             8 //GAME_MAX_SPRITES - PLAYERS
 /* Player indexes */
-#define INDEX_P1                15 //Index of P1 == GAME_MAX_PRITES - 1
+#define INDEX_P1                     8 //Index of P1 == GAME_MAX_PRITES - 1
 
 //Nirvana Related
 #define NIRV_SPRITE_P1               5 //Sprite to be used by P1 (Have transparency)
@@ -90,6 +89,7 @@
 
 #define GAME_TOTAL_CLASSES            6 //Total class of enemies
 #define GAME_TOTAL_INDEX_CLASSES      30 //Total class of enemies variations, the same enemy can be left/right etc...
+#define GAME_SPR_INIT_SIZE            9
 
 #define E_HORIZONTAL                  1
 #define E_VERTICAL                    2
@@ -225,6 +225,8 @@ extern unsigned char col[GAME_MAX_SPRITES];
 extern unsigned char colint[GAME_MAX_SPRITES];
 
 extern unsigned int last_time[GAME_MAX_SPRITES];
+extern unsigned int last_time_a[GAME_MAX_SPRITES];
+extern unsigned int last_time_b[GAME_MAX_SPRITES];
 extern unsigned int spr_timer[GAME_MAX_SPRITES];
 
 extern unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
@@ -335,7 +337,10 @@ extern unsigned char const spr_init[];
 
 extern unsigned char spr_tile[];
 extern unsigned char spr_speed[];
+extern unsigned char spr_speed_b[];
+extern unsigned char spr_speed_a[];
 extern unsigned char spr_frames[];
+extern unsigned char spr_altset[];
 extern unsigned char spr_kind[];
 extern unsigned char scr_map[];
 extern const unsigned char spr_init_len;
