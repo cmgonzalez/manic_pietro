@@ -37,9 +37,6 @@ extern unsigned char    spr_get_tile_dir(unsigned char *f_tile, unsigned char *f
 extern void             spr_back_repaint(void);
 extern void             spr_clear_scr(void);
 extern void             spr_turn_horizontal(void);
-extern void             spr_btile_paint_back(void);
-extern void             spr_flatten(void);
-extern void             spr_unflattenP1(void);
 extern void             spr_destroy(unsigned char f_sprite) __z88dk_fastcall;
 extern void             spr_draw8(unsigned char f_spr8, unsigned char f_lin, unsigned char f_col);
 extern unsigned char    spr_horizontal_check(unsigned char f_col) __z88dk_fastcall;

@@ -58,7 +58,6 @@ void player_init(unsigned char f_lin, unsigned char f_col,
     BIT_SET(state_a[INDEX_P1], STAT_LDIRR);
     tile[INDEX_P1] = f_tile;
     colint[INDEX_P1] = value_b[INDEX_P1];
-
   }
   // TODO PERF remove +16 and ajust all game
   // NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1], lin[INDEX_P1] +
@@ -70,6 +69,8 @@ void player_turn(void) {
 
   sprite = INDEX_P1;
   if (spr_chktime()) {
+    zx_print_chr(22, 0, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
+    zx_print_chr(22, 4, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
     s_lin0 = lin[INDEX_P1];
     s_col0 = col[INDEX_P1];
 
@@ -92,7 +93,15 @@ void player_debug_keys() {
   unsigned char c;
 
   c = in_inkey();
-
+  if (c == 32) { // SPACE
+    if (game_song_play_start) {
+      game_song_play_start = 0;
+      ay_song_stop();
+    } else {
+      audio_ingame();
+    }
+    in_wait_nokey();
+  }
   if (c == 49) { // 1
     --scr_curr;
     game_round_up = 1;
@@ -150,17 +159,18 @@ void player_check_exit() {
       ++scr_curr;
       game_round_up = 1;
       // Amimate Bonus Air
+      ay_song_stop();
       while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
         audio_tick();
         game_anim_air();
         player_score_add(25);
+        z80_delay_ms(5);
       }
     }
   }
 }
 
 unsigned char player_move(void) {
-
   if (BIT_CHK(state[INDEX_P1], STAT_JUMP) ||
       BIT_CHK(state[INDEX_P1], STAT_FALL)) {
     // Jump Handling
@@ -180,7 +190,6 @@ unsigned char player_move_jump(void) {
 
   ++player_jump_count; // 0xFF -> 16 normal horizontal jump
   player_vel_y = player_vel_y + game_gravity;
-
 
   if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
     // FIX Conveyor FALL
@@ -219,9 +228,8 @@ unsigned char player_move_jump(void) {
     player_jump_top = s_lin1;
   } else {
     // Falling
-    if (player_jump_count == 14) {
-      audio_fall();
-    }
+
+    // audio_fall();
 
     v0 = player_get_floor();
 
@@ -276,15 +284,22 @@ unsigned char player_move_jump(void) {
 unsigned char player_move_walk(void) {
   // Handle of player walk
   if (player_check_input()) {
+
     if (dirs & IN_STICK_FIRE) {
       player_new_jump();
       return 1;
     }
+
+    if (!BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
+
+      player_handle_walk();
+    }
+
     if (!BIT_CHK(state_a[INDEX_P1], STAT_LOCK)) {
       player_handle_conveyor();
     }
 
-    player_handle_walk();
+
     player_handle_fall();
     spr_move_horizontal();
     return 1;
@@ -333,25 +348,23 @@ void player_handle_lock() {
 void player_handle_walk() {
   // if (BIT_CHK(state_a[INDEX_P1], STAT_LOCK) && !BIT_CHK(state_a[INDEX_P1],
   // STAT_CONVJMP)) {
-  if (!BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
 
-    if (dirs & IN_STICK_RIGHT) {
-      if (BIT_CHK(state_a[INDEX_P1], STAT_LDIRL)) {
-        colint[INDEX_P1]--; // DarioPedia
-      }
-      spr_set_right();
+  if (dirs & IN_STICK_RIGHT) {
+    if (BIT_CHK(state_a[INDEX_P1], STAT_LDIRL)) {
+      colint[INDEX_P1]--; // DarioPedia
     }
-
-    /* Move Left */
-    if (dirs & IN_STICK_LEFT) {
-      if (BIT_CHK(state_a[INDEX_P1], STAT_LDIRR)) {
-        colint[INDEX_P1]++; // DarioPedia
-      }
-      spr_set_left();
-    }
-    // Set Tile according to current direction
-    player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+    spr_set_right();
   }
+
+  /* Move Left */
+  if (dirs & IN_STICK_LEFT) {
+    if (BIT_CHK(state_a[INDEX_P1], STAT_LDIRR)) {
+      colint[INDEX_P1]++; // DarioPedia
+    }
+    spr_set_left();
+  }
+  // Set Tile according to current direction
+  player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
 }
 
 void player_handle_fall() {
@@ -361,7 +374,9 @@ void player_handle_fall() {
     BIT_SET(state[INDEX_P1], STAT_FALL);
     BIT_CLR(state[INDEX_P1], STAT_DIRL);
     BIT_CLR(state[INDEX_P1], STAT_DIRR);
+    BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
     player_jump_count = 0xFF;
+    player_fall_start = 1;
     audio_fall();
   }
 }

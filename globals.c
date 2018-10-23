@@ -177,8 +177,6 @@ unsigned char screen_ink;
 
 unsigned char map_border;
 unsigned char map_paper;
-unsigned char map_paper_clr;
-unsigned char map_paper_last;
 
 unsigned char *air_curr_byte;
 const unsigned int air_start_byte = 21087;
@@ -227,7 +225,7 @@ unsigned char const spr_init[] = {
     92,  48, 4,   4, E_HORIZONTAL, 0x06, 0x04, 0x02, 0x04, // WEA
     94,  56, 4,   4, E_HORIZONTAL, 0x03, 0x04, 0x06, 0x02, // WEA 2
     96,  60, 4,   4, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EYE
-    98,  64, 8,   0, E_SKYLAB    , 0x07, 0x04, 0x06, 0xFF, // SKYLAB
+    98,  64, 8,   3, E_SKYLAB    , 0x0F, 0x0D, 0x0E, 0xFF, // SKYLAB
    100,  72, 4,   4, E_VERTICAL  , 0x46, 0x47, 0x44, 0x43, // SAFE
    102,  76, 4,   0, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // BILL
    104,  80, 4,   4, E_HORIZONTAL, 0x45, 0x43, 0x46, 0x44, // MOFETA

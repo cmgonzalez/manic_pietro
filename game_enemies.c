@@ -35,17 +35,18 @@ void enemy_turn(void) {
   while (sprite < spr_count) {
 
     if (class[sprite] != 0 && spr_chktime()) {
-        s_lin0 = lin[sprite];
-        s_col0 = col[sprite];
-        spr_clr = 0;
-        enemy_move();
-        spr_paint();
+      s_lin0 = lin[sprite];
+      s_col0 = col[sprite];
+      spr_clr = 0;
+      enemy_move();
+      spr_paint();
     }
 
     ++nirv_sprite_index;
-    if (nirv_sprite_index == NIRV_SPRITE_P1) { //This Nirvana have only 7 sprites -1 door -1 player
+    if (nirv_sprite_index ==
+        NIRV_SPRITE_P1) { // This Nirvana have only 7 sprites -1 door -1 player
       NIRVANAP_halt();
-      //z80_delay_ms(2);
+      // z80_delay_ms(2);
       nirv_sprite_index = 0;
     }
     ++sprite;
@@ -53,7 +54,6 @@ void enemy_turn(void) {
   if (spr_count > NIRV_SPRITE_P1) {
     NIRVANAP_halt();
   }
-
 }
 
 void enemy_move(void) {
@@ -81,7 +81,8 @@ void enemy_move(void) {
 }
 
 void enemy_gota() {
-  unsigned char l_found;
+  // unsigned char l_found;
+
   if (colint[sprite] == 0) {
 
     index1 = spr_calc_index(lin[sprite] + 16, col[sprite]);
@@ -92,32 +93,27 @@ void enemy_gota() {
     }
 
   } else {
-    colint[sprite]++;
-    if (colint[sprite] == spr_frames[sprite]) {
-      // Respawn Hack!
-      lin[sprite] = value_a[sprite];
-      l_found = 0;
-      col[sprite] = 0xFF;
-      while (!l_found) {
-        v0 = ((rand() & 15) << 1) - 1;
+    if (game_check_time(&last_time_a[sprite], spr_speed_a[sprite])) {
+      colint[sprite]++;
+      if (colint[sprite] == spr_frames[sprite]) {
+        // Skylab Respawn Hack!
 
-        if (v0 == 0xFF) {
-          v0 = 1;
-        }
-        if (v0 == 15) {
-          v0 = 13;
-        }
-        if (v0 == 23) {
-          v0 = 21;
-        }
+        v2 = s_lin0 + GAME_OFFSET_Y;
+        v3 = s_col0 + 1;
+        NIRVANAP_paintC(attrib_hl, v2, s_col0);
+        NIRVANAP_paintC(attrib_hl, v2, v3);
+        v2 = v2 + 8;
+        NIRVANAP_paintC(attrib_hl, v2, s_col0);
+        NIRVANAP_paintC(attrib_hl, v2, v3);
 
-        if (col[0] != v0 && col[1] != v0 && col[2] != v0) {
-          l_found = 1;
+        lin[sprite] = value_a[sprite];
+        col[sprite] = col[sprite] + 8;
+        if (col[sprite] > 31) {
+          col[sprite] = value_b[sprite]; // Initial Value
         }
+        colint[sprite] = 0;
       }
-
-      col[sprite] = v0;
-      colint[sprite] = 0;
+      last_time_a[sprite] = zx_clock();
     }
   }
 }
@@ -166,30 +162,28 @@ void enemy_horizontal() {
 
 void enemy_vertical() {
 
-if ( game_check_time(&last_time_a[sprite], spr_speed_a[sprite]) ) {
-  ++colint[sprite];
-  if (colint[sprite] == spr_frames[sprite]) {
-    colint[sprite] = 0;
-  }
-  last_time_a[sprite] = zx_clock();
-}
-if ( game_check_time(&last_time_b[sprite], spr_speed_b[sprite]) ) {
-  if (BIT_CHK(state[sprite], STAT_JUMP)) {
-    spr_move_up_f();
-    if (lin[sprite] == value_a[sprite]) {
-      spr_set_down();
+  if (game_check_time(&last_time_a[sprite], spr_speed_a[sprite])) {
+    ++colint[sprite];
+    if (colint[sprite] == spr_frames[sprite]) {
+      colint[sprite] = 0;
     }
-  } else {
-    spr_move_down_f();
-    if (lin[sprite] == value_b[sprite]) {
-      spr_set_up();
-    }
+    last_time_a[sprite] = zx_clock();
   }
-  last_time_b[sprite] = zx_clock();
+  if (game_check_time(&last_time_b[sprite], spr_speed_b[sprite])) {
+    if (BIT_CHK(state[sprite], STAT_JUMP)) {
+      spr_move_up_f();
+      if (lin[sprite] == value_a[sprite]) {
+        spr_set_down();
+      }
+    } else {
+      spr_move_down_f();
+      if (lin[sprite] == value_b[sprite]) {
+        spr_set_up();
+      }
+    }
+    last_time_b[sprite] = zx_clock();
+  }
 }
-
-}
-
 
 void enemy_init() {
 
@@ -223,7 +217,7 @@ void enemy_init() {
 
   // Search for Sprite Attribs on spr_init
   f_pos = 0;
-  //Size of spr_init attributes
+  // Size of spr_init attributes
   while (f_pos <= (GAME_TOTAL_INDEX_CLASSES * GAME_SPR_INIT_SIZE)) {
 
     if (spr_init[f_pos] == f_class) {
@@ -273,6 +267,10 @@ void enemy_init() {
       colint[sprite] = 0;
 
       switch (spr_kind[sprite]) {
+      case E_SKYLAB:
+        value_b[sprite] = col[sprite];
+        spr_speed_a[sprite] = spr_altset[sprite];
+        break;
       case E_HORIZONTAL:
         if (f_variant) {
           BIT_SET(state[sprite], STAT_DIRR);
@@ -285,7 +283,7 @@ void enemy_init() {
 
         spr_speed_a[sprite] = spr_altset[sprite];
         spr_speed_b[sprite] = spr_speed[sprite];
-        spr_speed[sprite] = 2; //CAUTION USE 2 MULTIPLES
+        spr_speed[sprite] = 2; // CAUTION USE 2 MULTIPLES
         if (f_variant) {
           BIT_SET(state[sprite], STAT_JUMP);
         } else {

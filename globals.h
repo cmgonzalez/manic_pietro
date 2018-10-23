@@ -366,8 +366,6 @@ extern unsigned char map_heigth;
 
 extern unsigned char map_border;
 extern unsigned char map_paper;
-extern unsigned char map_paper_clr;
-extern unsigned char map_paper_last;
 
 extern const unsigned char key_map[];
 extern const unsigned int scan_map[];

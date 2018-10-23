@@ -44,9 +44,9 @@ void main(void) {
   game_gravity = 100; // GAME_GRAVITY;
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
-  game_debug = 1;
+  game_debug = 0;
   game_fps_show = 1;
-  scr_curr = 17;
+  scr_curr = 0;
   nirv_sprite_index = 0;
 
   game_song_play = 1;
@@ -67,13 +67,15 @@ void main(void) {
   // TODO k1.fire1 = IN_KEY_SCANCODE_SPACE;
   k1.left = IN_KEY_SCANCODE_o;
   k1.right = IN_KEY_SCANCODE_p;
-  k1.up = IN_KEY_SCANCODE_DISABLE;   // must be defined otherwise up is always true
-  k1.down = IN_KEY_SCANCODE_DISABLE; // must be defined otherwise down is always true
+  k1.up =
+      IN_KEY_SCANCODE_DISABLE; // must be defined otherwise up is always true
+  k1.down =
+      IN_KEY_SCANCODE_DISABLE; // must be defined otherwise down is always true
 
   // Wait for Keypress and Randomize //
   /* Default Values for menu */
   joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
-  //joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
+  // joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
 
   // NIRVANAP_stop();
   in_wait_nokey();
@@ -82,45 +84,35 @@ void main(void) {
   srand(counter);
 
   // Clear Screen and init Nirvana
-
-  game_cls();
-  // Load Tiles
   NIRVANAP_tiles(_btiles);
+  NIRVANAP_start();
   game_attribs();
+
   game_over = 1;
-  zx_print_ink(INK_WHITE);
 
   // Init Screen
   frame_time = zx_clock();
-
   menu_curr_sel = 1;
-  map_paper_last = PAPER_BLACK; // DEFAULT PAPER ON BTILE FILE
+  // GAME INTRO
+  game_intro();
 
   while (1) {
-
+    game_cls();
     // MENU
     if (!game_debug) {
-
       menu_main();
     }
-
     // GAME
-    game_cls();
+    spr_clear_scr();
     game_loop();
-    for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
-      NIRVANAP_spriteT(i, 0, 0, 0);
-    }
+    spr_clear_scr();
     game_cls();
-
     game_paint_attrib(&attrib, 0, 31, (11 << 3) + 8);
-    zx_print_str(11, 12, "SHOE HERE!");
-    z80_delay_ms(250);
+    game_shoe();
+
     game_over = 0; // Hack game_colour_message to render background
-
-
     // GAME OVER
-    scr_curr = 0;
-    game_cls();
+    scr_curr = 0; // Hack for debug...
   }
 }
 

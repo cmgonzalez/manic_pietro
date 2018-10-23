@@ -19,10 +19,12 @@
 
 #include "globals.h"
 extern void audio_ingame(void);
+extern void audio_time(void);
 extern void audio_dead(void);
 extern void audio_jump(void);
 extern void audio_fall(void);
 extern void audio_coin(void);
+extern void audio_coin_noentiendo(void);
 extern void audio_door(void);
 extern void audio_tick(void);
 extern void audio_puerta(void);

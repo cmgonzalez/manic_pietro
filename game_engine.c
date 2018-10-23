@@ -60,7 +60,7 @@ void game_loop(void) {
       enemy_turn();
       // Player 1 turn
       player_turn();
-      
+
       // Cicling events
 
       if (loop_count & 1) {
@@ -81,7 +81,6 @@ void game_loop(void) {
             frame_time = zx_clock();
           }
         }
-
       }
 
       ++loop_count;
@@ -202,12 +201,12 @@ void game_draw_map(void) {
       if (val0 == 127) {
         player_lin_scr = s_lin1 - 16;
         player_col_scr = s_col1;
-        value_a[INDEX_P1] = scr_map[index1+1]; //Facing Right/Left
-        value_b[INDEX_P1] = scr_map[index1+32];//Initial Colint
+        value_a[INDEX_P1] = scr_map[index1 + 1];  // Facing Right/Left
+        value_b[INDEX_P1] = scr_map[index1 + 32]; // Initial Colint
 
         scr_map[index1] = TILE_EMPTY;
-        scr_map[index1+1] = TILE_EMPTY;
-        scr_map[index1+32] = TILE_EMPTY;
+        scr_map[index1 + 1] = TILE_EMPTY;
+        scr_map[index1 + 32] = TILE_EMPTY;
         spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1);
       }
     }
@@ -242,7 +241,7 @@ void game_img1() {
 
     i = 0;
     li = k * 48;
-    NIRVANAP_halt(); ///DONT REMOVE CAUSE HANG!!!!
+    NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
     page(1);
     while (i < 48) {
       btile[i] = img1[li];
@@ -250,8 +249,6 @@ void game_img1() {
       ++li;
     }
     page(0);
-
-
 
     i = 0;
     li = 48 * 64;
@@ -316,16 +313,10 @@ void game_print_lives(void) {
 
 void game_cls() {
   NIRVANAP_stop();
-  /*
-    p_byte = 0x5800;
-    while( p_byte < ( 0x5800 + 768 ) )  {
-      *p_byte = 0;
-      ++p_byte;
-    }
-  */
+  intrinsic_di();
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
   zx_border(INK_BLACK);
-  intrinsic_di();
+
   v0 = 0;
   while (v0 <= 8) {
     v1 = 0;
@@ -338,6 +329,11 @@ void game_cls() {
   }
   intrinsic_ei();
   NIRVANAP_start();
+  v0 = 0;
+  while (v0 <= NIRV_TOTAL_SPRITES) {
+    NIRVANAP_spriteT(v0, SPRITE_EMPTY, 0, 0);
+    ++v0;
+  }
 }
 
 void game_start_timer(void) {
@@ -355,6 +351,9 @@ void game_anim_air() {
   } else {
     if ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
       air_curr_byte = air_curr_byte - 1;
+      if ((unsigned int)air_curr_byte == 21065) {
+        audio_time();
+      }
     } else {
       player_killed = 1;
     }
@@ -419,9 +418,7 @@ void game_round_init(void) {
   game_fill_row(0, 32);
 
   spr_clear_scr();
-  for (i = 0; i < NIRV_TOTAL_SPRITES; i++) {
-    NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
-  }
+
   NIRVANAP_halt();
   NIRVANAP_stop();
 
@@ -528,16 +525,16 @@ void game_round_init(void) {
   }
   game_tile_cnt = game_copy_sprite_std(0, TILE_P1_RIGHT);
 
-  spr_btile_paint_back();
   key_attrib[0] = map_paper | key_ink;
   key_attrib[1] = key_attrib[0];
   key_attrib[2] = key_attrib[0];
   key_attrib[3] = key_attrib[0];
 
   game_song_play_start = 0;
-  audio_ingame();
+
   NIRVANAP_start();
   game_draw_map();
+  audio_ingame();
   game_flash_exit(!FLASH);
   zx_border(map_border);
   zx_print_ink(map_border | (map_border << 3));
@@ -610,7 +607,6 @@ void game_paint_attrib(unsigned char *f_attrib[], char f_start,
   }
 }
 
-
 unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
   if (zx_clock() - *start > lapse) {
     return 1;
@@ -659,7 +655,6 @@ void game_key_paint(void) {
   }
 }
 
-
 void game_attribs() {
 
   // ATTRIB NORMAL
@@ -675,10 +670,10 @@ void game_attribs() {
   attrib_hl[3] = map_paper | INK_CYAN | PAPER_RED;
 
   // ATTRIB OSD
-  attrib_osd[0] = PAPER_YELLOW | INK_BLACK | BRIGHT;
-  attrib_osd[1] = PAPER_YELLOW | INK_BLUE | BRIGHT;
-  attrib_osd[2] = PAPER_YELLOW | INK_BLUE | BRIGHT;
-  attrib_osd[3] = PAPER_YELLOW | INK_MAGENTA | BRIGHT;
+  attrib_osd[0] = PAPER_BLACK | INK_RED | BRIGHT;
+  attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;
+  attrib_osd[2] = PAPER_BLACK | INK_CYAN | BRIGHT;
+  attrib_osd[3] = PAPER_BLACK | INK_YELLOW | BRIGHT;
 }
 
 void game_page_map(void) {
@@ -696,7 +691,7 @@ void game_page_map(void) {
   unsigned char l_world;
   // unsigned char l_world_w;
   // unsigned char l_world_h;
-  unsigned char l_paper;
+
   unsigned char l_scr;
   unsigned char l_scr0;
   unsigned char l_scr_map;
@@ -716,23 +711,6 @@ void game_page_map(void) {
 
   l_scr_map = (l_world << 4) + l_scr;
   l_tileset = game_tileset;
-
-  // Read default start screen from world map
-  page(6);
-  if (l_scr == 255) {
-    l_scr_map = (l_world << 4) + l_scr;
-  }
-  l_paper = paper0[l_scr_map];
-  page(0);
-
-  // Store
-  index1 = 48 * SPRITE_DOOR;
-  li = 0;
-  while (li < 48) {
-    btiles[index1 + li] = l_btile[li];
-    ++li;
-  }
-  ++lk;
 
   // Tiles (8x8) @Bank7
   l_start = l_scr0 * 48 * 8;
@@ -775,7 +753,7 @@ void game_page_map(void) {
   page(0);
   // TODO IF I REMOVE THESE LINES THE ENGINE FAILS!!! WHY???
   scr_curr = l_scr;
-  map_paper = l_paper;
+
   // END TODO
   for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
 
@@ -804,7 +782,7 @@ void game_page_map(void) {
       break;
     }
   }
-
+  map_paper = btiles[32] & 0xF8;
   intrinsic_ei();
 }
 
@@ -945,4 +923,77 @@ unsigned char reverse(unsigned char b) {
 void page(unsigned char bank) {
   GLOBAL_ZX_PORT_7FFD = 0x10 + bank;
   IO_7FFD = 0x10 + bank;
+}
+
+void game_intro() {
+  if (!game_debug) {
+    // NOENTIENDO LOGO
+    game_cls();
+    v0 = 0;
+    v2 = 80;
+    while (v0 < 16) {
+      NIRVANAP_drawT(v2, 96, v0 + 8);
+      v0 = v0 + 2;
+      ++v2;
+    }
+    audio_coin_noentiendo();
+    z80_delay_ms(250);
+    in_wait_key();
+    // LOADING IMAGE
+    game_cls();
+    NIRVANAP_stop();
+    v0 = 0;
+    v1 = 0;
+    v2 = 8;
+    intrinsic_di();
+    while (v1 < 160) {
+      while (v0 < 16) {
+        NIRVANAP_drawT_raw(v2, v1 + GAME_OFFSET_Y, v0 + 8);
+        v0 = v0 + 2;
+        ++v2;
+      }
+      v1 = v1 + 16;
+      v0 = 0;
+    }
+
+    intrinsic_ei();
+    NIRVANAP_start();
+    NIRVANAP_halt();
+    z80_delay_ms(250);
+    in_wait_key();
+  }
+}
+
+void game_shoe() {
+  game_cls();
+
+  NIRVANAP_drawT(91, 96, 15);  // Willy
+  NIRVANAP_drawT(92, 112, 15); // Shoe
+  v0 = 16;
+  while (v0 <= 96) {
+    NIRVANAP_drawT(93, v0, 15); // Zapato
+    v0 = v0 + 2;
+    NIRVANAP_halt();
+    z80_delay_ms(25);
+  }
+
+  v0 = 1;
+  while (v0) {
+    game_paint_attrib(&attrib_osd, 8, 12, (6 << 3) + 8);
+    zx_print_str(6, 8, "Game");
+    game_paint_attrib(&attrib_osd, 20, 24, (6 << 3) + 8);
+    zx_print_str(6, 20, "Over");
+
+    v1 = attrib_osd[3];
+    attrib_osd[3] = attrib_osd[2];
+    attrib_osd[2] = attrib_osd[1];
+    attrib_osd[1] = attrib_osd[0];
+    attrib_osd[0] = v1;
+
+    v2 = in_inkey();
+    if (v2) {
+      v0 = 0;
+    }
+    z80_delay_ms(10);
+  }
 }

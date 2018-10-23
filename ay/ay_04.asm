@@ -56,24 +56,26 @@ _ay_song_menu:
 
 ;SOUND FX
 PUBLIC _ay_fx_coin
-PUBLIC _ay_fx_dead
-PUBLIC _ay_fx_jump
-PUBLIC _ay_fx_fall
-PUBLIC _ay_fx_game_start
-PUBLIC _ay_fx_door
-PUBLIC _ay_fx_tick
-
 _ay_fx_coin:
   BINARY "fx/coin.afx"
+PUBLIC _ay_fx_coin_noentiendo
+_ay_fx_coin_noentiendo:
+    BINARY "fx/coin_noentiendo.afx"
+PUBLIC _ay_fx_dead
 _ay_fx_dead:
   BINARY "fx/dead.afx"
+PUBLIC _ay_fx_jump
 _ay_fx_jump:
-  BINARY "fx/jump.afx"
+  BINARY "fx/jump_test.afx"
+PUBLIC _ay_fx_fall
 _ay_fx_fall:
   BINARY "fx/fall.afx"
+PUBLIC _ay_fx_game_start
 _ay_fx_game_start:
   BINARY "fx/game_start.afx"
+PUBLIC _ay_fx_door
 _ay_fx_door:
   BINARY "fx/door.afx"
+PUBLIC _ay_fx_tick
 _ay_fx_tick:
     BINARY "fx/tick.afx"

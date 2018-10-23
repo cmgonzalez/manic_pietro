@@ -263,24 +263,19 @@ void spr_clear_scr() {
   for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
     NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
   }
-  intrinsic_halt();
 
-  intrinsic_di();
   for (i = 0; i < 8; ++i) {
 
     for (j = 1; j < 10; ++j) {
-      NIRVANAP_fillT_raw(INK_BLACK || PAPER_BLACK, j << 4, i << 1);
+      NIRVANAP_fillT(INK_BLACK || PAPER_BLACK, j << 4, i << 1);
     }
 
     for (j = 1; j < 10; ++j) {
-      NIRVANAP_fillT_raw(INK_BLACK || PAPER_BLACK, j << 4, 30 - (i << 1));
+      NIRVANAP_fillT(INK_BLACK || PAPER_BLACK, j << 4, 30 - (i << 1));
     }
-
-    intrinsic_ei();
-    intrinsic_halt();
-    intrinsic_di();
+    NIRVANAP_halt();
   }
-  intrinsic_ei();
+
 }
 
 unsigned char spr_paint_player(void) {
@@ -407,44 +402,4 @@ void spr_turn_horizontal(void) {
   }
   // state[sprite] = state[sprite];
   tile[sprite] = spr_get_tile(&sprite);
-}
-
-void spr_btile_paint_back() {
-  unsigned char *f_char;
-
-  map_paper_clr = map_paper | (map_paper >> 3);
-
-  index0 = 48 * 16;
-  while (index0 < (48 * 9 * 8)) { // 12*20 btiles
-
-    i = 0;
-
-    // Internal
-    while (i < 16) {
-      f_char = &btiles[0] + index0 + i + 32; // TODO SPEED UP INC MEMORY ADDRESS
-      if ((*f_char & 0x38) ==
-          PAPER_BLACK) {          // 00111000 DEFAULT ON HI MEM BTILES
-        *f_char = *f_char & 0xC7; // 11000111
-        *f_char = *f_char | map_paper;
-      }
-      ++i;
-    }
-
-    index0 = index0 + 48;
-  }
-  map_paper_last = map_paper;
-  game_attribs();
-}
-
-void spr_flatten(void) {
-  unsigned char i;
-  for (i = 0; i < NIRV_TOTAL_SPRITES; ++i) {
-    NIRVANAP_spriteT(i, TILE_EMPTY, 0, 0);
-    NIRVANAP_drawT(*SPRITEVAL(i), *SPRITELIN(i), *SPRITELIN(i));
-  }
-}
-
-void spr_unflattenP1(void) {
-  // Only for INDEX_P1
-  NIRVANAP_drawT(tile[INDEX_P1], lin[INDEX_P1], col[INDEX_P1]);
 }

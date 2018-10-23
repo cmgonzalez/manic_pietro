@@ -35,7 +35,6 @@ extern void			     game_print_score(void);
 extern void          game_paint_attrib( unsigned char *f_attrib[], char f_start, unsigned char f_end, unsigned char f_lin);
 extern void			     game_colour_message( unsigned char f_row, unsigned char f_col, unsigned char f_col2, unsigned int f_miliseconds, unsigned char skip);
 extern void			     game_key_paint(void);
-extern void			     game_rotate_attrib_osd(void);
 extern unsigned char game_check_time(unsigned int *start, unsigned char lapse);
 extern void          game_print_header(void);
 extern void          game_attribs(void);
@@ -44,11 +43,13 @@ extern void          game_flash_exit(unsigned char f_attrib);
 //TODO MOVE TO SPRITES
 extern unsigned char game_copy_sprite_std(unsigned char f_hi_sprite, unsigned char f_low_sprite);
 void                 game_copy_sprite_color_reset(void);
-
 void                 game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite, unsigned char f_flip);
-unsigned char        reverse(unsigned char b);
+extern void          game_intro( );
+extern void          game_shoe( );
 extern void          game_anim_air(void);
+
 extern void          page( unsigned char bank );
+unsigned char        reverse(unsigned char b);
 
 
 #endif

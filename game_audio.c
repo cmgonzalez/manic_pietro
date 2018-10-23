@@ -42,6 +42,11 @@ void audio_ingame(void) {
   }
 }
 
+void audio_time(void) {
+  ay_song_stop();
+  ay_song_play(AY_SONG_ONCE, 6, ay_song_time_atack);
+}
+
 void audio_dead(void) {
   ay_fx_stop();
   ay_fx_play(4, ay_fx_dead);
@@ -54,14 +59,17 @@ void audio_jump(void) {
 
 void audio_fall(void) {
   if (player_fall_start) {
-    ay_fx_stop();
+    //ay_fx_stop();
     ay_fx_play(4, ay_fx_fall);
     player_fall_start = 0;
   }
 }
 void audio_game_start(void) { ay_fx_play(4, ay_fx_game_start); }
 
-void audio_door(void) { ay_fx_play(4, ay_fx_door); }
+void audio_door(void) {
+  ay_fx_play(4, ay_fx_door);
+}
+
 void audio_tick(void) {
   ay_fx_stop();
   ay_fx_play(4, ay_fx_tick);
@@ -70,7 +78,10 @@ void audio_coin(void) {
   // ay_fx_stop();
   ay_fx_play(4, ay_fx_coin);
 }
-
+void audio_coin_noentiendo(void) {
+  // ay_fx_stop();
+  ay_fx_play(4, ay_fx_coin_noentiendo);
+}
 void audio_puerta(void) {
   // ay_fx_play(4, ay_fx_puerta);
 }
