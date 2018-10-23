@@ -69,8 +69,6 @@ void player_turn(void) {
 
   sprite = INDEX_P1;
   if (spr_chktime()) {
-    zx_print_chr(22, 0, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
-    zx_print_chr(22, 4, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
     s_lin0 = lin[INDEX_P1];
     s_col0 = col[INDEX_P1];
 
@@ -252,7 +250,9 @@ unsigned char player_move_jump(void) {
       // BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
       ay_fx_stop();
       //}
-
+      // FOR CRUMBLE FLOOR
+      player_check_floor(0);
+      player_check_floor(1);
       return 0;
     }
     spr_set_down();
@@ -298,7 +298,6 @@ unsigned char player_move_walk(void) {
     if (!BIT_CHK(state_a[INDEX_P1], STAT_LOCK)) {
       player_handle_conveyor();
     }
-
 
     player_handle_fall();
     spr_move_horizontal();

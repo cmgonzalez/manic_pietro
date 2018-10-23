@@ -72,7 +72,7 @@ void game_loop(void) {
           time_conv = zx_clock();
         }
 
-        if (game_check_time(&time_air, 25)) {
+        if (game_check_time(&time_air, 30)) {
           game_anim_air();
           time_air = zx_clock();
           // Each second aprox - update fps
@@ -342,13 +342,8 @@ void game_start_timer(void) {
 }
 
 void game_anim_air() {
-  if (*air_curr_byte) {
-    v0 = *air_curr_byte << 1;
-    *air_curr_byte = v0;
-    *(air_curr_byte + 256) = v0;
-    *(air_curr_byte + 512) = v0;
-    *(air_curr_byte + 768) = v0;
-  } else {
+
+  if (!*air_curr_byte) {
     if ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
       air_curr_byte = air_curr_byte - 1;
       if ((unsigned int)air_curr_byte == 21065) {
@@ -358,6 +353,12 @@ void game_anim_air() {
       player_killed = 1;
     }
   }
+
+  v0 = *air_curr_byte << 1;
+  *air_curr_byte = v0;
+  *(air_curr_byte + 256) = v0;
+  *(air_curr_byte + 512) = v0;
+  *(air_curr_byte + 768) = v0;
 }
 void game_anim_conveyor() {
   unsigned char *f_byte;
