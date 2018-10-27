@@ -98,6 +98,7 @@
 #define E_GHOST                       5
 #define E_SKYLAB                      6
 #define E_FALL                        7
+#define E_ZIGZAG                      8
 
 
 #define TILE_TITLE                    204
@@ -151,7 +152,7 @@
 #define STAT_DIRR                     2
 #define STAT_DIRL                     3
 #define STAT_CONVEYOR                 4
-#define STAT_ONEXIT                   5
+#define STAT_KILLED                   5
 #define STAT_DIRU                     6
 #define STAT_DIRD                     7
 
@@ -219,6 +220,8 @@ extern unsigned char state[GAME_MAX_SPRITES];
 extern unsigned char state_a[GAME_MAX_SPRITES];
 extern unsigned char value_a[GAME_MAX_SPRITES];
 extern unsigned char value_b[GAME_MAX_SPRITES];
+extern unsigned char value_c[GAME_MAX_SPRITES];
+
 extern unsigned char tile[GAME_MAX_SPRITES];
 extern unsigned char lin[GAME_MAX_SPRITES];
 extern unsigned char col[GAME_MAX_SPRITES];
@@ -227,15 +230,12 @@ extern unsigned char colint[GAME_MAX_SPRITES];
 extern unsigned int last_time[GAME_MAX_SPRITES];
 extern unsigned int last_time_a[GAME_MAX_SPRITES];
 extern unsigned int last_time_b[GAME_MAX_SPRITES];
-extern unsigned int spr_timer[GAME_MAX_SPRITES];
 
 extern unsigned char obj_lin[GAME_MAX_OBJECTS]; // object lin for HIGHLIGHT
 extern unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
 extern unsigned char obj_count;
 
 extern unsigned char tbuffer[7];
-
-
 
 extern unsigned int player_score;
 extern signed int  player_vel_y;
@@ -282,7 +282,7 @@ extern unsigned char game_debug;
 extern unsigned char game_fps_show;
 
 extern unsigned char player_jump_top;
-extern unsigned char player_killed;
+
 extern unsigned int  player_kill_index;
 extern unsigned char nirv_sprite_index;
 
@@ -333,7 +333,8 @@ extern unsigned char game_start_scr;
 
 
 extern unsigned char screen_paper, screen_ink;
-extern unsigned char const spr_init[];
+extern unsigned char const spr_init1[];
+extern unsigned char const spr_init2[];
 
 extern unsigned char spr_tile[];
 extern unsigned char spr_speed[];
@@ -343,7 +344,6 @@ extern unsigned char spr_frames[];
 extern unsigned char spr_altset[];
 extern unsigned char spr_kind[];
 extern unsigned char scr_map[];
-extern const unsigned char spr_init_len;
 
 
 //extern unsigned char scr_obj0[];
@@ -360,8 +360,7 @@ extern const unsigned char game_borders0[];
 extern const unsigned char map_names0[];
 
 extern unsigned char scr_curr;
-extern unsigned char map_width;
-extern unsigned char map_heigth;
+
 
 
 extern unsigned char map_border;

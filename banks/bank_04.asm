@@ -55,27 +55,39 @@ _ay_song_menu:
     BINARY "songs/pietro_blue.pt3"
 
 ;SOUND FX
+
 PUBLIC _ay_fx_coin
 _ay_fx_coin:
-  BINARY "fx/coin.afx"
+BINARY "fx/coin.afx"
+
 PUBLIC _ay_fx_coin_noentiendo
 _ay_fx_coin_noentiendo:
-    BINARY "fx/coin_noentiendo.afx"
+BINARY "fx/coin_noentiendo.afx"
+
 PUBLIC _ay_fx_dead
 _ay_fx_dead:
-  BINARY "fx/dead.afx"
+BINARY "fx/dead.afx"
+
 PUBLIC _ay_fx_jump
 _ay_fx_jump:
-  BINARY "fx/jump_test.afx"
+BINARY "fx/jump_test.afx"
+
 PUBLIC _ay_fx_fall
 _ay_fx_fall:
-  BINARY "fx/fall.afx"
+BINARY "fx/fall.afx"
+
 PUBLIC _ay_fx_game_start
 _ay_fx_game_start:
-  BINARY "fx/game_start.afx"
-PUBLIC _ay_fx_door
-_ay_fx_door:
-  BINARY "fx/door.afx"
+BINARY "fx/game_start.afx"
+
 PUBLIC _ay_fx_tick
 _ay_fx_tick:
-    BINARY "fx/tick.afx"
+BINARY "fx/tick.afx"
+
+PUBLIC _ay_fx_crumble
+_ay_fx_crumble:
+BINARY "fx/crumble.afx"
+
+PUBLIC _ay_fx_door_open
+_ay_fx_door_open:
+BINARY "fx/door_open.afx"

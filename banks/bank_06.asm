@@ -22,3 +22,7 @@ SECTION BANK_6_AUDIO
 PUBLIC _ay_song_time_atack
 _ay_song_time_atack:
   BINARY "songs/time_atack.pt3"
+
+PUBLIC _ay_song_round_init
+_ay_song_round_init:
+  BINARY "songs/round_init.pt3"

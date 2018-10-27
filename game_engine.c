@@ -16,7 +16,7 @@
 */
 #include "game.h"
 #include "game_audio.h"
-#include "game_ay.h"
+#include "game_banks.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_menu.h"
@@ -346,11 +346,11 @@ void game_anim_air() {
   if (!*air_curr_byte) {
     if ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
       air_curr_byte = air_curr_byte - 1;
-      if ((unsigned int)air_curr_byte == 21065) {
+      if (!game_round_up && (unsigned int)air_curr_byte == 21065) {
         audio_time();
       }
     } else {
-      player_killed = 1;
+      BIT_SET(state[INDEX_P1], STAT_KILLED);
     }
   }
 
@@ -403,6 +403,7 @@ void game_anim_conveyor() {
     }
   }
 }
+
 void game_round_init(void) {
   // TODO move to 128 bank's
   unsigned char i;
@@ -413,11 +414,11 @@ void game_round_init(void) {
   // TODO Just use start to simplify
   ay_reset();
 
+
   // All Black
   zx_border(INK_BLACK);
   zx_print_ink(INK_BLACK | (INK_BLACK << 3));
   game_fill_row(0, 32);
-
   spr_clear_scr();
 
   NIRVANAP_halt();
@@ -446,11 +447,6 @@ void game_round_init(void) {
   frame_time = 0;
   player_coins = 0;
   air_curr_byte = (unsigned int)air_start_byte; // Remaing Air anim
-  // Init Sprites
-
-  // Read Tiles from bank 3
-
-  // Page Player from bank 3
 
   // Coin HIGHLIGHT init
   key_last = 0;
@@ -462,11 +458,6 @@ void game_round_init(void) {
     ++i;
   }
 
-  // if (scr_curr > 0) {
-  //  zx_print_ink(INK_BLACK | PAPER_YELLOW);
-  //  game_fill_row(17, 32);
-  //}
-
   if (scr_curr < 20) {
     game_tileset = 0;
     game_mode = 0;
@@ -475,55 +466,10 @@ void game_round_init(void) {
     game_mode = 1;
   }
   game_page_map();
-
-  // Copy player tile
-
-  // Hack player colors TODO  Configureable
-
   game_copy_sprite_color_reset();
+  game_color_hacks();
 
-  if (scr_curr < 20) {
-    // Eugene's Lair
-    if (map_paper == PAPER_RED) {
-      spr_init_cin0 = 2;
-      spr_init_cout0 = 3;
-    }
-    // Solar Power
-    if (map_paper == PAPER_GREEN) {
-      spr_init_cin0 = 5;
-      spr_init_cout0 = 1;
-    }
-  } else {
-    if (map_paper == PAPER_BLUE) {
-      spr_init_cin0 = PAPER_BLACK | INK_BLUE;
-      spr_init_cout0 = PAPER_BLACK | INK_WHITE;
-      spr_init_cin1 = PAPER_BLACK | INK_RED;
-      spr_init_cout1 = PAPER_BLACK | INK_GREEN;
-      spr_init_cin2 = PAPER_RED | INK_YELLOW;
-      spr_init_cout2 = PAPER_GREEN | INK_WHITE;
-    }
 
-    // if (map_paper == (PAPER_WHITE | BRIGHT)) {
-
-    if (map_paper == PAPER_WHITE) {
-      // spr_init_bright = BRIGHT;
-
-      spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
-      spr_init_cout0 = PAPER_BLACK | INK_BLACK;
-
-      spr_init_cin1 = PAPER_BLACK | INK_BLUE;
-      spr_init_cout1 = PAPER_BLACK | INK_BLUE;
-
-      spr_init_cin2 = PAPER_BLACK | INK_RED;
-      spr_init_cout2 = PAPER_BLACK | INK_MAGENTA;
-
-      spr_init_cin3 = PAPER_RED | INK_YELLOW;
-      spr_init_cout3 = PAPER_BLUE | INK_BLACK;
-
-      // spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
-      // spr_init_cout3 = PAPER_BLACK | INK_BLACK;
-    }
-  }
   game_tile_cnt = game_copy_sprite_std(0, TILE_P1_RIGHT);
 
   key_attrib[0] = map_paper | key_ink;
@@ -534,15 +480,34 @@ void game_round_init(void) {
   game_song_play_start = 0;
 
   NIRVANAP_start();
+  //Round presentation
+  if (!game_debug) {
+    game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
+    game_fill_row(10, 32);
+    zx_print_str(10,10,"ROUND");
+    zx_print_chr(10,16,scr_curr+1);
+    game_fill_row(17, 32);
+    game_fill_row(18, 32);
+    game_fill_row(20, 32);
+    game_fill_row(22, 32);
+    audio_round_init();
+    z80_delay_ms(800);
+    ay_reset();
+    spr_clear_scr();
+  }
+
+  //Draw Screen
   game_draw_map();
+  //Start Tune
   audio_ingame();
+  //Remove Flash from Door
   game_flash_exit(!FLASH);
   zx_border(map_border);
   zx_print_ink(map_border | (map_border << 3));
   game_fill_row(0, 32);
   if (!game_over) {
     player_init(player_lin_scr, player_col_scr, TILE_P1_RIGHT);
-    player_killed = 0;
+    BIT_CLR(state[INDEX_P1], STAT_KILLED);
   }
 
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
@@ -561,8 +526,72 @@ void game_round_init(void) {
 
   zx_print_ink(INK_WHITE | PAPER_BLACK);
   NIRVANAP_halt();
+
+
 }
 
+void game_color_hacks() {
+  //TODO MOVE THIS TO A PROPER ARRAY
+
+    if (map_paper & BRIGHT) {
+      spr_init_bright = BRIGHT;
+    }
+
+    if (scr_curr < 20) {
+      // Eugene's Lair
+      if (map_paper == PAPER_RED) {
+        spr_init_cin0 = 2;
+        spr_init_cout0 = 3;
+      }
+      // Solar Power
+      if (map_paper == PAPER_GREEN) {
+        spr_init_cin0 = 5;
+        spr_init_cout0 = 1;
+      }
+    } else {
+
+    /*
+      if (map_paper == PAPER_CYAN) {
+        spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
+        spr_init_cout0 = PAPER_BLACK | INK_WHITE;
+
+        spr_init_cin1 = PAPER_RED | INK_YELLOW;
+        spr_init_cout1 = PAPER_BLUE | INK_WHITE;
+      }
+
+      */
+
+      if (map_paper == PAPER_BLUE) {
+        spr_init_cin0 = PAPER_BLACK | INK_BLUE;
+        spr_init_cout0 = PAPER_BLACK | INK_WHITE;
+        spr_init_cin1 = PAPER_BLACK | INK_RED;
+        spr_init_cout1 = PAPER_BLACK | INK_GREEN;
+        spr_init_cin2 = PAPER_RED | INK_YELLOW;
+        spr_init_cout2 = PAPER_GREEN | INK_WHITE;
+      }
+
+      // if (map_paper == (PAPER_WHITE | BRIGHT)) {
+
+      if (map_paper == PAPER_WHITE) {
+        // spr_init_bright = BRIGHT;
+
+        spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
+        spr_init_cout0 = PAPER_BLACK | INK_BLACK;
+
+        spr_init_cin1 = PAPER_BLACK | INK_BLUE;
+        spr_init_cout1 = PAPER_BLACK | INK_BLUE;
+
+        spr_init_cin2 = PAPER_BLACK | INK_RED;
+        spr_init_cout2 = PAPER_BLACK | INK_MAGENTA;
+
+        spr_init_cin3 = PAPER_RED | INK_YELLOW;
+        spr_init_cout3 = PAPER_BLUE | INK_BLACK;
+
+        // spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
+        // spr_init_cout3 = PAPER_BLACK | INK_BLACK;
+      }
+    }
+}
 void game_print_header(void) {
 
   // zx_print_ink(INK_RED);
@@ -687,15 +716,15 @@ void game_page_map(void) {
   unsigned int lk;
   unsigned int l_start;
 
-  unsigned int add_index;
+  //unsigned int add_index;
   unsigned int start_index;
-  unsigned char l_world;
+  //unsigned char l_world;
   // unsigned char l_world_w;
   // unsigned char l_world_h;
 
   unsigned char l_scr;
   unsigned char l_scr0;
-  unsigned char l_scr_map;
+  //unsigned char l_scr_map;
   unsigned char l_tileset;
 
   // btile page
@@ -710,7 +739,7 @@ void game_page_map(void) {
     l_scr0 = l_scr - 20;
   }
 
-  l_scr_map = (l_world << 4) + l_scr;
+  //l_scr_map = (l_world << 4) + l_scr;
   l_tileset = game_tileset;
 
   // Tiles (8x8) @Bank7
@@ -743,23 +772,16 @@ void game_page_map(void) {
   lj = 0;
   lk = 0;
 
-  start_index = 0;
-  add_index = 0;
-  page(6);
-  while (lj < l_scr_map) {
-    add_index = lenght0[lj]; // TODO n LEVELS
-    start_index = start_index + add_index;
-    ++lj;
-  }
-  page(0);
+
   // TODO IF I REMOVE THESE LINES THE ENGINE FAILS!!! WHY???
-  scr_curr = l_scr;
+  //scr_curr = l_scr;
 
   // END TODO
   for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
 
     // Page in BANK 06 - Note that global variables are in page 0
     page(6);                            // TODO SINGLE READ TO speedup
+    start_index = lenght0[l_scr];
     lv0 = world0[start_index + li];     // TODO n LEVELS
     lv1 = world0[start_index + li + 1]; // TODO n LEVELS
     // Page in BANK 00
@@ -938,8 +960,8 @@ void game_intro() {
       ++v2;
     }
     audio_coin_noentiendo();
-    z80_delay_ms(250);
-    in_wait_key();
+    z80_delay_ms(350);
+    //in_wait_key();
     // LOADING IMAGE
     game_cls();
     NIRVANAP_stop();
@@ -960,8 +982,8 @@ void game_intro() {
     intrinsic_ei();
     NIRVANAP_start();
     NIRVANAP_halt();
-    z80_delay_ms(250);
-    in_wait_key();
+    z80_delay_ms(1000);
+    //in_wait_key();
   }
 }
 

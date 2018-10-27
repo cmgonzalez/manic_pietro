@@ -16,7 +16,7 @@
 */
 #include "game.h"
 #include "game_audio.h"
-#include "game_ay.h"
+#include "game_banks.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_player.h"

@@ -16,7 +16,7 @@
 */
 #include "game.h"
 #include "game_audio.h"
-#include "game_ay.h"
+#include "game_banks.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_player.h"
@@ -37,9 +37,7 @@ void enemy_turn(void) {
     if (class[sprite] != 0 && spr_chktime()) {
       s_lin0 = lin[sprite];
       s_col0 = col[sprite];
-      spr_clr = 0;
       enemy_move();
-      spr_paint();
     }
 
     ++nirv_sprite_index;
@@ -61,23 +59,60 @@ void enemy_move(void) {
   switch (spr_kind[sprite]) {
   case E_STATIC:
     enemy_static();
+    spr_paint();
+    if (spr_clr) spr_clear_fast();
     break;
   case E_HORIZONTAL:
     enemy_horizontal();
+    spr_paint();
+    if (spr_clr) spr_clear_fast();
     break;
   case E_WALK:
     enemy_horizontal();
+    spr_paint();
+    if (spr_clr) spr_clear_fast();
     break;
   case E_VERTICAL:
     enemy_vertical();
+    spr_paint();
+    if (spr_clr) spr_clear_fast();
     break;
   case E_SKYLAB:
     enemy_gota();
+    spr_paint();
+    if (spr_clr) spr_clear_fast();
     break;
   case E_FALL:
     enemy_fall();
+    spr_paint();
+    if (spr_clr) spr_clear_fast();
+    break;
+  case E_ZIGZAG:
+    enemy_zigzag();
+    spr_paint();
+    NIRVANAP_drawT(SPRITE_EMPTY, s_lin0 + GAME_OFFSET_Y, s_col0);
+
     break;
   }
+}
+
+void enemy_zigzag() {
+
+  if (BIT_CHK(state[sprite], STAT_JUMP)) {
+    lin[sprite] = lin[sprite] + SPRITE_LIN_INC;
+    v0 = abs(lin[sprite] - value_c[sprite]);
+    if (v0 == 8) {
+      BIT_CLR(state[sprite], STAT_JUMP);
+    }
+  } else {
+    lin[sprite] = lin[sprite] - SPRITE_LIN_INC;
+    v0 = abs(lin[sprite] - value_c[sprite]);
+    if (v0 == 8) {
+      BIT_SET(state[sprite], STAT_JUMP);
+    }
+  }
+
+  enemy_horizontal();
 }
 
 void enemy_gota() {
@@ -143,21 +178,22 @@ void enemy_static() {
 }
 
 void enemy_horizontal() {
-  if (BIT_CHK(state[sprite], STAT_DIRR)) {
-    spr_move_right_f();
-    if ((col[sprite] >= value_b[sprite] &&
-         colint[sprite] == 3)) { // HACK spr_frames[sprite] - 1
-      spr_set_left();
-      tile[sprite] = spr_get_tile(&sprite);
-    }
 
-  } else {
-    spr_move_left_f();
-    if ((col[sprite] <= value_a[sprite] && colint[sprite] == 0)) {
-      spr_set_right();
-      tile[sprite] = spr_get_tile(&sprite);
+    if (BIT_CHK(state[sprite], STAT_DIRR)) {
+      spr_move_right_f();
+      if ((col[sprite] >= value_b[sprite] &&
+           colint[sprite] == 3)) { // HACK spr_frames[sprite] - 1
+        spr_set_left();
+        tile[sprite] = spr_get_tile(&sprite);
+      }
+
+    } else {
+      spr_move_left_f();
+      if ((col[sprite] <= value_a[sprite] && colint[sprite] == 0)) {
+        spr_set_right();
+        tile[sprite] = spr_get_tile(&sprite);
+      }
     }
-  }
 }
 
 void enemy_vertical() {
@@ -193,6 +229,8 @@ void enemy_init() {
   unsigned char f_basetile;
   unsigned int f_pos;
 
+  unsigned char *f_init;
+
   // Defines
   f_class = scr_map[index1];
 
@@ -215,21 +253,26 @@ void enemy_init() {
     ++sprite;
   }
 
+  if (scr_curr < 20) {
+    f_init = &spr_init1[0];
+  } else {
+    f_init = &spr_init2[0];
+  }
   // Search for Sprite Attribs on spr_init
   f_pos = 0;
   // Size of spr_init attributes
   while (f_pos <= (GAME_TOTAL_INDEX_CLASSES * GAME_SPR_INIT_SIZE)) {
 
-    if (spr_init[f_pos] == f_class) {
+    if (*(f_init + f_pos) == f_class) {
 
       // Read from ARRAY
-      f_basetile = spr_init[f_pos + 1];
-      spr_frames[sprite] = spr_init[f_pos + 2];
-      spr_altset[sprite] = spr_init[f_pos + 3];
-      spr_kind[sprite] = spr_init[f_pos + 4];
+      f_basetile = *(f_init + f_pos + 1);
+      spr_frames[sprite] = *(f_init + f_pos + 2);
+      spr_altset[sprite] = *(f_init + f_pos + 3);
+      spr_kind[sprite] = *(f_init + f_pos + 4);
 
       // Color Alternates
-      spr_init_cin0 = spr_init[f_pos + 5];
+      spr_init_cin0 = *(f_init + f_pos + 5);
 
       switch (f_tot_class) {
       case 0:
@@ -237,13 +280,13 @@ void enemy_init() {
         spr_init_cout0 = 0;
         break;
       case 1:
-        spr_init_cout0 = spr_init[f_pos + 6];
+        spr_init_cout0 = *(f_init + f_pos + 6);
         break;
       case 2:
-        spr_init_cout0 = spr_init[f_pos + 7];
+        spr_init_cout0 = *(f_init + f_pos + 7);
         break;
       case 3:
-        spr_init_cout0 = spr_init[f_pos + 8];
+        spr_init_cout0 = *(f_init + f_pos + 8);
         break;
       }
 
@@ -290,6 +333,17 @@ void enemy_init() {
           BIT_SET(state[sprite], STAT_FALL);
         }
         break;
+
+      case E_ZIGZAG:
+        value_c[sprite] = lin[sprite];
+        BIT_SET(state[sprite], STAT_JUMP);
+        if (f_variant) {
+          BIT_SET(state[sprite], STAT_DIRR);
+        } else {
+          BIT_SET(state[sprite], STAT_DIRL);
+          colint[sprite] = 3;
+        }
+        break;
       }
 
       // Tile paging
@@ -317,7 +371,6 @@ void enemy_init() {
       }
       ++spr_count;
 
-      spr_timer[sprite] = zx_clock();
       last_time[sprite] = 0;
 
       break;

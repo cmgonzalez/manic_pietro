@@ -6,7 +6,7 @@ PUBLIC _hisprites2
 
 ;Sprites 16x16
 _hisprites1:
-   BINARY "game_sprites_1.btile"
+   BINARY "gfx/game_sprites_1.btile"
 
 _hisprites2:
-  BINARY "game_sprites_2.btile"
+  BINARY "gfx/game_sprites_2.btile"

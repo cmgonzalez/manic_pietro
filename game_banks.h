@@ -16,8 +16,8 @@
 */
 
 //TODO RENAME THIS IS NOT AY IT'S UPPER MEM
-#ifndef GAME_AY_H
-#define GAME_AY_H
+#ifndef game_banks_H
+#define game_banks_H
 
 // Bit Flags Returned from ay_is_playing()
 
@@ -54,6 +54,8 @@ extern unsigned char hisprites2[];
 extern unsigned char ay_song_ingame0[];
 extern unsigned char ay_song_ingame1[];
 extern unsigned char ay_song_menu[];
+extern unsigned char ay_song_round_init[];
+
 //BANK 4 Sound fx
 extern unsigned char ay_fx_coin[];
 extern unsigned char ay_fx_dead[];
@@ -61,7 +63,8 @@ extern unsigned char ay_fx_jump[];
 extern unsigned char ay_fx_fall[];
 extern unsigned char ay_fx_game_start[];
 extern unsigned char ay_fx_tick[];
-extern unsigned char ay_fx_door[];
+extern unsigned char ay_fx_door_open[];
+extern unsigned char ay_fx_crumble[];
 extern unsigned char ay_fx_coin_noentiendo[];
 //BANK 6 Songs
 extern unsigned char ay_song_time_atack[];

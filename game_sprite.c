@@ -16,7 +16,7 @@
 */
 #include "game.h"
 #include "game_audio.h"
-#include "game_ay.h"
+#include "game_banks.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_player.h"
@@ -286,10 +286,38 @@ unsigned char spr_paint_player(void) {
   return 0;
 }
 
+/*
+void spr_btile_paint_back() {
+  unsigned char *f_char;
+
+
+  index0 = 48 * 16;
+  while (index0 < (48 * 9 * 8)) { // 12*20 btiles
+
+    i = 0;
+
+    // Internal
+    while (i < 16) {
+      f_char = &btiles[0] + index0 + i + 32; // TODO SPEED UP INC MEMORY ADDRESS
+      if ((*f_char & 0x38) ==
+          PAPER_BLACK) {          // 00111000 DEFAULT ON HI MEM BTILES
+        *f_char = *f_char & 0xC7; // 11000111
+        *f_char = *f_char | map_paper;
+      }
+      ++i;
+    }
+
+    index0 = index0 + 48;
+  }
+  //map_paper_last = map_paper;
+  game_attribs();
+}
+*/
 void spr_paint(void) {
 
   NIRVANAP_spriteT(nirv_sprite_index, tile[sprite] + colint[sprite],
                    lin[sprite] + GAME_OFFSET_Y, col[sprite]);
+/*
   if (spr_clr) {
     // Method0 Using printC
     v2 = s_lin0 + GAME_OFFSET_Y;
@@ -300,17 +328,15 @@ void spr_paint(void) {
     NIRVANAP_paintC(attrib_hl, v2, s_col0);
     NIRVANAP_paintC(attrib_hl, v2, v3);
 
-    /*
+
     //Method1 Should be faster but not
      NIRVANAP_fillT(map_paper_clr, s_lin0 + GAME_OFFSET_Y, s_col0);
-    */
 
-    /*
     //Method2 Using background repaint, restores background
     spr_back_repaint();
-    */
 
-    /*
+
+
     //Method3 Using PrintQ we don't need to clear the pixels if we paint with
     the same paper+ink f_byte_src0 = &btiles[0]; f_byte_src1 = &btiles[0]+32;
         index1 = index0+32;
@@ -323,10 +349,22 @@ void spr_paint(void) {
         v2 = v2+8;
         NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, s_col0);
         NIRVANAP_printQ(f_byte_src0 , f_byte_src1,  v2, v3);
-    */
+
   }
+*/
 }
 
+void spr_clear_fast() {
+  // Method0 Using printC
+  v2 = s_lin0 + GAME_OFFSET_Y;
+  v3 = s_col0 + 1;
+  NIRVANAP_paintC(attrib_hl, v2, s_col0);
+  NIRVANAP_paintC(attrib_hl, v2, v3);
+  v2 = v2 + 8;
+  NIRVANAP_paintC(attrib_hl, v2, s_col0);
+  NIRVANAP_paintC(attrib_hl, v2, v3);
+
+}
 void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
   spr_count--;
   s_lin0 = lin[f_sprite];

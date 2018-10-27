@@ -20,7 +20,7 @@ copy /b src_font\game.font game.font 1>nul
 
 @rem EXPAND MACROS
 echo Expanding Macros
-zcc +zx -v -m4 -clib=sdcc_iy ay/src/VTII10bG-mfx.asm.m4
+zcc +zx -v -m4 -clib=sdcc_iy banks/src/VTII10bG-mfx.asm.m4
 
 @rem COMPILE C CODE FOR BANK_6_MISC
 echo Compiling C Code for BANK_6_MISC
@@ -48,12 +48,12 @@ appmake +zx -b game_LOADER.bin -o mcloader.tap --org 23296 --noloader --noheader
 appmake +zx -b game_scr.bin -o game_scr.tap --org 16384 --noloader --noheader
 appmake +zx -b nirvanap_final.bin -o nirvanap.tap --org 56323 --noloader --noheader
 appmake +zx -b game_CODE.bin -o game.tap --org 23584 --noloader --noheader
-appmake +zx -b game_BANK_1.bin -o game_ay_1.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_3.bin -o game_ay_3.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_4.bin -o game_ay_4.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_6.bin -o game_ay_6.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_7.bin -o game_ay_7.tap --org 49152 --noloader --noheader
-copy /b loader.tap + mcload.tap + mcloader.tap + game_scr.tap + nirvanap.tap + game.tap + game_ay_1.tap + game_ay_3.tap + game_ay_4.tap + game_ay_6.tap + game_ay_7.tap bin\game_release.tap
+appmake +zx -b game_BANK_1.bin -o game_banks_1.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_3.bin -o game_banks_3.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_4.bin -o game_banks_4.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_6.bin -o game_banks_6.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_7.bin -o game_banks_7.tap --org 49152 --noloader --noheader
+copy /b loader.tap + mcload.tap + mcloader.tap + game_scr.tap + nirvanap.tap + game.tap + game_banks_1.tap + game_banks_3.tap + game_banks_4.tap + game_banks_6.tap + game_banks_7.tap bin\game_release.tap
 
 @rem MAKE ZX7 COMPRESSED LOADING BINARY
 echo Making ZX7-Compressed Loading Binary
@@ -89,12 +89,12 @@ appmake +zx -b game_LOADER.bin -o mcloader.tap --org 23296 --noloader --noheader
 appmake +zx -b game_scr.bin.zx7 -o game_scr.tap --org 16384 --noloader --noheader
 appmake +zx -b nirvanap_final.bin.zx7 -o nirvanap.tap --org 56323 --noloader --noheader
 appmake +zx -b game_CODE.bin.zx7 -o game.tap --org 23584 --noloader --noheader
-appmake +zx -b game_BANK_1.bin.zx7 -o game_ay_1.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_3.bin.zx7 -o game_ay_3.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_4.bin.zx7 -o game_ay_4.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_6.bin.zx7 -o game_ay_6.tap --org 49152 --noloader --noheader
-appmake +zx -b game_BANK_7.bin.zx7 -o game_ay_7.tap --org 49152 --noloader --noheader
-copy /b loader.tap + mcload.tap + mcloader.tap + game_scr.tap + nirvanap.tap + game.tap + game_ay_1.tap + game_ay_3.tap + game_ay_4.tap + game_ay_6.tap + game_ay_7.tap bin\game_release_zx7.tap 1>nul
+appmake +zx -b game_BANK_1.bin.zx7 -o game_banks_1.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_3.bin.zx7 -o game_banks_3.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_4.bin.zx7 -o game_banks_4.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_6.bin.zx7 -o game_banks_6.tap --org 49152 --noloader --noheader
+appmake +zx -b game_BANK_7.bin.zx7 -o game_banks_7.tap --org 49152 --noloader --noheader
+copy /b loader.tap + mcload.tap + mcloader.tap + game_scr.tap + nirvanap.tap + game.tap + game_banks_1.tap + game_banks_3.tap + game_banks_4.tap + game_banks_6.tap + game_banks_7.tap bin\game_release_zx7.tap 1>nul
 
 @rem REPORT BINARY SIZES
 dir *.bin

@@ -1,7 +1,7 @@
 
 
 CSRC   = globals.c game.c game_enemies.c game_engine.c game_player.c game_sprite.c game_zx.c game_audio.c game_menu.c
-ASRC   = ay/ay_01.asm ay/ay_03.asm ay/ay_04.asm ay/ay_06.asm ay/ay_07.asm btiles.asm font.asm game_ay.asm game_engine.asm game_zx.asm
+ASRC   = banks/bank_01.asm banks/bank_03.asm banks/bank_04.asm banks/bank_06.asm banks/bank_07.asm btiles.asm font.asm game_ay.asm game_engine.asm game_zx.asm
 
 OBJS = $(CSRC:.c=.o)
 INCL = $(ZCCCFG)/../../include/_DEVELOPMENT/sdcc
@@ -47,7 +47,7 @@ game.font: src_font/game.font
 
 $(OUT): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	-rm -f $(OUT)
-	zcc +zx -vn -m4 -clib=sdcc_iy ay/src/VTII10bG-mfx.asm.m4
+	zcc +zx -vn -m4 -clib=sdcc_iy banks/src/VTII10bG-mfx.asm.m4
 	zcc +zx -vn -m -startup=31 -clib=sdcc_iy $(OBJS) $(ASRC) globals_06.o game_loader.asm -o game -pragma-include:zpragma.inc
 	appmake +inject -b game_NIRVANAP.bin -o nirvanap_final.bin -i game_NIRVANA_HOLE.bin --offset 6299
 	appmake +zx -b game_MCLOAD.bin -o mcload.tap --blockname mcload --org 16384 --noloader
@@ -55,17 +55,17 @@ $(OUT): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	appmake +zx -b game_scr.bin -o game_scr.tap --org 16384 --noloader --noheader
 	appmake +zx -b nirvanap_final.bin -o nirvanap.tap --org 56323 --noloader --noheader
 	appmake +zx -b game_CODE.bin -o game.tap --org $(ORG) --noloader --noheader
-	appmake +zx -b game_BANK_1.bin -o game_ay_1.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_3.bin -o game_ay_3.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_4.bin -o game_ay_4.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_6.bin -o game_ay_6.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_7.bin -o game_ay_7.tap --org 49152 --noloader --noheader
-	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_ay_1.tap game_ay_3.tap game_ay_4.tap game_ay_6.tap game_ay_7.tap > $(OUT)
+	appmake +zx -b game_BANK_1.bin -o game_banks_1.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_3.bin -o game_banks_3.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_4.bin -o game_banks_4.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_6.bin -o game_banks_6.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_7.bin -o game_banks_7.tap --org 49152 --noloader --noheader
+	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_banks_1.tap game_banks_3.tap game_banks_4.tap game_banks_6.tap game_banks_7.tap > $(OUT)
 	grep code_compiler_size game.map
 
 $(OUTS): $(OBJS) $(ASRC) game_sna.asm globals_06.o mmap.inc
 	-rm -f $(OUTS)
-	zcc +zx -vn -m4 -clib=sdcc_iy ay/src/VTII10bG-mfx.asm.m4
+	zcc +zx -vn -m4 -clib=sdcc_iy banks/src/VTII10bG-mfx.asm.m4
 	zcc +zx -v -m -startup=31 -clib=sdcc_iy game.o game_sna.asm -o game_sna -pragma-include:zpragma.inc
 	appmake +inject -b game_sna_NIRVANAP.bin -o nirvanap_final.bin -i game_sna_NIRVANA_HOLE.bin --offset 6299
 	cp -f nirvanap_final.bin game_sna_NIRVANAP.bin
@@ -74,7 +74,7 @@ $(OUTS): $(OBJS) $(ASRC) game_sna.asm globals_06.o mmap.inc
 
 $(OUTC): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	-rm -f $(OUTC)
-	zcc +zx -vn -m4 -clib=sdcc_iy ay/src/VTII10bG-mfx.asm.m4
+	zcc +zx -vn -m4 -clib=sdcc_iy banks/src/VTII10bG-mfx.asm.m4
 	zcc +zx -vn -m -startup=31 -clib=sdcc_iy $(OBJS) $(ASRC) globals_06.o game_loader.asm -o game -pragma-include:zpragma.inc
 	appmake +inject -b game_NIRVANAP.bin -o nirvanap_final.bin -i game_NIRVANA_HOLE.bin --offset 6299
 	zx7 -f game_scr.bin
@@ -100,12 +100,12 @@ $(OUTC): $(OBJS) $(ASRC) game_loader.asm globals_06.o mmap.inc
 	appmake +zx -b game_scr.bin.zx7 -o game_scr.tap --org 16384 --noloader --noheader
 	appmake +zx -b nirvanap_final.bin.zx7 -o nirvanap.tap --org 56323 --noloader --noheader
 	appmake +zx -b game_CODE.bin.zx7 -o game.tap --org $(ORG) --noloader --noheader
-	appmake +zx -b game_BANK_1.bin.zx7 -o game_ay_1.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_3.bin.zx7 -o game_ay_3.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_4.bin.zx7 -o game_ay_4.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_6.bin.zx7 -o game_ay_6.tap --org 49152 --noloader --noheader
-	appmake +zx -b game_BANK_7.bin.zx7 -o game_ay_7.tap --org 49152 --noloader --noheader
-	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_ay_1.tap game_ay_3.tap game_ay_4.tap game_ay_6.tap game_ay_7.tap > $(OUTC)
+	appmake +zx -b game_BANK_1.bin.zx7 -o game_banks_1.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_3.bin.zx7 -o game_banks_3.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_4.bin.zx7 -o game_banks_4.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_6.bin.zx7 -o game_banks_6.tap --org 49152 --noloader --noheader
+	appmake +zx -b game_BANK_7.bin.zx7 -o game_banks_7.tap --org 49152 --noloader --noheader
+	cat loader.tap mcload.tap mcloader.tap game_scr.tap nirvanap.tap game.tap game_banks_1.tap game_banks_3.tap game_banks_4.tap game_banks_6.tap game_banks_7.tap > $(OUTC)
 	grep code_compiler_size game.map
 
 .c.o:

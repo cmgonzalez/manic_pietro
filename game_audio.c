@@ -15,7 +15,7 @@
         along with Manic Pietro.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "game.h"
-#include "game_ay.h"
+#include "game_banks.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_player.h"
@@ -41,6 +41,9 @@ void audio_ingame(void) {
     }
   }
 }
+void audio_round_init(void) {
+  ay_song_play(AY_SONG_ONCE, 6, ay_song_round_init);
+}
 
 void audio_time(void) {
   ay_song_stop();
@@ -50,6 +53,10 @@ void audio_time(void) {
 void audio_dead(void) {
   ay_fx_stop();
   ay_fx_play(4, ay_fx_dead);
+}
+
+void audio_crumble(void) {
+  ay_fx_play(4, ay_fx_crumble);
 }
 
 void audio_jump(void) {
@@ -66,10 +73,10 @@ void audio_fall(void) {
 }
 void audio_game_start(void) { ay_fx_play(4, ay_fx_game_start); }
 
-void audio_door(void) {
-  ay_fx_play(4, ay_fx_door);
-}
 
+void audio_door_open(void) {
+  ay_fx_play(4, ay_fx_door_open);
+}
 void audio_tick(void) {
   ay_fx_stop();
   ay_fx_play(4, ay_fx_tick);

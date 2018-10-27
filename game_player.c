@@ -16,7 +16,7 @@
 */
 #include "game.h"
 #include "game_audio.h"
-#include "game_ay.h"
+#include "game_banks.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_player.h"
@@ -78,9 +78,9 @@ void player_turn(void) {
     player_move();
     player_collision();
 
-    if (player_killed && !game_inmune) {
+    if (BIT_CHK(state[INDEX_P1], STAT_KILLED) && !game_inmune) {
       player_lost_life();
-      player_killed = 0;
+      BIT_CLR(state[INDEX_P1], STAT_KILLED);
     }
     player_check_exit();
     player_debug_keys();
@@ -238,7 +238,7 @@ unsigned char player_move_jump(void) {
 
       if ((s_lin1 - player_jump_top) > 48) {
         // JUMP DEAD
-        player_killed = 1;
+        BIT_SET(state[INDEX_P1], STAT_KILLED);
       }
       // Jump end
       lin[INDEX_P1] = v0;
@@ -464,9 +464,6 @@ void player_new_jump() {
 
 void player_collision() {
   // Left
-
-  BIT_CLR(state[INDEX_P1], STAT_ONEXIT);
-
   index1 = spr_calc_index(lin[INDEX_P1], col[INDEX_P1]);
   player_pick();
 
@@ -506,7 +503,7 @@ void player_collision() {
           v0 = abs(colint[i] - colint[INDEX_P1]);
           if (v0 < 2) {
             player_kill_index = 0xFFFF;
-            player_killed = 1;
+            BIT_SET(state[INDEX_P1], STAT_KILLED);
           }
         }
       }
@@ -517,7 +514,6 @@ void player_collision() {
 void player_pick(void) {
   v0 = scr_map[index1];
   v0 = player_pick_deadly(v0);
-  v0 = player_pick_exit(v0);
   v0 = player_pick_item(v0, index1);
   v0 = player_pick_extra(v0);
 }
@@ -558,6 +554,7 @@ unsigned char player_pick_item(unsigned char l_val, int l_index) {
     ++player_coins;
     audio_coin();
     if (obj_count == player_coins) {
+      audio_door_open();
       game_flash_exit(FLASH);
       obj_count = 0xFF;
     }
@@ -571,7 +568,7 @@ unsigned char player_pick_deadly(unsigned char l_val) {
   l_val = tile_class[l_val];
 
   if (l_val == TILE_DEADLY) {
-    player_killed = 1;
+    BIT_SET(state[INDEX_P1], STAT_KILLED);
     player_kill_index = index1;
     v0 = TILE_EMPTY;
     v1 = TILE_EMPTY;
@@ -580,14 +577,6 @@ unsigned char player_pick_deadly(unsigned char l_val) {
   return l_val;
 }
 
-unsigned char player_pick_exit(unsigned char l_val) {
-
-  if (l_val == SPRITE_EXIT) {
-    BIT_SET(state[INDEX_P1], STAT_ONEXIT);
-    return 0;
-  }
-  return l_val;
-}
 
 unsigned char player_pick_extra(unsigned char l_val) {
 
@@ -703,6 +692,7 @@ unsigned char player_check_floor(unsigned char f_inc) {
     s_col1 = col[INDEX_P1] + f_inc;
 
     if (scr_map[index1] == TILE_CRUMB_INIT) {
+      audio_crumble();
       scr_map[index1] = TILE_CRUMB_START;
     } else {
       ++scr_map[index1];

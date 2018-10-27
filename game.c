@@ -20,7 +20,7 @@
 
 #include "game.h"
 #include "game_audio.h"
-#include "game_ay.h"
+#include "game_banks.h"
 #include "game_enemies.h"
 #include "game_engine.h"
 #include "game_menu.h"
@@ -39,18 +39,20 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
+  game_debug = 0;
 
-  z80_delay_ms(666);  // SATANIC DELAY
   game_gravity = 100; // GAME_GRAVITY;
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
-  game_debug = 0;
   game_fps_show = 1;
   scr_curr = 0;
   nirv_sprite_index = 0;
-
   game_song_play = 1;
-
+  if (!game_debug) {
+    scr_curr = 0;
+    game_fps_show = 0;
+    z80_delay_ms(666);  // SATANIC DELAY
+  }
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
   ay_reset();
@@ -67,21 +69,22 @@ void main(void) {
   // TODO k1.fire1 = IN_KEY_SCANCODE_SPACE;
   k1.left = IN_KEY_SCANCODE_o;
   k1.right = IN_KEY_SCANCODE_p;
-  k1.up =
-      IN_KEY_SCANCODE_DISABLE; // must be defined otherwise up is always true
-  k1.down =
-      IN_KEY_SCANCODE_DISABLE; // must be defined otherwise down is always true
+  // must be defined otherwise up is always true
+  k1.up = IN_KEY_SCANCODE_DISABLE;
+  k1.down = IN_KEY_SCANCODE_DISABLE;
 
-  // Wait for Keypress and Randomize //
-  /* Default Values for menu */
+  // Wait for Keypress and Randomize
+  // Default Values for menu
   joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
   // joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
 
   // NIRVANAP_stop();
-  in_wait_nokey();
-  for (counter = 31416; !in_test_key(); counter += 10061)
-    ;
-  srand(counter);
+  if (!game_debug) {
+    in_wait_nokey();
+    for (counter = 31416; !in_test_key(); counter += 10061)
+      ;
+    srand(counter);
+  }
 
   // Clear Screen and init Nirvana
   NIRVANAP_tiles(_btiles);
