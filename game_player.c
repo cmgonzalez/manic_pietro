@@ -187,6 +187,12 @@ unsigned char player_move_jump(void) {
   signed int val_yc;
 
   ++player_jump_count; // 0xFF -> 16 normal horizontal jump
+
+  //CAE COMO ROCA
+  if (player_jump_count > 17) {
+    BIT_CLR(state[INDEX_P1], STAT_DIRR);
+    BIT_CLR(state[INDEX_P1], STAT_DIRL);
+  }
   player_vel_y = player_vel_y + game_gravity;
 
   if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
@@ -217,6 +223,7 @@ unsigned char player_move_jump(void) {
     }
     if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
       player_vel_y = 0;
+
       BIT_CLR(state[INDEX_P1], STAT_DIRR);
       BIT_CLR(state[INDEX_P1], STAT_DIRL);
     } else {
@@ -251,8 +258,11 @@ unsigned char player_move_jump(void) {
       ay_fx_stop();
       //}
       // FOR CRUMBLE FLOOR
-      player_check_floor(0);
-      player_check_floor(1);
+      if ( (dirs & IN_STICK_FIRE) ) {
+        player_check_floor(0);
+        player_check_floor(1);
+      }
+
       return 0;
     }
     spr_set_down();
@@ -273,10 +283,7 @@ unsigned char player_move_jump(void) {
         // z80_delay_ms(2);
         return 0;
       }
-      // END JUMP HORIZONTAL MOVEMENT CAUTION CHECK MAX JUMP
-      if (player_jump_count <= 17) {
-        spr_move_horizontal();
-      }
+      spr_move_horizontal();
     }
   return 1;
 }
@@ -287,6 +294,7 @@ unsigned char player_move_walk(void) {
 
     if (dirs & IN_STICK_FIRE) {
       player_new_jump();
+      spr_move_horizontal();
       return 1;
     }
 
@@ -680,15 +688,18 @@ unsigned char player_check_floor(unsigned char f_inc) {
 
   if (v0 == TILE_CRUMB) { // TODO CAUTION!
 
-    if (BIT_CHK(state[INDEX_P1], DIR_RIGHT) && f_inc == 1 &&
-        colint[INDEX_P1] == 0) {
-      return 1;
-    }
-    if (BIT_CHK(state[INDEX_P1], DIR_LEFT) && f_inc == 0 &&
-        colint[INDEX_P1] == 3) {
-      return 1;
-    }
 
+/*
+    //Hack para romper solo el piso en los bordes, ojo con el joystick es la unica forma
+    if ( !(dirs & IN_STICK_LEFT) && !(dirs & IN_STICK_RIGHT) ) {
+      if (f_inc == 0 && colint[INDEX_P1] == 3) {
+        return 1;
+      }
+      if (f_inc == 1 && colint[INDEX_P1] == 0) {
+        return 1;
+      }
+    }
+*/
     s_col1 = col[INDEX_P1] + f_inc;
 
     if (scr_map[index1] == TILE_CRUMB_INIT) {

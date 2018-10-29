@@ -99,6 +99,7 @@
 #define E_SKYLAB                      6
 #define E_FALL                        7
 #define E_ZIGZAG                      8
+#define E_EUGENE                      9
 
 
 #define TILE_TITLE                    204

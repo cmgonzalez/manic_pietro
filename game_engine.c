@@ -539,7 +539,7 @@ void game_color_hacks() {
 
     if (scr_curr < 20) {
       // Eugene's Lair
-      if (map_paper == PAPER_RED) {
+      if (map_paper == (PAPER_RED)) {
         spr_init_cin0 = 2;
         spr_init_cout0 = 3;
       }

@@ -135,7 +135,9 @@ void spr_move_horizontal(void) {
 unsigned char spr_horizontal_check(unsigned char f_col) __z88dk_fastcall {
   // TODO ESTO FALLA CUANDO EL COLINT ES 0 Y ESTA JUSTO AL LADO UN
   s_lin1 = lin[sprite];
-  if (BIT_CHK(state[sprite], STAT_JUMP) || BIT_CHK(state[sprite], STAT_FALL)) {
+
+
+  if (( BIT_CHK(state[sprite], STAT_JUMP) || BIT_CHK(state[sprite], STAT_FALL ) ) && ((s_lin1 % 8) != 0))  {
     return game_check_map(s_lin1, f_col) || game_check_map(s_lin1 + 8, f_col) ||
            game_check_map(s_lin1 + 16, f_col);
   } else {

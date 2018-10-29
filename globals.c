@@ -210,8 +210,8 @@ unsigned char const spr_init1[] = { //TODO un arreglo separado para el mundo de 
     66,   8, 4,   4, E_HORIZONTAL, 0x05, 0x07, 0xFF, 0xFF, // PENGUIN
     68,  12, 4,   4, E_HORIZONTAL, 0x03, 0x02, 0x04, 0xFF, // CHICKEN
     70,  16, 4,   4, E_HORIZONTAL, 0x05, 0x03, 0xFF, 0xFF, // FOCA
-    72,  20, 4,   4, E_HORIZONTAL, 0x17, 0x10, 0xFF, 0xFF, // WATER
-    74, 112, 1, 255, E_VERTICAL  , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
+    72,  20, 4,   4, E_HORIZONTAL, 0x07, 0x00, 0xFF, 0xFF, // WATER
+    74, 112, 4, 255, E_EUGENE    , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
     76,  24, 4,   4, E_HORIZONTAL, 0x46, 0x43, 0x45, 0x06, // PAC
     78,  28, 4,   4, E_HORIZONTAL, 0x05, 0x03, 0x06, 0x02, // KANGOROO
     80,  32, 4,   4, E_HORIZONTAL, 0x45, 0x43, 0x44, 0x42, // BARRELL
@@ -315,9 +315,11 @@ const unsigned char tile_class[] = {
     TILE_EXTRA,     //07 Switch
 
     TILE_FLOOR,     //08 Switch Off
+
     TILE_CRUMB,     //09 Crumb1
     TILE_CRUMB,     //10 Crumb2
     TILE_CRUMB,     //11 Crumb3
+
     TILE_FLOOR,     //12 Misc Platform
     TILE_OBJECT,    //13 Object
     TILE_EMPTY,     //14 Reverved Exit
@@ -327,6 +329,7 @@ const unsigned char tile_class[] = {
     TILE_EMPTY,     //17 Backgound
     TILE_EMPTY,     //18 Backgound
     TILE_EMPTY,     //19 Backgound
+
     TILE_FLOOR,     //20 Platform
     TILE_FLOOR,     //21 Platform
     TILE_FLOOR,     //22 Platform
@@ -336,6 +339,7 @@ const unsigned char tile_class[] = {
     TILE_WALL,      //25 Wall
     TILE_WALL,      //26 Wall
     TILE_WALL,      //27 Wall
+
     TILE_DEADLY,    //28
     TILE_DEADLY,    //29
     TILE_EMPTY,     //30 Reverved Exit
@@ -348,6 +352,7 @@ unsigned char player_jump_count;
 unsigned char player_jump_top;
 unsigned char player_fall_start;
 
+//Jump Geometry HORIZONTAL extra increment to emulate Willy Jump
 const unsigned char player_jump_hor[] = {
   0, //0
   0, //1

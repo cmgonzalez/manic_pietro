@@ -60,32 +60,44 @@ void enemy_move(void) {
   case E_STATIC:
     enemy_static();
     spr_paint();
-    if (spr_clr) spr_clear_fast();
+    if (spr_clr)
+      spr_clear_fast();
     break;
   case E_HORIZONTAL:
     enemy_horizontal();
     spr_paint();
-    if (spr_clr) spr_clear_fast();
+    if (spr_clr)
+      spr_clear_fast();
     break;
   case E_WALK:
     enemy_horizontal();
     spr_paint();
-    if (spr_clr) spr_clear_fast();
+    if (spr_clr)
+      spr_clear_fast();
     break;
   case E_VERTICAL:
     enemy_vertical();
     spr_paint();
-    if (spr_clr) spr_clear_fast();
+    if (spr_clr)
+      spr_clear_fast();
+    break;
+  case E_EUGENE:
+    enemy_eugene();
+    spr_paint();
+    if (spr_clr)
+      spr_clear_fast();
     break;
   case E_SKYLAB:
     enemy_gota();
     spr_paint();
-    if (spr_clr) spr_clear_fast();
+    if (spr_clr)
+      spr_clear_fast();
     break;
   case E_FALL:
     enemy_fall();
     spr_paint();
-    if (spr_clr) spr_clear_fast();
+    if (spr_clr)
+      spr_clear_fast();
     break;
   case E_ZIGZAG:
     enemy_zigzag();
@@ -179,21 +191,21 @@ void enemy_static() {
 
 void enemy_horizontal() {
 
-    if (BIT_CHK(state[sprite], STAT_DIRR)) {
-      spr_move_right_f();
-      if ((col[sprite] >= value_b[sprite] &&
-           colint[sprite] == 3)) { // HACK spr_frames[sprite] - 1
-        spr_set_left();
-        tile[sprite] = spr_get_tile(&sprite);
-      }
-
-    } else {
-      spr_move_left_f();
-      if ((col[sprite] <= value_a[sprite] && colint[sprite] == 0)) {
-        spr_set_right();
-        tile[sprite] = spr_get_tile(&sprite);
-      }
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
+    spr_move_right_f();
+    if ((col[sprite] >= value_b[sprite] &&
+         colint[sprite] == 3)) { // HACK spr_frames[sprite] - 1
+      spr_set_left();
+      tile[sprite] = spr_get_tile(&sprite);
     }
+
+  } else {
+    spr_move_left_f();
+    if ((col[sprite] <= value_a[sprite] && colint[sprite] == 0)) {
+      spr_set_right();
+      tile[sprite] = spr_get_tile(&sprite);
+    }
+  }
 }
 
 void enemy_vertical() {
@@ -218,6 +230,26 @@ void enemy_vertical() {
       }
     }
     last_time_b[sprite] = zx_clock();
+  }
+}
+
+void enemy_eugene() {
+
+  if (obj_count != 255) {
+    spr_frames[sprite] = 1;
+    enemy_vertical();
+  } else {
+    if (game_check_time(&last_time_b[sprite], spr_speed_b[sprite])) {
+      //spr_frames[sprite] = 4;
+      ++colint[sprite];
+      if (colint[sprite] > 3) {
+        colint[sprite] = 0;
+      }
+      if (lin[sprite] < 88) {
+        spr_move_down_f();
+      }
+      last_time_b[sprite] = zx_clock();
+    }
   }
 }
 
@@ -333,7 +365,17 @@ void enemy_init() {
           BIT_SET(state[sprite], STAT_FALL);
         }
         break;
+      case E_EUGENE:
+        spr_speed_a[sprite] = spr_altset[sprite];
+        spr_speed_b[sprite] = spr_speed[sprite];
+        spr_speed[sprite] = 2; // CAUTION USE 2 MULTIPLES
+        if (f_variant) {
+          BIT_SET(state[sprite], STAT_JUMP);
+        } else {
+          BIT_SET(state[sprite], STAT_FALL);
+        }
 
+        break;
       case E_ZIGZAG:
         value_c[sprite] = lin[sprite];
         BIT_SET(state[sprite], STAT_JUMP);
