@@ -45,7 +45,7 @@ void main(void) {
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_fps_show = 1;
-  scr_curr = 0;
+  scr_curr = 18;
   nirv_sprite_index = 0;
   game_song_play = 1;
   if (!game_debug) {

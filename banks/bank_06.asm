@@ -26,3 +26,7 @@ _ay_song_time_atack:
 PUBLIC _ay_song_round_init
 _ay_song_round_init:
   BINARY "songs/round_init.pt3"
+
+PUBLIC _ay_song_game_over
+_ay_song_game_over:
+BINARY "songs/game_over.pt3"

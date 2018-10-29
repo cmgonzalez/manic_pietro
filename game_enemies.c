@@ -49,9 +49,10 @@ void enemy_turn(void) {
     }
     ++sprite;
   }
-  if (spr_count > NIRV_SPRITE_P1) {
+  if (spr_count >= NIRV_SPRITE_P1) {
     NIRVANAP_halt();
   }
+
 }
 
 void enemy_move(void) {

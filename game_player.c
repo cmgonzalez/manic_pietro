@@ -243,7 +243,7 @@ unsigned char player_move_jump(void) {
             v0 >= s_lin0   // Is below
     ) {
 
-      if ((s_lin1 - player_jump_top) > 48) {
+      if ((s_lin1 - player_jump_top) >= 40) {
         // JUMP DEAD
         BIT_SET(state[INDEX_P1], STAT_KILLED);
       }

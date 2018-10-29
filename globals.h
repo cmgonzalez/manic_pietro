@@ -300,6 +300,10 @@ extern unsigned char zx_val_asm;
 extern unsigned char attrib[4];
 extern unsigned char attrib_hl[4];
 extern unsigned char attrib_osd[4];
+extern unsigned char attrib_sol0[4];
+extern unsigned char attrib_sol1[4];
+extern unsigned char g_ray1;
+
 
 
 //TILE ATTRIB

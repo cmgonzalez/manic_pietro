@@ -82,7 +82,9 @@ void game_loop(void) {
           }
         }
       }
-
+      if (scr_curr == 18) {
+        game_solar_ray();
+      }
       ++loop_count;
       ++fps;
     }
@@ -225,6 +227,75 @@ void game_draw_map(void) {
   }
   intrinsic_ei();
   NIRVANAP_start();
+}
+
+void game_solar_ray() {
+  unsigned char f_lin;
+  unsigned char f_mode;
+  f_lin = 40;
+  f_mode = 1;
+
+  while (f_lin <= 128) {
+
+    if (f_mode) {
+
+      if ((f_lin == 40 && col[0] <= 24) || (f_lin == 64 && col[1] <= 24) ||
+          (f_lin == 88 && col[4] <= 24) ||
+          (f_lin == 120 && col[6] <= 24 && col[6] >= 23)) {
+        game_solar_ray0(f_lin, 1);
+        f_mode = 0;
+      }
+      NIRVANAP_paintC(attrib_sol1, f_lin, 23);
+    } else {
+      if (g_ray1 != 0 && g_ray1 < f_lin) {
+        NIRVANAP_paintC(attrib_sol0, f_lin, 23);
+      }
+    }
+    f_lin = f_lin + 8;
+  }
+  if (f_mode && g_ray1) {
+    game_solar_ray0(g_ray1, 0);
+  }
+}
+
+void game_solar_ray0(unsigned char f_lin, unsigned char f_mode) {
+
+  unsigned char f_col;
+  unsigned char f_col0;
+
+  if (g_ray1 != f_lin || !f_mode) {
+    f_col = 22;
+    f_col0 = 0;
+    if (f_mode) {
+
+      if (f_lin >= lin[2] && f_lin <= (lin[2] + 16)) {
+        f_col0 = col[2];
+      }
+      if (f_lin >= lin[3] && f_lin <= (lin[3] + 16)) {
+        f_col0 = col[3];
+      }
+      if (f_lin >= lin[5] && f_lin <= (lin[5] + 16)) {
+        f_col0 = col[5];
+      }
+    }
+
+    while (f_col > 0) {
+      if (f_mode) {
+        if (f_col > f_col0) {
+          NIRVANAP_paintC(attrib_sol1, f_lin, f_col);
+        }
+        if (g_ray1) {
+          NIRVANAP_paintC(attrib_sol0, g_ray1, f_col);
+        }
+      } else {
+        NIRVANAP_paintC(attrib_sol0, f_lin, f_col);
+        g_ray1 = 0;
+      }
+      --f_col;
+    }
+
+    g_ray1 = f_lin;
+  }
 }
 
 void game_img1() {
@@ -414,7 +485,6 @@ void game_round_init(void) {
   // TODO Just use start to simplify
   ay_reset();
 
-
   // All Black
   zx_border(INK_BLACK);
   zx_print_ink(INK_BLACK | (INK_BLACK << 3));
@@ -469,7 +539,6 @@ void game_round_init(void) {
   game_copy_sprite_color_reset();
   game_color_hacks();
 
-
   game_tile_cnt = game_copy_sprite_std(0, TILE_P1_RIGHT);
 
   key_attrib[0] = map_paper | key_ink;
@@ -480,12 +549,12 @@ void game_round_init(void) {
   game_song_play_start = 0;
 
   NIRVANAP_start();
-  //Round presentation
+  // Round presentation
   if (!game_debug) {
     game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
     game_fill_row(10, 32);
-    zx_print_str(10,10,"ROUND");
-    zx_print_chr(10,16,scr_curr+1);
+    zx_print_str(10, 10, "ROUND");
+    zx_print_chr(10, 16, scr_curr + 1);
     game_fill_row(17, 32);
     game_fill_row(18, 32);
     game_fill_row(20, 32);
@@ -496,11 +565,11 @@ void game_round_init(void) {
     spr_clear_scr();
   }
 
-  //Draw Screen
+  // Draw Screen
   game_draw_map();
-  //Start Tune
+  // Start Tune
   audio_ingame();
-  //Remove Flash from Door
+  // Remove Flash from Door
   game_flash_exit(!FLASH);
   zx_border(map_border);
   zx_print_ink(map_border | (map_border << 3));
@@ -526,29 +595,27 @@ void game_round_init(void) {
 
   zx_print_ink(INK_WHITE | PAPER_BLACK);
   NIRVANAP_halt();
-
-
 }
 
 void game_color_hacks() {
-  //TODO MOVE THIS TO A PROPER ARRAY
+  // TODO MOVE THIS TO A PROPER ARRAY
 
-    if (map_paper & BRIGHT) {
-      spr_init_bright = BRIGHT;
+  if (map_paper & BRIGHT) {
+    spr_init_bright = BRIGHT;
+  }
+
+  if (scr_curr < 20) {
+    // Eugene's Lair
+    if (map_paper == (PAPER_RED)) {
+      spr_init_cin0 = 2;
+      spr_init_cout0 = 3;
     }
-
-    if (scr_curr < 20) {
-      // Eugene's Lair
-      if (map_paper == (PAPER_RED)) {
-        spr_init_cin0 = 2;
-        spr_init_cout0 = 3;
-      }
-      // Solar Power
-      if (map_paper == PAPER_GREEN) {
-        spr_init_cin0 = 5;
-        spr_init_cout0 = 1;
-      }
-    } else {
+    // Solar Power
+    if (map_paper == PAPER_GREEN) {
+      spr_init_cin0 = 5;
+      spr_init_cout0 = 1;
+    }
+  } else {
 
     /*
       if (map_paper == PAPER_CYAN) {
@@ -561,36 +628,36 @@ void game_color_hacks() {
 
       */
 
-      if (map_paper == PAPER_BLUE) {
-        spr_init_cin0 = PAPER_BLACK | INK_BLUE;
-        spr_init_cout0 = PAPER_BLACK | INK_WHITE;
-        spr_init_cin1 = PAPER_BLACK | INK_RED;
-        spr_init_cout1 = PAPER_BLACK | INK_GREEN;
-        spr_init_cin2 = PAPER_RED | INK_YELLOW;
-        spr_init_cout2 = PAPER_GREEN | INK_WHITE;
-      }
-
-      // if (map_paper == (PAPER_WHITE | BRIGHT)) {
-
-      if (map_paper == PAPER_WHITE) {
-        // spr_init_bright = BRIGHT;
-
-        spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
-        spr_init_cout0 = PAPER_BLACK | INK_BLACK;
-
-        spr_init_cin1 = PAPER_BLACK | INK_BLUE;
-        spr_init_cout1 = PAPER_BLACK | INK_BLUE;
-
-        spr_init_cin2 = PAPER_BLACK | INK_RED;
-        spr_init_cout2 = PAPER_BLACK | INK_MAGENTA;
-
-        spr_init_cin3 = PAPER_RED | INK_YELLOW;
-        spr_init_cout3 = PAPER_BLUE | INK_BLACK;
-
-        // spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
-        // spr_init_cout3 = PAPER_BLACK | INK_BLACK;
-      }
+    if (map_paper == PAPER_BLUE) {
+      spr_init_cin0 = PAPER_BLACK | INK_BLUE;
+      spr_init_cout0 = PAPER_BLACK | INK_WHITE;
+      spr_init_cin1 = PAPER_BLACK | INK_RED;
+      spr_init_cout1 = PAPER_BLACK | INK_GREEN;
+      spr_init_cin2 = PAPER_RED | INK_YELLOW;
+      spr_init_cout2 = PAPER_GREEN | INK_WHITE;
     }
+
+    // if (map_paper == (PAPER_WHITE | BRIGHT)) {
+
+    if (map_paper == PAPER_WHITE) {
+      // spr_init_bright = BRIGHT;
+
+      spr_init_cin0 = PAPER_BLACK | INK_YELLOW;
+      spr_init_cout0 = PAPER_BLACK | INK_BLACK;
+
+      spr_init_cin1 = PAPER_BLACK | INK_BLUE;
+      spr_init_cout1 = PAPER_BLACK | INK_BLUE;
+
+      spr_init_cin2 = PAPER_BLACK | INK_RED;
+      spr_init_cout2 = PAPER_BLACK | INK_MAGENTA;
+
+      spr_init_cin3 = PAPER_RED | INK_YELLOW;
+      spr_init_cout3 = PAPER_BLUE | INK_BLACK;
+
+      // spr_init_cin3 = PAPER_BLACK | INK_YELLOW;
+      // spr_init_cout3 = PAPER_BLACK | INK_BLACK;
+    }
+  }
 }
 void game_print_header(void) {
 
@@ -704,6 +771,16 @@ void game_attribs() {
   attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;
   attrib_osd[2] = PAPER_BLACK | INK_CYAN | BRIGHT;
   attrib_osd[3] = PAPER_BLACK | INK_YELLOW | BRIGHT;
+
+  attrib_sol0[0] = PAPER_GREEN | INK_GREEN;
+  attrib_sol0[1] = PAPER_GREEN | INK_GREEN;
+  attrib_sol0[2] = PAPER_GREEN | INK_GREEN;
+  attrib_sol0[3] = PAPER_GREEN | INK_GREEN;
+
+  attrib_sol1[0] = PAPER_YELLOW | INK_YELLOW;
+  attrib_sol1[1] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
+  attrib_sol1[2] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
+  attrib_sol1[3] = PAPER_YELLOW | INK_YELLOW;
 }
 
 void game_page_map(void) {
@@ -716,15 +793,15 @@ void game_page_map(void) {
   unsigned int lk;
   unsigned int l_start;
 
-  //unsigned int add_index;
+  // unsigned int add_index;
   unsigned int start_index;
-  //unsigned char l_world;
+  // unsigned char l_world;
   // unsigned char l_world_w;
   // unsigned char l_world_h;
 
   unsigned char l_scr;
   unsigned char l_scr0;
-  //unsigned char l_scr_map;
+  // unsigned char l_scr_map;
   unsigned char l_tileset;
 
   // btile page
@@ -739,7 +816,7 @@ void game_page_map(void) {
     l_scr0 = l_scr - 20;
   }
 
-  //l_scr_map = (l_world << 4) + l_scr;
+  // l_scr_map = (l_world << 4) + l_scr;
   l_tileset = game_tileset;
 
   // Tiles (8x8) @Bank7
@@ -772,15 +849,14 @@ void game_page_map(void) {
   lj = 0;
   lk = 0;
 
-
   // TODO IF I REMOVE THESE LINES THE ENGINE FAILS!!! WHY???
-  //scr_curr = l_scr;
+  // scr_curr = l_scr;
 
   // END TODO
   for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
 
     // Page in BANK 06 - Note that global variables are in page 0
-    page(6);                            // TODO SINGLE READ TO speedup
+    page(6); // TODO SINGLE READ TO speedup
     start_index = lenght0[l_scr];
     lv0 = world0[start_index + li];     // TODO n LEVELS
     lv1 = world0[start_index + li + 1]; // TODO n LEVELS
@@ -961,7 +1037,7 @@ void game_intro() {
     }
     audio_coin_noentiendo();
     z80_delay_ms(350);
-    //in_wait_key();
+    // in_wait_key();
     // LOADING IMAGE
     game_cls();
     NIRVANAP_stop();
@@ -983,24 +1059,27 @@ void game_intro() {
     NIRVANAP_start();
     NIRVANAP_halt();
     z80_delay_ms(1000);
-    //in_wait_key();
+    // in_wait_key();
   }
 }
 
 void game_shoe() {
+  audio_game_over();
   game_cls();
 
   NIRVANAP_drawT(91, 96, 15);  // Willy
   NIRVANAP_drawT(92, 112, 15); // Shoe
   v0 = 16;
   while (v0 <= 96) {
-    NIRVANAP_drawT(93, v0, 15); // Zapato
+    NIRVANAP_spriteT(0, 93, v0, 15); // Zapato
     v0 = v0 + 2;
     NIRVANAP_halt();
     z80_delay_ms(25);
   }
 
   v0 = 1;
+  time_conv = zx_clock();
+
   while (v0) {
     game_paint_attrib(&attrib_osd, 8, 12, (6 << 3) + 8);
     zx_print_str(6, 8, "Game");
@@ -1014,7 +1093,7 @@ void game_shoe() {
     attrib_osd[0] = v1;
 
     v2 = in_inkey();
-    if (v2) {
+    if (v2 || game_check_time(&time_conv, 500)){
       v0 = 0;
     }
     z80_delay_ms(10);

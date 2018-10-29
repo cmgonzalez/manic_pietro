@@ -134,6 +134,11 @@ unsigned char zx_val_asm;
 unsigned char attrib[4];
 unsigned char attrib_hl[4];
 unsigned char attrib_osd[4];
+
+unsigned char attrib_sol0[4];
+unsigned char attrib_sol1[4];
+unsigned char g_ray1;
+
 // TILE ATTRIB TODO REMOVE UNUSED
 unsigned char key_attrib[4];
 

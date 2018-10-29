@@ -47,6 +47,8 @@ void                 game_copy_sprite(unsigned char f_hi_sprite, unsigned char f
 extern void          game_intro( );
 extern void          game_shoe( );
 extern void          game_anim_air(void);
+extern void          game_solar_ray(void);
+extern void          game_solar_ray0( unsigned char f_lin, unsigned char f_mode);
 
 extern void          page( unsigned char bank );
 unsigned char        reverse(unsigned char b);
