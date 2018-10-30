@@ -65,10 +65,11 @@ extern unsigned char ay_fx_game_start[];
 extern unsigned char ay_fx_tick[];
 extern unsigned char ay_fx_door_open[];
 extern unsigned char ay_fx_crumble[];
-extern unsigned char ay_fx_coin_noentiendo[];
+
 //BANK 6 Songs
 extern unsigned char ay_song_time_atack[];
 extern unsigned char ay_song_game_over[];
+extern unsigned char ay_song_coin_noentiendo[];
 //BANK 7 Tiles 8x8
 extern unsigned char hitiles1[];
 extern unsigned char hitiles2[];

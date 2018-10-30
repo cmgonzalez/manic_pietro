@@ -30,3 +30,7 @@ _ay_song_round_init:
 PUBLIC _ay_song_game_over
 _ay_song_game_over:
 BINARY "songs/game_over.pt3"
+
+PUBLIC _ay_song_coin_noentiendo
+_ay_song_coin_noentiendo:
+BINARY "songs/coin_noentiendo.pt3"

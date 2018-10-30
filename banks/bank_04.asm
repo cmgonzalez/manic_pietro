@@ -60,10 +60,6 @@ PUBLIC _ay_fx_coin
 _ay_fx_coin:
 BINARY "fx/coin.afx"
 
-PUBLIC _ay_fx_coin_noentiendo
-_ay_fx_coin_noentiendo:
-BINARY "fx/coin_noentiendo.afx"
-
 PUBLIC _ay_fx_dead
 _ay_fx_dead:
 BINARY "fx/dead.afx"

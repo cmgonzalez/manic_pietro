@@ -908,9 +908,9 @@
 905   0000              	GLOBAL _GLOBAL_ZX_PORT_FE
 906   0000              	GLOBAL _hitiles2
 907   0000              	GLOBAL _hitiles1
-908   0000              	GLOBAL _ay_song_game_over
-909   0000              	GLOBAL _ay_song_time_atack
-910   0000              	GLOBAL _ay_fx_coin_noentiendo
+908   0000              	GLOBAL _ay_song_coin_noentiendo
+909   0000              	GLOBAL _ay_song_game_over
+910   0000              	GLOBAL _ay_song_time_atack
 911   0000              	GLOBAL _ay_fx_crumble
 912   0000              	GLOBAL _ay_fx_door_open
 913   0000              	GLOBAL _ay_fx_tick
@@ -1149,50 +1149,49 @@
 1146  00CA              ; Function audio_coin_noentiendo
 1147  00CA              ; ---------------------------------
 1148  00CA              _audio_coin_noentiendo:
-1149  00CA  21 00 00    	ld	hl,_ay_fx_coin_noentiendo
+1149  00CA  21 00 00    	ld	hl,_ay_song_coin_noentiendo
 1150  00CD  E5          	push	hl
-1151  00CE  3E 04       	ld	a,0x04
-1152  00D0  F5          	push	af
-1153  00D1  33          	inc	sp
-1154  00D2  CD 00 00    	call	_ay_fx_play
-1155  00D5  C9          	ret
-1156  00D6              	SECTION code_compiler
-1157  00D6              ;	---------------------------------
-1158  00D6              ; Function audio_puerta is a stub
-1159  00D6              ; ---------------------------------
-1160  00D6              EXTERN l_ret
-1161  00D6              defc _audio_puerta = l_ret
-1162  00D6              	SECTION code_compiler
-1163  00D6              ;	---------------------------------
-1164  00D6              ; Function audio_level_start
-1165  00D6              ; ---------------------------------
-1166  00D6              	defc _audio_level_start	=	_ay_reset
-1167  00D6              	SECTION code_compiler
-1168  00D6              ;	---------------------------------
-1169  00D6              ; Function audio_level_complete
-1170  00D6              ; ---------------------------------
-1171  00D6              	defc _audio_level_complete	=	_ay_reset
-1172  00D6              	SECTION code_compiler
-1173  00D6              ;	---------------------------------
-1174  00D6              ; Function audio_game_end
-1175  00D6              ; ---------------------------------
-1176  00D6              	defc _audio_game_end	=	_ay_reset
-1177  00D6              	SECTION code_compiler
-1178  00D6              ;	---------------------------------
-1179  00D6              ; Function audio_menu
-1180  00D6              ; ---------------------------------
-1181  00D6              _audio_menu:
-1182  00D6  CD 00 00    	call	_ay_reset
-1183  00D9  21 00 00    	ld	hl,_ay_song_menu
-1184  00DC  E5          	push	hl
-1185  00DD  21 00 04    	ld	hl,0x0400
-1186  00E0  E5          	push	hl
-1187  00E1  CD 00 00    	call	_ay_song_play
-1188  00E4  C9          	ret
-1189  00E5              	SECTION code_compiler
-1190  00E5              ;	---------------------------------
-1191  00E5              ; Function audio_levelup
-1192  00E5              ; ---------------------------------
-1193  00E5              	defc _audio_levelup	=	_ay_fx_stop
-1194  00E5              	SECTION IGNORE
-1195  0000              
+1151  00CE  21 01 06    	ld	hl,0x0601
+1152  00D1  E5          	push	hl
+1153  00D2  CD 00 00    	call	_ay_song_play
+1154  00D5  C9          	ret
+1155  00D6              	SECTION code_compiler
+1156  00D6              ;	---------------------------------
+1157  00D6              ; Function audio_puerta is a stub
+1158  00D6              ; ---------------------------------
+1159  00D6              EXTERN l_ret
+1160  00D6              defc _audio_puerta = l_ret
+1161  00D6              	SECTION code_compiler
+1162  00D6              ;	---------------------------------
+1163  00D6              ; Function audio_level_start
+1164  00D6              ; ---------------------------------
+1165  00D6              	defc _audio_level_start	=	_ay_reset
+1166  00D6              	SECTION code_compiler
+1167  00D6              ;	---------------------------------
+1168  00D6              ; Function audio_level_complete
+1169  00D6              ; ---------------------------------
+1170  00D6              	defc _audio_level_complete	=	_ay_reset
+1171  00D6              	SECTION code_compiler
+1172  00D6              ;	---------------------------------
+1173  00D6              ; Function audio_game_end
+1174  00D6              ; ---------------------------------
+1175  00D6              	defc _audio_game_end	=	_ay_reset
+1176  00D6              	SECTION code_compiler
+1177  00D6              ;	---------------------------------
+1178  00D6              ; Function audio_menu
+1179  00D6              ; ---------------------------------
+1180  00D6              _audio_menu:
+1181  00D6  CD 00 00    	call	_ay_reset
+1182  00D9  21 00 00    	ld	hl,_ay_song_menu
+1183  00DC  E5          	push	hl
+1184  00DD  21 00 04    	ld	hl,0x0400
+1185  00E0  E5          	push	hl
+1186  00E1  CD 00 00    	call	_ay_song_play
+1187  00E4  C9          	ret
+1188  00E5              	SECTION code_compiler
+1189  00E5              ;	---------------------------------
+1190  00E5              ; Function audio_levelup
+1191  00E5              ; ---------------------------------
+1192  00E5              	defc _audio_levelup	=	_ay_fx_stop
+1193  00E5              	SECTION IGNORE
+1194  0000              

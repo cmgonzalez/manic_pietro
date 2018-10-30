@@ -231,70 +231,80 @@ void game_draw_map(void) {
 
 void game_solar_ray() {
   unsigned char f_lin;
-  unsigned char f_mode;
-  f_lin = 40;
-  f_mode = 1;
+  unsigned char f_lin_ray;
 
-  while (f_lin <= 128) {
 
-    if (f_mode) {
-
-      if ((f_lin == 40 && col[0] <= 24) || (f_lin == 64 && col[1] <= 24) ||
-          (f_lin == 88 && col[4] <= 24) ||
-          (f_lin == 120 && col[6] <= 24 && col[6] >= 23)) {
-        game_solar_ray0(f_lin, 1);
-        f_mode = 0;
-      }
-      NIRVANAP_paintC(attrib_sol1, f_lin, 23);
+  f_lin_ray = 0;
+  if (col[0] == 23) {
+    f_lin_ray = lin[0];
+  } else {
+    if (col[1] == 23) {
+      f_lin_ray = lin[1];
     } else {
-      if (g_ray1 != 0 && g_ray1 < f_lin) {
-        NIRVANAP_paintC(attrib_sol0, f_lin, 23);
+      if (col[4] == 23) {
+        f_lin_ray = lin[4];
+      } else {
+        if (col[6] == 23) {
+          f_lin_ray = lin[6];
+        }
       }
     }
-    f_lin = f_lin + 8;
   }
-  if (f_mode && g_ray1) {
-    game_solar_ray0(g_ray1, 0);
-  }
+
+  //Borro rayo
+ if (f_lin_ray == 0 && g_ray1) {
+   game_solar_ray0();
+   g_ray1 = 0;
+   f_lin = 24;
+   while (f_lin <= 112) {
+     NIRVANAP_paintC(attrib_sol1, f_lin + GAME_OFFSET_Y, 23);
+      f_lin = f_lin + 8;
+   }
+ }
+
+ if (f_lin_ray && !g_ray1) {
+   f_lin = 24;
+   g_ray1 = f_lin_ray;
+   while (f_lin < f_lin_ray) {
+     NIRVANAP_paintC(attrib_sol1, f_lin + GAME_OFFSET_Y, 23);
+      f_lin = f_lin + 8;
+   }
+   game_solar_ray1();
+
+   f_lin = f_lin + 8;
+   while (f_lin <= 112) {
+     NIRVANAP_paintC(attrib_sol0, f_lin + GAME_OFFSET_Y, 23);
+      f_lin = f_lin + 8;
+   }
+ }
 }
 
-void game_solar_ray0(unsigned char f_lin, unsigned char f_mode) {
+void game_solar_ray1() {
 
   unsigned char f_col;
   unsigned char f_col0;
 
-  if (g_ray1 != f_lin || !f_mode) {
-    f_col = 22;
-    f_col0 = 0;
-    if (f_mode) {
+  f_col = 22;
+  f_col0 = 0;
 
-      if (f_lin >= lin[2] && f_lin <= (lin[2] + 16)) {
-        f_col0 = col[2];
-      }
-      if (f_lin >= lin[3] && f_lin <= (lin[3] + 16)) {
-        f_col0 = col[3];
-      }
-      if (f_lin >= lin[5] && f_lin <= (lin[5] + 16)) {
-        f_col0 = col[5];
-      }
-    }
+  while (f_col > 0) {
+    // LIMPIO RAYO DESDE EL INICIO
+    NIRVANAP_paintC(attrib_sol1, g_ray1 + GAME_OFFSET_Y, f_col);
+    --f_col;
+  }
+}
+void game_solar_ray0() {
 
-    while (f_col > 0) {
-      if (f_mode) {
-        if (f_col > f_col0) {
-          NIRVANAP_paintC(attrib_sol1, f_lin, f_col);
-        }
-        if (g_ray1) {
-          NIRVANAP_paintC(attrib_sol0, g_ray1, f_col);
-        }
-      } else {
-        NIRVANAP_paintC(attrib_sol0, f_lin, f_col);
-        g_ray1 = 0;
-      }
-      --f_col;
-    }
+  unsigned char f_col;
+  unsigned char f_col0;
 
-    g_ray1 = f_lin;
+  f_col = 22;
+  f_col0 = 0;
+
+  while (f_col > 0) {
+    // LIMPIO RAYO DESDE EL INICIO
+    NIRVANAP_paintC(attrib_sol0, g_ray1 + GAME_OFFSET_Y, f_col);
+    --f_col;
   }
 }
 
@@ -1026,16 +1036,24 @@ void page(unsigned char bank) {
 
 void game_intro() {
   if (!game_debug) {
+    audio_coin_noentiendo();
     // NOENTIENDO LOGO
     game_cls();
+
     v0 = 0;
     v2 = 80;
+    v1 = 0;
     while (v0 < 16) {
-      NIRVANAP_drawT(v2, 96, v0 + 8);
+      NIRVANAP_spriteT(v1, v2, 96, v0 + 8);
       v0 = v0 + 2;
       ++v2;
+      ++v1;
+      if (v1 == NIRV_TOTAL_SPRITES) {
+        v1 = 0;
+        NIRVANAP_halt();
+      }
     }
-    audio_coin_noentiendo();
+
     z80_delay_ms(350);
     // in_wait_key();
     // LOADING IMAGE
@@ -1093,7 +1111,7 @@ void game_shoe() {
     attrib_osd[0] = v1;
 
     v2 = in_inkey();
-    if (v2 || game_check_time(&time_conv, 500)){
+    if (v2 || game_check_time(&time_conv, 500)) {
       v0 = 0;
     }
     z80_delay_ms(10);

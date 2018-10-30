@@ -48,7 +48,8 @@ extern void          game_intro( );
 extern void          game_shoe( );
 extern void          game_anim_air(void);
 extern void          game_solar_ray(void);
-extern void          game_solar_ray0( unsigned char f_lin, unsigned char f_mode);
+extern void          game_solar_ray1();
+extern void          game_solar_ray0();
 
 extern void          page( unsigned char bank );
 unsigned char        reverse(unsigned char b);
