@@ -32,7 +32,8 @@ extern unsigned char    spr_move_right(void);
 extern unsigned char    spr_move_left(void);
 extern void             spr_paint(void);
 extern void             spr_clear_fast(void);
-
+extern void             spr_clear_fast_vert(void);
+extern void             spr_clear_fast_hor(void);
 
 extern unsigned char    spr_paint_player(void);
 extern unsigned char    spr_get_tile(unsigned char *f_sprite) __z88dk_fastcall;

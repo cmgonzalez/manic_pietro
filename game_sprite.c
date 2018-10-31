@@ -366,7 +366,80 @@ void spr_clear_fast() {
   NIRVANAP_paintC(attrib_hl, v2, s_col0);
   NIRVANAP_paintC(attrib_hl, v2, v3);
 
+  /*
+  // Method0 Using spr_draw8
+  v2 = s_lin0 + 8;
+  v3 = s_col0 + 1;
+  spr_draw8(0, v2, s_col0);
+  spr_draw8(0, v2, v3);
+  v2 = v2 + 8;
+  spr_draw8(0, v2, s_col0);
+  spr_draw8(0, v2, v3);
+  */
 }
+void spr_clear_fast_hor(void) {
+  //TODO CODE OPTIMIZE
+  unsigned char *f_byte;
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
+    f_byte = zx_py2saddr(s_lin0+8) + s_col0;
+    *f_byte = 0;
+    *(f_byte + 256) = 0;
+    *(f_byte + 512) = 0;
+    *(f_byte + 768) = 0;
+    *(f_byte + 1024) = 0;
+    *(f_byte + 1280) = 0;
+    *(f_byte + 1536) = 0;
+    *(f_byte + 1792) = 0;
+    //f_byte = f_byte + 32;
+    f_byte = zx_py2saddr(s_lin0+16) + s_col0;
+    *f_byte = 0;
+    *(f_byte + 256) = 0;
+    *(f_byte + 512) = 0;
+    *(f_byte + 768) = 0;
+    *(f_byte + 1024) = 0;
+    *(f_byte + 1280) = 0;
+    *(f_byte + 1536) = 0;
+    *(f_byte + 1792) = 0;
+  } else {
+    f_byte = zx_py2saddr(s_lin0+8) + s_col0 + 1;
+    *f_byte = 0;
+    *(f_byte + 256) = 0;
+    *(f_byte + 512) = 0;
+    *(f_byte + 768) = 0;
+    *(f_byte + 1024) = 0;
+    *(f_byte + 1280) = 0;
+    *(f_byte + 1536) = 0;
+    *(f_byte + 1792) = 0;
+    //f_byte = f_byte + 32;
+    f_byte = zx_py2saddr(s_lin0+16) + s_col0 + 1;
+    *f_byte = 0;
+    *(f_byte + 256) = 0;
+    *(f_byte + 512) = 0;
+    *(f_byte + 768) = 0;
+    *(f_byte + 1024) = 0;
+    *(f_byte + 1280) = 0;
+    *(f_byte + 1536) = 0;
+    *(f_byte + 1792) = 0;
+  }
+}
+
+void spr_clear_fast_vert(void) {
+  unsigned char *f_byte;
+  if (BIT_CHK(state[sprite], STAT_FALL)) {
+    f_byte = zx_py2saddr(s_lin0+8) + s_col0;
+    *f_byte = 0;
+    *(f_byte + 1) = 0;
+    *(f_byte + 256) = 0;
+    *(f_byte + 257) = 0;
+  } else {
+    f_byte = zx_py2saddr(s_lin0+8+14) + s_col0; //TODO WHY 14???
+    *f_byte = 0;
+    *(f_byte + 1) = 0;
+    *(f_byte + 256) = 0;
+    *(f_byte + 257) = 0;
+  }
+}
+
 void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
   spr_count--;
   s_lin0 = lin[f_sprite];

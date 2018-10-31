@@ -49,10 +49,9 @@ void enemy_turn(void) {
     }
     ++sprite;
   }
-  if (spr_count >= NIRV_SPRITE_P1) {
+  if (spr_count > NIRV_SPRITE_P1) {
     NIRVANAP_halt();
   }
-
 }
 
 void enemy_move(void) {
@@ -61,14 +60,15 @@ void enemy_move(void) {
   case E_STATIC:
     enemy_static();
     spr_paint();
-    if (spr_clr)
-      spr_clear_fast();
+    // if (spr_clr)
+    //  spr_clear_fast();
     break;
   case E_HORIZONTAL:
     enemy_horizontal();
     spr_paint();
-    if (spr_clr)
-      spr_clear_fast();
+    if (spr_clr) {
+      spr_clear_fast_hor();
+    }
     break;
   case E_WALK:
     enemy_horizontal();
@@ -78,9 +78,12 @@ void enemy_move(void) {
     break;
   case E_VERTICAL:
     enemy_vertical();
+
     spr_paint();
-    if (spr_clr)
-      spr_clear_fast();
+
+    if (spr_clr) {
+      spr_clear_fast_vert();
+    }
     break;
   case E_EUGENE:
     enemy_eugene();
@@ -144,7 +147,7 @@ void enemy_gota() {
     if (game_check_time(&last_time_a[sprite], spr_speed_a[sprite])) {
       colint[sprite]++;
       if (colint[sprite] == spr_frames[sprite]) {
-        // Skylab Respawn Hack!
+
 
         v2 = s_lin0 + GAME_OFFSET_Y;
         v3 = s_col0 + 1;
@@ -155,10 +158,14 @@ void enemy_gota() {
         NIRVANAP_paintC(attrib_hl, v2, v3);
 
         lin[sprite] = value_a[sprite];
-        col[sprite] = col[sprite] + 8;
-        if (col[sprite] > 31) {
-          col[sprite] = value_b[sprite]; // Initial Value
+        if (scr_curr == 13) {
+          // Skylab Respawn Hack!
+          col[sprite] = col[sprite] + 8;
+          if (col[sprite] > 31) {
+            col[sprite] = value_b[sprite]; // Initial Value
+          }
         }
+
         colint[sprite] = 0;
       }
       last_time_a[sprite] = zx_clock();
@@ -241,7 +248,7 @@ void enemy_eugene() {
     enemy_vertical();
   } else {
     if (game_check_time(&last_time_b[sprite], spr_speed_b[sprite])) {
-      //spr_frames[sprite] = 4;
+      // spr_frames[sprite] = 4;
       ++colint[sprite];
       if (colint[sprite] > 3) {
         colint[sprite] = 0;

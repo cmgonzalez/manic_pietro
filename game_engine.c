@@ -256,9 +256,10 @@ void game_solar_ray() {
    game_solar_ray0();
    g_ray1 = 0;
    f_lin = 24;
-   while (f_lin <= 112) {
-     NIRVANAP_paintC(attrib_sol1, f_lin + GAME_OFFSET_Y, 23);
-      f_lin = f_lin + 8;
+   while (f_lin < 128) {
+     //NIRVANAP_paintC(attrib_sol1, f_lin + GAME_OFFSET_Y, 23);
+     spr_draw8(17, f_lin, 23);
+     f_lin = f_lin + 8;
    }
  }
 
@@ -266,14 +267,14 @@ void game_solar_ray() {
    f_lin = 24;
    g_ray1 = f_lin_ray;
    while (f_lin < f_lin_ray) {
-     NIRVANAP_paintC(attrib_sol1, f_lin + GAME_OFFSET_Y, 23);
+     spr_draw8(17, f_lin, 23);
       f_lin = f_lin + 8;
    }
    game_solar_ray1();
 
    f_lin = f_lin + 8;
-   while (f_lin <= 112) {
-     NIRVANAP_paintC(attrib_sol0, f_lin + GAME_OFFSET_Y, 23);
+   while (f_lin < 128) {
+     spr_draw8(0, f_lin, 23);
       f_lin = f_lin + 8;
    }
  }
@@ -289,7 +290,7 @@ void game_solar_ray1() {
 
   while (f_col > 0) {
     // LIMPIO RAYO DESDE EL INICIO
-    NIRVANAP_paintC(attrib_sol1, g_ray1 + GAME_OFFSET_Y, f_col);
+    spr_draw8(16, g_ray1+8, f_col);
     --f_col;
   }
 }
@@ -303,7 +304,7 @@ void game_solar_ray0() {
 
   while (f_col > 0) {
     // LIMPIO RAYO DESDE EL INICIO
-    NIRVANAP_paintC(attrib_sol0, g_ray1 + GAME_OFFSET_Y, f_col);
+    spr_draw8(0, g_ray1+8, f_col);
     --f_col;
   }
 }
@@ -1082,9 +1083,9 @@ void game_intro() {
 }
 
 void game_shoe() {
-  audio_game_over();
-  game_cls();
 
+  game_cls();
+  audio_game_over();
   NIRVANAP_drawT(91, 96, 15);  // Willy
   NIRVANAP_drawT(92, 112, 15); // Shoe
   v0 = 16;
