@@ -37,6 +37,7 @@
 #define GAME_COLLISION_TIME         30 //TIME BTWN COLISION CHECKS
 
 #define PLAYER_SPEED                 4
+#define PLAYER_SPEED_VJUMP           10
 #define ENEMY_START_INDEX            64 //INDEX OF START OF ENEMY ON MAP ARRAY
 
 
@@ -161,7 +162,7 @@
 /*Stats alt (bit position number)*/
 #define STAT_LOCK                     0
 #define STAT_CONVJMP                  1
-#define STAT_PUSH                     2
+#define STAT_VJUMP                    2
 #define STAT_LDIRL                    3
 #define STAT_LDIRR                    4
 #define STAT_RESTART                  6
@@ -397,3 +398,6 @@ extern unsigned char spr_clr;
 extern unsigned char *air_curr_byte;
 extern const unsigned int air_start_byte;
 extern const unsigned int air_end_byte;
+
+extern unsigned char *attribs;
+extern unsigned char *deltas;

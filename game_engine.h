@@ -50,7 +50,7 @@ extern void          game_anim_air(void);
 extern void          game_solar_ray(void);
 extern void          game_solar_ray1();
 extern void          game_solar_ray0();
-
+extern void          game_set_attr(unsigned char f_lin, unsigned char f_col, unsigned char f_attrib );
 extern void          page( unsigned char bank );
 unsigned char        reverse(unsigned char b);
 

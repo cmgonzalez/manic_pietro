@@ -35,6 +35,7 @@
 
 void main(void) {
   unsigned int counter;
+
   zx_border(INK_BLACK);
   zx_print_ink(INK_WHITE);
 
@@ -45,14 +46,18 @@ void main(void) {
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_fps_show = 1;
-  scr_curr = 31;
+  scr_curr = 0;
   nirv_sprite_index = 0;
   game_song_play = 1;
+
+  // Nirvana Attributes lookup tables
+  attribs = (unsigned char * ) 0xFCC8;
+  deltas = (unsigned char *) 0xFF01;
 
   if (!game_debug) {
     scr_curr = 0;
     game_fps_show = 0;
-    z80_delay_ms(666);  // SATANIC DELAY
+    z80_delay_ms(666); // SATANIC DELAY
   }
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -84,8 +89,9 @@ void main(void) {
     in_wait_nokey();
     for (counter = 31416; !in_test_key(); counter += 10061)
       ;
-    srand(counter);
   }
+  srand(counter);
+
 
   // Clear Screen and init Nirvana
   NIRVANAP_tiles(_btiles);
@@ -99,6 +105,7 @@ void main(void) {
   menu_curr_sel = 1;
   // GAME INTRO
   game_intro();
+  zx_border(INK_WHITE);
 
   while (1) {
     game_cls();

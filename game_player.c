@@ -78,11 +78,12 @@ void player_turn(void) {
     player_move();
     player_collision();
 
+    player_check_exit();
     if (BIT_CHK(state[INDEX_P1], STAT_KILLED) && !game_inmune) {
       player_lost_life();
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
     }
-    player_check_exit();
+
     player_debug_keys();
   }
 }
@@ -156,6 +157,7 @@ void player_check_exit() {
     if (v0 < 8) {
       ++scr_curr;
       game_round_up = 1;
+      BIT_CLR(state[INDEX_P1], STAT_KILLED);
       // Amimate Bonus Air
       ay_song_stop();
       while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
@@ -188,11 +190,21 @@ unsigned char player_move_jump(void) {
 
   ++player_jump_count; // 0xFF -> 16 normal horizontal jump
 
-  //CAE COMO ROCA
+  // CAE COMO ROCA
   if (player_jump_count > 17) {
     BIT_CLR(state[INDEX_P1], STAT_DIRR);
     BIT_CLR(state[INDEX_P1], STAT_DIRL);
   }
+
+  if (BIT_CHK(state_a[INDEX_P1], STAT_VJUMP)) {
+    // 100% vertical jump is slow
+    if (player_jump_count > 2 && player_jump_count < 9) {
+      spr_speed[INDEX_P1] = 7;
+    } else {
+      spr_speed[INDEX_P1] = PLAYER_SPEED;
+    }
+  }
+
   player_vel_y = player_vel_y + game_gravity;
 
   if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
@@ -258,11 +270,13 @@ unsigned char player_move_jump(void) {
       ay_fx_stop();
       //}
       // FOR CRUMBLE FLOOR
-      if ( (dirs & IN_STICK_FIRE) ) {
+      if ((dirs & IN_STICK_FIRE)) {
         player_check_floor(0);
         player_check_floor(1);
       }
-
+      // Recover speed if the jump 100% vertical
+      spr_speed[INDEX_P1] = PLAYER_SPEED;
+      BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
       return 0;
     }
     spr_set_down();
@@ -299,12 +313,17 @@ unsigned char player_move_walk(void) {
     }
 
     if (!BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
-
       player_handle_walk();
     }
 
     if (!BIT_CHK(state_a[INDEX_P1], STAT_LOCK)) {
       player_handle_conveyor();
+    } else {
+      // Enforce Lock , cae como roca puede sacar el lock y dejar sin dirección
+      if (dirs & IN_STICK_RIGHT)
+        BIT_SET(state[INDEX_P1], STAT_DIRR);
+      if (dirs & IN_STICK_LEFT)
+        BIT_SET(state[INDEX_P1], STAT_DIRL);
     }
 
     player_handle_fall();
@@ -413,6 +432,7 @@ void player_new_jump() {
 
   // Pre CHECK
   if (player_check_ceil(lin[INDEX_P1] - 2, col[INDEX_P1])) {
+    BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
     // NEW JUMP
     if (game_mode == 0) {
       // Willy
@@ -460,6 +480,11 @@ void player_new_jump() {
       if (dirs & IN_STICK_RIGHT) {
         spr_set_right();
       }
+      if (!BIT_CHK(state[INDEX_P1], STAT_DIRL) &&
+          !BIT_CHK(state[INDEX_P1], STAT_DIRR)) {
+        BIT_SET(state_a[INDEX_P1], STAT_VJUMP);
+      }
+
       // Not facing jump if disabled
       player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
     }
@@ -585,7 +610,6 @@ unsigned char player_pick_deadly(unsigned char l_val) {
   return l_val;
 }
 
-
 unsigned char player_pick_extra(unsigned char l_val) {
 
   if (l_val == TILE_EXTRA) {
@@ -688,18 +712,17 @@ unsigned char player_check_floor(unsigned char f_inc) {
 
   if (v0 == TILE_CRUMB) { // TODO CAUTION!
 
-
-/*
-    //Hack para romper solo el piso en los bordes, ojo con el joystick es la unica forma
-    if ( !(dirs & IN_STICK_LEFT) && !(dirs & IN_STICK_RIGHT) ) {
-      if (f_inc == 0 && colint[INDEX_P1] == 3) {
-        return 1;
-      }
-      if (f_inc == 1 && colint[INDEX_P1] == 0) {
-        return 1;
-      }
-    }
-*/
+    /*
+        //Hack para romper solo el piso en los bordes, ojo con el joystick es la
+       unica forma if ( !(dirs & IN_STICK_LEFT) && !(dirs & IN_STICK_RIGHT) ) {
+          if (f_inc == 0 && colint[INDEX_P1] == 3) {
+            return 1;
+          }
+          if (f_inc == 1 && colint[INDEX_P1] == 0) {
+            return 1;
+          }
+        }
+    */
     s_col1 = col[INDEX_P1] + f_inc;
 
     if (scr_map[index1] == TILE_CRUMB_INIT) {

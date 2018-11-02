@@ -41,15 +41,15 @@ void enemy_turn(void) {
     }
 
     ++nirv_sprite_index;
-    if (nirv_sprite_index ==
-        NIRV_SPRITE_P1) { // This Nirvana have only 7 sprites -1 door -1 player
+    if (nirv_sprite_index == NIRV_SPRITE_P1) {
+      // This Nirvana Version have only 7 sprites -1 door -1 player
       NIRVANAP_halt();
-      // z80_delay_ms(2);
+      //z80_delay_ms(2);
       nirv_sprite_index = 0;
     }
     ++sprite;
   }
-  if (spr_count > NIRV_SPRITE_P1) {
+  if (nirv_sprite_index && spr_count > NIRV_SPRITE_P1) {
     NIRVANAP_halt();
   }
 }

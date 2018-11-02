@@ -423,20 +423,58 @@ void spr_clear_fast_hor(void) {
   }
 }
 
+/* SLOWER!!! TODO CONVERT TO ASM!
+
+void spr_clear_fast_vert(void) {
+  unsigned char *f_byte;
+  unsigned char f_lin;
+  unsigned int f_attrib;
+  unsigned char f_delta;
+
+  if (BIT_CHK(state[sprite], STAT_FALL)) {
+    f_lin = s_lin0 + GAME_OFFSET_Y;
+    f_attrib = (*(attribs + f_lin)) + ((*(attribs + f_lin + 1)) << 8);
+    f_delta = (*(deltas + s_col0));
+    f_byte = f_attrib + f_delta;
+    *f_byte = 0x00;
+    f_delta = (*(deltas + s_col0 + 1));
+    f_byte = f_attrib + f_delta;
+    *f_byte = 0x00;
+  } else {
+    f_lin = s_lin0 + GAME_OFFSET_Y + 14;
+    f_attrib = (*(attribs + f_lin)) + ((*(attribs + f_lin + 1)) << 8);
+    f_delta = (*(deltas + s_col0));
+    f_byte = f_attrib + f_delta;
+    *f_byte = 0x00;
+    f_delta = (*(deltas + s_col0 + 1));
+    f_byte = f_attrib + f_delta;
+    *f_byte = 0x00;
+  }
+}
+*/
 void spr_clear_fast_vert(void) {
   unsigned char *f_byte;
   if (BIT_CHK(state[sprite], STAT_FALL)) {
     f_byte = zx_py2saddr(s_lin0+8) + s_col0;
     *f_byte = 0;
-    *(f_byte + 1) = 0;
-    *(f_byte + 256) = 0;
-    *(f_byte + 257) = 0;
+     ++f_byte;
+    *f_byte = 0;
+    f_byte += 255;
+    *f_byte = 0;
+    ++f_byte;
+    *f_byte = 0;
+    //*(f_byte + 1) = 0;
+    //*(f_byte + 256) = 0;
+    //*(f_byte + 257) = 0;
   } else {
     f_byte = zx_py2saddr(s_lin0+8+14) + s_col0; //TODO WHY 14???
     *f_byte = 0;
-    *(f_byte + 1) = 0;
-    *(f_byte + 256) = 0;
-    *(f_byte + 257) = 0;
+     ++f_byte;
+    *f_byte = 0;
+    f_byte += 255;
+    *f_byte = 0;
+    ++f_byte;
+    *f_byte = 0;
   }
 }
 

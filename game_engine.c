@@ -233,7 +233,6 @@ void game_solar_ray() {
   unsigned char f_lin;
   unsigned char f_lin_ray;
 
-
   f_lin_ray = 0;
   if (col[0] == 23) {
     f_lin_ray = lin[0];
@@ -251,33 +250,33 @@ void game_solar_ray() {
     }
   }
 
-  //Borro rayo
- if (f_lin_ray == 0 && g_ray1) {
-   game_solar_ray0();
-   g_ray1 = 0;
-   f_lin = 24;
-   while (f_lin < 128) {
-     //NIRVANAP_paintC(attrib_sol1, f_lin + GAME_OFFSET_Y, 23);
-     spr_draw8(17, f_lin, 23);
-     f_lin = f_lin + 8;
-   }
- }
-
- if (f_lin_ray && !g_ray1) {
-   f_lin = 24;
-   g_ray1 = f_lin_ray;
-   while (f_lin < f_lin_ray) {
-     spr_draw8(17, f_lin, 23);
+  // Borro rayo
+  if (f_lin_ray == 0 && g_ray1) {
+    game_solar_ray0();
+    g_ray1 = 0;
+    f_lin = 24;
+    while (f_lin < 128) {
+      // NIRVANAP_paintC(attrib_sol1, f_lin + GAME_OFFSET_Y, 23);
+      spr_draw8(17, f_lin, 23);
       f_lin = f_lin + 8;
-   }
-   game_solar_ray1();
+    }
+  }
 
-   f_lin = f_lin + 8;
-   while (f_lin < 128) {
-     spr_draw8(0, f_lin, 23);
+  if (f_lin_ray && !g_ray1) {
+    f_lin = 24;
+    g_ray1 = f_lin_ray;
+    while (f_lin < f_lin_ray) {
+      spr_draw8(17, f_lin, 23);
       f_lin = f_lin + 8;
-   }
- }
+    }
+    game_solar_ray1();
+
+    f_lin = f_lin + 8;
+    while (f_lin < 128) {
+      spr_draw8(0, f_lin, 23);
+      f_lin = f_lin + 8;
+    }
+  }
 }
 
 void game_solar_ray1() {
@@ -290,7 +289,7 @@ void game_solar_ray1() {
 
   while (f_col > 0) {
     // LIMPIO RAYO DESDE EL INICIO
-    spr_draw8(16, g_ray1+8, f_col);
+    spr_draw8(16, g_ray1 + 8, f_col);
     --f_col;
   }
 }
@@ -304,7 +303,7 @@ void game_solar_ray0() {
 
   while (f_col > 0) {
     // LIMPIO RAYO DESDE EL INICIO
-    spr_draw8(0, g_ray1+8, f_col);
+    spr_draw8(0, g_ray1 + 8, f_col);
     --f_col;
   }
 }
@@ -386,7 +385,7 @@ void game_print_lives(void) {
 
   game_fill_row(22, 32);
 
-  while (v0 < player_lives) {
+  while (v0 < (player_lives - 1)) {
     zx_print_ink(INK_CYAN);
     zx_print_str(22, v0, "<");
     ++v0;
@@ -1090,9 +1089,23 @@ void game_shoe() {
   NIRVANAP_drawT(92, 112, 15); // Shoe
   v0 = 16;
   while (v0 <= 96) {
-    NIRVANAP_spriteT(0, 93, v0, 15); // Zapato
-    v0 = v0 + 2;
+
+    v1 = v3;
+    while (v1 == v3) {
+      v1 = (rand() % 7) + 1;
+      v2 = (rand() % 1);
+      if (v2) {
+        v1 = v1 | BRIGHT;
+      }
+    }
+    v3 = v1;
+    // zx_print_chr(22,0,v1);
     NIRVANAP_halt();
+    game_set_attr(v0, 15, v1);
+    game_set_attr(v0, 16, v1);
+    v0 = v0 + 2;
+    NIRVANAP_spriteT(0, 93, v0, 15); // Zapato
+
     z80_delay_ms(25);
   }
 
@@ -1117,4 +1130,30 @@ void game_shoe() {
     }
     z80_delay_ms(10);
   }
+}
+
+void game_set_attr(unsigned char f_lin, unsigned char f_col,
+                   unsigned char f_attrib) {
+  unsigned char *pbyte;
+
+  /*
+  colonel32 wrote: »
+  Hi Einar. I'm trying to figure out a formula that takes a NIRVANA+ line and
+  column, and returns an 8x2 attribute address. The attribute address is:
+  race_raster + (lin-16)*82 + deltas[col]
+  where 16 <= lin < 200 (lin must be even)
+  and 0 <= col <= 31
+  Since race_raster starts at address 56695:
+  56695 + (lin-16)*82 + deltas[col]
+  In practice, NIRVANA+ uses the lookup table attribs to avoid multiplication,
+  as follows: attribs[lin] + 256*attribs[lin+1] + deltas[col] The lookup table
+  attribs is located at address $fcc8 and deltas is located at address $ff01,
+  therefore: PEEK($fcc8+lin) + 256*PEEK($fcc8+lin+1) + PEEK($ff00+col+1) This is
+  exactly the calculation you see in the code.
+  */
+
+  // val0 = 16 + ((f_lin - 16) << 1);
+  pbyte = (*(attribs + f_lin)) + ((*(attribs + f_lin + 1)) << 8) +
+          (*(deltas + f_col));
+  *pbyte = f_attrib;
 }
