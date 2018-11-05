@@ -20,7 +20,7 @@
 
 #define GAME_SCR_MAX_INDEX           512 // 32 * 16
 
-#define GAME_MAX_OBJECTS             8 //OBJECTS OR COINS
+#define GAME_MAX_OBJECTS             5 //OBJECTS OR COINS
 #define GAME_MAX_SPRITES             9 //MAX OF OBJECTS (ENEMIES + PLAYERS)
 #define GAME_MAX_ENEMIES             8 //GAME_MAX_SPRITES - PLAYERS
 /* Player indexes */

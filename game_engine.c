@@ -63,25 +63,29 @@ void game_loop(void) {
 
       // Cicling events
 
-      if (loop_count & 1) {
+      if (game_check_time(&time_key, 3)) {
+
         game_key_paint();
-      } else {
+        time_key = zx_clock();
+      }
 
-        if (game_conveyor_col0 > 0 && game_check_time(&time_conv, 5)) {
-          game_anim_conveyor();
+      if (game_conveyor_col0 > 0) {
+        if (game_check_time(&time_conv, 5)) {
           time_conv = zx_clock();
-        }
-
-        if (game_check_time(&time_air, 30)) {
-          game_anim_air();
-          time_air = zx_clock();
-          // Each second aprox - update fps
-          if (game_fps_show && game_check_time(&frame_time, TIME_EVENT)) {
-            game_fps();
-            frame_time = zx_clock();
-          }
+          game_anim_conveyor();
         }
       }
+
+      if (game_check_time(&time_air, 30)) {
+        game_anim_air();
+        time_air = zx_clock();
+        // Each second aprox - update fps
+        if (game_fps_show && game_check_time(&frame_time, TIME_EVENT)) {
+          game_fps();
+          frame_time = zx_clock();
+        }
+      }
+
       if (scr_curr == 18) {
         game_solar_ray();
       }
@@ -712,431 +716,452 @@ unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
 }
 
 void game_key_paint(void) {
-  unsigned char li;
 
-  if (obj_count > 0) {
-    // TODO PERFOMANCE (ASM)
-    li = key_last;
+  //TODO SPEEDUP ASM ROUTINE
+  v0 = 0;
+  while (v0 < GAME_MAX_OBJECTS) {
+    if (obj_col[v0] != 0xFF) {
+      v1 = map_paper | key_ink;
+      game_set_attr(obj_lin[v0], obj_col[v0], v1);
+      game_set_attr(obj_lin[v0]+2, obj_col[v0], v1);
+      game_set_attr(obj_lin[v0]+4, obj_col[v0], v1);
+      game_set_attr(obj_lin[v0]+6, obj_col[v0], v1);
+    }
+    ++v0;
+    ++key_ink;
+    if (key_ink > 6) {
+      key_ink = 3;
+    }
+  }
+    /*
+      unsigned char li;
 
-    while (li < GAME_MAX_OBJECTS) {
-      if (obj_col[li] != 0xFF) {
+      if (obj_count > 0) {
+        // TODO PERFOMANCE (ASM)
+        li = key_last;
 
-        NIRVANAP_paintC(key_attrib, obj_lin[li], obj_col[li]);
+        while (li < GAME_MAX_OBJECTS) {
+          if (obj_col[li] != 0xFF) {
 
-        key_attrib[0] = map_paper | key_ink;
-        key_attrib[1] = key_attrib[0];
-        key_attrib[2] = key_attrib[0];
-        key_attrib[3] = key_attrib[0];
+            NIRVANAP_paintC(key_attrib, obj_lin[li], obj_col[li]);
 
-        ++key_ink;
-        if (key_ink > 6) {
-          key_ink = 3;
+            key_attrib[0] = map_paper | key_ink;
+            key_attrib[1] = key_attrib[0];
+            key_attrib[2] = key_attrib[0];
+            key_attrib[3] = key_attrib[0];
+
+            ++key_ink;
+            if (key_ink > 6) {
+              key_ink = 3;
+            }
+            key_last = li + 1;
+            break;
+          }
+          ++li;
         }
-        key_last = li + 1;
+
+        if (li >= GAME_MAX_OBJECTS) {
+          if (obj_count == 4) {
+
+            ++key_ink;
+            if (key_ink > 6) {
+              key_ink = 3;
+            }
+          }
+          key_last = 0;
+        }
+      }
+    */
+  }
+
+  void game_attribs() {
+
+    // ATTRIB NORMAL
+    attrib[0] = map_paper | INK_YELLOW;
+    attrib[1] = map_paper | INK_YELLOW | BRIGHT;
+    attrib[2] = map_paper | INK_WHITE;
+    attrib[3] = map_paper | INK_YELLOW;
+
+    // ATTRIB HIGHLIGHT
+    attrib_hl[0] = map_paper | INK_CYAN | PAPER_RED;
+    attrib_hl[1] = map_paper | INK_CYAN | PAPER_RED | BRIGHT;
+    attrib_hl[2] = map_paper | INK_WHITE | PAPER_RED;
+    attrib_hl[3] = map_paper | INK_CYAN | PAPER_RED;
+
+    // ATTRIB OSD
+    attrib_osd[0] = PAPER_BLACK | INK_RED | BRIGHT;
+    attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;
+    attrib_osd[2] = PAPER_BLACK | INK_CYAN | BRIGHT;
+    attrib_osd[3] = PAPER_BLACK | INK_YELLOW | BRIGHT;
+
+    attrib_sol0[0] = PAPER_GREEN | INK_GREEN;
+    attrib_sol0[1] = PAPER_GREEN | INK_GREEN;
+    attrib_sol0[2] = PAPER_GREEN | INK_GREEN;
+    attrib_sol0[3] = PAPER_GREEN | INK_GREEN;
+
+    attrib_sol1[0] = PAPER_YELLOW | INK_YELLOW;
+    attrib_sol1[1] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
+    attrib_sol1[2] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
+    attrib_sol1[3] = PAPER_YELLOW | INK_YELLOW;
+  }
+
+  void game_page_map(void) {
+    // TODO review and encapsulate inside logic
+    unsigned char lv0;
+    unsigned char lv1;
+    unsigned char vr;
+    unsigned int li;
+    unsigned int lj;
+    unsigned int lk;
+    unsigned int l_start;
+
+    // unsigned int add_index;
+    unsigned int start_index;
+    unsigned int end_index;
+
+    unsigned char l_scr;
+    unsigned char l_scr0;
+    // unsigned char l_scr_map;
+
+    // btile page
+    // unsigned char l_btile[48];
+
+    unsigned char *src;
+    unsigned char *dest;
+
+    intrinsic_di();
+
+    // Get Map from Bank 6
+    l_scr = scr_curr;
+    l_scr0 = scr_curr;
+    if (l_scr > 19) {
+      l_scr0 = l_scr - 20;
+    }
+
+    // Get Map data
+    lj = 0;
+    lk = 0;
+
+    // TODO IF I REMOVE THESE LINES THE ENGINE FAILS!!! WHY???
+    // scr_curr = l_scr;
+
+    // END TODO
+
+    page(6); // TODO SINGLE READ TO speedup
+    start_index = lenght0[l_scr];
+    end_index = lenght0[l_scr + 1];
+    dest = &btiles[0];
+    src = &world0[start_index];
+    memcpy(dest, src, end_index - start_index);
+    page(0);
+
+    for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
+
+      lv0 = btiles[li];
+      lv1 = btiles[li + 1];
+
+      if (lv0 < 128) {
+        scr_map[lk] = lv0;
+        ++lk;
+      } else {
+        vr = lv0 - 128; // Repeat counter Should be < 128!!
+        for (lj = 0; lj < vr; lj++) {
+          scr_map[lk] = lv1;
+          ++lk;
+          if (lk >= GAME_SCR_MAX_INDEX) {
+            break;
+          }
+        }
+        ++li;
+      }
+      if (lk >= GAME_SCR_MAX_INDEX) {
         break;
       }
+    }
+
+    // l_scr_map = (l_world << 4) + l_scr;
+
+    // Tiles (8x8) @Bank7
+    l_start = l_scr0 * 48 * 8;
+
+    lk = 0;
+    while (lk < 48 * 8) {
+      dest = &btiles[SPRITE_TMP];
+      if (scr_curr < 20) {
+        src = &hitiles1[l_start + lk];
+      } else {
+        src = &hitiles2[l_start + lk];
+      }
+
+      page(7);
+      memcpy(dest, src, 48);
+      page(0);
+      // Store btile in low mem
+      dest = &btiles[lk];
+      src = &btiles[SPRITE_TMP];
+      memcpy(dest, src, 48);
+      lk = lk + 48; // Next btile
+    }
+    map_paper = btiles[32] & 0xF8;
+
+    intrinsic_ei();
+  }
+
+  void game_flash_exit(unsigned char f_attrib) {
+    unsigned int li;
+    // Set Flash bits on Exit Sprite
+    li = (48 * (SPRITE_DOOR)) + 32; // 80 ==> TILE EXIT
+    i = 0;
+    while (i < 16) {
+      btiles[li] = btiles[li] & 127;
+      btiles[li] = btiles[li] | f_attrib;
+      ++i;
       ++li;
     }
-
-    if (li >= GAME_MAX_OBJECTS) {
-      if (obj_count == 4) {
-
-        ++key_ink;
-        if (key_ink > 6) {
-          key_ink = 3;
-        }
-      }
-      key_last = 0;
-    }
-  }
-}
-
-void game_attribs() {
-
-  // ATTRIB NORMAL
-  attrib[0] = map_paper | INK_YELLOW;
-  attrib[1] = map_paper | INK_YELLOW | BRIGHT;
-  attrib[2] = map_paper | INK_WHITE;
-  attrib[3] = map_paper | INK_YELLOW;
-
-  // ATTRIB HIGHLIGHT
-  attrib_hl[0] = map_paper | INK_CYAN | PAPER_RED;
-  attrib_hl[1] = map_paper | INK_CYAN | PAPER_RED | BRIGHT;
-  attrib_hl[2] = map_paper | INK_WHITE | PAPER_RED;
-  attrib_hl[3] = map_paper | INK_CYAN | PAPER_RED;
-
-  // ATTRIB OSD
-  attrib_osd[0] = PAPER_BLACK | INK_RED | BRIGHT;
-  attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;
-  attrib_osd[2] = PAPER_BLACK | INK_CYAN | BRIGHT;
-  attrib_osd[3] = PAPER_BLACK | INK_YELLOW | BRIGHT;
-
-  attrib_sol0[0] = PAPER_GREEN | INK_GREEN;
-  attrib_sol0[1] = PAPER_GREEN | INK_GREEN;
-  attrib_sol0[2] = PAPER_GREEN | INK_GREEN;
-  attrib_sol0[3] = PAPER_GREEN | INK_GREEN;
-
-  attrib_sol1[0] = PAPER_YELLOW | INK_YELLOW;
-  attrib_sol1[1] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
-  attrib_sol1[2] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
-  attrib_sol1[3] = PAPER_YELLOW | INK_YELLOW;
-}
-
-void game_page_map(void) {
-  // TODO review and encapsulate inside logic
-  unsigned char lv0;
-  unsigned char lv1;
-  unsigned char vr;
-  unsigned int li;
-  unsigned int lj;
-  unsigned int lk;
-  unsigned int l_start;
-
-  // unsigned int add_index;
-  unsigned int start_index;
-  unsigned int end_index;
-
-  unsigned char l_scr;
-  unsigned char l_scr0;
-  // unsigned char l_scr_map;
-
-  // btile page
-  //unsigned char l_btile[48];
-
-  unsigned char *src;
-  unsigned char *dest;
-
-  intrinsic_di();
-
-  // Get Map from Bank 6
-  l_scr = scr_curr;
-  l_scr0 = scr_curr;
-  if (l_scr > 19) {
-    l_scr0 = l_scr - 20;
+    NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
+                     game_exit_col);
+    NIRVANAP_halt();
   }
 
-  // Get Map data
-  lj = 0;
-  lk = 0;
-
-  // TODO IF I REMOVE THESE LINES THE ENGINE FAILS!!! WHY???
-  // scr_curr = l_scr;
-
-  // END TODO
-
-  page(6); // TODO SINGLE READ TO speedup
-  start_index = lenght0[l_scr];
-  end_index = lenght0[l_scr + 1];
-  dest = &btiles[0];
-  src = &world0[start_index];
-  memcpy(dest, src, end_index - start_index);
-  page(0);
-
-  for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
-
-    lv0 = btiles[li];
-    lv1 = btiles[li + 1];
-
-    if (lv0 < 128) {
-      scr_map[lk] = lv0;
-      ++lk;
-    } else {
-      vr = lv0 - 128; // Repeat counter Should be < 128!!
-      for (lj = 0; lj < vr; lj++) {
-        scr_map[lk] = lv1;
-        ++lk;
-        if (lk >= GAME_SCR_MAX_INDEX) {
-          break;
-        }
-      }
-      ++li;
-    }
-    if (lk >= GAME_SCR_MAX_INDEX) {
-      break;
-    }
+  void game_copy_sprite_color_reset(void) {
+    spr_init_bright = 0;
+    spr_init_cin0 = 0;
+    spr_init_cout0 = 0;
+    spr_init_cin1 = 0;
+    spr_init_cout1 = 0;
+    spr_init_cin2 = 0;
+    spr_init_cout2 = 0;
+    spr_init_cin3 = 0;
+    spr_init_cout3 = 0;
   }
 
-  // l_scr_map = (l_world << 4) + l_scr;
+  unsigned char game_copy_sprite_std(unsigned char f_hi_sprite,
+                                     unsigned char f_low_sprite) {
 
-  // Tiles (8x8) @Bank7
-  l_start = l_scr0 * 48 * 8;
+    game_copy_sprite(f_hi_sprite + 0, f_low_sprite + 0, 0);
+    game_copy_sprite(f_hi_sprite + 1, f_low_sprite + 1, 0);
+    game_copy_sprite(f_hi_sprite + 2, f_low_sprite + 2, 0);
+    game_copy_sprite(f_hi_sprite + 3, f_low_sprite + 3, 0);
 
-  lk = 0;
-  while (lk < 48 * 8) {
-    dest = &btiles[SPRITE_TMP];
+    game_copy_sprite(f_hi_sprite + 3, f_low_sprite + 4, 1);
+    game_copy_sprite(f_hi_sprite + 2, f_low_sprite + 5, 1);
+    game_copy_sprite(f_hi_sprite + 1, f_low_sprite + 6, 1);
+    game_copy_sprite(f_hi_sprite + 0, f_low_sprite + 7, 1);
+    game_copy_sprite_color_reset();
+    return f_low_sprite + 8;
+  }
+
+  void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
+                        unsigned char f_flip) {
+
+    unsigned int li;
+    unsigned char i;
+
+    unsigned char *src;
+    unsigned char *dest;
+    unsigned char *p_btile_tmp;
+
+    // Page a Tile
+    intrinsic_di();
     if (scr_curr < 20) {
-      src = &hitiles1[l_start + lk];
+      src = &hisprites1[48 * f_hi_sprite];
     } else {
-      src = &hitiles2[l_start + lk];
+      src = &hisprites2[48 * f_hi_sprite];
     }
 
-    page(7);
+    // dest = &btile[0];
+    p_btile_tmp = &btiles[SPRITE_TMP];
+    dest = p_btile_tmp;
+    page(3);
     memcpy(dest, src, 48);
     page(0);
-    // Store btile in low mem
-    dest = &btiles[lk];
-    src = &btiles[SPRITE_TMP];
-    memcpy(dest, src, 48);
-    lk = lk + 48; // Next btile
-  }
-  map_paper = btiles[32] & 0xF8;
+    intrinsic_ei();
 
-  intrinsic_ei();
-}
-
-void game_flash_exit(unsigned char f_attrib) {
-  unsigned int li;
-  // Set Flash bits on Exit Sprite
-  li = (48 * (SPRITE_DOOR)) + 32; // 80 ==> TILE EXIT
-  i = 0;
-  while (i < 16) {
-    btiles[li] = btiles[li] & 127;
-    btiles[li] = btiles[li] | f_attrib;
-    ++i;
-    ++li;
-  }
-  NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin, game_exit_col);
-  NIRVANAP_halt();
-}
-
-void game_copy_sprite_color_reset(void) {
-  spr_init_bright = 0;
-  spr_init_cin0 = 0;
-  spr_init_cout0 = 0;
-  spr_init_cin1 = 0;
-  spr_init_cout1 = 0;
-  spr_init_cin2 = 0;
-  spr_init_cout2 = 0;
-  spr_init_cin3 = 0;
-  spr_init_cout3 = 0;
-}
-
-unsigned char game_copy_sprite_std(unsigned char f_hi_sprite,
-                                   unsigned char f_low_sprite) {
-
-  game_copy_sprite(f_hi_sprite + 0, f_low_sprite + 0, 0);
-  game_copy_sprite(f_hi_sprite + 1, f_low_sprite + 1, 0);
-  game_copy_sprite(f_hi_sprite + 2, f_low_sprite + 2, 0);
-  game_copy_sprite(f_hi_sprite + 3, f_low_sprite + 3, 0);
-
-  game_copy_sprite(f_hi_sprite + 3, f_low_sprite + 4, 1);
-  game_copy_sprite(f_hi_sprite + 2, f_low_sprite + 5, 1);
-  game_copy_sprite(f_hi_sprite + 1, f_low_sprite + 6, 1);
-  game_copy_sprite(f_hi_sprite + 0, f_low_sprite + 7, 1);
-  game_copy_sprite_color_reset();
-  return f_low_sprite + 8;
-}
-
-void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
-                      unsigned char f_flip) {
-
-  unsigned int li;
-  unsigned char i;
-
-  unsigned char *src;
-  unsigned char *dest;
-  unsigned char *p_btile_tmp;
-
-  // Page a Tile
-  intrinsic_di();
-  if (scr_curr < 20) {
-    src = &hisprites1[48 * f_hi_sprite];
-  } else {
-    src = &hisprites2[48 * f_hi_sprite];
-  }
-
-  // dest = &btile[0];
-  p_btile_tmp = &btiles[SPRITE_TMP];
-  dest = p_btile_tmp;
-  page(3);
-  memcpy(dest, src, 48);
-  page(0);
-  intrinsic_ei();
-
-  // Atrribs Changes
-  i = 32;
-  while (i < 48) {
-    if (*(p_btile_tmp + i) == spr_init_cin0) {
-      *(p_btile_tmp + i) = spr_init_cout0;
-    } else {
-      if (*(p_btile_tmp + i) == spr_init_cin1) {
-        *(p_btile_tmp + i) = spr_init_cout1;
+    // Atrribs Changes
+    i = 32;
+    while (i < 48) {
+      if (*(p_btile_tmp + i) == spr_init_cin0) {
+        *(p_btile_tmp + i) = spr_init_cout0;
       } else {
-        if (*(p_btile_tmp + i) == spr_init_cin2) {
-          *(p_btile_tmp + i) = spr_init_cout2;
+        if (*(p_btile_tmp + i) == spr_init_cin1) {
+          *(p_btile_tmp + i) = spr_init_cout1;
         } else {
-          if (*(p_btile_tmp + i) == spr_init_cin3) {
-            *(p_btile_tmp + i) = spr_init_cout3;
+          if (*(p_btile_tmp + i) == spr_init_cin2) {
+            *(p_btile_tmp + i) = spr_init_cout2;
+          } else {
+            if (*(p_btile_tmp + i) == spr_init_cin3) {
+              *(p_btile_tmp + i) = spr_init_cout3;
+            }
           }
         }
       }
+      *(p_btile_tmp + i) = (*(p_btile_tmp + i) | spr_init_bright);
+      ++i;
     }
-    *(p_btile_tmp + i) = (*(p_btile_tmp + i) | spr_init_bright);
-    ++i;
-  }
 
-  // Write Local
-  li = (48 * f_low_sprite);
-  i = 0;
-  while (i < 48) {
-    if (f_flip) {
-      if (i < 32) {
-        if ((i & 1) == 0) {
-          v0 = i + 1;
+    // Write Local
+    li = (48 * f_low_sprite);
+    i = 0;
+    while (i < 48) {
+      if (f_flip) {
+        if (i < 32) {
+          if ((i & 1) == 0) {
+            v0 = i + 1;
+          } else {
+            v0 = i - 1;
+          }
+          btiles[li] = reverse(*(p_btile_tmp + v0));
         } else {
-          v0 = i - 1;
+          if (i < 40) {
+            v0 = i + 8;
+          } else {
+            v0 = i - 8;
+          }
+          btiles[li] = *(p_btile_tmp + v0);
         }
-        btiles[li] = reverse(*(p_btile_tmp + v0));
+
       } else {
-        if (i < 40) {
-          v0 = i + 8;
-        } else {
-          v0 = i - 8;
-        }
-        btiles[li] = *(p_btile_tmp + v0);
+        btiles[li] = *(p_btile_tmp + i);
       }
 
-    } else {
-      btiles[li] = *(p_btile_tmp + i);
+      ++i;
+      ++li;
     }
-
-    ++i;
-    ++li;
   }
-}
 
-unsigned char reverse(unsigned char b) {
-  b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-  b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-  b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-  return b;
-}
+  unsigned char reverse(unsigned char b) {
+    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+    return b;
+  }
 
-void page(unsigned char bank) {
-  GLOBAL_ZX_PORT_7FFD = 0x10 + bank;
-  IO_7FFD = 0x10 + bank;
-}
+  void page(unsigned char bank) {
+    GLOBAL_ZX_PORT_7FFD = 0x10 + bank;
+    IO_7FFD = 0x10 + bank;
+  }
 
-void game_intro() {
-  if (!game_debug) {
-    audio_coin_noentiendo();
-    // NOENTIENDO LOGO
-    game_cls();
+  void game_intro() {
+    if (!game_debug) {
+      audio_coin_noentiendo();
+      // NOENTIENDO LOGO
+      game_cls();
 
-    v0 = 0;
-    v2 = 80;
-    v1 = 0;
-    while (v0 < 16) {
-      NIRVANAP_spriteT(v1, v2, 96, v0 + 8);
-      v0 = v0 + 2;
-      ++v2;
-      ++v1;
-      if (v1 == NIRV_TOTAL_SPRITES) {
-        v1 = 0;
-        NIRVANAP_halt();
-      }
-    }
-
-    z80_delay_ms(350);
-    // in_wait_key();
-    // LOADING IMAGE
-    game_cls();
-    NIRVANAP_stop();
-    v0 = 0;
-    v1 = 0;
-    v2 = 8;
-    intrinsic_di();
-    while (v1 < 160) {
+      v0 = 0;
+      v2 = 80;
+      v1 = 0;
       while (v0 < 16) {
-        NIRVANAP_drawT_raw(v2, v1 + GAME_OFFSET_Y, v0 + 8);
+        NIRVANAP_spriteT(v1, v2, 96, v0 + 8);
         v0 = v0 + 2;
         ++v2;
+        ++v1;
+        if (v1 == NIRV_TOTAL_SPRITES) {
+          v1 = 0;
+          NIRVANAP_halt();
+        }
       }
-      v1 = v1 + 16;
+
+      z80_delay_ms(350);
+      // in_wait_key();
+      // LOADING IMAGE
+      game_cls();
+      NIRVANAP_stop();
       v0 = 0;
-    }
-
-    intrinsic_ei();
-    NIRVANAP_start();
-    NIRVANAP_halt();
-    z80_delay_ms(1000);
-    // in_wait_key();
-  }
-}
-
-void game_shoe() {
-
-  game_cls();
-  audio_game_over();
-  NIRVANAP_drawT(91, 96, 15);  // Willy
-  NIRVANAP_drawT(92, 112, 15); // Shoe
-  v0 = 16;
-  while (v0 <= 96) {
-
-    v1 = v3;
-    while (v1 == v3) {
-      v1 = (rand() % 7) + 1;
-      v2 = (rand() % 1);
-      if (v2) {
-        v1 = v1 | BRIGHT;
+      v1 = 0;
+      v2 = 8;
+      intrinsic_di();
+      while (v1 < 160) {
+        while (v0 < 16) {
+          NIRVANAP_drawT_raw(v2, v1 + GAME_OFFSET_Y, v0 + 8);
+          v0 = v0 + 2;
+          ++v2;
+        }
+        v1 = v1 + 16;
+        v0 = 0;
       }
-    }
-    v3 = v1;
-    // zx_print_chr(22,0,v1);
-    NIRVANAP_halt();
-    game_set_attr(v0, 15, v1);
-    game_set_attr(v0, 16, v1);
-    v0 = v0 + 2;
-    NIRVANAP_spriteT(0, 93, v0, 15); // Zapato
 
-    z80_delay_ms(25);
+      intrinsic_ei();
+      NIRVANAP_start();
+      NIRVANAP_halt();
+      z80_delay_ms(1000);
+      // in_wait_key();
+    }
   }
 
-  v0 = 1;
-  time_conv = zx_clock();
+  void game_shoe() {
 
-  while (v0) {
-    game_paint_attrib(&attrib_osd, 8, 12, (6 << 3) + 8);
-    zx_print_str(6, 8, "Game");
-    game_paint_attrib(&attrib_osd, 20, 24, (6 << 3) + 8);
-    zx_print_str(6, 20, "Over");
+    game_cls();
+    audio_game_over();
+    NIRVANAP_drawT(91, 96, 15);  // Willy
+    NIRVANAP_drawT(92, 112, 15); // Shoe
+    v0 = 16;
+    while (v0 <= 96) {
+      /*
+      v1 = v3;
+      while (v1 == v3) {
+        v1 = (rand() % 7) + 1;
+        v2 = (rand() % 1);
+        if (v2) {
+          v1 = v1 | BRIGHT;
+        }
+      }
+      v3 = v1;
+      */
+      // zx_print_chr(22,0,v1);
+      NIRVANAP_halt();
+      game_set_attr(v0, 15, v1);
+      game_set_attr(v0, 16, v1);
+      v0 = v0 + 2;
+      NIRVANAP_spriteT(0, 93, v0, 15); // Zapato
 
-    v1 = attrib_osd[3];
-    attrib_osd[3] = attrib_osd[2];
-    attrib_osd[2] = attrib_osd[1];
-    attrib_osd[1] = attrib_osd[0];
-    attrib_osd[0] = v1;
-
-    v2 = in_inkey();
-    if (v2 || game_check_time(&time_conv, 500)) {
-      v0 = 0;
+      z80_delay_ms(25);
     }
-    z80_delay_ms(10);
+
+    v0 = 1;
+    time_conv = zx_clock();
+
+    while (v0) {
+      game_paint_attrib(&attrib_osd, 8, 12, (6 << 3) + 8);
+      zx_print_str(6, 8, "Game");
+      game_paint_attrib(&attrib_osd, 20, 24, (6 << 3) + 8);
+      zx_print_str(6, 20, "Over");
+
+      v1 = attrib_osd[3];
+      attrib_osd[3] = attrib_osd[2];
+      attrib_osd[2] = attrib_osd[1];
+      attrib_osd[1] = attrib_osd[0];
+      attrib_osd[0] = v1;
+
+      v2 = in_inkey();
+      if (v2 || game_check_time(&time_conv, 500)) {
+        v0 = 0;
+      }
+      z80_delay_ms(10);
+    }
   }
-}
 
-void game_set_attr(unsigned char f_lin, unsigned char f_col,
-                   unsigned char f_attrib) {
-  unsigned char *pbyte;
+  void game_set_attr(unsigned char f_lin, unsigned char f_col,
+                     unsigned char f_attrib) {
+    unsigned char *pbyte;
 
-  /*
-  colonel32 wrote: »
-  Hi Einar. I'm trying to figure out a formula that takes a NIRVANA+ line and
-  column, and returns an 8x2 attribute address. The attribute address is:
-  race_raster + (lin-16)*82 + deltas[col]
-  where 16 <= lin < 200 (lin must be even)
-  and 0 <= col <= 31
-  Since race_raster starts at address 56695:
-  56695 + (lin-16)*82 + deltas[col]
-  In practice, NIRVANA+ uses the lookup table attribs to avoid multiplication,
-  as follows: attribs[lin] + 256*attribs[lin+1] + deltas[col] The lookup table
-  attribs is located at address $fcc8 and deltas is located at address $ff01,
-  therefore: PEEK($fcc8+lin) + 256*PEEK($fcc8+lin+1) + PEEK($ff00+col+1) This is
-  exactly the calculation you see in the code.
-  */
+    /*
+    colonel32 wrote: »
+    Hi Einar. I'm trying to figure out a formula that takes a NIRVANA+ line and
+    column, and returns an 8x2 attribute address. The attribute address is:
+    race_raster + (lin-16)*82 + deltas[col]
+    where 16 <= lin < 200 (lin must be even)
+    and 0 <= col <= 31
+    Since race_raster starts at address 56695:
+    56695 + (lin-16)*82 + deltas[col]
+    In practice, NIRVANA+ uses the lookup table attribs to avoid multiplication,
+    as follows: attribs[lin] + 256*attribs[lin+1] + deltas[col] The lookup table
+    attribs is located at address $fcc8 and deltas is located at address $ff01,
+    therefore: PEEK($fcc8+lin) + 256*PEEK($fcc8+lin+1) + PEEK($ff00+col+1) This
+    is exactly the calculation you see in the code.
+    */
 
-  // val0 = 16 + ((f_lin - 16) << 1);
-  pbyte = (*(attribs + f_lin)) + ((*(attribs + f_lin + 1)) << 8) +
-          (*(deltas + f_col));
-  *pbyte = f_attrib;
-}
+    // val0 = 16 + ((f_lin - 16) << 1);
+    pbyte = (*(attribs + f_lin)) + ((*(attribs + f_lin + 1)) << 8) +
+            (*(deltas + f_col));
+    *pbyte = f_attrib;
+  }
