@@ -63,6 +63,7 @@
 
 #define SPRITE_EXIT                  32
 #define SPRITE_EMPTY                 94
+#define SPRITE_TMP                   4320 //90*48
 #define SPRITE_DOOR                  7
 
 

@@ -1356,18 +1356,18 @@
 1353  02AE  20 4F       	jr	NZ,l_spr_move_right_00111
 1354  02B0  0A          	ld	a, (bc)
 1355  02B1  3C          	inc	a
-1356  02B2  DD 77 FD    	ld	(ix-3),a
+1356  02B2  DD 77 FF    	ld	(ix-1),a
 1357  02B5  02          	ld	(bc),a
 1358  02B6  3E 00       	ld	a, +((_spr_frames) & 0xFF)
 1359  02B8  21 00 00    	ld	hl,_sprite
 1360  02BB  86          	add	a, (hl)
-1361  02BC  DD 77 FE    	ld	(ix-2),a
-1362  02BF  6F          	ld	l,a
-1363  02C0  3E 00       	ld	a,+((_spr_frames) / 256)
-1364  02C2  CE 00       	adc	a,0x00
-1365  02C4  DD 77 FF    	ld	(ix-1),a
-1366  02C7  67          	ld	h,a
-1367  02C8  DD 7E FD    	ld	a,(ix-3)
+1361  02BC  DD 77 FD    	ld	(ix-3),a
+1362  02BF  3E 00       	ld	a, +((_spr_frames) / 256)
+1363  02C1  CE 00       	adc	a,0x00
+1364  02C3  DD 77 FE    	ld	(ix-2),a
+1365  02C6  E1          	pop	hl
+1366  02C7  E5          	push	hl
+1367  02C8  DD 7E FF    	ld	a,(ix-1)
 1368  02CB  96          	sub	a,(hl)
 1369  02CC  38 31       	jr	C,l_spr_move_right_00111
 1370  02CE  1A          	ld	a, (de)
@@ -1391,12 +1391,12 @@
 1388  02E9              l_spr_move_right_00104:
 1389  02E9  1A          	ld	a, (de)
 1390  02EA  3C          	inc	a
-1391  02EB  DD 77 FE    	ld	(ix-2),a
+1391  02EB  DD 77 FD    	ld	(ix-3),a
 1392  02EE  12          	ld	(de),a
 1393  02EF  AF          	xor	a, a
 1394  02F0  02          	ld	(bc), a
 1395  02F1  3E 1F       	ld	a,0x1f
-1396  02F3  DD 96 FE    	sub	a,(ix-2)
+1396  02F3  DD 96 FD    	sub	a,(ix-3)
 1397  02F6  30 07       	jr	NC,l_spr_move_right_00111
 1398  02F8  3E 1F       	ld	a,0x1f
 1399  02FA  12          	ld	(de), a

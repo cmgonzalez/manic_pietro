@@ -235,11 +235,12 @@ unsigned char const spr_init1[] = { //TODO un arreglo separado para el mundo de 
    106,  84, 4,   4, E_VERTICAL  , 0x03, 0x06, 0x47, 0x01, // WEA 3
    108,  88, 4,   4, E_HORIZONTAL, 0x02, 0x05, 0xFF, 0xFF, // WEA CON PATAS
    110,  92, 4,   4, E_VERTICAL  , 0x03, 0x04, 0x05, 0x06, // AMEBATRON 2
-   112,  96, 4,   4, E_VERTICAL  , 0x22, 0x21, 0x26, 0x24, // PELOTA(PAPER GREEN)
+   112,  96, 4,   4, E_VERTICAL  , 0x22, 0x26, 0x21, 0x24, // PELOTA(PAPER GREEN)
    114, 100, 4,   0, E_HORIZONTAL, 0x26, 0x21, 0x22, 0x27, // WEA SOLAR (PAPER GREEN)
    116, 106, 6,   0, E_FALL      , 0xFF, 0xFF, 0xFF, 0xFF, // KONG FALLING
    118, 112, 2,   0, E_STATIC    , 0xFF, 0xFF, 0xFF, 0xFF, // KONG JR
    120, 108, 4,   4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // CARRITO FINAL
+   122,  36, 4,   4, E_HORIZONTAL, 0x04, 0x03, 0x05, 0x06, // CARRITO COPIA PARA OTROS COLORES
 };
 
 unsigned char const spr_init2[] = { //TODO un arreglo separado para el mundo de pietro?
@@ -360,6 +361,7 @@ unsigned char player_jump_top;
 unsigned char player_fall_start;
 
 //Jump Geometry HORIZONTAL extra increment to emulate Willy Jump
+
 const unsigned char player_jump_hor[] = {
   0, //0
   0, //1
@@ -379,4 +381,3 @@ const unsigned char player_jump_hor[] = {
   1, //15
   0  //16
 };
-// 1 4 7 9 12

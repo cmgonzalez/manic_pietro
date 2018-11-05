@@ -194,7 +194,7 @@ void game_draw_map(void) {
         scr_map[index1 + 33] = SPRITE_EXIT;
       }
       // Enemy
-      if (val0 >= ENEMY_START_INDEX && val0 <= 121) {
+      if (val0 >= ENEMY_START_INDEX && val0 <= 123) {
         spr_draw8(TILE_EMPTY, s_row1 << 3, s_col1); // Draw a Block with Paper
         enemy_init();
         scr_map[index1] = TILE_EMPTY;
@@ -309,10 +309,12 @@ void game_solar_ray0() {
 }
 
 void game_img1() {
-  unsigned char btile[48];
+
   unsigned int li;
   unsigned char i;
   unsigned char k;
+  unsigned char *src;
+  unsigned char *dest;
 
   k = 0;
   v0 = 16;
@@ -323,23 +325,12 @@ void game_img1() {
     i = 0;
     li = k * 48;
     NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
+    dest = &btiles[SPRITE_TMP];
+    src = &img1[li];
     page(1);
-    while (i < 48) {
-      btile[i] = img1[li];
-      ++i;
-      ++li;
-    }
+    memcpy(dest, src, 48);
     page(0);
-
-    i = 0;
-    li = 48 * 64;
-    while (i < 48) {
-      btiles[li] = btile[i];
-      ++i;
-      ++li;
-    }
-
-    NIRVANAP_drawT_raw(64, v0, v1);
+    NIRVANAP_drawT_raw(90, v0, v1);
     if (v1 == 30) {
       v0 = v0 + 16;
       v1 = 0;
@@ -441,6 +432,7 @@ void game_anim_air() {
   *(air_curr_byte + 512) = v0;
   *(air_curr_byte + 768) = v0;
 }
+
 void game_anim_conveyor() {
   unsigned char *f_byte;
   unsigned char *f_byte_src;
@@ -488,9 +480,10 @@ void game_anim_conveyor() {
 void game_round_init(void) {
   // TODO move to 128 bank's
   unsigned char i;
-  unsigned int j;
   unsigned char game_borders;
   unsigned char map_names[33];
+  unsigned char *src;
+  unsigned char *dest;
 
   // TODO Just use start to simplify
   ay_reset();
@@ -504,18 +497,14 @@ void game_round_init(void) {
   NIRVANAP_halt();
   NIRVANAP_stop();
 
+  src = &map_names0[scr_curr * 32];
+  dest = &map_names[0];
   i = scr_curr;
   page(6);
   // Get Border Data
   game_borders = game_borders0[i];
-  // Get Map Name
-  j = i * 32;
-  i = 0;
-  while (i < 32) {
-    map_names[i] = map_names0[j];
-    ++i;
-    ++j;
-  }
+  // Get screen Name
+  memcpy(dest, src, 32);
   page(0);
   map_names[32] = '\0';
   map_border = game_borders;
@@ -805,17 +794,17 @@ void game_page_map(void) {
 
   // unsigned int add_index;
   unsigned int start_index;
-  // unsigned char l_world;
-  // unsigned char l_world_w;
-  // unsigned char l_world_h;
+  unsigned int end_index;
 
   unsigned char l_scr;
   unsigned char l_scr0;
   // unsigned char l_scr_map;
-  unsigned char l_tileset;
 
   // btile page
-  unsigned char l_btile[48];
+  //unsigned char l_btile[48];
+
+  unsigned char *src;
+  unsigned char *dest;
 
   intrinsic_di();
 
@@ -826,35 +815,6 @@ void game_page_map(void) {
     l_scr0 = l_scr - 20;
   }
 
-  // l_scr_map = (l_world << 4) + l_scr;
-  l_tileset = game_tileset;
-
-  // Tiles (8x8) @Bank7
-  l_start = l_scr0 * 48 * 8;
-
-  lk = 0;
-  while (lk < 48 * 8) {
-    page(7);
-
-    li = 0;
-    while (li < 48) {
-      if (l_tileset == 0) {
-        l_btile[li] = hitiles1[l_start + li + lk];
-      } else {
-        l_btile[li] = hitiles2[l_start + li + lk];
-      }
-      ++li;
-    }
-    page(0);
-    // Store btile in low mem
-    li = 0;
-    while (li < 48) {
-      btiles[lk + li] = l_btile[li];
-      ++li;
-    }
-    lk = lk + 48; // Next btile
-  }
-
   // Get Map data
   lj = 0;
   lk = 0;
@@ -863,15 +823,19 @@ void game_page_map(void) {
   // scr_curr = l_scr;
 
   // END TODO
+
+  page(6); // TODO SINGLE READ TO speedup
+  start_index = lenght0[l_scr];
+  end_index = lenght0[l_scr + 1];
+  dest = &btiles[0];
+  src = &world0[start_index];
+  memcpy(dest, src, end_index - start_index);
+  page(0);
+
   for (li = 0; li < GAME_SCR_MAX_INDEX; ++li) {
 
-    // Page in BANK 06 - Note that global variables are in page 0
-    page(6); // TODO SINGLE READ TO speedup
-    start_index = lenght0[l_scr];
-    lv0 = world0[start_index + li];     // TODO n LEVELS
-    lv1 = world0[start_index + li + 1]; // TODO n LEVELS
-    // Page in BANK 00
-    page(0);
+    lv0 = btiles[li];
+    lv1 = btiles[li + 1];
 
     if (lv0 < 128) {
       scr_map[lk] = lv0;
@@ -891,7 +855,32 @@ void game_page_map(void) {
       break;
     }
   }
+
+  // l_scr_map = (l_world << 4) + l_scr;
+
+  // Tiles (8x8) @Bank7
+  l_start = l_scr0 * 48 * 8;
+
+  lk = 0;
+  while (lk < 48 * 8) {
+    dest = &btiles[SPRITE_TMP];
+    if (scr_curr < 20) {
+      src = &hitiles1[l_start + lk];
+    } else {
+      src = &hitiles2[l_start + lk];
+    }
+
+    page(7);
+    memcpy(dest, src, 48);
+    page(0);
+    // Store btile in low mem
+    dest = &btiles[lk];
+    src = &btiles[SPRITE_TMP];
+    memcpy(dest, src, 48);
+    lk = lk + 48; // Next btile
+  }
   map_paper = btiles[32] & 0xF8;
+
   intrinsic_ei();
 }
 
@@ -940,56 +929,49 @@ unsigned char game_copy_sprite_std(unsigned char f_hi_sprite,
 
 void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
                       unsigned char f_flip) {
-  // copy a btile from bank3
-  unsigned char btile[48];
+
   unsigned int li;
   unsigned char i;
-  unsigned char l_tileset;
 
-  l_tileset = game_tileset;
+  unsigned char *src;
+  unsigned char *dest;
+  unsigned char *p_btile_tmp;
 
   // Page a Tile
   intrinsic_di();
-  page(3);
-
-  li = (48 * f_hi_sprite);
-  i = 0;
-  while (i < 48) {
-    if (l_tileset == 0) {
-      btile[i] = hisprites1[li];
-    } else {
-      btile[i] = hisprites2[li];
-    }
-
-    if (i > 31 && btile[i] == spr_init_cin0) {
-      btile[i] = spr_init_cout0;
-    }
-    ++i;
-    ++li;
+  if (scr_curr < 20) {
+    src = &hisprites1[48 * f_hi_sprite];
+  } else {
+    src = &hisprites2[48 * f_hi_sprite];
   }
-  // Page in BANK 00
+
+  // dest = &btile[0];
+  p_btile_tmp = &btiles[SPRITE_TMP];
+  dest = p_btile_tmp;
+  page(3);
+  memcpy(dest, src, 48);
   page(0);
   intrinsic_ei();
 
-  // Paint Variants
+  // Atrribs Changes
   i = 32;
   while (i < 48) {
-    if (btile[i] == spr_init_cin0) {
-      btile[i] = spr_init_cout0;
+    if (*(p_btile_tmp + i) == spr_init_cin0) {
+      *(p_btile_tmp + i) = spr_init_cout0;
     } else {
-      if (btile[i] == spr_init_cin1) {
-        btile[i] = spr_init_cout1;
+      if (*(p_btile_tmp + i) == spr_init_cin1) {
+        *(p_btile_tmp + i) = spr_init_cout1;
       } else {
-        if (btile[i] == spr_init_cin2) {
-          btile[i] = spr_init_cout2;
+        if (*(p_btile_tmp + i) == spr_init_cin2) {
+          *(p_btile_tmp + i) = spr_init_cout2;
         } else {
-          if (btile[i] == spr_init_cin3) {
-            btile[i] = spr_init_cout3;
+          if (*(p_btile_tmp + i) == spr_init_cin3) {
+            *(p_btile_tmp + i) = spr_init_cout3;
           }
         }
       }
     }
-    btile[i] = (btile[i] | spr_init_bright);
+    *(p_btile_tmp + i) = (*(p_btile_tmp + i) | spr_init_bright);
     ++i;
   }
 
@@ -1000,21 +982,22 @@ void game_copy_sprite(unsigned char f_hi_sprite, unsigned char f_low_sprite,
     if (f_flip) {
       if (i < 32) {
         if ((i & 1) == 0) {
-          btiles[li] = reverse(btile[i + 1]);
+          v0 = i + 1;
         } else {
-          btiles[li] = reverse(btile[i - 1]);
+          v0 = i - 1;
         }
-
+        btiles[li] = reverse(*(p_btile_tmp + v0));
       } else {
         if (i < 40) {
-          btiles[li] = btile[i + 8];
+          v0 = i + 8;
         } else {
-          btiles[li] = btile[i - 8];
+          v0 = i - 8;
         }
+        btiles[li] = *(p_btile_tmp + v0);
       }
 
     } else {
-      btiles[li] = btile[i];
+      btiles[li] = *(p_btile_tmp + i);
     }
 
     ++i;
