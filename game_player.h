@@ -37,5 +37,7 @@ extern unsigned char player_move_jump(void);
 extern void          player_lost_life(void);
 extern void          player_use_floor( unsigned char f_inc );
 extern void          player_pick(void);
+extern void          player_crumble(void);
+
 
 #endif

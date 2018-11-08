@@ -357,6 +357,7 @@ void spr_paint(void) {
 }
 
 void spr_clear_fast() {
+/*
   // Method0 Using printC
   v2 = s_lin0 + GAME_OFFSET_Y;
   v3 = s_col0 + 1;
@@ -365,8 +366,8 @@ void spr_clear_fast() {
   v2 = v2 + 8;
   NIRVANAP_paintC(attrib_hl, v2, s_col0);
   NIRVANAP_paintC(attrib_hl, v2, v3);
+*/
 
-  /*
   // Method0 Using spr_draw8
   v2 = s_lin0 + 8;
   v3 = s_col0 + 1;
@@ -375,9 +376,35 @@ void spr_clear_fast() {
   v2 = v2 + 8;
   spr_draw8(0, v2, s_col0);
   spr_draw8(0, v2, v3);
-  */
+
+
 }
 void spr_clear_fast_hor(void) {
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
+    v1 = s_col0;
+  } else {
+    v1 = s_col0+1;
+  }
+  v0 = s_lin0 + GAME_OFFSET_Y;
+  NIRVANAP_paintC(attrib_hl, v0, v1);
+  v0 = v0 + 8;
+  NIRVANAP_paintC(attrib_hl, v0, v1);
+
+  /*
+  if (BIT_CHK(state[sprite], STAT_DIRR)) {
+    v1 = 0;
+  } else {
+    v1 = 1;
+  }
+  s_lin0 = s_lin0 + GAME_OFFSET_Y;
+  v0 = s_lin0 + 16;
+  s_col0 = s_col0 + v1;
+  while ( s_lin0 < v0) {
+    game_set_attr(s_lin0, s_col0, map_clear);
+    s_lin0+=2;
+  }
+  */
+  /*
   //TODO CODE OPTIMIZE
   unsigned char *f_byte;
   if (BIT_CHK(state[sprite], STAT_DIRR)) {
@@ -421,6 +448,7 @@ void spr_clear_fast_hor(void) {
     *(f_byte + 1536) = 0;
     *(f_byte + 1792) = 0;
   }
+  */
 }
 
 /* SLOWER!!! TODO CONVERT TO ASM!
@@ -453,6 +481,19 @@ void spr_clear_fast_vert(void) {
 }
 */
 void spr_clear_fast_vert(void) {
+  /*
+  if (BIT_CHK(state[sprite], STAT_FALL)) {
+    v0 = s_lin0 + GAME_OFFSET_Y;
+    game_set_attr(v0, s_col0, map_clear);
+    game_set_attr(v0, s_col0+1, map_clear);
+
+  } else {
+    v0 = s_lin0 + GAME_OFFSET_Y + 14;
+    game_set_attr(v0, s_col0, map_clear);
+    game_set_attr(v0, s_col0+1, map_clear);
+  }
+  */
+
   unsigned char *f_byte;
   if (BIT_CHK(state[sprite], STAT_FALL)) {
     f_byte = zx_py2saddr(s_lin0+8) + s_col0;
@@ -476,6 +517,7 @@ void spr_clear_fast_vert(void) {
     ++f_byte;
     *f_byte = 0;
   }
+  
 }
 
 void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {

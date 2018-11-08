@@ -57,8 +57,7 @@
 
 
 #define TILE_CRUMB_INIT              2 //TODO MOVE ON BTILE AND PLACE ADJACENT TO CRUMBLING TILES
-#define TILE_CRUMB_START             9
-#define TILE_CRUMB_END               11
+
 
 
 #define SPRITE_EXIT                  32
@@ -241,7 +240,7 @@ extern unsigned char obj_count;
 
 extern unsigned char tbuffer[7];
 
-extern unsigned int player_score;
+extern uint64_t player_score;
 extern signed int  player_vel_y;
 extern signed int  player_vel_y0;
 extern signed char  player_vel_inc;
@@ -321,6 +320,8 @@ extern unsigned int frame_time;
 extern unsigned int time_air;
 extern unsigned int time_conv;
 extern unsigned int time_key;
+extern unsigned int time_crumb;
+extern unsigned char lapse_crumb;
 
 extern unsigned char key_last;
 extern unsigned char key_ink;
@@ -334,9 +335,13 @@ extern unsigned char game_sound;
 extern unsigned char game_tile_cnt;
 
 extern unsigned char game_over;
+extern unsigned char game_crumb_start;
+extern unsigned char game_crumb_end;
+
 extern unsigned char player_lives;
 extern unsigned char player_coins;
-extern unsigned int game_score_top;
+extern uint64_t game_score_top;
+extern uint64_t player_next_extra;
 extern unsigned char game_start_scr;
 
 
@@ -363,16 +368,20 @@ extern unsigned char scr_map[];
 extern const unsigned char world0[];
 extern const unsigned int lenght0[];
 extern const unsigned char paper0[];
+extern const unsigned char tile_class1[];
+extern const unsigned char tile_class2[];
 
 extern const unsigned char game_borders0[];
 extern const unsigned char map_names0[];
 
 extern unsigned char scr_curr;
+extern unsigned char *gbyte;
 
 
 
 extern unsigned char map_border;
 extern unsigned char map_paper;
+extern unsigned char map_clear;
 
 extern const unsigned char key_map[];
 extern const unsigned int scan_map[];

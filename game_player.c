@@ -163,7 +163,7 @@ void player_check_exit() {
       while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
         audio_tick();
         game_anim_air();
-        player_score_add(25);
+        player_score_add(1); //http://skoolkit.ca/disassemblies/manic_miner/asm/36904.html
         z80_delay_ms(5);
       }
     }
@@ -576,6 +576,18 @@ void player_score_add(unsigned int f_score) __z88dk_fastcall {
   if (player_score > game_score_top) {
     game_score_top = player_score;
   }
+
+  //CHECK FOR EXTRA life
+  if (player_score > player_next_extra) {
+    player_lives = player_lives + 1;
+    player_next_extra = player_next_extra + 10000;
+  }
+  //ROTATE HIGH SCORE
+  if (player_score > 1000000) {
+    player_score = 0;
+    player_next_extra = 10000;
+  }
+
   game_print_score();
 }
 
@@ -697,6 +709,29 @@ void player_check_conveyor() {
   //}
 }
 
+void player_crumble() {
+
+  v0 = tile_class[scr_map[index1]];
+  if (v0 == TILE_CRUMB) { // TODO CAUTION!
+
+    if (scr_map[index1] == TILE_CRUMB_INIT) {
+      audio_crumble();
+      scr_map[index1] = game_crumb_start;
+
+    } else {
+      ++scr_map[index1];
+
+      if (scr_map[index1] > game_crumb_end) {
+        scr_map[index1] = TILE_EMPTY;
+      }
+    }
+
+    // GASTA BRICK TODO OPTIMIZE CALC
+    s_row1 = (((lin[INDEX_P1] + 16) >> 3) + 1) << 3;
+    spr_draw8(scr_map[index1], s_row1, s_col1);
+  }
+}
+
 unsigned char player_check_floor(unsigned char f_inc) {
 
   index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1] + f_inc);
@@ -709,38 +744,6 @@ unsigned char player_check_floor(unsigned char f_inc) {
   if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) {
     return 1;
   }
-
-  if (v0 == TILE_CRUMB) { // TODO CAUTION!
-
-    /*
-        //Hack para romper solo el piso en los bordes, ojo con el joystick es la
-       unica forma if ( !(dirs & IN_STICK_LEFT) && !(dirs & IN_STICK_RIGHT) ) {
-          if (f_inc == 0 && colint[INDEX_P1] == 3) {
-            return 1;
-          }
-          if (f_inc == 1 && colint[INDEX_P1] == 0) {
-            return 1;
-          }
-        }
-    */
-    s_col1 = col[INDEX_P1] + f_inc;
-
-    if (scr_map[index1] == TILE_CRUMB_INIT) {
-      audio_crumble();
-      scr_map[index1] = TILE_CRUMB_START;
-    } else {
-      ++scr_map[index1];
-      //++scr_map[index1];
-      if (scr_map[index1] > TILE_CRUMB_END) {
-        scr_map[index1] = TILE_EMPTY;
-      }
-    }
-
-    // GASTA BRICK TODO OPTIMIZE CALC
-    s_row1 = (((lin[INDEX_P1] + 16) >> 3) + 1) << 3;
-    spr_draw8(scr_map[index1], s_row1, s_col1);
-  }
-
   return 0;
 }
 

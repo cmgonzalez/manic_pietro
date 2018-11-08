@@ -31,25 +31,27 @@
 void enemy_turn(void) {
 
   sprite = 0;
-  nirv_sprite_index = 0;
+  nirv_sprite_index = 0xFF;
   while (sprite < spr_count) {
 
+
+    ++nirv_sprite_index;
+    if (nirv_sprite_index == NIRV_SPRITE_P1) {
+      // This Nirvana Version have only 7 sprites -1 door -1 player
+      NIRVANAP_halt();
+      // z80_delay_ms(2);
+      nirv_sprite_index = 0;
+    }
     if (class[sprite] != 0 && spr_chktime()) {
       s_lin0 = lin[sprite];
       s_col0 = col[sprite];
       enemy_move();
     }
 
-    ++nirv_sprite_index;
-    if (nirv_sprite_index == NIRV_SPRITE_P1) {
-      // This Nirvana Version have only 7 sprites -1 door -1 player
-      NIRVANAP_halt();
-      //z80_delay_ms(2);
-      nirv_sprite_index = 0;
-    }
+
     ++sprite;
   }
-  if (nirv_sprite_index && spr_count > NIRV_SPRITE_P1) {
+  if (nirv_sprite_index && spr_count >= NIRV_SPRITE_P1) {
     NIRVANAP_halt();
   }
 }
@@ -88,20 +90,23 @@ void enemy_move(void) {
   case E_EUGENE:
     enemy_eugene();
     spr_paint();
-    if (spr_clr)
-      spr_clear_fast();
+    if (spr_clr) {
+      spr_clear_fast_vert();
+    }
     break;
   case E_SKYLAB:
     enemy_gota();
     spr_paint();
-    if (spr_clr)
+    if (spr_clr) {
       spr_clear_fast();
+    }
     break;
   case E_FALL:
     enemy_fall();
     spr_paint();
-    if (spr_clr)
-      spr_clear_fast();
+    if (spr_clr) {
+      spr_clear_fast_vert();
+    }
     break;
   case E_ZIGZAG:
     enemy_zigzag();
@@ -147,7 +152,6 @@ void enemy_gota() {
     if (game_check_time(&last_time_a[sprite], spr_speed_a[sprite])) {
       colint[sprite]++;
       if (colint[sprite] == spr_frames[sprite]) {
-
 
         v2 = s_lin0 + GAME_OFFSET_Y;
         v3 = s_col0 + 1;
@@ -229,11 +233,13 @@ void enemy_vertical() {
     if (BIT_CHK(state[sprite], STAT_JUMP)) {
       spr_move_up_f();
       if (lin[sprite] == value_a[sprite]) {
+        spr_clear_fast_vert();
         spr_set_down();
       }
     } else {
       spr_move_down_f();
       if (lin[sprite] == value_b[sprite]) {
+        spr_clear_fast_vert();
         spr_set_up();
       }
     }
@@ -254,6 +260,7 @@ void enemy_eugene() {
         colint[sprite] = 0;
       }
       if (lin[sprite] < 88) {
+        BIT_SET(state[sprite], STAT_FALL);
         spr_move_down_f();
       }
       last_time_b[sprite] = zx_clock();
@@ -348,7 +355,10 @@ void enemy_init() {
       lin[sprite] = (index1 >> 5) << 3;
       col[sprite] = index1 & 31;
       colint[sprite] = 0;
-
+      if (scr_curr == 1) {
+        // HACK el pinguino queda bajo la salida
+        col[sprite] = col[sprite] + 2;
+      }
       switch (spr_kind[sprite]) {
       case E_SKYLAB:
         value_b[sprite] = col[sprite];

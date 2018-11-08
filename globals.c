@@ -84,7 +84,7 @@ unsigned char obj_col[GAME_MAX_OBJECTS]; // object col for HIGHLIGHT
 unsigned char obj_count;
 
 // PLAYER ONLY
-unsigned int player_score; // SCORE
+uint64_t player_score; // SCORE
 unsigned char player_lives;
 unsigned char player_coins;
 signed int player_vel_y;
@@ -143,6 +143,7 @@ unsigned char g_ray1;
 unsigned char key_attrib[4];
 
 
+unsigned char *gbyte;
 
 
 
@@ -151,6 +152,8 @@ unsigned int frame_time;
 unsigned int time_air;
 unsigned int time_conv;
 unsigned int time_key;
+unsigned int time_crumb;
+unsigned char lapse_crumb;
 
 unsigned char key_last;
 unsigned char key_ink;
@@ -172,7 +175,11 @@ unsigned char game_tile_cnt;
 
 unsigned char game_over;
 
-unsigned int game_score_top;
+unsigned char game_crumb_start;
+unsigned char game_crumb_end;
+
+uint64_t game_score_top;
+uint64_t player_next_extra;
 unsigned char game_start_scr;
 
 // PHASE RELATED VARIABLES
@@ -181,6 +188,7 @@ unsigned char screen_ink;
 
 unsigned char map_border;
 unsigned char map_paper;
+unsigned char map_clear;
 
 unsigned char *air_curr_byte;
 const unsigned int air_start_byte = 21087;
@@ -214,7 +222,7 @@ unsigned char const spr_init1[] = { //TODO un arreglo separado para el mundo de 
     64,   4, 4,   4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // ROBOT
     66,   8, 4,   4, E_HORIZONTAL, 0x05, 0x07, 0xFF, 0xFF, // PENGUIN
     68,  12, 4,   4, E_HORIZONTAL, 0x03, 0x02, 0x04, 0xFF, // CHICKEN
-    70,  16, 4,   4, E_HORIZONTAL, 0x05, 0x03, 0xFF, 0xFF, // FOCA
+    70,  16, 4,   4, E_HORIZONTAL, 0x03, 0x05, 0xFF, 0xFF, // FOCA
     72,  20, 4,   4, E_HORIZONTAL, 0x17, 0x10, 0xFF, 0xFF, // WATER
     74, 112, 4, 255, E_EUGENE    , 0xFF, 0xFF, 0xFF, 0xFF, // EUGENE
     76,  24, 4,   4, E_HORIZONTAL, 0x46, 0x43, 0x45, 0x06, // PAC
@@ -312,47 +320,7 @@ const unsigned int scan_map[] = {
     IN_KEY_SCANCODE_y,     IN_KEY_SCANCODE_z
 };
 
-const unsigned char tile_class[] = {
-    TILE_EMPTY,     //00
-    TILE_FLOOR,     //01
-    TILE_CRUMB,     //02
-    TILE_WALL,      //03
-    TILE_CONVEYOR,  //04
-    TILE_DEADLY,    //05
-    TILE_DEADLY,    //06
-    TILE_EXTRA,     //07 Switch
-
-    TILE_FLOOR,     //08 Switch Off
-
-    TILE_CRUMB,     //09 Crumb1
-    TILE_CRUMB,     //10 Crumb2
-    TILE_CRUMB,     //11 Crumb3
-
-    TILE_FLOOR,     //12 Misc Platform
-    TILE_OBJECT,    //13 Object
-    TILE_EMPTY,     //14 Reverved Exit
-    TILE_EMPTY,     //15 Reverved Exit
-
-    TILE_EMPTY,     //16 Backgound
-    TILE_EMPTY,     //17 Backgound
-    TILE_EMPTY,     //18 Backgound
-    TILE_EMPTY,     //19 Backgound
-
-    TILE_FLOOR,     //20 Platform
-    TILE_FLOOR,     //21 Platform
-    TILE_FLOOR,     //22 Platform
-    TILE_FLOOR,     //23 Platform
-
-    TILE_WALL,      //24 Wall
-    TILE_WALL,      //25 Wall
-    TILE_WALL,      //26 Wall
-    TILE_WALL,      //27 Wall
-
-    TILE_DEADLY,    //28
-    TILE_DEADLY,    //29
-    TILE_EMPTY,     //30 Reverved Exit
-    TILE_EMPTY,     //31 Reverved Exit
-};
+const unsigned char tile_class[32];
 
 //Hack for horizontal jump increment
 
