@@ -40,13 +40,13 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
-  game_debug = 1;
+  game_debug = 0;
 
   game_gravity = 100; // GAME_GRAVITY;
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_fps_show = 1;
-  scr_curr = 15;
+  scr_curr = 0;
   nirv_sprite_index = 0;
   game_song_play = 1;
 
@@ -116,7 +116,6 @@ void main(void) {
     // GAME
     spr_clear_scr();
     player_next_extra = 10000;
-    g_ray1 = 128;
     game_loop();
     spr_clear_scr();
     game_cls();

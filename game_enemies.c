@@ -300,11 +300,9 @@ void enemy_init() {
     ++sprite;
   }
 
-  if (scr_curr < 20) {
-    f_init = &spr_init1[0];
-  } else {
-    f_init = &spr_init2[0];
-  }
+
+  f_init = &spr_init[0];
+
   // Search for Sprite Attribs on spr_init
   f_pos = 0;
   // Size of spr_init attributes

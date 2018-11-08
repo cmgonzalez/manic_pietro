@@ -62,7 +62,7 @@ void game_loop(void) {
       player_turn();
 
       // Cicling events
-      if (game_check_time(&time_crumb,lapse_crumb)) {
+      if (game_check_time(&time_crumb, lapse_crumb)) {
         time_crumb = zx_clock();
         game_crumble();
       }
@@ -525,16 +525,17 @@ void game_round_init(void) {
   NIRVANAP_stop();
   intrinsic_di();
 
-  src = &map_names0[scr_curr * 32];
-  dest = &map_names[0];
-  i = scr_curr; //local variable to be used during paging
+
+  i = scr_curr; // local variable to be used during paging
   page(6);
   // Get Border Data
   game_borders = game_borders0[i];
   // Get screen Name
+  src = &map_names0[i * 32];
+  dest = &map_names[0];
   memcpy(dest, src, 32);
 
-  //Tile Classes
+  // Tile Classes
 
   if (i < 20) {
     src = &tile_class1[0];
@@ -543,13 +544,24 @@ void game_round_init(void) {
   }
   dest = &tile_class[0];
   memcpy(dest, src, 32);
+
+  // Enemy attribs
+  if (i < 20) {
+    src = &spr_init1[0];
+  } else {
+    src = &spr_init2[0];
+  }
+  dest = &spr_init[0];
+
+  memcpy(dest, src, GAME_ENEMY_MAX_CLASSES*GAME_ENEMY_CLASS_LEN);
+
   page(0);
+
   map_names[32] = '\0';
   map_border = game_borders;
   /* screen init */
   /*PHASE INIT*/
   loop_count = 0;
-
 
   zx_set_clock(0);
   frame_time = 0;
@@ -647,6 +659,14 @@ void game_round_init(void) {
 
   zx_print_ink(INK_WHITE | PAPER_BLACK);
   fps = 0;
+  //Hack
+  if (scr_curr == 18) {
+    v0 = 16;
+    while (v0 < 128) {
+      spr_draw8(17, v0, 23);
+      v0 = v0 + 8;
+    }
+  }
   NIRVANAP_halt();
 }
 

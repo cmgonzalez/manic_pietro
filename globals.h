@@ -107,6 +107,9 @@
 #define TILE_TITLE                    204
 #define TILE_ANIM                     128
 
+#define GAME_ENEMY_MAX_CLASSES        30
+#define GAME_ENEMY_CLASS_LEN          9
+
 
 
 
@@ -346,8 +349,8 @@ extern unsigned char game_start_scr;
 
 
 extern unsigned char screen_paper, screen_ink;
-extern unsigned char const spr_init1[];
-extern unsigned char const spr_init2[];
+extern const unsigned char spr_init[];
+
 
 extern unsigned char spr_tile[];
 extern unsigned char spr_speed[];
@@ -370,6 +373,8 @@ extern const unsigned int lenght0[];
 extern const unsigned char paper0[];
 extern const unsigned char tile_class1[];
 extern const unsigned char tile_class2[];
+extern const unsigned char spr_init1[];
+extern const unsigned char spr_init2[];
 
 extern const unsigned char game_borders0[];
 extern const unsigned char map_names0[];
