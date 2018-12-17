@@ -62,10 +62,10 @@ void game_loop(void) {
       player_turn();
 
       // Cicling events
-      if (game_check_time(&time_crumb, lapse_crumb)) {
-        time_crumb = zx_clock();
-        game_crumble();
-      }
+      //if (game_check_time(&time_crumb, lapse_crumb)) {
+      //  time_crumb = zx_clock();
+      //  game_crumble();
+      //}
       if (game_check_time(&time_key, 4)) {
         time_key = zx_clock();
         game_key_paint();
@@ -519,7 +519,14 @@ void game_round_init(void) {
   zx_border(INK_BLACK);
   zx_print_ink(INK_BLACK | (INK_BLACK << 3));
   game_fill_row(0, 32);
+  game_fill_row(17, 32);
+  game_fill_row(18, 32);
+  game_fill_row(20, 32);
+  game_fill_row(22, 32);
+  game_fill_row(10, 32);
   spr_clear_scr();
+
+
 
   NIRVANAP_halt();
   NIRVANAP_stop();
@@ -609,16 +616,16 @@ void game_round_init(void) {
   game_song_play_start = 0;
   intrinsic_ei();
   NIRVANAP_start();
+  NIRVANAP_halt();
   // Round presentation
   if (!game_debug) {
     game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
-    game_fill_row(10, 32);
+
+
+
     zx_print_str(10, 10, "ROUND");
     zx_print_chr(10, 16, scr_curr + 1);
-    game_fill_row(17, 32);
-    game_fill_row(18, 32);
-    game_fill_row(20, 32);
-    game_fill_row(22, 32);
+
     audio_round_init();
     z80_delay_ms(800);
     ay_reset();
@@ -1133,7 +1140,7 @@ void game_shoe() {
   NIRVANAP_drawT(91, 96, 15);  // Willy
   NIRVANAP_drawT(92, 112, 15); // Shoe
   v0 = 16;
-  while (v0 <= 96) {
+  while (v0 <= 94) {
     /*
     v1 = v3;
     while (v1 == v3) {

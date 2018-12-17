@@ -72,10 +72,15 @@ void player_turn(void) {
     s_lin0 = lin[INDEX_P1];
     s_col0 = col[INDEX_P1];
 
-    dirs = (joyfunc1)(&k1);
+    if (!BIT_CHK(state[INDEX_P1], STAT_JUMP) &&
+        !BIT_CHK(state[INDEX_P1], STAT_FALL)) {
+      dirs_last = dirs;
+    }
 
-    player_handle_lock();
+    dirs = (joyfunc1)(&k1);
     player_move();
+    player_handle_lock();
+
     player_collision();
 
     player_check_exit();
@@ -83,8 +88,14 @@ void player_turn(void) {
       player_lost_life();
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
     }
-
+    game_crumble();
+    // Magic Keys
     player_debug_keys();
+
+    zx_print_chr(21, 0, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
+    zx_print_chr(21, 4, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
+    zx_print_chr(22, 8, dirs);
+    zx_print_chr(22, 16, dirs_last);
   }
 }
 
@@ -163,7 +174,8 @@ void player_check_exit() {
       while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
         audio_tick();
         game_anim_air();
-        player_score_add(1); //http://skoolkit.ca/disassemblies/manic_miner/asm/36904.html
+        // http://skoolkit.ca/disassemblies/manic_miner/asm/36904.html
+        player_score_add(1);
         z80_delay_ms(5);
       }
     }
@@ -206,13 +218,7 @@ unsigned char player_move_jump(void) {
   }
 
   player_vel_y = player_vel_y + game_gravity;
-
-  if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
-    // FIX Conveyor FALL
-    BIT_CLR(state[INDEX_P1], STAT_DIRR);
-    BIT_CLR(state[INDEX_P1], STAT_DIRL);
-    BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
-  }
+  BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
 
   // END JUMP HACK
   // CONVER TO PIXEL'S
@@ -236,8 +242,13 @@ unsigned char player_move_jump(void) {
     if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
       player_vel_y = 0;
 
-      BIT_CLR(state[INDEX_P1], STAT_DIRR);
-      BIT_CLR(state[INDEX_P1], STAT_DIRL);
+      if (!(dirs & IN_STICK_RIGHT)) {
+        BIT_CLR(state[INDEX_P1], STAT_DIRR);
+      }
+      if (!(dirs & IN_STICK_LEFT)) {
+        BIT_CLR(state[INDEX_P1], STAT_DIRL);
+      }
+
     } else {
       lin[INDEX_P1] = s_lin1;
     }
@@ -265,7 +276,9 @@ unsigned char player_move_jump(void) {
       // if (!player_check_floor(0) || !player_check_floor(1)) {
       BIT_CLR(state[INDEX_P1], STAT_FALL);
       BIT_CLR(state[INDEX_P1], STAT_JUMP);
-      player_check_conveyor();
+      // player_check_conveyor();
+
+      player_handle_conveyor();
       // BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
       ay_fx_stop();
       //}
@@ -277,8 +290,11 @@ unsigned char player_move_jump(void) {
       // Recover speed if the jump 100% vertical
       spr_speed[INDEX_P1] = PLAYER_SPEED;
       BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
+      // player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+
       return 0;
     }
+
     spr_set_down();
     lin[INDEX_P1] = s_lin1;
   }
@@ -307,8 +323,9 @@ unsigned char player_move_walk(void) {
   if (player_check_input()) {
 
     if (dirs & IN_STICK_FIRE) {
-      player_new_jump();
-      spr_move_horizontal();
+      if (player_new_jump()) {
+        spr_move_horizontal();
+      }
       return 1;
     }
 
@@ -324,6 +341,7 @@ unsigned char player_move_walk(void) {
         BIT_SET(state[INDEX_P1], STAT_DIRR);
       if (dirs & IN_STICK_LEFT)
         BIT_SET(state[INDEX_P1], STAT_DIRL);
+      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
     }
 
     player_handle_fall();
@@ -341,39 +359,27 @@ unsigned char player_move_walk(void) {
 }
 
 void player_handle_lock() {
-  // Key Lock
-  if (!BIT_CHK(state[INDEX_P1], STAT_CONVEYOR) &&
-      !BIT_CHK(state[INDEX_P1], STAT_JUMP) &&
-      !BIT_CHK(state[INDEX_P1], STAT_FALL)) {
-
-    if (dirs & IN_STICK_RIGHT) {
-      if (dirs_last != DIR_RIGHT)
-         {
-          dirs_last = DIR_RIGHT;
-          BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
-        }
-      else {
-        BIT_SET(state_a[INDEX_P1], STAT_LOCK);
-      }
-    }
-
-    if (dirs & IN_STICK_LEFT) {
-      if (dirs_last != DIR_LEFT) {
-        dirs_last = DIR_LEFT;
-        BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
-      } else {
-        BIT_SET(state_a[INDEX_P1], STAT_LOCK);
-      }
-    }
-  }
-  if (!(dirs & IN_STICK_RIGHT) && !(dirs & IN_STICK_LEFT)) {
+  // Simplified
+  if (dirs == 0 || BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
     BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+  } else {
+
+    if (dirs & IN_STICK_FIRE) {
+      // Set the fire bit
+      dirs_last = dirs_last | IN_STICK_FIRE;
+    } else {
+      dirs_last = dirs_last & 0x7F;
+    }
+
+    if (dirs == dirs_last) {
+      BIT_SET(state_a[INDEX_P1], STAT_LOCK);
+    } else {
+      BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    }
   }
 }
 
 void player_handle_walk() {
-  // if (BIT_CHK(state_a[INDEX_P1], STAT_LOCK) && !BIT_CHK(state_a[INDEX_P1],
-  // STAT_CONVJMP)) {
 
   if (dirs & IN_STICK_RIGHT) {
     if (BIT_CHK(state_a[INDEX_P1], STAT_LDIRL)) {
@@ -407,6 +413,19 @@ void player_handle_fall() {
   }
 }
 
+void player_check_conveyor() {
+  if (!BIT_CHK(state_a[INDEX_P1], STAT_LOCK)) {
+    index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1]);
+    v0 = tile_class[scr_map[index1]];
+    v1 = tile_class[scr_map[index1 + 1]];
+    if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+      BIT_SET(state[INDEX_P1], STAT_CONVEYOR);
+    } else {
+      BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
+    }
+  }
+}
+
 unsigned char player_handle_conveyor() {
 
   player_check_conveyor();
@@ -428,7 +447,8 @@ unsigned char player_handle_conveyor() {
   }
   return 0;
 }
-void player_new_jump() {
+
+unsigned char player_new_jump() {
 
   // Pre CHECK
   if (player_check_ceil(lin[INDEX_P1] - 2, col[INDEX_P1])) {
@@ -451,28 +471,44 @@ void player_new_jump() {
     audio_jump();
     spr_set_up();
     player_vel_y = player_vel_y0;
+    BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
 
     // Set the Lock
+    player_check_conveyor();
+    if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
+      // Jump on Conveyor
 
-    if (player_handle_conveyor()) {
-
-      if (BIT_CHK(state_a[INDEX_P1], STAT_LOCK) &&
-          !BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP)) {
+      if (BIT_CHK(state_a[INDEX_P1], STAT_LOCK)) {
+        // Locked Jump
+        if (!(dirs & IN_STICK_LEFT) && !(dirs & IN_STICK_RIGHT)) {
+          // Vertical Jump
+          if (!BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP)) {
+            BIT_CLR(state[INDEX_P1], STAT_DIRL);
+            BIT_CLR(state[INDEX_P1], STAT_DIRR);
+          } else {
+            // TODO PERF IS CHECKING AGAIN INSIDE...
+            player_handle_conveyor();
+          }
+        }
+        // Left Jump
         if (dirs & IN_STICK_LEFT) {
           spr_set_left();
         }
+        // Right Jump
         if (dirs & IN_STICK_RIGHT) {
           spr_set_right();
         }
-        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+      } else {
+        // TODO PERF IS CHECKING AGAIN INSIDE...
+        player_handle_conveyor();
       }
-
       BIT_SET(state_a[INDEX_P1], STAT_CONVJMP);
-    } else {
 
+    } else {
+      // Normal Jump
       BIT_CLR(state[INDEX_P1], STAT_DIRL);
       BIT_CLR(state[INDEX_P1], STAT_DIRR);
-
+      BIT_CLR(state_a[INDEX_P1], STAT_CONVJMP);
       // Normal JUMP
       if (dirs & IN_STICK_LEFT) {
         spr_set_left();
@@ -480,19 +516,17 @@ void player_new_jump() {
       if (dirs & IN_STICK_RIGHT) {
         spr_set_right();
       }
-      if (!BIT_CHK(state[INDEX_P1], STAT_DIRL) &&
-          !BIT_CHK(state[INDEX_P1], STAT_DIRR)) {
-        BIT_SET(state_a[INDEX_P1], STAT_VJUMP);
-      }
-
-      // Not facing jump if disabled
-      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
     }
 
-    BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
-    BIT_CLR(state_a[INDEX_P1], STAT_CONVJMP);
-    // BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    if (!BIT_CHK(state[INDEX_P1], STAT_DIRL) &&
+        !BIT_CHK(state[INDEX_P1], STAT_DIRR)) {
+      BIT_SET(state_a[INDEX_P1], STAT_VJUMP);
+    }
+    player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+
+    return 1;
   }
+  return 0;
 }
 
 void player_collision() {
@@ -577,12 +611,12 @@ void player_score_add(unsigned int f_score) __z88dk_fastcall {
     game_score_top = player_score;
   }
 
-  //CHECK FOR EXTRA life
+  // CHECK FOR EXTRA life
   if (player_score > player_next_extra) {
     player_lives = player_lives + 1;
     player_next_extra = player_next_extra + 10000;
   }
-  //ROTATE HIGH SCORE
+  // ROTATE HIGH SCORE
   if (player_score > 1000000) {
     player_score = 0;
     player_next_extra = 10000;
@@ -690,23 +724,6 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
   }
 
   return 0;
-}
-
-void player_check_conveyor() {
-
-  // if (!BIT_CHK(state_a[INDEX_P1], STAT_LOCK) || BIT_SET(state_a[INDEX_P1],
-  // STAT_CONVJMP)) {
-
-  index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1]);
-
-  v0 = tile_class[scr_map[index1]];
-  v1 = tile_class[scr_map[index1 + 1]];
-  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
-    BIT_SET(state[INDEX_P1], STAT_CONVEYOR);
-  } else {
-    BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
-  }
-  //}
 }
 
 void player_crumble() {

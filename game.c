@@ -40,13 +40,13 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
-  game_debug = 0;
+  game_debug = 1;
 
   game_gravity = 100; // GAME_GRAVITY;
-  game_inmune = 0;    // GAME_INMUNE;
+  game_inmune = 1;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   game_fps_show = 1;
-  scr_curr = 0;
+  scr_curr = 11;
   nirv_sprite_index = 0;
   game_song_play = 1;
 
