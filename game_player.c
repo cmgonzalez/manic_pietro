@@ -91,11 +91,13 @@ void player_turn(void) {
     game_crumble();
     // Magic Keys
     player_debug_keys();
-
+/*
     zx_print_chr(21, 0, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
     zx_print_chr(21, 4, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
+    zx_print_chr(21, 8, BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP));
     zx_print_chr(22, 8, dirs);
     zx_print_chr(22, 16, dirs_last);
+*/
   }
 }
 
@@ -242,13 +244,16 @@ unsigned char player_move_jump(void) {
     if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
       player_vel_y = 0;
 
+      BIT_CLR(state[INDEX_P1], STAT_DIRR);
+      BIT_CLR(state[INDEX_P1], STAT_DIRL);
+      /*
       if (!(dirs & IN_STICK_RIGHT)) {
         BIT_CLR(state[INDEX_P1], STAT_DIRR);
       }
       if (!(dirs & IN_STICK_LEFT)) {
         BIT_CLR(state[INDEX_P1], STAT_DIRL);
       }
-
+      */
     } else {
       lin[INDEX_P1] = s_lin1;
     }
@@ -290,7 +295,19 @@ unsigned char player_move_jump(void) {
       // Recover speed if the jump 100% vertical
       spr_speed[INDEX_P1] = PLAYER_SPEED;
       BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
-      // player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+
+      player_check_conveyor_int();
+
+      if (!BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP)) {
+        player_check_conveyor_int();
+        if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
+          // caida sobre cinta, si va en direccion contraria se bloquea
+          BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+          BIT_SET(state_a[INDEX_P1], STAT_CONVLOCK);
+          BIT_CLR(state_a[INDEX_P1], STAT_CONVJMP);
+          key_last = 0;
+        }
+      }
 
       return 0;
     }
@@ -360,8 +377,15 @@ unsigned char player_move_walk(void) {
 
 void player_handle_lock() {
   // Simplified
-  if (dirs == 0 || BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
+
+  if (dirs == 0 || BIT_CHK(state[INDEX_P1], STAT_CONVEYOR) ||
+      ((dirs & IN_STICK_RIGHT) && (dirs & IN_STICK_LEFT))) {
     BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    if (dirs == 0) {
+      BIT_CLR(state_a[INDEX_P1], STAT_CONVLOCK);
+    }
+
+    player_check_conveyor();
   } else {
 
     if (dirs & IN_STICK_FIRE) {
@@ -407,22 +431,26 @@ void player_handle_fall() {
     BIT_CLR(state[INDEX_P1], STAT_DIRL);
     BIT_CLR(state[INDEX_P1], STAT_DIRR);
     BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    BIT_CLR(state_a[INDEX_P1], STAT_CONVJMP);
     player_jump_count = 0xFF;
     player_fall_start = 1;
     audio_fall();
   }
 }
-
 void player_check_conveyor() {
   if (!BIT_CHK(state_a[INDEX_P1], STAT_LOCK)) {
-    index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1]);
-    v0 = tile_class[scr_map[index1]];
-    v1 = tile_class[scr_map[index1 + 1]];
-    if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
-      BIT_SET(state[INDEX_P1], STAT_CONVEYOR);
-    } else {
-      BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
-    }
+    player_check_conveyor_int();
+  }
+}
+
+void player_check_conveyor_int() {
+  index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1]);
+  v0 = tile_class[scr_map[index1]];
+  v1 = tile_class[scr_map[index1 + 1]];
+  if (v0 == TILE_CONVEYOR || v1 == TILE_CONVEYOR) {
+    BIT_SET(state[INDEX_P1], STAT_CONVEYOR);
+  } else {
+    BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
   }
 }
 
@@ -431,18 +459,27 @@ unsigned char player_handle_conveyor() {
   player_check_conveyor();
   if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
 
-    /* Move Right */
-    if (game_conveyor_dir == DIR_RIGHT) {
-      spr_set_right();
-      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
-      return 1;
+    if (BIT_CHK(state_a[INDEX_P1], STAT_CONVLOCK)) {
+      if ((game_conveyor_dir == DIR_RIGHT && (dirs & IN_STICK_RIGHT)) ||
+          (game_conveyor_dir == DIR_LEFT && (dirs & IN_STICK_LEFT))) {
+        BIT_CLR(state_a[INDEX_P1], STAT_CONVLOCK);
+      }
     }
 
-    /* Move Left */
-    if (game_conveyor_dir == DIR_LEFT) {
-      spr_set_left();
-      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
-      return 1;
+    if (!BIT_CHK(state_a[INDEX_P1], STAT_CONVLOCK)) {
+      /* Move Right */
+      if (game_conveyor_dir == DIR_RIGHT) {
+        spr_set_right();
+        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+        return 1;
+      }
+
+      /* Move Left */
+      if (game_conveyor_dir == DIR_LEFT) {
+        spr_set_left();
+        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+        return 1;
+      }
     }
   }
   return 0;

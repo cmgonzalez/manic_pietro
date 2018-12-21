@@ -97,7 +97,6 @@ void game_loop(void) {
 
     if (game_round_up) {
       zx_print_ink(INK_BLACK | PAPER_YELLOW);
-      game_fill_row(17, 32);
 
       game_round_init();
       NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
@@ -523,7 +522,7 @@ void game_round_init(void) {
   game_fill_row(18, 32);
   game_fill_row(20, 32);
   game_fill_row(22, 32);
-  game_fill_row(10, 32);
+  //game_fill_row(10, 32);
   spr_clear_scr();
 
 
@@ -619,10 +618,8 @@ void game_round_init(void) {
   NIRVANAP_halt();
   // Round presentation
   if (!game_debug) {
+    game_fill_row(10, 32);
     game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
-
-
-
     zx_print_str(10, 10, "ROUND");
     zx_print_chr(10, 16, scr_curr + 1);
 
@@ -652,7 +649,6 @@ void game_round_init(void) {
 
   zx_print_ink(INK_BLACK | PAPER_YELLOW);
   game_fill_row(17, 32);
-
   zx_print_str(17, 0, &map_names[0]);
 
   zx_print_ink(INK_WHITE | PAPER_RED | BRIGHT);

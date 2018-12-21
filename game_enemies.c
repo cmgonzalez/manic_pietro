@@ -51,7 +51,7 @@ void enemy_turn(void) {
 
     ++sprite;
   }
-  if (nirv_sprite_index && spr_count >= NIRV_SPRITE_P1) {
+  if (nirv_sprite_index != 0xFF && spr_count >= NIRV_SPRITE_P1) {
     NIRVANAP_halt();
   }
 }
@@ -164,9 +164,10 @@ void enemy_gota() {
         lin[sprite] = value_a[sprite];
         if (scr_curr == 13) {
           // Skylab Respawn Hack!
+          lin[sprite] = 0;
           col[sprite] = col[sprite] + 8;
           if (col[sprite] > 31) {
-            col[sprite] = value_b[sprite]; // Initial Value
+            col[sprite] = value_a[sprite]; // Initial Value
           }
         }
 
@@ -359,7 +360,7 @@ void enemy_init() {
       }
       switch (spr_kind[sprite]) {
       case E_SKYLAB:
-        value_b[sprite] = col[sprite];
+        //value_b[sprite] = col[sprite];
         spr_speed_a[sprite] = spr_altset[sprite];
         break;
       case E_HORIZONTAL:

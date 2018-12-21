@@ -168,7 +168,7 @@
 #define STAT_VJUMP                    2
 #define STAT_LDIRL                    3
 #define STAT_LDIRR                    4
-#define STAT_RESTART                  6
+#define STAT_CONVLOCK                 6
 #define STAT_HITBRICK                 7
 /* General */
 #define SPRITE_LIN_INC                2 //USED ONLY ONCE CHECK
