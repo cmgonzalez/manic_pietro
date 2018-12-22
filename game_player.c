@@ -59,10 +59,6 @@ void player_init(unsigned char f_lin, unsigned char f_col,
     tile[INDEX_P1] = f_tile;
     colint[INDEX_P1] = value_b[INDEX_P1];
   }
-  // TODO PERF remove +16 and ajust all game
-  // NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1], lin[INDEX_P1] +
-  // 16,
-  //                 col[INDEX_P1]);
 }
 
 void player_turn(void) {
@@ -80,7 +76,6 @@ void player_turn(void) {
     dirs = (joyfunc1)(&k1);
     player_move();
     player_handle_lock();
-
     player_collision();
 
     player_check_exit();
@@ -95,6 +90,8 @@ void player_turn(void) {
     zx_print_chr(21, 0, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
     zx_print_chr(21, 4, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
     zx_print_chr(21, 8, BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP));
+    zx_print_chr(21, 12, BIT_CHK(state[INDEX_P1], STAT_JUMP));
+    zx_print_chr(21, 16, BIT_CHK(state[INDEX_P1], STAT_FALL));
     zx_print_chr(22, 8, dirs);
     zx_print_chr(22, 16, dirs_last);
 */
@@ -187,10 +184,10 @@ void player_check_exit() {
 unsigned char player_move(void) {
   if (BIT_CHK(state[INDEX_P1], STAT_JUMP) ||
       BIT_CHK(state[INDEX_P1], STAT_FALL)) {
-    // Jump Handling
+    // Jump Handling */
     player_move_jump();
   } else {
-    // Walk Handling
+    /* Walk Handling */
     player_move_walk();
   }
   /* Paint Player Sprite */
@@ -261,32 +258,29 @@ unsigned char player_move_jump(void) {
     player_jump_top = s_lin1;
   } else {
     // Falling
-
-    // audio_fall();
-
     v0 = player_get_floor();
-
     if ((s_lin1 >= 120) || // Out of screen
         s_lin1 >= v0 &&    // Curr floor
             v0 >= s_lin0   // Is below
     ) {
 
       if ((s_lin1 - player_jump_top) >= 40) {
-        // JUMP DEAD
+        /* JUMP DEAD BY HIGH ALTITUDE*/
         BIT_SET(state[INDEX_P1], STAT_KILLED);
       }
-      // Jump end
+      /* JUMPS ENDS */
       lin[INDEX_P1] = v0;
       player_vel_y = 0;
-      // if (!player_check_floor(0) || !player_check_floor(1)) {
       BIT_CLR(state[INDEX_P1], STAT_FALL);
       BIT_CLR(state[INDEX_P1], STAT_JUMP);
-      // player_check_conveyor();
+      if (BIT_CHK(state_a[INDEX_P1], STAT_VJUMP)) {
+        BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+      }
+      BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
 
       player_handle_conveyor();
-      // BIT_CLR(state[INDEX_P1], STAT_CONVEYOR);
       ay_fx_stop();
-      //}
+
       // FOR CRUMBLE FLOOR
       if ((dirs & IN_STICK_FIRE)) {
         player_check_floor(0);
@@ -294,21 +288,8 @@ unsigned char player_move_jump(void) {
       }
       // Recover speed if the jump 100% vertical
       spr_speed[INDEX_P1] = PLAYER_SPEED;
-      BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
 
-      player_check_conveyor_int();
-
-      if (!BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP)) {
-        player_check_conveyor_int();
-        if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
-          // caida sobre cinta, si va en direccion contraria se bloquea
-          BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
-          BIT_SET(state_a[INDEX_P1], STAT_CONVLOCK);
-          BIT_CLR(state_a[INDEX_P1], STAT_CONVJMP);
-          key_last = 0;
-        }
-      }
-
+      player_check_conveyor();
       return 0;
     }
 
@@ -345,6 +326,7 @@ unsigned char player_move_walk(void) {
       }
       return 1;
     }
+    BIT_CLR(state_a[INDEX_P1], STAT_CONVJMP);
 
     if (!BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
       player_handle_walk();
@@ -365,6 +347,7 @@ unsigned char player_move_walk(void) {
     spr_move_horizontal();
     return 1;
   } else {
+    BIT_CLR(state_a[INDEX_P1], STAT_CONVJMP);
 
     // NO INPUT FROM Player
     if (player_handle_conveyor()) {
@@ -376,30 +359,33 @@ unsigned char player_move_walk(void) {
 }
 
 void player_handle_lock() {
-  // Simplified
 
-  if (dirs == 0 || BIT_CHK(state[INDEX_P1], STAT_CONVEYOR) ||
-      ((dirs & IN_STICK_RIGHT) && (dirs & IN_STICK_LEFT))) {
-    BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+  if (!BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
+    // Simplified
     if (dirs == 0) {
-      BIT_CLR(state_a[INDEX_P1], STAT_CONVLOCK);
-    }
-
-    player_check_conveyor();
-  } else {
-
-    if (dirs & IN_STICK_FIRE) {
-      // Set the fire bit
-      dirs_last = dirs_last | IN_STICK_FIRE;
-    } else {
-      dirs_last = dirs_last & 0x7F;
-    }
-
-    if (dirs == dirs_last) {
-      BIT_SET(state_a[INDEX_P1], STAT_LOCK);
-    } else {
       BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    } else {
+      if ((dirs & IN_STICK_LEFT) || (dirs & IN_STICK_RIGHT)) {
+        if (dirs & IN_STICK_FIRE) {
+          dirs_last = dirs_last | IN_STICK_FIRE;
+        } else {
+          dirs_last = dirs_last & 0x7F;
+        }
+        if (dirs == dirs_last) {
+          BIT_SET(state_a[INDEX_P1], STAT_LOCK);
+        } else {
+          BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+        }
+      } else {
+        if ((dirs & IN_STICK_FIRE) && (dirs_last & IN_STICK_FIRE)) {
+          BIT_SET(state_a[INDEX_P1], STAT_LOCK);
+        } else {
+          BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+        }
+      }
     }
+  } else {
+    BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
   }
 }
 
@@ -458,28 +444,17 @@ unsigned char player_handle_conveyor() {
 
   player_check_conveyor();
   if (BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
-
-    if (BIT_CHK(state_a[INDEX_P1], STAT_CONVLOCK)) {
-      if ((game_conveyor_dir == DIR_RIGHT && (dirs & IN_STICK_RIGHT)) ||
-          (game_conveyor_dir == DIR_LEFT && (dirs & IN_STICK_LEFT))) {
-        BIT_CLR(state_a[INDEX_P1], STAT_CONVLOCK);
-      }
+    /* Move Right */
+    if (game_conveyor_dir == DIR_RIGHT) {
+      spr_set_right();
+      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+      return 1;
     }
-
-    if (!BIT_CHK(state_a[INDEX_P1], STAT_CONVLOCK)) {
-      /* Move Right */
-      if (game_conveyor_dir == DIR_RIGHT) {
-        spr_set_right();
-        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
-        return 1;
-      }
-
-      /* Move Left */
-      if (game_conveyor_dir == DIR_LEFT) {
-        spr_set_left();
-        player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
-        return 1;
-      }
+    /* Move Left */
+    if (game_conveyor_dir == DIR_LEFT) {
+      spr_set_left();
+      player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
+      return 1;
     }
   }
   return 0;
@@ -487,20 +462,21 @@ unsigned char player_handle_conveyor() {
 
 unsigned char player_new_jump() {
 
-  // Pre CHECK
+  // Can jump?
   if (player_check_ceil(lin[INDEX_P1] - 2, col[INDEX_P1])) {
+    if (!BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP)) {
+      dirs_last = dirs;
+    } else {
+      dirs_last = 0;
+      BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    }
+
     BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
     // NEW JUMP
-    if (game_mode == 0) {
-      // Willy
-      game_gravity = 100;                  // GAME_GRAVITY;
-      player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
-    } else {
-      // Pietro
-      game_gravity = 100; // GAME_GRAVITY;
-      // player_vel_y0 = -(game_gravity * 7); // GAME_VELOCITY;
-      player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
-    }
+    // Pietro
+    game_gravity = 100; // GAME_GRAVITY;
+    // player_vel_y0 = -(game_gravity * 7); // GAME_VELOCITY;
+    player_vel_y0 = -(game_gravity * 6); // GAME_VELOCITY;
 
     player_vel_inc = 1;
     player_jump_count = 0xFF;
@@ -562,6 +538,10 @@ unsigned char player_new_jump() {
     player_tile(TILE_P1_RIGHT, TILE_P1_LEN);
 
     return 1;
+  } else {
+    /* Da pasitos si se pega en el techo */
+    spr_move_horizontal();
+    player_handle_fall();
   }
   return 0;
 }
