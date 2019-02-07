@@ -62,7 +62,7 @@ void game_loop(void) {
       player_turn();
 
       // Cicling events
-      //if (game_check_time(&time_crumb, lapse_crumb)) {
+      // if (game_check_time(&time_crumb, lapse_crumb)) {
       //  time_crumb = zx_clock();
       //  game_crumble();
       //}
@@ -522,15 +522,12 @@ void game_round_init(void) {
   game_fill_row(18, 32);
   game_fill_row(20, 32);
   game_fill_row(22, 32);
-  //game_fill_row(10, 32);
+  // game_fill_row(10, 32);
   spr_clear_scr();
-
-
 
   NIRVANAP_halt();
   NIRVANAP_stop();
   intrinsic_di();
-
 
   i = scr_curr; // local variable to be used during paging
   page(6);
@@ -559,7 +556,7 @@ void game_round_init(void) {
   }
   dest = &spr_init[0];
 
-  memcpy(dest, src, GAME_ENEMY_MAX_CLASSES*GAME_ENEMY_CLASS_LEN);
+  memcpy(dest, src, GAME_ENEMY_MAX_CLASSES * GAME_ENEMY_CLASS_LEN);
 
   page(0);
 
@@ -662,7 +659,7 @@ void game_round_init(void) {
 
   zx_print_ink(INK_WHITE | PAPER_BLACK);
   fps = 0;
-  //Hack
+  // Hack
   if (scr_curr == 18) {
     v0 = 16;
     while (v0 < 128) {
@@ -670,6 +667,11 @@ void game_round_init(void) {
       v0 = v0 + 8;
     }
   }
+
+  if (game_debug) {
+    zx_print_chr(23, 20, scr_curr);
+  }
+
   NIRVANAP_halt();
 }
 

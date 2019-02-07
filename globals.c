@@ -261,6 +261,7 @@ const unsigned char tile_class[32];
 //Hack for horizontal jump increment
 
 unsigned char player_jump_count;
+unsigned char player_jump_lin;
 unsigned char player_jump_top;
 unsigned char player_fall_start;
 

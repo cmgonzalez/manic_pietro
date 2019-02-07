@@ -154,8 +154,8 @@ unsigned char spr_move_right(void) {
   if (!spr_horizontal_check(*f_col + 1)) {
     ++*f_colint;
     if (*f_colint >= spr_frames[sprite]) {
-
-      if (*f_col < 31) {
+//zx_print_chr(23,8,*f_col);
+      if (*f_col < 30) {
         if (spr_horizontal_check(*f_col + 2)) {
           --*f_colint;
           return 1;
@@ -167,6 +167,9 @@ unsigned char spr_move_right(void) {
             return 1;
           }
         }
+      } else {
+        *f_colint = 3;
+        //TODO SCREEN ROTATE HORIZONTAL
       }
     }
   }
@@ -195,7 +198,10 @@ unsigned char spr_move_left(void) {
             return 1;
           }
         }
+      } else {
+        //TODO SCREEN ROTATE HORIZONTAL
       }
+
     }
   }
 
@@ -517,7 +523,7 @@ void spr_clear_fast_vert(void) {
     ++f_byte;
     *f_byte = 0;
   }
-  
+
 }
 
 void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {

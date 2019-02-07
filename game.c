@@ -40,23 +40,72 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
+
+  /*
+  00"         Central Cavern         "
+  01"          The Cold Room         "
+  02"          The Menagerie         "
+  03"   Abandoned Uranium Workings   "
+  04"         Eugene's Lair          "
+  05"       Processing Plant         "
+  06"            The Vat             "
+  07"Miner Willy meets the Kong Beast"
+  08"        Wacky Amoebatrons       "
+  09"       The Endorian Forest      "
+  10"Attack of the Mutant Telephones "
+  11" Return of the Alien Kong Beast "
+  12"          Ore Refinery          "
+  13"       Skylab Landing Bay       "
+  14"             The Bank           "
+  15"      The Sixteenth Cavern      "
+  16"         The Warehouse          "
+  17"      Amoebatrons Revenge       "
+  18"     Solar Power Generator      "
+  19"        The Final Barrier       "
+  20"       Frozen Central Pipe      "
+  21"        Super Luizo Bro         "
+  22"    Pietro meets Monkey Kong    "
+  23"         Chuntey Crew           "
+  24"     Kong Jr Watch the Game     "
+  25"          Dr. Errazking         "
+  26"         Super Doki Doki        "
+  27"         Darius the Kid         "
+  28"Senior Mutant Unemployed Turtles"
+  29"            Puke Men            "
+  30"        Beyker The Sonico       "
+  31"           Fede Simbel          "
+  32"            Work Over           "
+  33"          Juanjo's Lair         "
+  34"    Chuck Norris Karate Champ   "
+  35"            Yet Pack            "
+  36"            Stage 36            "
+  37"            Stage 37            "
+  38"            Stage 38            "
+  29"           Noentiendo           "
+  */
+
   game_debug = 1;
 
-  game_gravity = 100; // GAME_GRAVITY;
-  game_inmune = 1;    // GAME_INMUNE;
-  game_inf_lives = 0; // GAME_INF_LIVES;
-  game_fps_show = 1;
-  scr_curr = 12;
+  game_fps_show = 0;
+  scr_curr = 00;
   nirv_sprite_index = 0;
   game_song_play = 1;
 
+
+  game_gravity = 100; // GAME_GRAVITY;
+  game_inmune = 0;    // GAME_INMUNE;
+  game_inf_lives = 0; // GAME_INF_LIVES;
   // Nirvana Attributes lookup tables
   attribs = (unsigned char * ) 0xFCC8;
   deltas = (unsigned char *) 0xFF01;
 
-  if (!game_debug) {
-    scr_curr = 0;
-    game_fps_show = 0;
+  if (game_debug) {
+    scr_curr = 34;
+    game_fps_show = 1;
+    game_inmune = 1;    // GAME_INMUNE;
+    game_inf_lives = 1; // GAME_INF_LIVES;
+    scr_curr = 25;
+  } else {
     z80_delay_ms(666); // SATANIC DELAY
   }
   // INTERRUPTS ARE DISABLED
@@ -71,7 +120,7 @@ void main(void) {
                        : (GAME_SOUND_48_FX_ON | GAME_SOUND_48_MUS_ON);
 
   // Keyboard Handling
-  k1.fire = IN_KEY_SCANCODE_m;
+  k1.fire = IN_KEY_SCANCODE_z;
   // TODO k1.fire1 = IN_KEY_SCANCODE_SPACE;
   k1.left = IN_KEY_SCANCODE_o;
   k1.right = IN_KEY_SCANCODE_p;

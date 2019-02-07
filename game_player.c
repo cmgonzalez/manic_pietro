@@ -83,18 +83,26 @@ void player_turn(void) {
       player_lost_life();
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
     }
-    game_crumble();
+    if (scr_curr < 20) {
+      game_crumble();
+    } else {
+      if ((loop_count & 1) == 0) {
+        game_crumble();
+      }
+    }
+
     // Magic Keys
     player_debug_keys();
-/*
-    zx_print_chr(21, 0, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
-    zx_print_chr(21, 4, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
-    zx_print_chr(21, 8, BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP));
-    zx_print_chr(21, 12, BIT_CHK(state[INDEX_P1], STAT_JUMP));
-    zx_print_chr(21, 16, BIT_CHK(state[INDEX_P1], STAT_FALL));
-    zx_print_chr(22, 8, dirs);
-    zx_print_chr(22, 16, dirs_last);
-*/
+
+    // zx_print_chr(21, 0, colint[INDEX_P1]);
+     zx_print_chr(21, 0, lin[INDEX_P1]);
+    // zx_print_chr(21, 0, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
+    // zx_print_chr(21, 4, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
+    // zx_print_chr(21, 8, BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP));
+     zx_print_chr(21, 12, BIT_CHK(state[INDEX_P1], STAT_JUMP));
+     zx_print_chr(21, 16, BIT_CHK(state[INDEX_P1], STAT_FALL));
+    // zx_print_chr(22, 8, dirs);
+    // zx_print_chr(22, 16, dirs_last);
   }
 }
 
@@ -130,6 +138,7 @@ void player_debug_keys() {
 
   if (c == 51) {
     game_inmune = !game_inmune;
+    BIT_CLR(state[INDEX_P1], STAT_KILLED);
     if (game_inmune) {
       zx_print_str(21, 0, "MILLENIAL MODE");
     } else {
@@ -173,8 +182,9 @@ void player_check_exit() {
       while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
         audio_tick();
         game_anim_air();
-        // http://skoolkit.ca/disassemblies/manic_miner/asm/36904.html
-        player_score_add(1);
+        // Was 1 per loop
+        // player_score_add(1 + rand() % 3);
+        player_score_add(8); // Carlos + Fede
         z80_delay_ms(5);
       }
     }
@@ -235,9 +245,10 @@ unsigned char player_move_jump(void) {
   if (val_yc <= 0) {
     // Asending
     spr_set_up();
-    if (s_lin1 > GAME_LIN_FLOOR) {
-      s_lin1 = 0;
-    }
+    zx_print_chr(22, 0, s_lin1);
+    //if (s_lin1 > (GAME_LIN_FLOOR - 32) && (s_lin1 < 238)) {
+    //  s_lin1 = 0;
+    //}
     if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
       player_vel_y = 0;
 
@@ -258,13 +269,19 @@ unsigned char player_move_jump(void) {
     player_jump_top = s_lin1;
   } else {
     // Falling
+    if (s_lin1 > (GAME_LIN_FLOOR - 16) && (s_lin1 < 238)) {
+    //if (s_lin1 >= (GAME_LIN_FLOOR - 16)) {
+      // Out Screen bottom
+      v0 = GAME_LIN_FLOOR;
+      s_lin1 = GAME_LIN_FLOOR - 16;
+    }
+
     v0 = player_get_floor();
-    if ((s_lin1 >= 120) || // Out of screen
-        s_lin1 >= v0 &&    // Curr floor
-            v0 >= s_lin0   // Is below
+    if (s_lin1 >= v0 && // Curr floor
+        v0 >= s_lin0    // Is below
     ) {
 
-      if ((s_lin1 - player_jump_top) >= 40) {
+      if ((s_lin1 - player_jump_top) >= PLAYER_FALL_DEADLY) {
         /* JUMP DEAD BY HIGH ALTITUDE*/
         BIT_SET(state[INDEX_P1], STAT_KILLED);
       }
@@ -273,9 +290,11 @@ unsigned char player_move_jump(void) {
       player_vel_y = 0;
       BIT_CLR(state[INDEX_P1], STAT_FALL);
       BIT_CLR(state[INDEX_P1], STAT_JUMP);
-      if (BIT_CHK(state_a[INDEX_P1], STAT_VJUMP)) {
+      // Kong vertical jump to conveyour + second conv jump unlocks
+      if (player_jump_lin == v0 && BIT_CHK(state_a[INDEX_P1], STAT_VJUMP)) {
         BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
       }
+      BIT_CLR(state_a[INDEX_P1], STAT_NEWJUMP);
       BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
 
       player_handle_conveyor();
@@ -472,6 +491,7 @@ unsigned char player_new_jump() {
     }
 
     BIT_CLR(state_a[INDEX_P1], STAT_VJUMP);
+    BIT_SET(state_a[INDEX_P1], STAT_NEWJUMP);
     // NEW JUMP
     // Pietro
     game_gravity = 100; // GAME_GRAVITY;
@@ -480,7 +500,7 @@ unsigned char player_new_jump() {
 
     player_vel_inc = 1;
     player_jump_count = 0xFF;
-
+    player_jump_lin = s_lin0;
     audio_jump();
     spr_set_up();
     player_vel_y = player_vel_y0;
@@ -548,6 +568,7 @@ unsigned char player_new_jump() {
 
 void player_collision() {
   // Left
+
   index1 = spr_calc_index(lin[INDEX_P1], col[INDEX_P1]);
   player_pick();
 
@@ -565,6 +586,48 @@ void player_collision() {
   for (i = 0; i < INDEX_P1; ++i) {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[INDEX_P1]);
+
+      switch (spr_kind[i]) {
+      case E_SKYLAB:
+        v1 = 1;
+        break;
+      case E_HORIZONTAL:
+        v1 = colint[i];
+        break;
+      case E_VERTICAL:
+        v1 = 1;
+        break;
+      case E_EUGENE:
+        v1 = 1;
+        break;
+      case E_ZIGZAG:
+        v1 = colint[i];
+        break;
+      }
+
+      if (v0 == 1) {
+        // Depende del tipo de enemigo!!!!
+
+        if (colint[INDEX_P1] == 0) {
+          if (col[INDEX_P1] < col[i]) {
+            v0 = 0xFF;
+          } else {
+            if (v1 == 0) {
+              v0 = 0xFF;
+            }
+          }
+        }
+        if (colint[INDEX_P1] == 3) {
+          if (col[INDEX_P1] > col[i]) {
+            v0 = 0xFF;
+          } else {
+            if (v1 == 3) {
+              v0 = 0xFF;
+            }
+          }
+        }
+      }
+
       if (v0 < 2) {
 
         v0 = abs(lin[i] - lin[INDEX_P1]);
@@ -767,22 +830,41 @@ void player_crumble() {
 }
 
 unsigned char player_check_floor(unsigned char f_inc) {
+  /*
+    if ( lin[INDEX_P1] >= (GAME_LIN_FLOOR - 16) && ) {
 
+      return 0;
+    }
+  */
   index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1] + f_inc);
+  if (index1 <= GAME_SCR_MAX_INDEX) {
+    v0 = scr_map[index1];
+    if (v0 > 31) {
+      v0 = TILE_EMPTY;
+    }
+    v0 = tile_class[v0];
+  } else {
+    v0 = TILE_WALL;
 
-  if (v0 > 31) {
-    v0 = TILE_EMPTY;
+    //TODO SCREEN ROTATE VERTICAL
   }
-  v0 = tile_class[scr_map[index1]];
 
-  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) {
+  if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY ||
+      v0 == TILE_EXTRA) {
     return 1;
   }
   return 0;
 }
 
 unsigned char player_get_floor() {
-  index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1]);
+
+if  ( lin[INDEX_P1] + 16 > GAME_LIN_FLOOR) {
+  v0 = 0;
+} else {
+  v0 = lin[INDEX_P1] + 16;
+}
+
+  index1 = spr_calc_index( v0, col[INDEX_P1]);
 
   i = 0;
   while (i < 16) {
@@ -799,15 +881,17 @@ unsigned char player_get_floor() {
     v0 = tile_class[v0];
     v1 = tile_class[v1];
 
-    if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY) &&
-        (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY)) {
+    if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY ||
+         v0 == TILE_EXTRA) &&
+        (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY ||
+         v1 == TILE_EXTRA)) {
       index1 = index1 + 32;
       ++i;
     } else {
       return ((index1 >> 5) << 3) - 16; // /32 *8 -16 Optimizar
     }
   }
-  return GAME_LIN_FLOOR - 24;
+  return (GAME_LIN_FLOOR - 16);
 }
 
 void player_lost_life() {

@@ -38,6 +38,7 @@
 
 #define PLAYER_SPEED                 4
 #define PLAYER_SPEED_VJUMP           10
+#define PLAYER_FALL_DEADLY           40
 #define ENEMY_START_INDEX            64 //INDEX OF START OF ENEMY ON MAP ARRAY
 
 
@@ -169,7 +170,7 @@
 #define STAT_LDIRL                    3
 #define STAT_LDIRR                    4
 #define STAT_CONVLOCK                 6
-#define STAT_HITBRICK                 7
+#define STAT_NEWJUMP                  7
 /* General */
 #define SPRITE_LIN_INC                2 //USED ONLY ONCE CHECK
 
@@ -249,6 +250,7 @@ extern signed int  player_vel_y0;
 extern signed char  player_vel_inc;
 extern unsigned char player_jump_hack;
 extern unsigned char player_jump_count;
+extern unsigned char player_jump_lin;
 extern const unsigned char player_jump_hor[];
 
 extern unsigned char player_fall_start;

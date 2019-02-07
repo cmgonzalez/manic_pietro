@@ -34,7 +34,6 @@ void enemy_turn(void) {
   nirv_sprite_index = 0xFF;
   while (sprite < spr_count) {
 
-
     ++nirv_sprite_index;
     if (nirv_sprite_index == NIRV_SPRITE_P1) {
       // This Nirvana Version have only 7 sprites -1 door -1 player
@@ -47,7 +46,6 @@ void enemy_turn(void) {
       s_col0 = col[sprite];
       enemy_move();
     }
-
 
     ++sprite;
   }
@@ -69,7 +67,11 @@ void enemy_move(void) {
     enemy_horizontal();
     spr_paint();
     if (spr_clr) {
-      spr_clear_fast_hor();
+      if (scr_curr == 37 || scr_curr == 29) { // TODO MOVE TO ENEMY DEF ARRAY
+        spr_back_repaint();
+      } else {
+        spr_clear_fast_hor();
+      }
     }
     break;
   case E_WALK:
@@ -111,7 +113,8 @@ void enemy_move(void) {
   case E_ZIGZAG:
     enemy_zigzag();
     spr_paint();
-    NIRVANAP_drawT(SPRITE_EMPTY, s_lin0 + GAME_OFFSET_Y, s_col0);
+    // NIRVANAP_drawT(SPRITE_EMPTY, s_lin0 + GAME_OFFSET_Y, s_col0);
+    spr_back_repaint();
 
     break;
   }
@@ -301,7 +304,6 @@ void enemy_init() {
     ++sprite;
   }
 
-
   f_init = &spr_init[0];
 
   // Search for Sprite Attribs on spr_init
@@ -360,7 +362,7 @@ void enemy_init() {
       }
       switch (spr_kind[sprite]) {
       case E_SKYLAB:
-        //value_b[sprite] = col[sprite];
+        // value_b[sprite] = col[sprite];
         spr_speed_a[sprite] = spr_altset[sprite];
         break;
       case E_HORIZONTAL:
