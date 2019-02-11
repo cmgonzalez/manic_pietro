@@ -84,10 +84,13 @@ void player_turn(void) {
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
     }
     if (scr_curr < 20) {
+      //Normal Crumble
       game_crumble();
     } else {
-      if ((loop_count & 1) == 0) {
+      //Timed Crumble
+      if (game_check_time(&last_time_b[INDEX_P1], 4)) {
         game_crumble();
+        last_time_b[INDEX_P1] = zx_clock();
       }
     }
 
@@ -95,12 +98,12 @@ void player_turn(void) {
     player_debug_keys();
 
     // zx_print_chr(21, 0, colint[INDEX_P1]);
-     zx_print_chr(21, 0, lin[INDEX_P1]);
+    // zx_print_chr(21, 0, lin[INDEX_P1]);
     // zx_print_chr(21, 0, BIT_CHK(state_a[INDEX_P1], STAT_LOCK));
     // zx_print_chr(21, 4, BIT_CHK(state[INDEX_P1], STAT_CONVEYOR));
     // zx_print_chr(21, 8, BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP));
-     zx_print_chr(21, 12, BIT_CHK(state[INDEX_P1], STAT_JUMP));
-     zx_print_chr(21, 16, BIT_CHK(state[INDEX_P1], STAT_FALL));
+    // zx_print_chr(21, 12, BIT_CHK(state[INDEX_P1], STAT_JUMP));
+    // zx_print_chr(21, 16, BIT_CHK(state[INDEX_P1], STAT_FALL));
     // zx_print_chr(22, 8, dirs);
     // zx_print_chr(22, 16, dirs_last);
   }
@@ -170,7 +173,8 @@ void player_debug_keys() {
 
 void player_check_exit() {
   // Level UP
-  if (obj_count == 0xFF && (col[INDEX_P1] == game_exit_col)) {
+  if (obj_count == 0xFF && ((col[INDEX_P1] == game_exit_col) ||
+                            col[INDEX_P1] == (game_exit_col + 1))) {
     v0 = abs((lin[INDEX_P1] + 16) - game_exit_lin);
 
     if (v0 < 8) {
@@ -245,8 +249,8 @@ unsigned char player_move_jump(void) {
   if (val_yc <= 0) {
     // Asending
     spr_set_up();
-    zx_print_chr(22, 0, s_lin1);
-    //if (s_lin1 > (GAME_LIN_FLOOR - 32) && (s_lin1 < 238)) {
+
+    // if (s_lin1 > (GAME_LIN_FLOOR - 32) && (s_lin1 < 238)) {
     //  s_lin1 = 0;
     //}
     if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
@@ -269,19 +273,27 @@ unsigned char player_move_jump(void) {
     player_jump_top = s_lin1;
   } else {
     // Falling
-    if (s_lin1 > (GAME_LIN_FLOOR - 16) && (s_lin1 < 238)) {
-    //if (s_lin1 >= (GAME_LIN_FLOOR - 16)) {
+    if (s_lin1 > (GAME_LIN_FLOOR - 16)) {
+      // if (s_lin1 >= (GAME_LIN_FLOOR - 16)) {
       // Out Screen bottom
-      v0 = GAME_LIN_FLOOR;
-      s_lin1 = GAME_LIN_FLOOR - 16;
+      if (s_lin1 > 200) {
+        v0 = 0;
+        // s_lin1 = 0;
+      } else {
+        v0 = GAME_LIN_FLOOR - 16;
+        s_lin1 = GAME_LIN_FLOOR - 16;
+      }
+
+    } else {
+      v0 = player_get_floor();
     }
 
-    v0 = player_get_floor();
     if (s_lin1 >= v0 && // Curr floor
-        v0 >= s_lin0    // Is below
+
+        v0 >= s_lin0 // Is below
     ) {
 
-      if ((s_lin1 - player_jump_top) >= PLAYER_FALL_DEADLY) {
+      if ((v0 - player_jump_top) >= PLAYER_FALL_DEADLY) {
         /* JUMP DEAD BY HIGH ALTITUDE*/
         BIT_SET(state[INDEX_P1], STAT_KILLED);
       }
@@ -809,6 +821,7 @@ unsigned char player_check_ceil(unsigned char f_lin, unsigned char f_col) {
 void player_crumble() {
 
   v0 = tile_class[scr_map[index1]];
+
   if (v0 == TILE_CRUMB) { // TODO CAUTION!
 
     if (scr_map[index1] == TILE_CRUMB_INIT) {
@@ -826,6 +839,8 @@ void player_crumble() {
     // GASTA BRICK TODO OPTIMIZE CALC
     s_row1 = (((lin[INDEX_P1] + 16) >> 3) + 1) << 3;
     spr_draw8(scr_map[index1], s_row1, s_col1);
+  } else {
+    last_time_b[INDEX_P1] = 0;
   }
 }
 
@@ -837,16 +852,20 @@ unsigned char player_check_floor(unsigned char f_inc) {
     }
   */
   index1 = spr_calc_index(lin[INDEX_P1] + 16, col[INDEX_P1] + f_inc);
-  if (index1 <= GAME_SCR_MAX_INDEX) {
+  if (index1 < GAME_SCR_MAX_INDEX) {
     v0 = scr_map[index1];
     if (v0 > 31) {
       v0 = TILE_EMPTY;
     }
     v0 = tile_class[v0];
   } else {
-    v0 = TILE_WALL;
+    if (lin[INDEX_P1] > 200) {
+      v0 = TILE_EMPTY;
+    } else {
+      v0 = TILE_WALL;
+    }
 
-    //TODO SCREEN ROTATE VERTICAL
+    // TODO SCREEN ROTATE VERTICAL
   }
 
   if (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY ||
@@ -858,13 +877,13 @@ unsigned char player_check_floor(unsigned char f_inc) {
 
 unsigned char player_get_floor() {
 
-if  ( lin[INDEX_P1] + 16 > GAME_LIN_FLOOR) {
-  v0 = 0;
-} else {
-  v0 = lin[INDEX_P1] + 16;
-}
+  if (lin[INDEX_P1] + 16 > GAME_LIN_FLOOR) {
+    v0 = GAME_LIN_FLOOR;
+  } else {
+    v0 = lin[INDEX_P1] + 16 + 8;
+  }
 
-  index1 = spr_calc_index( v0, col[INDEX_P1]);
+  index1 = spr_calc_index(v0, col[INDEX_P1]);
 
   i = 0;
   while (i < 16) {
@@ -881,14 +900,18 @@ if  ( lin[INDEX_P1] + 16 > GAME_LIN_FLOOR) {
     v0 = tile_class[v0];
     v1 = tile_class[v1];
 
-    if ((v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY ||
-         v0 == TILE_EXTRA) &&
-        (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY ||
-         v1 == TILE_EXTRA)) {
+    v0 = (v0 == TILE_EMPTY || v0 == TILE_OBJECT || v0 == TILE_DEADLY ||
+          v0 == TILE_EXTRA);
+    v1 = (v1 == TILE_EMPTY || v1 == TILE_OBJECT || v1 == TILE_DEADLY ||
+          v1 == TILE_EXTRA);
+
+    if (v0 && v1) {
       index1 = index1 + 32;
       ++i;
     } else {
+
       return ((index1 >> 5) << 3) - 16; // /32 *8 -16 Optimizar
+      // return ((index1 / 32) * 8) -16;
     }
   }
   return (GAME_LIN_FLOOR - 16);

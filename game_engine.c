@@ -1135,7 +1135,12 @@ void game_shoe() {
 
   game_cls();
   audio_game_over();
-  NIRVANAP_drawT(91, 96, 15);  // Willy
+  if (scr_curr > 19) {
+    NIRVANAP_drawT(90, 96, 15);  // Pietro
+  } else {
+    NIRVANAP_drawT(91, 96, 15);  // Willy
+  }
+
   NIRVANAP_drawT(92, 112, 15); // Shoe
   v0 = 16;
   while (v0 <= 94) {

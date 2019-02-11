@@ -136,14 +136,19 @@ unsigned char spr_horizontal_check(unsigned char f_col) __z88dk_fastcall {
   // TODO ESTO FALLA CUANDO EL COLINT ES 0 Y ESTA JUSTO AL LADO UN
   s_lin1 = lin[sprite];
 
+  if ( s_lin1 < (GAME_LIN_FLOOR - 16)) {
+    if (( BIT_CHK(state[sprite], STAT_JUMP) || BIT_CHK(state[sprite], STAT_FALL ) ) && ((s_lin1 % 8) != 0))  {
+      return game_check_map(s_lin1, f_col) || game_check_map(s_lin1 + 8, f_col) ||
+             game_check_map(s_lin1 + 16, f_col);
+    } else {
 
-  if (( BIT_CHK(state[sprite], STAT_JUMP) || BIT_CHK(state[sprite], STAT_FALL ) ) && ((s_lin1 % 8) != 0))  {
-    return game_check_map(s_lin1, f_col) || game_check_map(s_lin1 + 8, f_col) ||
-           game_check_map(s_lin1 + 16, f_col);
+      return game_check_map(s_lin1, f_col) || game_check_map(s_lin1 + 8, f_col);
+    }
   } else {
-
-    return game_check_map(s_lin1, f_col) || game_check_map(s_lin1 + 8, f_col);
+      return 0;
   }
+
+
 }
 
 unsigned char spr_move_right(void) {
@@ -288,9 +293,19 @@ void spr_clear_scr() {
 
 unsigned char spr_paint_player(void) {
 
+if (lin[INDEX_P1] <= 144) {
+  //IN Screen
   NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1] + colint[INDEX_P1],
                    lin[INDEX_P1] + 16, col[INDEX_P1]);
   spr_back_repaint();
+} else {
+  //OUT Of Screen
+  if (s_lin0 < GAME_LIN_FLOOR) {
+    spr_back_repaint();
+  }
+  NIRVANAP_spriteT(NIRV_SPRITE_P1,TILE_EMPTY, 0,0);
+  NIRVANAP_halt();
+}
   return 0;
 }
 

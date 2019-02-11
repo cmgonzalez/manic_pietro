@@ -152,7 +152,6 @@ unsigned int frame_time;
 unsigned int time_air;
 unsigned int time_conv;
 unsigned int time_key;
-unsigned int time_crumb;
 unsigned char lapse_crumb;
 
 unsigned char key_last;

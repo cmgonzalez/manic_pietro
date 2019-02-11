@@ -87,3 +87,7 @@ BINARY "fx/crumble.afx"
 PUBLIC _ay_fx_door_open
 _ay_fx_door_open:
 BINARY "fx/door_open.afx"
+
+PUBLIC _ay_song_coin_noentiendo
+_ay_song_coin_noentiendo:
+BINARY "songs/coin_noentiendo.pt3"

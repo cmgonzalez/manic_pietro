@@ -850,51 +850,51 @@
 847   0000              	GLOBAL _key_ink
 848   0000              	GLOBAL _key_last
 849   0000              	GLOBAL _lapse_crumb
-850   0000              	GLOBAL _time_crumb
-851   0000              	GLOBAL _time_key
-852   0000              	GLOBAL _time_conv
-853   0000              	GLOBAL _time_air
-854   0000              	GLOBAL _frame_time
-855   0000              	GLOBAL _curr_time
-856   0000              	GLOBAL _key_attrib
-857   0000              	GLOBAL _g_ray1
-858   0000              	GLOBAL _attrib_sol1
-859   0000              	GLOBAL _attrib_sol0
-860   0000              	GLOBAL _attrib_osd
-861   0000              	GLOBAL _attrib_hl
-862   0000              	GLOBAL _attrib
-863   0000              	GLOBAL _zx_val_asm
-864   0000              	GLOBAL _index1
-865   0000              	GLOBAL _index0
-866   0000              	GLOBAL _loop_count
-867   0000              	GLOBAL _s_row1
-868   0000              	GLOBAL _s_col1
-869   0000              	GLOBAL _s_col0
-870   0000              	GLOBAL _s_lin1
-871   0000              	GLOBAL _s_lin0
-872   0000              	GLOBAL _nirv_sprite_index
-873   0000              	GLOBAL _player_kill_index
-874   0000              	GLOBAL _player_jump_top
-875   0000              	GLOBAL _game_fps_show
-876   0000              	GLOBAL _game_debug
-877   0000              	GLOBAL _sprite
-878   0000              	GLOBAL _fps
-879   0000              	GLOBAL _game_mode
-880   0000              	GLOBAL _game_tileset
-881   0000              	GLOBAL _menu_curr_sel
-882   0000              	GLOBAL _game_round_up
-883   0000              	GLOBAL _game_exit_lin
-884   0000              	GLOBAL _game_exit_col
-885   0000              	GLOBAL _game_conveyor_col1
-886   0000              	GLOBAL _game_conveyor_col0
-887   0000              	GLOBAL _game_conveyor_lin
-888   0000              	GLOBAL _game_conveyor_dir
-889   0000              	GLOBAL _game_song_play_start
-890   0000              	GLOBAL _game_song_play
-891   0000              	GLOBAL _game_gravity
-892   0000              	GLOBAL _player_lin_scr
-893   0000              	GLOBAL _player_col_scr
-894   0000              	GLOBAL _player_fall_start
+850   0000              	GLOBAL _time_key
+851   0000              	GLOBAL _time_conv
+852   0000              	GLOBAL _time_air
+853   0000              	GLOBAL _frame_time
+854   0000              	GLOBAL _curr_time
+855   0000              	GLOBAL _key_attrib
+856   0000              	GLOBAL _g_ray1
+857   0000              	GLOBAL _attrib_sol1
+858   0000              	GLOBAL _attrib_sol0
+859   0000              	GLOBAL _attrib_osd
+860   0000              	GLOBAL _attrib_hl
+861   0000              	GLOBAL _attrib
+862   0000              	GLOBAL _zx_val_asm
+863   0000              	GLOBAL _index1
+864   0000              	GLOBAL _index0
+865   0000              	GLOBAL _loop_count
+866   0000              	GLOBAL _s_row1
+867   0000              	GLOBAL _s_col1
+868   0000              	GLOBAL _s_col0
+869   0000              	GLOBAL _s_lin1
+870   0000              	GLOBAL _s_lin0
+871   0000              	GLOBAL _nirv_sprite_index
+872   0000              	GLOBAL _player_kill_index
+873   0000              	GLOBAL _player_jump_top
+874   0000              	GLOBAL _game_fps_show
+875   0000              	GLOBAL _game_debug
+876   0000              	GLOBAL _sprite
+877   0000              	GLOBAL _fps
+878   0000              	GLOBAL _game_mode
+879   0000              	GLOBAL _game_tileset
+880   0000              	GLOBAL _menu_curr_sel
+881   0000              	GLOBAL _game_round_up
+882   0000              	GLOBAL _game_exit_lin
+883   0000              	GLOBAL _game_exit_col
+884   0000              	GLOBAL _game_conveyor_col1
+885   0000              	GLOBAL _game_conveyor_col0
+886   0000              	GLOBAL _game_conveyor_lin
+887   0000              	GLOBAL _game_conveyor_dir
+888   0000              	GLOBAL _game_song_play_start
+889   0000              	GLOBAL _game_song_play
+890   0000              	GLOBAL _game_gravity
+891   0000              	GLOBAL _player_lin_scr
+892   0000              	GLOBAL _player_col_scr
+893   0000              	GLOBAL _player_fall_start
+894   0000              	GLOBAL _player_jump_lin
 895   0000              	GLOBAL _player_jump_count
 896   0000              	GLOBAL _player_jump_hack
 897   0000              	GLOBAL _player_vel_inc
@@ -1244,18 +1244,18 @@
 1241  01A9  8E          	adc	a, (hl)
 1242  01AA  47          	ld	b, a
 1243  01AB  0A          	ld	a, (bc)
-1244  01AC  DD 77 FD    	ld	(ix-3),a
+1244  01AC  DD 77 FE    	ld	(ix-2),a
 1245  01AF  46          	ld	b,(hl)
 1246  01B0  2B          	dec	hl
 1247  01B1  4E          	ld	c,(hl)
 1248  01B2  03          	inc	bc
 1249  01B3  21 00 00    	ld	hl,_scr_map
 1250  01B6  09          	add	hl,bc
-1251  01B7  DD 75 FE    	ld	(ix-2),l
-1252  01BA  DD 74 FF    	ld	(ix-1),h
+1251  01B7  DD 75 FC    	ld	(ix-4),l
+1252  01BA  DD 74 FD    	ld	(ix-3),h
 1253  01BD  7E          	ld	a, (hl)
-1254  01BE  DD 77 FC    	ld	(ix-4),a
-1255  01C1  DD 7E FD    	ld	a,(ix-3)
+1254  01BE  DD 77 FF    	ld	(ix-1),a
+1255  01C1  DD 7E FE    	ld	a,(ix-2)
 1256  01C4  D6 20       	sub	a,0x20
 1257  01C6  D2 91 02    	jp	NC, l_game_draw_map_00132
 1258  01C9  3A 00 00    	ld	a,(_s_row1)
@@ -1268,14 +1268,14 @@
 1265  01D5  48          	ld	c,b
 1266  01D6  47          	ld	b,a
 1267  01D7  C5          	push	bc
-1268  01D8  DD 7E FD    	ld	a,(ix-3)
+1268  01D8  DD 7E FE    	ld	a,(ix-2)
 1269  01DB  F5          	push	af
 1270  01DC  33          	inc	sp
 1271  01DD  CD 00 00    	call	_spr_draw8
 1272  01E0  F1          	pop	af
 1273  01E1  33          	inc	sp
 1274  01E2  3E 00       	ld	a, +((_tile_class) & 0xFF)
-1275  01E4  DD 86 FD    	add	a,(ix-3)
+1275  01E4  DD 86 FE    	add	a,(ix-2)
 1276  01E7  6F          	ld	l, a
 1277  01E8  3E 00       	ld	a, +((_tile_class) / 256)
 1278  01EA  CE 00       	adc	a,0x00
@@ -1283,7 +1283,7 @@
 1280  01ED  7E          	ld	a, (hl)
 1281  01EE  DD 77 FB    	ld	(ix-5),a
 1282  01F1  3E 00       	ld	a, +((_tile_class) & 0xFF)
-1283  01F3  DD 86 FC    	add	a,(ix-4)
+1283  01F3  DD 86 FF    	add	a,(ix-1)
 1284  01F6  6F          	ld	l, a
 1285  01F7  3E 00       	ld	a, +((_tile_class) / 256)
 1286  01F9  CE 00       	adc	a,0x00
@@ -1369,7 +1369,7 @@
 1366  028C  36 04       	ld	(hl),0x04
 1367  028E  C3 71 03    	jp	l_game_draw_map_00133
 1368  0291              l_game_draw_map_00132:
-1369  0291  DD 7E FD    	ld	a,(ix-3)
+1369  0291  DD 7E FE    	ld	a,(ix-2)
 1370  0294  D6 20       	sub	a,0x20
 1371  0296  20 38       	jr	NZ,l_game_draw_map_00122
 1372  0298  DD 7E F9    	ld	a,(ix-7)
@@ -1380,8 +1380,8 @@
 1377  02A5  32 00 00    	ld	(_game_exit_col),a
 1378  02A8  3A 00 00    	ld	a,(_s_lin1)
 1379  02AB  32 00 00    	ld	(_game_exit_lin),a
-1380  02AE  DD 6E FE    	ld	l,(ix-2)
-1381  02B1  DD 66 FF    	ld	h,(ix-1)
+1380  02AE  DD 6E FC    	ld	l,(ix-4)
+1381  02B1  DD 66 FD    	ld	h,(ix-3)
 1382  02B4  36 20       	ld	(hl),0x20
 1383  02B6  2A 00 00    	ld	hl,(_index1)
 1384  02B9  01 20 00    	ld	bc,0x0020
@@ -1396,11 +1396,11 @@
 1393  02CD  09          	add	hl,bc
 1394  02CE  36 20       	ld	(hl),0x20
 1395  02D0              l_game_draw_map_00122:
-1396  02D0  DD 7E FD    	ld	a,(ix-3)
+1396  02D0  DD 7E FE    	ld	a,(ix-2)
 1397  02D3  D6 40       	sub	a,0x40
 1398  02D5  38 31       	jr	C,l_game_draw_map_00127
 1399  02D7  3E 7B       	ld	a,0x7b
-1400  02D9  DD 96 FD    	sub	a,(ix-3)
+1400  02D9  DD 96 FE    	sub	a,(ix-2)
 1401  02DC  38 2A       	jr	C,l_game_draw_map_00127
 1402  02DE  3A 00 00    	ld	a,(_s_row1)
 1403  02E1  07          	rlca
@@ -1429,7 +1429,7 @@
 1426  0306  AF          	xor	a,a
 1427  0307  77          	ld	(hl),a
 1428  0308              l_game_draw_map_00127:
-1429  0308  DD 7E FD    	ld	a,(ix-3)
+1429  0308  DD 7E FE    	ld	a,(ix-2)
 1430  030B  D6 7F       	sub	a,0x7f
 1431  030D  20 62       	jr	NZ,l_game_draw_map_00133
 1432  030F  3A 00 00    	ld	a,(_s_lin1)
@@ -1784,7 +1784,7 @@
 1781  0513  33          	inc	sp
 1782  0514  D1          	pop	de
 1783  0515  C1          	pop	bc
-1784  0516  21 E0 10    	ld	hl, +(_btiles + 0x10e0)
+1784  0516  21 80 10    	ld	hl, +(_btiles + 0x1080)
 1785  0519  C5          	push	bc
 1786  051A  EB          	ex	de, hl
 1787  051B  01 30 00    	ld	bc,0x0030
@@ -2949,8 +2949,8 @@
 2942  0C88  C6 EC       	add	a,0xec
 2943  0C8A  DD 77 FF    	ld	(ix-1),a
 2944  0C8D              l_game_page_map_00102:
-2945  0C8D  DD 36 F4 00 	ld	(ix-12),0x00
-2946  0C91  DD 36 F5 00 	ld	(ix-11),0x00
+2945  0C8D  DD 36 F0 00 	ld	(ix-16),0x00
+2946  0C91  DD 36 F1 00 	ld	(ix-15),0x00
 2947  0C95  C5          	push	bc
 2948  0C96  3E 06       	ld	a,0x06
 2949  0C98  F5          	push	af
@@ -2996,54 +2996,54 @@
 2989  0CD7  CD 1C 11    	call	_page
 2990  0CDA  33          	inc	sp
 2991  0CDB  C1          	pop	bc
-2992  0CDC  DD 36 F2 00 	ld	(ix-14),0x00
-2993  0CE0  DD 36 F3 00 	ld	(ix-13),0x00
+2992  0CDC  DD 36 F4 00 	ld	(ix-12),0x00
+2993  0CE0  DD 36 F5 00 	ld	(ix-11),0x00
 2994  0CE4  11 00 00    	ld	de,_scr_map+0
 2995  0CE7              l_game_page_map_00121:
-2996  0CE7  DD 6E F2    	ld	l,(ix-14)
-2997  0CEA  DD 66 F3    	ld	h,(ix-13)
+2996  0CE7  DD 6E F4    	ld	l,(ix-12)
+2997  0CEA  DD 66 F5    	ld	h,(ix-11)
 2998  0CED  09          	add	hl, bc
 2999  0CEE  7E          	ld	a, (hl)
-3000  0CEF  DD 77 F6    	ld	(ix-10),a
-3001  0CF2  DD 7E F2    	ld	a,(ix-14)
+3000  0CEF  DD 77 F7    	ld	(ix-9),a
+3001  0CF2  DD 7E F4    	ld	a,(ix-12)
 3002  0CF5  C6 01       	add	a,0x01
 3003  0CF7  DD 77 FD    	ld	(ix-3),a
 3004  0CFA  6F          	ld	l,a
-3005  0CFB  DD 7E F3    	ld	a,(ix-13)
+3005  0CFB  DD 7E F5    	ld	a,(ix-11)
 3006  0CFE  CE 00       	adc	a,0x00
 3007  0D00  DD 77 FE    	ld	(ix-2),a
 3008  0D03  67          	ld	h,a
 3009  0D04  09          	add	hl, bc
 3010  0D05  7E          	ld	a, (hl)
-3011  0D06  DD 77 F7    	ld	(ix-9),a
-3012  0D09  DD 7E F6    	ld	a,(ix-10)
+3011  0D06  DD 77 F8    	ld	(ix-8),a
+3012  0D09  DD 7E F7    	ld	a,(ix-9)
 3013  0D0C  D6 80       	sub	a,0x80
 3014  0D0E  30 15       	jr	NC,l_game_page_map_00107
-3015  0D10  DD 6E F4    	ld	l,(ix-12)
-3016  0D13  DD 66 F5    	ld	h,(ix-11)
+3015  0D10  DD 6E F0    	ld	l,(ix-16)
+3016  0D13  DD 66 F1    	ld	h,(ix-15)
 3017  0D16  19          	add	hl, de
-3018  0D17  DD 7E F6    	ld	a,(ix-10)
+3018  0D17  DD 7E F7    	ld	a,(ix-9)
 3019  0D1A  77          	ld	(hl), a
-3020  0D1B  DD 34 F4    	inc	(ix-12)
+3020  0D1B  DD 34 F0    	inc	(ix-16)
 3021  0D1E  20 77       	jr	NZ,l_game_page_map_00108
-3022  0D20  DD 34 F5    	inc	(ix-11)
+3022  0D20  DD 34 F1    	inc	(ix-15)
 3023  0D23  18 72       	jr	l_game_page_map_00108
 3024  0D25              l_game_page_map_00107:
-3025  0D25  DD 7E F6    	ld	a,(ix-10)
+3025  0D25  DD 7E F7    	ld	a,(ix-9)
 3026  0D28  C6 80       	add	a,0x80
-3027  0D2A  DD 77 F8    	ld	(ix-8),a
-3028  0D2D  DD 7E F4    	ld	a,(ix-12)
+3027  0D2A  DD 77 F6    	ld	(ix-10),a
+3028  0D2D  DD 7E F0    	ld	a,(ix-16)
 3029  0D30  DD 77 FB    	ld	(ix-5),a
-3030  0D33  DD 7E F5    	ld	a,(ix-11)
+3030  0D33  DD 7E F1    	ld	a,(ix-15)
 3031  0D36  DD 77 FC    	ld	(ix-4),a
-3032  0D39  DD 36 F0 00 	ld	(ix-16),0x00
-3033  0D3D  DD 36 F1 00 	ld	(ix-15),0x00
+3032  0D39  DD 36 F2 00 	ld	(ix-14),0x00
+3033  0D3D  DD 36 F3 00 	ld	(ix-13),0x00
 3034  0D41              l_game_page_map_00119:
-3035  0D41  DD 6E F8    	ld	l,(ix-8)
+3035  0D41  DD 6E F6    	ld	l,(ix-10)
 3036  0D44  26 00       	ld	h,0x00
-3037  0D46  DD 7E F0    	ld	a,(ix-16)
+3037  0D46  DD 7E F2    	ld	a,(ix-14)
 3038  0D49  95          	sub	a, l
-3039  0D4A  DD 7E F1    	ld	a,(ix-15)
+3039  0D4A  DD 7E F3    	ld	a,(ix-13)
 3040  0D4D  9C          	sbc	a, h
 3041  0D4E  30 2F       	jr	NC,l_game_page_map_00135
 3042  0D50  7B          	ld	a, e
@@ -3054,7 +3054,7 @@
 3047  0D5B  DD 6E F9    	ld	l,(ix-7)
 3048  0D5E  DD 77 FA    	ld	(ix-6),a
 3049  0D61  67          	ld	h,a
-3050  0D62  DD 7E F7    	ld	a,(ix-9)
+3050  0D62  DD 7E F8    	ld	a,(ix-8)
 3051  0D65  77          	ld	(hl), a
 3052  0D66  DD 34 FB    	inc	(ix-5)
 3053  0D69  20 03       	jr	NZ,l_game_page_map_00168
@@ -3063,28 +3063,28 @@
 3056  0D6E  DD 7E FC    	ld	a,(ix-4)
 3057  0D71  D6 02       	sub	a,0x02
 3058  0D73  30 0A       	jr	NC,l_game_page_map_00135
-3059  0D75  DD 34 F0    	inc	(ix-16)
+3059  0D75  DD 34 F2    	inc	(ix-14)
 3060  0D78  20 C7       	jr	NZ,l_game_page_map_00119
-3061  0D7A  DD 34 F1    	inc	(ix-15)
+3061  0D7A  DD 34 F3    	inc	(ix-13)
 3062  0D7D  18 C2       	jr	l_game_page_map_00119
 3063  0D7F              l_game_page_map_00135:
 3064  0D7F  DD 7E FB    	ld	a,(ix-5)
-3065  0D82  DD 77 F4    	ld	(ix-12),a
+3065  0D82  DD 77 F0    	ld	(ix-16),a
 3066  0D85  DD 7E FC    	ld	a,(ix-4)
-3067  0D88  DD 77 F5    	ld	(ix-11),a
+3067  0D88  DD 77 F1    	ld	(ix-15),a
 3068  0D8B  DD 7E FD    	ld	a,(ix-3)
-3069  0D8E  DD 77 F2    	ld	(ix-14),a
+3069  0D8E  DD 77 F4    	ld	(ix-12),a
 3070  0D91  DD 7E FE    	ld	a,(ix-2)
-3071  0D94  DD 77 F3    	ld	(ix-13),a
+3071  0D94  DD 77 F5    	ld	(ix-11),a
 3072  0D97              l_game_page_map_00108:
-3073  0D97  DD 7E F5    	ld	a,(ix-11)
+3073  0D97  DD 7E F1    	ld	a,(ix-15)
 3074  0D9A  D6 02       	sub	a,0x02
 3075  0D9C  30 10       	jr	NC,l_game_page_map_00111
-3076  0D9E  DD 34 F2    	inc	(ix-14)
+3076  0D9E  DD 34 F4    	inc	(ix-12)
 3077  0DA1  20 03       	jr	NZ,l_game_page_map_00170
-3078  0DA3  DD 34 F3    	inc	(ix-13)
+3078  0DA3  DD 34 F5    	inc	(ix-11)
 3079  0DA6              l_game_page_map_00170:
-3080  0DA6  DD 7E F3    	ld	a,(ix-13)
+3080  0DA6  DD 7E F5    	ld	a,(ix-11)
 3081  0DA9  D6 02       	sub	a,0x02
 3082  0DAB  DA E7 0C    	jp	C, l_game_page_map_00121
 3083  0DAE              l_game_page_map_00111:
@@ -3100,21 +3100,21 @@
 3093  0DBC  1F          	rra
 3094  0DBD  DD 77 EE    	ld	(ix-18),a
 3095  0DC0  DD 75 EF    	ld	(ix-17),l
-3096  0DC3  DD 36 F4 00 	ld	(ix-12),0x00
-3097  0DC7  DD 36 F5 00 	ld	(ix-11),0x00
+3096  0DC3  DD 36 F0 00 	ld	(ix-16),0x00
+3097  0DC7  DD 36 F1 00 	ld	(ix-15),0x00
 3098  0DCB              l_game_page_map_00115:
-3099  0DCB  DD 7E F4    	ld	a,(ix-12)
+3099  0DCB  DD 7E F0    	ld	a,(ix-16)
 3100  0DCE  D6 80       	sub	a,0x80
-3101  0DD0  DD 7E F5    	ld	a,(ix-11)
+3101  0DD0  DD 7E F1    	ld	a,(ix-15)
 3102  0DD3  DE 01       	sbc	a,0x01
 3103  0DD5  D2 55 0E    	jp	NC, l_game_page_map_00117
-3104  0DD8  DD 36 EA E0 	ld	(ix-22),+((_btiles + 0x10e0) & 0xFF)
-3105  0DDC  DD 36 EB 10 	ld	(ix-21),+((_btiles + 0x10e0) / 256)
+3104  0DD8  DD 36 EA 80 	ld	(ix-22),+((_btiles + 0x1080) & 0xFF)
+3105  0DDC  DD 36 EB 10 	ld	(ix-21),+((_btiles + 0x1080) / 256)
 3106  0DE0  DD 7E EE    	ld	a,(ix-18)
-3107  0DE3  DD 86 F4    	add	a,(ix-12)
+3107  0DE3  DD 86 F0    	add	a,(ix-16)
 3108  0DE6  DD 77 F9    	ld	(ix-7),a
 3109  0DE9  DD 7E EF    	ld	a,(ix-17)
-3110  0DEC  DD 8E F5    	adc	a,(ix-11)
+3110  0DEC  DD 8E F1    	adc	a,(ix-15)
 3111  0DEF  DD 77 FA    	ld	(ix-6),a
 3112  0DF2  3A 00 00    	ld	a,(_scr_curr)
 3113  0DF5  D6 14       	sub	a,0x14
@@ -3155,21 +3155,21 @@
 3148  0E2B  CD 1C 11    	call	_page
 3149  0E2E  33          	inc	sp
 3150  0E2F  C1          	pop	bc
-3151  0E30  DD 6E F4    	ld	l,(ix-12)
-3152  0E33  DD 66 F5    	ld	h,(ix-11)
+3151  0E30  DD 6E F0    	ld	l,(ix-16)
+3152  0E33  DD 66 F1    	ld	h,(ix-15)
 3153  0E36  09          	add	hl, bc
-3154  0E37  11 E0 10    	ld	de, +(_btiles + 0x10e0)
+3154  0E37  11 80 10    	ld	de, +(_btiles + 0x1080)
 3155  0E3A  C5          	push	bc
 3156  0E3B  EB          	ex	de, hl
 3157  0E3C  01 30 00    	ld	bc,0x0030
 3158  0E3F  ED B0       	ldir
 3159  0E41  C1          	pop	bc
-3160  0E42  DD 7E F4    	ld	a,(ix-12)
+3160  0E42  DD 7E F0    	ld	a,(ix-16)
 3161  0E45  C6 30       	add	a,0x30
-3162  0E47  DD 77 F4    	ld	(ix-12),a
-3163  0E4A  DD 7E F5    	ld	a,(ix-11)
+3162  0E47  DD 77 F0    	ld	(ix-16),a
+3163  0E4A  DD 7E F1    	ld	a,(ix-15)
 3164  0E4D  CE 00       	adc	a,0x00
-3165  0E4F  DD 77 F5    	ld	(ix-11),a
+3165  0E4F  DD 77 F1    	ld	(ix-15),a
 3166  0E52  C3 CB 0D    	jp	l_game_page_map_00115
 3167  0E55              l_game_page_map_00117:
 3168  0E55  3A 20 00    	ld	a, (_btiles + 32)
@@ -3402,7 +3402,7 @@
 3395  0FA9  4D          	ld	c, l
 3396  0FAA  44          	ld	b, h
 3397  0FAB              l_game_copy_sprite_00103:
-3398  0FAB  11 E0 10    	ld	de, +(_btiles + 0x10e0)
+3398  0FAB  11 80 10    	ld	de, +(_btiles + 0x1080)
 3399  0FAE  C5          	push	bc
 3400  0FAF  D5          	push	de
 3401  0FB0  3E 03       	ld	a,0x03
@@ -3425,10 +3425,10 @@
 3418  0FC9  79          	ld	a, c
 3419  0FCA  D6 30       	sub	a,0x30
 3420  0FCC  30 42       	jr	NC,l_game_copy_sprite_00117
-3421  0FCE  3E E0       	ld	a,+((_btiles+0x10e0) & 0xFF)
+3421  0FCE  3E 80       	ld	a,+((_btiles+0x1080) & 0xFF)
 3422  0FD0  81          	add	a, c
 3423  0FD1  5F          	ld	e, a
-3424  0FD2  3E 10       	ld	a,+((_btiles+0x10e0) / 256)
+3424  0FD2  3E 10       	ld	a,+((_btiles+0x1080) / 256)
 3425  0FD4  CE 00       	adc	a,0x00
 3426  0FD6  57          	ld	d, a
 3427  0FD7  1A          	ld	a, (de)
@@ -3511,7 +3511,7 @@
 3504  1069              l_game_copy_sprite_00120:
 3505  1069  2A 00 00    	ld	hl,(_v0)
 3506  106C  26 00       	ld	h,0x00
-3507  106E  01 E0 10    	ld	bc,+(_btiles + 0x10e0)
+3507  106E  01 80 10    	ld	bc,+(_btiles + 0x1080)
 3508  1071  09          	add	hl,bc
 3509  1072  7E          	ld	a,(hl)
 3510  1073  F5          	push	af
@@ -3538,7 +3538,7 @@
 3531  109C              l_game_copy_sprite_00123:
 3532  109C  2A 00 00    	ld	hl,(_v0)
 3533  109F  26 00       	ld	h,0x00
-3534  10A1  01 E0 10    	ld	bc,+(_btiles + 0x10e0)
+3534  10A1  01 80 10    	ld	bc,+(_btiles + 0x1080)
 3535  10A4  09          	add	hl,bc
 3536  10A5  7E          	ld	a,(hl)
 3537  10A6  DD 6E FB    	ld	l,(ix-5)
@@ -3546,10 +3546,10 @@
 3539  10AC  77          	ld	(hl), a
 3540  10AD  18 13       	jr	l_game_copy_sprite_00129
 3541  10AF              l_game_copy_sprite_00128:
-3542  10AF  3E E0       	ld	a,+((_btiles+0x10e0) & 0xFF)
+3542  10AF  3E 80       	ld	a,+((_btiles+0x1080) & 0xFF)
 3543  10B1  DD 86 FA    	add	a,(ix-6)
 3544  10B4  4F          	ld	c, a
-3545  10B5  3E 10       	ld	a,+((_btiles+0x10e0) / 256)
+3545  10B5  3E 10       	ld	a,+((_btiles+0x1080) / 256)
 3546  10B7  CE 00       	adc	a,0x00
 3547  10B9  47          	ld	b, a
 3548  10BA  0A          	ld	a, (bc)
@@ -3730,196 +3730,209 @@
 3723  11E1              _game_shoe:
 3724  11E1  CD 33 06    	call	_game_cls
 3725  11E4  CD 00 00    	call	_audio_game_over
-3726  11E7  21 60 0F    	ld	hl,0x0f60
-3727  11EA  E5          	push	hl
-3728  11EB  3E 5B       	ld	a,0x5b
-3729  11ED  F5          	push	af
-3730  11EE  33          	inc	sp
-3731  11EF  CD 00 00    	call	_NIRVANAP_drawT_callee
-3732  11F2  21 70 0F    	ld	hl,0x0f70
-3733  11F5  E5          	push	hl
-3734  11F6  3E 5C       	ld	a,0x5c
-3735  11F8  F5          	push	af
-3736  11F9  33          	inc	sp
-3737  11FA  CD 00 00    	call	_NIRVANAP_drawT_callee
-3738  11FD  21 00 00    	ld	hl,_v0
-3739  1200  36 10       	ld	(hl),0x10
-3740  1202              l_game_shoe_00101:
-3741  1202  3E 5E       	ld	a,0x5e
-3742  1204  21 00 00    	ld	hl,_v0
-3743  1207  96          	sub	a, (hl)
-3744  1208  38 15       	jr	C,l_game_shoe_00103
-3745  120A  34          	inc	(hl)
-3746  120B  34          	inc	(hl)
-3747  120C  6E          	ld	l,(hl)
-3748  120D  26 0F       	ld	h,0x0f
-3749  120F  E5          	push	hl
-3750  1210  21 00 5D    	ld	hl,0x5d00
-3751  1213  E5          	push	hl
-3752  1214  CD 00 00    	call	_NIRVANAP_spriteT_callee
-3753  1217  21 19 00    	ld	hl,0x0019
-3754  121A  CD 00 00    	call	_z80_delay_ms_fastcall
-3755  121D  18 E3       	jr	l_game_shoe_00101
-3756  121F              l_game_shoe_00103:
-3757  121F  21 00 00    	ld	hl,_v0
-3758  1222  36 01       	ld	(hl),0x01
-3759  1224  2A 00 00    	ld	hl,(_curr_time)
-3760  1227  22 00 00    	ld	(_time_conv),hl
-3761  122A              l_game_shoe_00107:
-3762  122A  3A 00 00    	ld	a,(_v0)
-3763  122D  B7          	or	a, a
-3764  122E  CA AD 12    	jp	Z, l_game_shoe_00110
-3765  1231  21 0C 38    	ld	hl,0x380c
-3766  1234  E5          	push	hl
-3767  1235  3E 08       	ld	a,0x08
-3768  1237  F5          	push	af
-3769  1238  33          	inc	sp
-3770  1239  21 00 00    	ld	hl,_attrib_osd
-3771  123C  E5          	push	hl
-3772  123D  CD 60 0B    	call	_game_paint_attrib
-3773  1240  F1          	pop	af
-3774  1241  33          	inc	sp
-3775  1242  21 4E 00    	ld	hl,___str_6
-3776  1245  E3          	ex	(sp),hl
-3777  1246  21 06 08    	ld	hl,0x0806
-3778  1249  E5          	push	hl
-3779  124A  CD 00 00    	call	_zx_print_str
-3780  124D  21 18 38    	ld	hl,0x3818
-3781  1250  E5          	push	hl
-3782  1251  3E 14       	ld	a,0x14
-3783  1253  F5          	push	af
-3784  1254  33          	inc	sp
-3785  1255  21 00 00    	ld	hl,_attrib_osd
-3786  1258  E5          	push	hl
-3787  1259  CD 60 0B    	call	_game_paint_attrib
-3788  125C  F1          	pop	af
-3789  125D  33          	inc	sp
-3790  125E  21 53 00    	ld	hl,___str_7
-3791  1261  E3          	ex	(sp),hl
-3792  1262  21 06 14    	ld	hl,0x1406
-3793  1265  E5          	push	hl
-3794  1266  CD 00 00    	call	_zx_print_str
-3795  1269  01 03 00    	ld	bc,_attrib_osd + 3
-3796  126C  0A          	ld	a, (bc)
-3797  126D  32 00 00    	ld	(_v1),a
-3798  1270  11 02 00    	ld	de,_attrib_osd + 2
-3799  1273  1A          	ld	a, (de)
-3800  1274  02          	ld	(bc), a
-3801  1275  01 01 00    	ld	bc,_attrib_osd + 1
-3802  1278  0A          	ld	a, (bc)
-3803  1279  12          	ld	(de), a
-3804  127A  3A 00 00    	ld	a,(_attrib_osd)
-3805  127D  02          	ld	(bc), a
-3806  127E  3A 00 00    	ld	a,(_v1)
-3807  1281  32 00 00    	ld	(_attrib_osd),a
-3808  1284  CD 00 00    	call	_in_inkey
-3809  1287  7D          	ld	a,l
-3810  1288  32 00 00    	ld	(_v2),a
-3811  128B  B7          	or	a, a
-3812  128C  20 11       	jr	NZ,l_game_shoe_00104
-3813  128E  3E F4       	ld	a,0xf4
-3814  1290  F5          	push	af
-3815  1291  33          	inc	sp
-3816  1292  21 00 00    	ld	hl,_time_conv
-3817  1295  E5          	push	hl
-3818  1296  CD 82 0B    	call	_game_check_time
-3819  1299  F1          	pop	af
-3820  129A  33          	inc	sp
-3821  129B  7D          	ld	a, l
-3822  129C  B7          	or	a, a
-3823  129D  28 05       	jr	Z,l_game_shoe_00105
-3824  129F              l_game_shoe_00104:
-3825  129F  21 00 00    	ld	hl,_v0
-3826  12A2  36 00       	ld	(hl),0x00
-3827  12A4              l_game_shoe_00105:
-3828  12A4  21 0A 00    	ld	hl,0x000a
-3829  12A7  CD 00 00    	call	_z80_delay_ms_fastcall
-3830  12AA  C3 2A 12    	jp	l_game_shoe_00107
-3831  12AD              l_game_shoe_00110:
-3832  12AD  C9          	ret
-3833  12AE              	SECTION rodata_compiler
-3834  004E              ___str_6:
-3835  004E  47 61 6D 65 	DEFM "Game"
-3836  0052  00          	DEFB 0x00
-3837  0053              	SECTION rodata_compiler
-3838  0053              ___str_7:
-3839  0053  4F 76 65 72 	DEFM "Over"
-3840  0057  00          	DEFB 0x00
-3841  0058              	SECTION code_compiler
-3842  12AE              ;	---------------------------------
-3843  12AE              ; Function game_set_attr
-3844  12AE              ; ---------------------------------
-3845  12AE              _game_set_attr:
-3846  12AE  CD 00 00    	call	___sdcc_enter_ix
-3847  12B1  21 00 00    	ld	hl,_attribs
-3848  12B4  7E          	ld	a, (hl)
-3849  12B5  DD 86 04    	add	a,(ix+4)
-3850  12B8  5F          	ld	e, a
-3851  12B9  23          	inc	hl
-3852  12BA  7E          	ld	a, (hl)
-3853  12BB  CE 00       	adc	a,0x00
-3854  12BD  57          	ld	d, a
-3855  12BE  1A          	ld	a, (de)
-3856  12BF  4F          	ld	c, a
-3857  12C0  06 00       	ld	b,0x00
-3858  12C2  EB          	ex	de,hl
-3859  12C3  23          	inc	hl
-3860  12C4  66          	ld	h, (hl)
-3861  12C5  2E 00       	ld	l,0x00
-3862  12C7  09          	add	hl,bc
-3863  12C8  4D          	ld	c, l
-3864  12C9  44          	ld	b, h
-3865  12CA  21 00 00    	ld	hl,_deltas
-3866  12CD  7E          	ld	a, (hl)
-3867  12CE  DD 86 05    	add	a,(ix+5)
-3868  12D1  5F          	ld	e, a
-3869  12D2  23          	inc	hl
-3870  12D3  7E          	ld	a, (hl)
-3871  12D4  CE 00       	adc	a,0x00
-3872  12D6  57          	ld	d, a
-3873  12D7  1A          	ld	a, (de)
-3874  12D8  6F          	ld	l, a
-3875  12D9  26 00       	ld	h,0x00
-3876  12DB  09          	add	hl, bc
-3877  12DC  DD 7E 06    	ld	a,(ix+6)
-3878  12DF  77          	ld	(hl),a
-3879  12E0  DD E1       	pop	ix
-3880  12E2  C9          	ret
-3881  12E3              	SECTION code_compiler
-3882  12E3              ;	---------------------------------
-3883  12E3              ; Function game_crumble
-3884  12E3              ; ---------------------------------
-3885  12E3              _game_crumble:
-3886  12E3  3A 08 00    	ld	a,(_state + 0x0008)
-3887  12E6  CB 47       	bit	0, a
-3888  12E8  20 31       	jr	NZ,l_game_crumble_00104
-3889  12EA  CB 4F       	bit	1, a
-3890  12EC  20 2D       	jr	NZ,l_game_crumble_00104
-3891  12EE  3A 08 00    	ld	a,(_col + 0x0008)
-3892  12F1  32 00 00    	ld	(_s_col1),a
-3893  12F4  3A 08 00    	ld	a,(_lin + 0x0008)
-3894  12F7  C6 10       	add	a,0x10
-3895  12F9  4F          	ld	c, a
-3896  12FA  3A 00 00    	ld	a,(_s_col1)
-3897  12FD  F5          	push	af
-3898  12FE  33          	inc	sp
-3899  12FF  79          	ld	a, c
-3900  1300  F5          	push	af
-3901  1301  33          	inc	sp
-3902  1302  CD 00 00    	call	_spr_calc_index
-3903  1305  F1          	pop	af
-3904  1306  22 00 00    	ld	(_index1),hl
-3905  1309  CD 00 00    	call	_player_crumble
-3906  130C  21 00 00    	ld	hl,_index1
-3907  130F  34          	inc	(hl)
-3908  1310  20 02       	jr	NZ,l_game_crumble_00118
-3909  1312  23          	inc	hl
-3910  1313  34          	inc	(hl)
-3911  1314              l_game_crumble_00118:
-3912  1314  21 00 00    	ld	hl,_s_col1
-3913  1317  34          	inc	(hl)
-3914  1318  CD 00 00    	call	_player_crumble
-3915  131B              l_game_crumble_00104:
-3916  131B  C9          	ret
-3917  131C              	SECTION IGNORE
-3918  0000              
+3726  11E7  3E 13       	ld	a,0x13
+3727  11E9  21 00 00    	ld	hl,_scr_curr
+3728  11EC  96          	sub	a, (hl)
+3729  11ED  30 0D       	jr	NC,l_game_shoe_00102
+3730  11EF  21 60 0F    	ld	hl,0x0f60
+3731  11F2  E5          	push	hl
+3732  11F3  3E 5A       	ld	a,0x5a
+3733  11F5  F5          	push	af
+3734  11F6  33          	inc	sp
+3735  11F7  CD 00 00    	call	_NIRVANAP_drawT_callee
+3736  11FA  18 0B       	jr	l_game_shoe_00103
+3737  11FC              l_game_shoe_00102:
+3738  11FC  21 60 0F    	ld	hl,0x0f60
+3739  11FF  E5          	push	hl
+3740  1200  3E 5B       	ld	a,0x5b
+3741  1202  F5          	push	af
+3742  1203  33          	inc	sp
+3743  1204  CD 00 00    	call	_NIRVANAP_drawT_callee
+3744  1207              l_game_shoe_00103:
+3745  1207  21 70 0F    	ld	hl,0x0f70
+3746  120A  E5          	push	hl
+3747  120B  3E 5C       	ld	a,0x5c
+3748  120D  F5          	push	af
+3749  120E  33          	inc	sp
+3750  120F  CD 00 00    	call	_NIRVANAP_drawT_callee
+3751  1212  21 00 00    	ld	hl,_v0
+3752  1215  36 10       	ld	(hl),0x10
+3753  1217              l_game_shoe_00104:
+3754  1217  3E 5E       	ld	a,0x5e
+3755  1219  21 00 00    	ld	hl,_v0
+3756  121C  96          	sub	a, (hl)
+3757  121D  38 15       	jr	C,l_game_shoe_00106
+3758  121F  34          	inc	(hl)
+3759  1220  34          	inc	(hl)
+3760  1221  6E          	ld	l,(hl)
+3761  1222  26 0F       	ld	h,0x0f
+3762  1224  E5          	push	hl
+3763  1225  21 00 5D    	ld	hl,0x5d00
+3764  1228  E5          	push	hl
+3765  1229  CD 00 00    	call	_NIRVANAP_spriteT_callee
+3766  122C  21 19 00    	ld	hl,0x0019
+3767  122F  CD 00 00    	call	_z80_delay_ms_fastcall
+3768  1232  18 E3       	jr	l_game_shoe_00104
+3769  1234              l_game_shoe_00106:
+3770  1234  21 00 00    	ld	hl,_v0
+3771  1237  36 01       	ld	(hl),0x01
+3772  1239  2A 00 00    	ld	hl,(_curr_time)
+3773  123C  22 00 00    	ld	(_time_conv),hl
+3774  123F              l_game_shoe_00110:
+3775  123F  3A 00 00    	ld	a,(_v0)
+3776  1242  B7          	or	a, a
+3777  1243  CA C2 12    	jp	Z, l_game_shoe_00113
+3778  1246  21 0C 38    	ld	hl,0x380c
+3779  1249  E5          	push	hl
+3780  124A  3E 08       	ld	a,0x08
+3781  124C  F5          	push	af
+3782  124D  33          	inc	sp
+3783  124E  21 00 00    	ld	hl,_attrib_osd
+3784  1251  E5          	push	hl
+3785  1252  CD 60 0B    	call	_game_paint_attrib
+3786  1255  F1          	pop	af
+3787  1256  33          	inc	sp
+3788  1257  21 4E 00    	ld	hl,___str_6
+3789  125A  E3          	ex	(sp),hl
+3790  125B  21 06 08    	ld	hl,0x0806
+3791  125E  E5          	push	hl
+3792  125F  CD 00 00    	call	_zx_print_str
+3793  1262  21 18 38    	ld	hl,0x3818
+3794  1265  E5          	push	hl
+3795  1266  3E 14       	ld	a,0x14
+3796  1268  F5          	push	af
+3797  1269  33          	inc	sp
+3798  126A  21 00 00    	ld	hl,_attrib_osd
+3799  126D  E5          	push	hl
+3800  126E  CD 60 0B    	call	_game_paint_attrib
+3801  1271  F1          	pop	af
+3802  1272  33          	inc	sp
+3803  1273  21 53 00    	ld	hl,___str_7
+3804  1276  E3          	ex	(sp),hl
+3805  1277  21 06 14    	ld	hl,0x1406
+3806  127A  E5          	push	hl
+3807  127B  CD 00 00    	call	_zx_print_str
+3808  127E  01 03 00    	ld	bc,_attrib_osd + 3
+3809  1281  0A          	ld	a, (bc)
+3810  1282  32 00 00    	ld	(_v1),a
+3811  1285  11 02 00    	ld	de,_attrib_osd + 2
+3812  1288  1A          	ld	a, (de)
+3813  1289  02          	ld	(bc), a
+3814  128A  01 01 00    	ld	bc,_attrib_osd + 1
+3815  128D  0A          	ld	a, (bc)
+3816  128E  12          	ld	(de), a
+3817  128F  3A 00 00    	ld	a,(_attrib_osd)
+3818  1292  02          	ld	(bc), a
+3819  1293  3A 00 00    	ld	a,(_v1)
+3820  1296  32 00 00    	ld	(_attrib_osd),a
+3821  1299  CD 00 00    	call	_in_inkey
+3822  129C  7D          	ld	a,l
+3823  129D  32 00 00    	ld	(_v2),a
+3824  12A0  B7          	or	a, a
+3825  12A1  20 11       	jr	NZ,l_game_shoe_00107
+3826  12A3  3E F4       	ld	a,0xf4
+3827  12A5  F5          	push	af
+3828  12A6  33          	inc	sp
+3829  12A7  21 00 00    	ld	hl,_time_conv
+3830  12AA  E5          	push	hl
+3831  12AB  CD 82 0B    	call	_game_check_time
+3832  12AE  F1          	pop	af
+3833  12AF  33          	inc	sp
+3834  12B0  7D          	ld	a, l
+3835  12B1  B7          	or	a, a
+3836  12B2  28 05       	jr	Z,l_game_shoe_00108
+3837  12B4              l_game_shoe_00107:
+3838  12B4  21 00 00    	ld	hl,_v0
+3839  12B7  36 00       	ld	(hl),0x00
+3840  12B9              l_game_shoe_00108:
+3841  12B9  21 0A 00    	ld	hl,0x000a
+3842  12BC  CD 00 00    	call	_z80_delay_ms_fastcall
+3843  12BF  C3 3F 12    	jp	l_game_shoe_00110
+3844  12C2              l_game_shoe_00113:
+3845  12C2  C9          	ret
+3846  12C3              	SECTION rodata_compiler
+3847  004E              ___str_6:
+3848  004E  47 61 6D 65 	DEFM "Game"
+3849  0052  00          	DEFB 0x00
+3850  0053              	SECTION rodata_compiler
+3851  0053              ___str_7:
+3852  0053  4F 76 65 72 	DEFM "Over"
+3853  0057  00          	DEFB 0x00
+3854  0058              	SECTION code_compiler
+3855  12C3              ;	---------------------------------
+3856  12C3              ; Function game_set_attr
+3857  12C3              ; ---------------------------------
+3858  12C3              _game_set_attr:
+3859  12C3  CD 00 00    	call	___sdcc_enter_ix
+3860  12C6  21 00 00    	ld	hl,_attribs
+3861  12C9  7E          	ld	a, (hl)
+3862  12CA  DD 86 04    	add	a,(ix+4)
+3863  12CD  5F          	ld	e, a
+3864  12CE  23          	inc	hl
+3865  12CF  7E          	ld	a, (hl)
+3866  12D0  CE 00       	adc	a,0x00
+3867  12D2  57          	ld	d, a
+3868  12D3  1A          	ld	a, (de)
+3869  12D4  4F          	ld	c, a
+3870  12D5  06 00       	ld	b,0x00
+3871  12D7  EB          	ex	de,hl
+3872  12D8  23          	inc	hl
+3873  12D9  66          	ld	h, (hl)
+3874  12DA  2E 00       	ld	l,0x00
+3875  12DC  09          	add	hl,bc
+3876  12DD  4D          	ld	c, l
+3877  12DE  44          	ld	b, h
+3878  12DF  21 00 00    	ld	hl,_deltas
+3879  12E2  7E          	ld	a, (hl)
+3880  12E3  DD 86 05    	add	a,(ix+5)
+3881  12E6  5F          	ld	e, a
+3882  12E7  23          	inc	hl
+3883  12E8  7E          	ld	a, (hl)
+3884  12E9  CE 00       	adc	a,0x00
+3885  12EB  57          	ld	d, a
+3886  12EC  1A          	ld	a, (de)
+3887  12ED  6F          	ld	l, a
+3888  12EE  26 00       	ld	h,0x00
+3889  12F0  09          	add	hl, bc
+3890  12F1  DD 7E 06    	ld	a,(ix+6)
+3891  12F4  77          	ld	(hl),a
+3892  12F5  DD E1       	pop	ix
+3893  12F7  C9          	ret
+3894  12F8              	SECTION code_compiler
+3895  12F8              ;	---------------------------------
+3896  12F8              ; Function game_crumble
+3897  12F8              ; ---------------------------------
+3898  12F8              _game_crumble:
+3899  12F8  3A 08 00    	ld	a,(_state + 0x0008)
+3900  12FB  CB 47       	bit	0, a
+3901  12FD  20 31       	jr	NZ,l_game_crumble_00104
+3902  12FF  CB 4F       	bit	1, a
+3903  1301  20 2D       	jr	NZ,l_game_crumble_00104
+3904  1303  3A 08 00    	ld	a,(_col + 0x0008)
+3905  1306  32 00 00    	ld	(_s_col1),a
+3906  1309  3A 08 00    	ld	a,(_lin + 0x0008)
+3907  130C  C6 10       	add	a,0x10
+3908  130E  4F          	ld	c, a
+3909  130F  3A 00 00    	ld	a,(_s_col1)
+3910  1312  F5          	push	af
+3911  1313  33          	inc	sp
+3912  1314  79          	ld	a, c
+3913  1315  F5          	push	af
+3914  1316  33          	inc	sp
+3915  1317  CD 00 00    	call	_spr_calc_index
+3916  131A  F1          	pop	af
+3917  131B  22 00 00    	ld	(_index1),hl
+3918  131E  CD 00 00    	call	_player_crumble
+3919  1321  21 00 00    	ld	hl,_index1
+3920  1324  34          	inc	(hl)
+3921  1325  20 02       	jr	NZ,l_game_crumble_00118
+3922  1327  23          	inc	hl
+3923  1328  34          	inc	(hl)
+3924  1329              l_game_crumble_00118:
+3925  1329  21 00 00    	ld	hl,_s_col1
+3926  132C  34          	inc	(hl)
+3927  132D  CD 00 00    	call	_player_crumble
+3928  1330              l_game_crumble_00104:
+3929  1330  C9          	ret
+3930  1331              	SECTION IGNORE
+3931  0000              

@@ -85,7 +85,7 @@ void audio_coin(void) {
 }
 void audio_coin_noentiendo(void) {
   // ay_fx_stop();
-  ay_song_play(AY_SONG_ONCE, 6, ay_song_coin_noentiendo);
+  ay_song_play(AY_SONG_ONCE, 4, ay_song_coin_noentiendo);
   // ay_fx_play(4, ay_fx_coin_noentiendo);
 }
 void audio_puerta(void) {

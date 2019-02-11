@@ -63,7 +63,7 @@
 
 #define SPRITE_EXIT                  32
 #define SPRITE_EMPTY                 94
-#define SPRITE_TMP                   4320 //90*48
+#define SPRITE_TMP                   4224 // 88*48 4320 //90*48
 #define SPRITE_DOOR                  7
 
 
@@ -137,6 +137,7 @@
 #define SCR_ROWS                      23  /* Rows max */
 #define SCR_LINS                      184 /* Lins max */
 #define GAME_LIN_FLOOR                128
+#define GAME_LIN_FLOOR_NIRV           144 /* GAME_LIN_FLOOR + 16 */
 #define GAME_LIN_TOP_PLATFORM         48
 #define GAME_OFFSET_Y                 16
 
@@ -253,6 +254,7 @@ extern unsigned char player_jump_count;
 extern unsigned char player_jump_lin;
 extern const unsigned char player_jump_hor[];
 
+
 extern unsigned char player_fall_start;
 
 //PLAYER ATTRIBUTES
@@ -325,7 +327,6 @@ extern unsigned int frame_time;
 extern unsigned int time_air;
 extern unsigned int time_conv;
 extern unsigned int time_key;
-extern unsigned int time_crumb;
 extern unsigned char lapse_crumb;
 
 extern unsigned char key_last;

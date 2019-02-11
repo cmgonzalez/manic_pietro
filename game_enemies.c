@@ -67,7 +67,7 @@ void enemy_move(void) {
     enemy_horizontal();
     spr_paint();
     if (spr_clr) {
-      if (scr_curr == 37 || scr_curr == 29) { // TODO MOVE TO ENEMY DEF ARRAY
+      if (scr_curr >= 20) { // ON PIETRO MODE
         spr_back_repaint();
       } else {
         spr_clear_fast_hor();
@@ -314,10 +314,10 @@ void enemy_init() {
     if (*(f_init + f_pos) == f_class) {
 
       // Read from ARRAY
-      f_basetile = *(f_init + f_pos + 1);
-      spr_frames[sprite] = *(f_init + f_pos + 2);
+      f_basetile = *(f_init + f_pos + 1); //base tile
+      spr_frames[sprite] = *(f_init + f_pos + 2); //frames
       spr_altset[sprite] = *(f_init + f_pos + 3);
-      spr_kind[sprite] = *(f_init + f_pos + 4);
+      spr_kind[sprite] = *(f_init + f_pos + 4); //Class of sprite
 
       // Color Alternates
       spr_init_cin0 = *(f_init + f_pos + 5);
