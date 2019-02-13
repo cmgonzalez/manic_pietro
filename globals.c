@@ -109,6 +109,8 @@ unsigned char game_conveyor_col1;
 unsigned char game_exit_col;
 unsigned char game_exit_lin;
 unsigned char game_code;
+unsigned char game_menu;
+unsigned char game_effect;
 
 
 unsigned char game_tileset;

@@ -256,22 +256,14 @@ unsigned char player_move_jump(void) {
     // Asending
     spr_set_up();
 
-    // if (s_lin1 > (GAME_LIN_FLOOR - 32) && (s_lin1 < 238)) {
-    //  s_lin1 = 0;
-    //}
+
     if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
       player_vel_y = 0;
 
       BIT_CLR(state[INDEX_P1], STAT_DIRR);
       BIT_CLR(state[INDEX_P1], STAT_DIRL);
-      /*
-      if (!(dirs & IN_STICK_RIGHT)) {
-        BIT_CLR(state[INDEX_P1], STAT_DIRR);
-      }
-      if (!(dirs & IN_STICK_LEFT)) {
-        BIT_CLR(state[INDEX_P1], STAT_DIRL);
-      }
-      */
+      BIT_CLR(state[INDEX_P1], STAT_JUMP);
+
     } else {
       lin[INDEX_P1] = s_lin1;
     }
@@ -280,11 +272,9 @@ unsigned char player_move_jump(void) {
   } else {
     // Falling
     if (s_lin1 > (GAME_LIN_FLOOR - 16)) {
-      // if (s_lin1 >= (GAME_LIN_FLOOR - 16)) {
       // Out Screen bottom
       if (s_lin1 > 200) {
         v0 = 0;
-        // s_lin1 = 0;
       } else {
         v0 = GAME_LIN_FLOOR - 16;
         s_lin1 = GAME_LIN_FLOOR - 16;

@@ -40,7 +40,7 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
-  game_debug = 0;
+  game_debug = 1;
   game_mode = 1;  //PIETRO DEFAULT
   game_fps_show = 0;
   nirv_sprite_index = 0;
@@ -55,13 +55,17 @@ void main(void) {
 
   if (game_debug) {
     game_fps_show = 1;
-    game_inmune = 0;    // GAME_INMUNE;
+    game_inmune = 1;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 20;
+    scr_curr = 1;
+    game_menu = 0;
+    game_effect = 0;
   } else {
     z80_delay_ms(666); // SATANIC DELAY
     scr_curr = 20;
     game_fps_show = 0;
+    game_menu = 1;
+    game_effect = 1;
   }
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -115,14 +119,17 @@ void main(void) {
   // GAME INTRO
   //BUGGY SPECTACUTOR audio_game_over();
   //z80_delay_ms(5000);
-  game_intro();
+  if (game_effect){
+    game_intro();
+  }
+
 
   while (1) {
     game_cls();
     // MENU
-  //  if (!game_debug) {
+    if (game_menu) {
       menu_main();
-//    }
+    }
     // GAME
     spr_clear_scr();
     player_next_extra = 10000;
