@@ -88,7 +88,7 @@ void player_turn(void) {
       game_crumble();
     } else {
       //Timed Crumble
-      if (game_check_time(&last_time_b[INDEX_P1], 4)) {
+      if (game_check_time(&last_time_b[INDEX_P1], 8)) {
         game_crumble();
         last_time_b[INDEX_P1] = zx_clock();
       }
@@ -179,6 +179,12 @@ void player_check_exit() {
 
     if (v0 < 8) {
       ++scr_curr;
+      if (scr_curr == 20) {
+        scr_curr = 0;
+      }
+      if (scr_curr == 40) {
+        scr_curr = 20;
+      }
       game_round_up = 1;
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
       // Amimate Bonus Air
@@ -705,7 +711,10 @@ void player_score_add(unsigned int f_score) __z88dk_fastcall {
 
   // CHECK FOR EXTRA life
   if (player_score > player_next_extra) {
-    player_lives = player_lives + 1;
+    if (player_lives < 255) {
+      player_lives = player_lives + 1;
+    }
+
     player_next_extra = player_next_extra + 10000;
   }
   // ROTATE HIGH SCORE

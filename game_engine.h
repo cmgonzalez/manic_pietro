@@ -53,7 +53,8 @@ extern void          game_solar_ray0();
 extern void          game_crumble();
 extern void          game_set_attr(unsigned char f_lin, unsigned char f_col, unsigned char f_attrib );
 extern void          page( unsigned char bank );
-unsigned char        reverse(unsigned char b);
+extern unsigned char reverse(unsigned char b);
+extern void          zx_print_char(unsigned char ui_row, unsigned char ui_col, unsigned char c);
 
 
 #endif

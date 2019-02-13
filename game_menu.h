@@ -23,6 +23,10 @@ extern void          menu_main();
 extern void          menu_main_print(void);
 extern void          menu_redefine();
 extern unsigned int  menu_define_key();
+extern unsigned char menu_read_key( unsigned char row, unsigned char col);
+extern unsigned char menu_read_code();
+//extern unsigned char menu_mcodechk(unsigned char *s);
+
 
 
 #endif

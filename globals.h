@@ -35,6 +35,7 @@
 #define GAME_VELOCITY               -6
 #define GAME_START_LIVES             3
 #define GAME_COLLISION_TIME         30 //TIME BTWN COLISION CHECKS
+#define GAME_CODELEN                 8 //LEN OF START CODES
 
 #define PLAYER_SPEED                 4
 #define PLAYER_SPEED_VJUMP           10
@@ -63,7 +64,7 @@
 
 #define SPRITE_EXIT                  32
 #define SPRITE_EMPTY                 94
-#define SPRITE_TMP                   4224 // 88*48 4320 //90*48
+#define SPRITE_TMP                   4608 //96 * 48 //4320 //90*48
 #define SPRITE_DOOR                  7
 
 
@@ -253,6 +254,7 @@ extern unsigned char player_jump_hack;
 extern unsigned char player_jump_count;
 extern unsigned char player_jump_lin;
 extern const unsigned char player_jump_hor[];
+extern const unsigned char game_encode[];
 
 
 extern unsigned char player_fall_start;
@@ -276,6 +278,8 @@ extern unsigned char game_conveyor_col0;
 extern unsigned char game_conveyor_col1;
 extern unsigned char game_exit_col;
 extern unsigned char game_exit_lin;
+extern unsigned char game_code;
+extern unsigned char game_lives;
 
 extern unsigned char game_round_up;
 extern unsigned char menu_curr_sel;
@@ -419,3 +423,6 @@ extern const unsigned int air_end_byte;
 
 extern unsigned char *attribs;
 extern unsigned char *deltas;
+
+extern unsigned char code0[GAME_CODELEN];
+extern unsigned char code1[GAME_CODELEN];

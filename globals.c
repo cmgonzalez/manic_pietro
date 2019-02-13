@@ -26,6 +26,7 @@ unsigned char v0;
 unsigned char v1;
 unsigned char v2;
 unsigned char v3;
+
 unsigned char tbuffer[7]; // Used for ASM PRINT
 
 //###############################################################################################
@@ -107,9 +108,11 @@ unsigned char game_conveyor_col0;
 unsigned char game_conveyor_col1;
 unsigned char game_exit_col;
 unsigned char game_exit_lin;
+unsigned char game_code;
 
 unsigned char game_tileset;
 unsigned char game_mode;
+unsigned char game_lives;
 
 unsigned char game_round_up;
 unsigned char menu_curr_sel;
@@ -138,6 +141,8 @@ unsigned char attrib_osd[4];
 unsigned char attrib_sol0[4];
 unsigned char attrib_sol1[4];
 unsigned char g_ray1;
+
+
 
 // TILE ATTRIB TODO REMOVE UNUSED
 unsigned char key_attrib[4];
@@ -264,6 +269,10 @@ unsigned char player_jump_lin;
 unsigned char player_jump_top;
 unsigned char player_fall_start;
 
+//CODE
+unsigned char code0[GAME_CODELEN];
+unsigned char code1[GAME_CODELEN];
+
 //Jump Geometry HORIZONTAL extra increment to emulate Willy Jump
 
 const unsigned char player_jump_hor[] = {
@@ -284,4 +293,17 @@ const unsigned char player_jump_hor[] = {
   0, //14
   1, //15
   0  //16
+};
+
+const unsigned char game_encode[10] = {
+  'Z', //0
+  'X', //1
+  'S', //2
+  'P', //3
+  'E', //4
+  'C', //5
+  'T', //6
+  'R', //7
+  'U', //8
+  'M'  //9
 };

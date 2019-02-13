@@ -39,7 +39,10 @@ void game_tick(void) {
 
 void game_loop(void) {
 
-  player_lives = GAME_START_LIVES;
+  if (!game_code) {
+    player_lives = GAME_START_LIVES;
+  }
+  game_lives = player_lives;
   player_score = 0;
   game_over = 0;
   game_round_up = 0;
@@ -97,7 +100,8 @@ void game_loop(void) {
 
     if (game_round_up) {
       zx_print_ink(INK_BLACK | PAPER_YELLOW);
-
+      game_lives =
+          player_lives; // Store start of level lives to give on the code...
       game_round_init();
       NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
                        game_exit_col);
@@ -356,7 +360,7 @@ void game_img1() {
     page(1);
     memcpy(dest, src, 48);
     page(0);
-    NIRVANAP_drawT_raw(90, v0, v1);
+    NIRVANAP_drawT_raw(96, v0, v1);
     if (v1 == 30) {
       v0 = v0 + 16;
       v1 = 0;
@@ -401,11 +405,16 @@ void game_print_lives(void) {
   v0 = 0;
 
   game_fill_row(22, 32);
-
-  while (v0 < (player_lives - 1)) {
+  if (player_lives <= 10) {
+    while (v0 < (player_lives - 1)) {
+      zx_print_ink(INK_CYAN);
+      zx_print_str(22, v0, "<");
+      ++v0;
+    }
+  } else {
     zx_print_ink(INK_CYAN);
-    zx_print_str(22, v0, "<");
-    ++v0;
+    zx_print_str(22, 0, "< x");
+    zx_print_chr(22, 4, player_lives);
   }
 }
 
@@ -615,13 +624,46 @@ void game_round_init(void) {
   NIRVANAP_halt();
   // Round presentation
   if (!game_debug) {
-    game_fill_row(10, 32);
-    game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
-    zx_print_str(10, 10, "ROUND");
-    zx_print_chr(10, 16, scr_curr + 1);
+
+    // game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
+    // zx_print_str(10, 10, "ROUNDXX");
+    // zx_print_chr(10, 15, scr_curr + 1);
+
+    // game_paint_attrib(&attrib, 0, 31, (11 << 3) + 8);
 
     audio_round_init();
-    z80_delay_ms(800);
+    game_fill_row(10, 32);
+    s_col0 = 1;
+    v0 = 0;
+    while (s_col0 < 30) {
+      if (s_col0 > 0) {
+        game_paint_attrib(&attrib, s_col0 - 1, s_col0, (10 << 3) + 8);
+        game_paint_attrib(&attrib, s_col0 - 1, s_col0, (11 << 3) + 8);
+      }
+
+      if (scr_curr > 20) {
+        zx_print_chr(10, 17, scr_curr + 1 - 20);
+        zx_print_str(10, 21, "A");
+      } else {
+        zx_print_chr(10, 17, scr_curr + 1);
+        zx_print_str(10, 21, "B");
+      }
+
+      zx_print_str(10, 11, "ROUND");
+      zx_print_str(11, 0, &map_names[0]);
+
+      v0++;
+      z80_delay_ms(1);
+      NIRVANAP_halt();
+      if (v0 == 3) {
+
+        NIRVANAP_drawT(SPRITE_EMPTY, 88, s_col0);
+        s_col0++;
+        v0 = 0;
+      }
+      NIRVANAP_spriteT(0, 8 + v0, 88, s_col0);
+    }
+
     ay_reset();
     spr_clear_scr();
   }
@@ -939,6 +981,7 @@ void game_page_map(void) {
     }
 
     page(7);
+    // Retrieve the data from bank7
     memcpy(dest, src, 48);
     page(0);
     // Store btile in low mem
@@ -1136,9 +1179,9 @@ void game_shoe() {
   game_cls();
   audio_game_over();
   if (scr_curr > 19) {
-    NIRVANAP_drawT(90, 96, 15);  // Pietro
+    NIRVANAP_drawT(90, 96, 15); // Pietro
   } else {
-    NIRVANAP_drawT(91, 96, 15);  // Willy
+    NIRVANAP_drawT(91, 96, 15); // Willy
   }
 
   NIRVANAP_drawT(92, 112, 15); // Shoe
@@ -1168,6 +1211,32 @@ void game_shoe() {
 
   v0 = 1;
   time_conv = zx_clock();
+
+  // CODE GEN
+  // game_start_scr =  10 * code1[5] + code1[2];
+  // player_lives = 100 * code1[0] + 10 * code1[6] + code1[3];
+  // checksum0 = 100 * code1[7] + 10 * code1[4] + code1[1];
+  // checksum1 = code1[0] + code1[2] + code1[3] + code1[5] + code1[6];
+  // START SCREEN
+  code0[5] = scr_curr / 10;
+  code0[2] = scr_curr - (code0[5] * 10);
+  // LIVES
+  code0[3] = game_lives / 100;
+  code0[6] = (game_lives - (code0[3] * 100)) / 10;
+  code0[0] = game_lives - (code0[3] * 100 + code0[6] * 10);
+  // CHECKSUM
+  v3 = code0[5] + code0[2] + code0[0] + code0[6] + code0[3];
+  code0[7] = v3 / 100;
+  code0[4] = (v3 - (code0[7] * 100)) / 10;
+  code0[1] = v3 - (code0[7] * 100 + code0[4] * 10);
+
+  zx_print_str(20, 8, "CODE : ");
+  i = 0;
+  while (i < 8) {
+    zx_print_char(20, 8 + 7 + i,
+                  game_encode[code0[i]]); // 48 to convert to ascii digit
+    i++;
+  }
 
   while (v0) {
     game_paint_attrib(&attrib_osd, 8, 12, (6 << 3) + 8);
@@ -1228,4 +1297,12 @@ void game_crumble() {
     ++s_col1;
     player_crumble();
   }
+}
+
+void zx_print_char(unsigned char ui_row, unsigned char ui_col,
+                   unsigned char c) {
+  unsigned char str[2];
+  str[0] = c;
+  str[1] = 0;
+  zx_print_str(ui_row, ui_col, str);
 }

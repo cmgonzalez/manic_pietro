@@ -40,10 +40,9 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
-  game_debug = 0;
-
+  game_debug = 1;
+  game_mode = 1;  //PIETRO DEFAULT
   game_fps_show = 0;
-  scr_curr = 00;
   nirv_sprite_index = 0;
   game_song_play = 1;
 
@@ -55,15 +54,14 @@ void main(void) {
   deltas = (unsigned char *) 0xFF01;
 
   if (game_debug) {
-    scr_curr = 34;
     game_fps_show = 1;
     game_inmune = 0;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 26;
+    scr_curr = 20;
   } else {
     z80_delay_ms(666); // SATANIC DELAY
     scr_curr = 20;
-    game_fps_show = 1;
+    game_fps_show = 0;
   }
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -87,10 +85,12 @@ void main(void) {
 
   // Wait for Keypress and Randomize
   // Default Values for menu
-  //joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
+  joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
+  menu_curr_sel = 1;   //Sync Menu
 
-  joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
-  menu_curr_sel = 2;   //Sync Menu
+  //joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
+  //menu_curr_sel = 2;   //Sync Menu
+
   // joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
 
   // NIRVANAP_stop();
@@ -113,14 +113,16 @@ void main(void) {
   frame_time = zx_clock();
 
   // GAME INTRO
+  //BUGGY SPECTACUTOR audio_game_over();
+  //z80_delay_ms(5000);
   game_intro();
-  
+
   while (1) {
     game_cls();
     // MENU
-    if (!game_debug) {
+  //  if (!game_debug) {
       menu_main();
-    }
+//    }
     // GAME
     spr_clear_scr();
     player_next_extra = 10000;
@@ -132,9 +134,19 @@ void main(void) {
 
     game_over = 0; // Hack game_colour_message to render background
     // GAME OVER
-    scr_curr = 20; // Hack for debug...
+    if (!game_code) {
+      if (game_mode) {
+        scr_curr = 20;
+      } else {
+        scr_curr = 0;
+      }
+    }
+
+
   }
 }
+
+
 
 void test_proc() {}
 

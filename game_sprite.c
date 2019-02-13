@@ -293,7 +293,9 @@ void spr_clear_scr() {
 
 unsigned char spr_paint_player(void) {
 
-if (lin[INDEX_P1] <= 144) {
+v0 = lin[INDEX_P1] + 16;
+if ( v0 <= 128 ) {
+
   //IN Screen
   NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1] + colint[INDEX_P1],
                    lin[INDEX_P1] + 16, col[INDEX_P1]);
