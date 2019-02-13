@@ -110,8 +110,10 @@ unsigned char game_exit_col;
 unsigned char game_exit_lin;
 unsigned char game_code;
 
+
 unsigned char game_tileset;
 unsigned char game_mode;
+unsigned char game_atrac;
 unsigned char game_lives;
 
 unsigned char game_round_up;

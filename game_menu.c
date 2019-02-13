@@ -36,10 +36,12 @@ void menu_main() {
   unsigned char s_col_e;
   unsigned char s_row;
   unsigned char c;
+  unsigned int start_time;
+
 
   f_input = 1;
-  s_col = 11;
-  s_col_e = 11 + 9;
+  s_col = 12;
+  s_col_e = 12 + 9;
   s_row = 7;
   c = 0;
   game_code = 0;
@@ -47,7 +49,8 @@ void menu_main() {
 
   audio_menu();
   menu_main_print();
-i = 0;
+  i = 0;
+  start_time = zx_clock();
   while (f_input) {
     z80_delay_ms(40);
     // in_wait_key();
@@ -58,14 +61,14 @@ i = 0;
     // ROTATE PAPER
     v0 = attrib_hl[0];
     v1 = i % 3;
-    switch(v1) {
-      case 0:
+    switch (v1) {
+    case 0:
       v0 = PAPER_RED;
       break;
-      case 1:
+    case 1:
       v0 = PAPER_MAGENTA;
       break;
-      case 2:
+    case 2:
       v0 = PAPER_BLUE;
       break;
     }
@@ -102,6 +105,7 @@ i = 0;
       joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
       // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 2;
+      start_time = zx_clock();
       break;
     case 6:
       game_attribs();
@@ -111,6 +115,7 @@ i = 0;
         intrinsic_halt();
         f_input = 0; // Exit Loop
       }
+      start_time = zx_clock();
       zx_border(INK_BLACK);
       break;
     case 0:
@@ -125,6 +130,53 @@ i = 0;
     if (c > 0 && c < 5)
       game_paint_attrib(&attrib, s_col, s_col_e, s_row);
     ++i;
+
+
+
+    if (game_check_time(&start_time, 1600)) {
+
+      ay_reset();
+      game_atrac = 1;
+      c = 0;
+      while (!c) {
+
+        c = in_inkey();
+        //spr_clear_scr();
+        //game_cls();
+        game_round_init();
+        start_time = zx_clock();
+        while (!game_check_time(&start_time, 500) && !c) {
+          enemy_turn();
+          if (game_check_time(&time_key, 4)) {
+            time_key = zx_clock();
+            game_key_paint();
+          }
+          if (game_conveyor_col0 > 0) {
+            if (game_check_time(&time_conv, 5)) {
+              time_conv = zx_clock();
+              game_anim_conveyor();
+            }
+          }
+          c = in_inkey();
+
+        }
+        scr_curr++;
+        if (scr_curr == 20 || scr_curr == 40) {
+          c = 0xFF;
+        }
+      }
+      map_paper = PAPER_BLACK;
+      if (game_mode) {
+        scr_curr = 20;
+      } else {
+        scr_curr = 0;
+      }
+      start_time = zx_clock();
+      //spr_clear_scr();
+      //game_cls();
+      menu_main_print();
+      game_atrac = 0;
+    }
   }
 }
 
@@ -134,8 +186,8 @@ void menu_main_print(void) {
   unsigned char s_col;
   unsigned char s_col_e;
   s_row = 7;
-  s_col = 10;
-  s_col_e = 20;
+  s_col = 11;
+  s_col_e = 21;
   // intrinsic_halt();
   game_cls();
   audio_menu();
@@ -147,12 +199,12 @@ void menu_main_print(void) {
   game_attribs();
 
   if (game_mode) {
-    zx_print_str(3, 9, "MANIC PIETRO");
+    zx_print_str(3, 10, "MANIC PIETRO");
   } else {
-    zx_print_str(3, 9, "MANIC  MINER");
+    zx_print_str(3, 10, "MANIC  MINER");
   }
 
-  game_paint_attrib(&attrib, 9, 21, (3 << 3) + 8);
+  game_paint_attrib(&attrib, 10, 22, (3 << 3) + 8);
 
   zx_print_str(s_row, s_col, "1 SINCLAIR");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
@@ -193,15 +245,22 @@ void menu_redefine() {
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
   intrinsic_halt();
 
-  zx_print_str(10, 10, "LEFT");
+  s_col1 = 10;
+  s_row1 = 10;
+  zx_print_str(s_row1, s_col1, "LEFT");
   k1.left = menu_define_key();
-  zx_print_str(11, 10, "RIGHT");
+
+  s_row1++;
+  zx_print_str(s_row1, s_col1, "RIGHT");
   k1.right = menu_define_key();
-  zx_print_str(12, 10, "JUMP");
+
+  s_row1++;
+  zx_print_str(s_row1, s_col1, "JUMP");
   k1.fire = menu_define_key();
 
   k1.up = IN_KEY_SCANCODE_DISABLE;
   k1.down = IN_KEY_SCANCODE_DISABLE;
+  z80_delay_ms(255);
   // game_fill_row(12, 32);
   menu_main_print();
 }
@@ -211,10 +270,23 @@ unsigned int menu_define_key() {
   while (1) {
     in_wait_key();
     v1 = in_inkey();
+
     in_wait_nokey();
     v0 = 0;
     while (v0 < 38) {
       if (v1 == key_map[v0]) {
+        if (v1 >= 61 && v1 <=122) {
+          v1 = v1 - 32; //TO UPPER
+        }
+        if ( (v1 >= 30 && v1 <= 39) || (v1 >= 65 && v1 <= 90) ) {
+          zx_print_char(s_row1,s_col1+10,v1);
+        }
+        if (v1 == 13) {
+          zx_print_str(s_row1,s_col1+10,"ENTER");
+        }
+        if (v1 == 32) {
+          zx_print_str(s_row1,s_col1+10,"SPACE");
+        }
         return scan_map[v0];
       }
       ++v0;
@@ -270,7 +342,7 @@ unsigned char menu_read_code() {
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
   intrinsic_halt();
   s_row = 12;
-  s_col = 10;
+  s_col = 11;
   zx_print_ink(INK_CYAN);
 
   zx_print_str(s_row, s_col, "ENTER CODE");
@@ -389,8 +461,8 @@ unsigned char menu_read_code() {
     }
   }
   ay_song_stop();
-  s_row = 14;
-  s_col = 12;
+  s_row = 16;
+  s_col = 13;
   zx_print_str(s_row, s_col, "NOPSIE");
   game_paint_attrib(&attrib_hl, s_col, s_col + 6, (s_row << 3) + 8);
   z80_delay_ms(350);

@@ -40,7 +40,7 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
-  game_debug = 1;
+  game_debug = 0;
   game_mode = 1;  //PIETRO DEFAULT
   game_fps_show = 0;
   nirv_sprite_index = 0;

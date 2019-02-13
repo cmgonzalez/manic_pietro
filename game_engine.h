@@ -35,7 +35,7 @@ extern void			     game_print_score(void);
 extern void          game_paint_attrib( unsigned char *f_attrib[], char f_start, unsigned char f_end, unsigned char f_lin);
 extern void			     game_colour_message( unsigned char f_row, unsigned char f_col, unsigned char f_col2, unsigned int f_miliseconds, unsigned char skip);
 extern void			     game_key_paint(void);
-extern unsigned char game_check_time(unsigned int *start, unsigned char lapse);
+extern unsigned char game_check_time(unsigned int *start, unsigned int lapse);
 extern void          game_print_header(void);
 extern void          game_attribs(void);
 extern void          game_page_map(void);
@@ -55,6 +55,6 @@ extern void          game_set_attr(unsigned char f_lin, unsigned char f_col, uns
 extern void          page( unsigned char bank );
 extern unsigned char reverse(unsigned char b);
 extern void          zx_print_char(unsigned char ui_row, unsigned char ui_col, unsigned char c);
-
+extern void          game_anim_conveyor();
 
 #endif

@@ -106,7 +106,7 @@ void audio_game_end(void) {
 }
 void audio_menu(void) {
   ay_reset();
-  ay_song_play(AY_SONG_LOOP, 4, ay_song_menu);
+  ay_song_play(AY_SONG_ONCE, 4, ay_song_menu);
 }
 
 void audio_levelup(void) {

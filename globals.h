@@ -285,6 +285,7 @@ extern unsigned char game_round_up;
 extern unsigned char menu_curr_sel;
 extern unsigned char game_tileset;
 extern unsigned char game_mode;
+extern unsigned char game_atrac;
 
 
 extern unsigned int fps;

@@ -122,6 +122,8 @@ void game_draw_map(void) {
   unsigned char val1;
   unsigned char f_exit;
 
+  NIRVANAP_stop();
+  intrinsic_di();
   zx_print_ink(INK_WHITE); // For Debug
   v0 = 0;
   while (v0 < INDEX_P1) {
@@ -236,6 +238,8 @@ void game_draw_map(void) {
   if (scr_curr == 19) {
     game_img1();
   }
+  intrinsic_ei();
+  NIRVANAP_start();
 }
 
 void game_solar_ray() {
@@ -623,7 +627,7 @@ void game_round_init(void) {
   NIRVANAP_start();
   NIRVANAP_halt();
   // Round presentation
-  if (!game_debug) {
+  if (!game_debug && !game_atrac) {
 
     // game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
     // zx_print_str(10, 10, "ROUNDXX");
@@ -669,13 +673,12 @@ void game_round_init(void) {
   }
 
   // Draw Screen
-  NIRVANAP_stop();
-  intrinsic_di();
   game_draw_map();
-  intrinsic_ei();
-  NIRVANAP_start();
   // Start Tune
-  audio_ingame();
+  if (!game_atrac) {
+    audio_ingame();
+  }
+
   // Remove Flash from Door
   game_flash_exit(!FLASH);
   zx_border(map_border);
@@ -824,7 +827,7 @@ void game_paint_attrib(unsigned char *f_attrib[], char f_start,
   }
 }
 
-unsigned char game_check_time(unsigned int *start, unsigned char lapse) {
+unsigned char game_check_time(unsigned int *start, unsigned int lapse) {
   if (zx_clock() - *start > lapse) {
     return 1;
   } else {
