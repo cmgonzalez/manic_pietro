@@ -206,10 +206,11 @@ const unsigned char spr_init1[] = { //WILLY MODE
    122,  36, 4,   4, E_HORIZONTAL, 0x04, 0x03, 0x05, 0x06, // CARRITO COPIA PARA OTROS COLORES
 };
 
-const unsigned char texts[] = { //GAME TEXT
-"Errazking termina pronto estos dibujos| o nos vamos quedar fuera de la Dev",
-"Segundo estupido texto|de pruebas"
-
+const unsigned char texts[128] = { //GAME TEXT
+"ERRAZKING TERMINA PRONTO LOS    "
+"DIBUJOS SINO VAMOS A QUEDAR     "
+"FUERA DE LA ZXDEV MIA REMAKES..."
+"PD GRACIAS A TODOS POR SU APOYO!"
 };
 
 

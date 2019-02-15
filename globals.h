@@ -389,7 +389,8 @@ extern const unsigned char spr_init2[];
 
 extern const unsigned char game_borders0[];
 extern const unsigned char map_names0[];
-
+extern const unsigned char texts[];
+extern unsigned char color;
 extern unsigned char scr_curr;
 extern unsigned char *gbyte;
 

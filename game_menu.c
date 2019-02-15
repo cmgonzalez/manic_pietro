@@ -36,10 +36,8 @@ void menu_main() {
   unsigned char s_col_e;
   unsigned char s_row;
   unsigned char c;
-  unsigned char color;
 
   unsigned int start_time;
-
 
   f_input = 1;
   s_col = 12;
@@ -57,15 +55,25 @@ void menu_main() {
   menu_main_print();
   i = 0;
   start_time = zx_clock();
+  color = 0;
   while (f_input) {
-    z80_delay_ms(40);
+    z80_delay_ms(20);
     // in_wait_key();
     c = in_inkey();
     // in_wait_nokey();
 
     s_row = ((9 + menu_curr_sel) << 3) + 8;
     // ROTATE PAPER
-    v0 = attrib_hl[0];
+    // v0 = attrib_hl[0];
+    v0 = color << 3;
+    ++color;
+    if (color == INK_CYAN) {
+      ++color;
+    }
+    if (color > 6) {
+      color = 0;
+    }
+    /*
     v1 = i % 3;
     switch (v1) {
     case 0:
@@ -78,6 +86,7 @@ void menu_main() {
       v0 = PAPER_BLUE;
       break;
     }
+    */
     attrib_hl[0] = (attrib_hl[0] & 0xC7) | v0;
     attrib_hl[1] = (attrib_hl[1] & 0xC7) | v0;
     attrib_hl[2] = (attrib_hl[2] & 0xC7) | v0;
@@ -113,7 +122,7 @@ void menu_main() {
       menu_curr_sel = 2;
       start_time = zx_clock();
       break;
-    case 6:
+    case 6: // CODES
       game_attribs();
       v0 = menu_read_code();
       ay_reset();
@@ -124,6 +133,17 @@ void menu_main() {
       start_time = zx_clock();
       zx_border(INK_BLACK);
       break;
+    /* OUT OF MEM
+    case 7: // INTRO
+      ay_reset();
+      game_intro();
+      game_cls();
+      menu_logo();
+      menu_clear();
+      menu_main_print();
+      audio_menu();
+      break;
+    */
     case 0:
       intrinsic_halt();
       game_cls();
@@ -137,8 +157,6 @@ void menu_main() {
       game_paint_attrib(&attrib, s_col, s_col_e, s_row);
     ++i;
 
-
-
     if (game_check_time(&start_time, 1600)) {
 
       ay_reset();
@@ -147,8 +165,8 @@ void menu_main() {
       while (!c) {
 
         c = in_inkey();
-        //spr_clear_scr();
-        //game_cls();
+        // spr_clear_scr();
+        // game_cls();
         game_round_init();
         start_time = zx_clock();
         color = 0;
@@ -158,9 +176,10 @@ void menu_main() {
             time_key = zx_clock();
             game_key_paint();
             zx_print_ink(PAPER_BLACK | color | BRIGHT);
-            zx_print_str(22,0," MANIC PIETRO   2019 NOENTIENDO");
+            // zx_print_str(22,0," MANIC PIETRO   2019 NOENTIENDO");
+            zx_print_str(22, 0, " MANIC PIETRO ZXDEV MIA REMAKES");
             color++;
-            if (color == 8){
+            if (color == 8) {
               color = 0;
             }
           }
@@ -171,7 +190,6 @@ void menu_main() {
             }
           }
           c = in_inkey();
-
         }
         scr_curr++;
         if (scr_curr == 20 || scr_curr == 40) {
@@ -185,7 +203,7 @@ void menu_main() {
         scr_curr = 0;
       }
       start_time = zx_clock();
-      //spr_clear_scr();
+      // spr_clear_scr();
       zx_border(INK_BLACK);
       game_attribs();
       game_cls();
@@ -227,6 +245,12 @@ void menu_main_print(void) {
   zx_print_str(s_row, s_col, "6 CODES");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
   ++s_row;
+  /* OUT OF MEM
+  zx_print_str(s_row, s_col, "7 INTRO");
+  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
+  ++s_row;
+  */
+  ++s_row;
   ++s_row;
   zx_print_ink(INK_CYAN);
 
@@ -236,13 +260,13 @@ void menu_main_print(void) {
   zx_print_str(s_row, 8, "2019  NOENTIENDO");
 }
 
-void menu_clear () {
+void menu_clear() {
   zx_print_ink(PAPER_BLACK | INK_WHITE | BRIGHT);
   for (v0 = 9; v0 < 20; ++v0) {
     game_paint_attrib(&attrib, 0, 31, (v0 << 3) + 8);
   }
   for (v0 = 9; v0 < 23; ++v0) {
-    game_fill_row(v0,32);
+    game_fill_row(v0, 32);
   }
 }
 
@@ -251,7 +275,7 @@ void menu_redefine() {
   s_row1 = 10;
 
   menu_clear();
-  zx_print_str(s_row1, s_col1-2, "PRESS A KEY");
+  zx_print_str(s_row1, s_col1 - 2, "PRESS A KEY");
   game_paint_attrib(&attrib, 0, 31, (s_row1 << 3) + 8);
   s_row1++;
   s_row1++;
@@ -284,17 +308,17 @@ unsigned int menu_define_key() {
     v0 = 0;
     while (v0 < 38) {
       if (v1 == key_map[v0]) {
-        if (v1 >= 61 && v1 <=122) {
-          v1 = v1 - 32; //TO UPPER
+        if (v1 >= 61 && v1 <= 122) {
+          v1 = v1 - 32; // TO UPPER
         }
-        if ( (v1 >= 30 && v1 <= 39) || (v1 >= 65 && v1 <= 90) ) {
-          zx_print_char(s_row1,s_col1+10,v1);
+        if ((v1 >= 30 && v1 <= 39) || (v1 >= 65 && v1 <= 90)) {
+          zx_print_char(s_row1, s_col1 + 10, v1);
         }
         if (v1 == 13) {
-          zx_print_str(s_row1,s_col1+10,"ENTER");
+          zx_print_str(s_row1, s_col1 + 10, "ENTER");
         }
         if (v1 == 32) {
-          zx_print_str(s_row1,s_col1+10,"SPACE");
+          zx_print_str(s_row1, s_col1 + 10, "SPACE");
         }
         return scan_map[v0];
       }
@@ -472,10 +496,10 @@ unsigned char menu_read_code() {
 
 void menu_logo() {
   if (game_mode) {
-    //zx_print_str(3, 10, "MANIC PIETRO");
-    game_logo1(1,16,4,8,4);
+    // zx_print_str(3, 10, "MANIC PIETRO");
+    game_logo1(1, 16, 4, 8, 4);
   } else {
-    //zx_print_str(3, 10, "MANIC  MINER");
-    game_logo1(2,16,0,16,4);
+    // zx_print_str(3, 10, "MANIC  MINER");
+    game_logo1(2, 16, 0, 16, 4);
   }
 }

@@ -1224,8 +1224,13 @@ void game_intro() {
 
     z80_delay_ms(350);
     game_logo1(0, 16, 4, 8, 10);
+    game_text(0,19);
+    game_text(1,20);
+    game_text(2,21);
+    game_text(3,22);
     z80_delay_ms(1000);
   }
+
 }
 
 void game_shoe() {
@@ -1361,6 +1366,41 @@ void zx_print_char(unsigned char ui_row, unsigned char ui_col,
   zx_print_str(ui_row, ui_col, str);
 }
 
-void game_message( unsigned char f_index, unsigned char f_row ) {
-  unsigned char map_names[32];
+void game_text( unsigned char f_index, unsigned char f_row ) {
+  unsigned char text_buff[32];
+  unsigned char *src;
+  unsigned char *dest;
+  unsigned char k;
+
+
+  src = &texts[32*f_index];
+  dest = &text_buff[0];
+  page(6);
+  memcpy(dest, src, 32);
+  page(0);
+
+  k = 1;
+  v0 = 0;
+  s_col1 = 0;
+  color = 1;
+  while (k) {
+    color = 1;
+    while ( color < 8) {
+      zx_print_ink(PAPER_BLACK | color | BRIGHT);
+      zx_print_char(f_row, s_col1, text_buff[v0]);
+      z80_delay_ms(1);
+      ++color;
+    }
+    z80_delay_ms(8);
+    ++v0;
+    ++s_col1;
+    ++color;
+    if (color > 7) {
+      color = 1;
+    }
+    if (v0 > 31) {
+      k = 0;
+    }
+  }
+
 }

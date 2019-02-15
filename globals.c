@@ -26,6 +26,7 @@ unsigned char v0;
 unsigned char v1;
 unsigned char v2;
 unsigned char v3;
+unsigned char color;
 
 unsigned char tbuffer[7]; // Used for ASM PRINT
 

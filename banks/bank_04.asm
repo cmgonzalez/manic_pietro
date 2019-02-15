@@ -43,16 +43,24 @@ SECTION BANK_4_AUDIO
 
 PUBLIC _ay_song_ingame0
 _ay_song_ingame0:
-  BINARY "songs/pietro_cavern.pt3"
+BINARY "songs/pietro_cavern.pt3"
 
 PUBLIC _ay_song_ingame1
 _ay_song_ingame1:
-  BINARY "songs/Davos_MOZART.pt3"
+BINARY "songs/Davos_MOZART.pt3"
 
 
 PUBLIC _ay_song_menu
 _ay_song_menu:
-    BINARY "songs/pietro_blue.pt3"
+BINARY "songs/pietro_blue.pt3"
+
+PUBLIC _ay_song_coin_noentiendo
+_ay_song_coin_noentiendo:
+BINARY "songs/coin_noentiendo.pt3"
+
+PUBLIC _ay_song_game_over
+_ay_song_game_over:
+BINARY "songs/game_over.pt3"
 
 ;SOUND FX
 
@@ -87,7 +95,3 @@ BINARY "fx/crumble.afx"
 PUBLIC _ay_fx_door_open
 _ay_fx_door_open:
 BINARY "fx/door_open.afx"
-
-PUBLIC _ay_song_coin_noentiendo
-_ay_song_coin_noentiendo:
-BINARY "songs/coin_noentiendo.pt3"

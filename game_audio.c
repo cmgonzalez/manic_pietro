@@ -42,10 +42,15 @@ void audio_ingame(void) {
     }
   }
 }
+
 void audio_round_init(void) {
   ay_song_play(AY_SONG_ONCE, 6, ay_song_round_init);
 }
-void audio_game_over(void) { ay_song_play(AY_SONG_ONCE, 6, ay_song_game_over); }
+
+void audio_game_over(void) {
+  ay_song_play(AY_SONG_ONCE, 4, ay_song_game_over); 
+}
+
 void audio_time(void) {
   ay_song_stop();
   if (!game_debug) {
