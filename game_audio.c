@@ -31,14 +31,32 @@
 #include <z80.h>
 
 void audio_ingame(void) {
-  if (!game_debug) {
-    if (game_song_play && !game_song_play_start) {
-      game_song_play_start = 1;
-      if (game_mode == 0) {
-        ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
-      } else {
-        ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame1);
+  ay_song_stop();
+
+  if (!game_tune)
+     {
+      if (game_song_play && !game_song_play_start) {
+        game_song_play_start = 1;
+        if (game_mode == 0) {
+          ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
+          game_tune = 1;
+        } else {
+          ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame1);
+          game_tune = 2;
+        }
       }
+    }
+  else {
+    switch (game_tune) {
+    case 1: // PIETRO
+      ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
+      break;
+    case 2: // WILLY
+      ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame1);
+      break;
+    case 3: // MENU
+      ay_song_play(AY_SONG_LOOP, 4, ay_song_menu);
+      break;
     }
   }
 }
@@ -47,9 +65,7 @@ void audio_round_init(void) {
   ay_song_play(AY_SONG_ONCE, 6, ay_song_round_init);
 }
 
-void audio_game_over(void) {
-  ay_song_play(AY_SONG_ONCE, 4, ay_song_game_over); 
-}
+void audio_game_over(void) { ay_song_play(AY_SONG_ONCE, 4, ay_song_game_over); }
 
 void audio_time(void) {
   ay_song_stop();

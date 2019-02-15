@@ -37,7 +37,7 @@ void main(void) {
   unsigned int counter;
 
   zx_border(INK_BLACK);
-  zx_print_ink(INK_WHITE);
+  //zx_print_ink(INK_WHITE);
 
   // DEBUG
   game_debug = 0;
@@ -92,10 +92,19 @@ void main(void) {
   k1.up = IN_KEY_SCANCODE_DISABLE;
   k1.down = IN_KEY_SCANCODE_DISABLE;
 
+
+  k2.left = IN_KEY_SCANCODE_CAPS;
+  k2.right = IN_KEY_SCANCODE_SYM;
+
+  k2.up = IN_KEY_SCANCODE_DISABLE;
+  k2.down = IN_KEY_SCANCODE_DISABLE;
+  k2.fire = IN_KEY_SCANCODE_DISABLE;
+  joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
   // Wait for Keypress and Randomize
   // Default Values for menu
 
-
+  //#define IN_KEY_SCANCODE_CAPS   0x01fe
+  //#define IN_KEY_SCANCODE_SYM    0x027f
 
   // joyfunc2 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
 
@@ -127,6 +136,7 @@ void main(void) {
 
 
   while (1) {
+    game_tune = 0; //default
     game_cls();
     // MENU
     if (game_menu) {

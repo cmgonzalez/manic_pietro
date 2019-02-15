@@ -96,6 +96,46 @@ void game_loop(void) {
       }
       ++loop_count;
       ++fps;
+
+      dirs = (joyfunc2)(&k2);
+      if (dirs & IN_STICK_LEFT) {
+        ++game_tune;
+        //0 DEF
+        //1 Pietro
+        //2 Willy
+        //3 MENU
+        //4 Off
+        if (game_tune > 4) {
+          game_tune = 1;
+        }
+        audio_ingame();
+        z80_delay_ms(100);
+      };
+      color = 0;
+      if (dirs & IN_STICK_RIGHT) {
+        z80_delay_ms(100);
+        ay_song_stop();
+        v0=1;
+        while(v0) {
+          dirs = (joyfunc2)(&k2);
+          z80_delay_ms(10);
+          if (dirs & IN_STICK_RIGHT) {
+            v0 = 0;
+          }
+
+          ++color;
+          if (color > 7) {
+            color = 0;
+          }
+          zx_print_ink((map_border << 3) | color);
+          zx_print_str(0,14,"PAUSE");
+        }
+        game_fill_row(0, 32);
+        audio_ingame();
+        z80_delay_ms(100);
+      };
+
+
     }
 
     if (game_round_up) {

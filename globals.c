@@ -44,8 +44,9 @@ unsigned char scr_curr;
 //###############################################################################################
 
 uint16_t (*joyfunc1)(udk_t *); // pointer to joystick function Player 1
-//uint16_t (*joyfunc2)(udk_t *); // pointer to joystick function for game_control_mode
+uint16_t (*joyfunc2)(udk_t *); // pointer to joystick function for game_control_mode
 udk_t k1;
+udk_t k2;
 
 unsigned char dirs;
 unsigned char dirs_last;
@@ -112,12 +113,14 @@ unsigned char game_exit_lin;
 unsigned char game_code;
 unsigned char game_menu;
 unsigned char game_effect;
+unsigned char game_tune;
 
 
 unsigned char game_tileset;
 unsigned char game_mode;
 unsigned char game_atrac;
 unsigned char game_lives;
+unsigned char game_tunes;
 
 unsigned char game_round_up;
 unsigned char menu_curr_sel;

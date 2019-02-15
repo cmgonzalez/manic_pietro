@@ -62,7 +62,7 @@ void menu_main() {
     c = in_inkey();
     // in_wait_nokey();
 
-    s_row = ((9 + menu_curr_sel) << 3) + 8;
+    s_row = ((10 + menu_curr_sel) << 3) + 8;
     // ROTATE PAPER
     // v0 = attrib_hl[0];
     v0 = color << 3;
@@ -110,19 +110,21 @@ void menu_main() {
       // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 3;
       break;
+    /*
     case 4: // CURSOR
       joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_cursor);
       // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 4;
       break;
-    case 5: // DEFINE
+    */
+    case 4: // DEFINE
       menu_redefine();
       joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
       // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 2;
       start_time = zx_clock();
       break;
-    case 6: // CODES
+    case 5: // CODES
       game_attribs();
       v0 = menu_read_code();
       ay_reset();
@@ -175,9 +177,11 @@ void menu_main() {
           if (game_check_time(&time_key, 4)) {
             time_key = zx_clock();
             game_key_paint();
-            zx_print_ink(PAPER_BLACK | color | BRIGHT);
+            zx_print_ink((map_border << 3) | color);
             // zx_print_str(22,0," MANIC PIETRO   2019 NOENTIENDO");
-            zx_print_str(22, 0, " MANIC PIETRO ZXDEV MIA REMAKES");
+            zx_print_str(0, 10, "MANIC PIETRO");
+            //zx_print_ink((map_border << 3) | color | BRIGHT);
+            //zx_print_str(22, 7, "ZXDEV MIA REMAKES");
             color++;
             if (color == 8) {
               color = 0;
@@ -221,7 +225,7 @@ void menu_main_print(void) {
   unsigned char s_row;
   unsigned char s_col;
   unsigned char s_col_e;
-  s_row = 10;
+  s_row = 11;
   s_col = 11;
   s_col_e = 21;
   // intrinsic_halt();
@@ -235,16 +239,19 @@ void menu_main_print(void) {
   ++s_row;
   zx_print_str(s_row, s_col, "3 KEMPSTON");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
+/*
   ++s_row;
   zx_print_str(s_row, s_col, "4 CURSOR");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
+*/
   ++s_row;
-  zx_print_str(s_row, s_col, "5 DEFINE");
+  ++s_row;
+  zx_print_str(s_row, s_col, "4 DEFINE");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
   ++s_row;
-  zx_print_str(s_row, s_col, "6 CODES");
+  zx_print_str(s_row, s_col, "5 CODES");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-  ++s_row;
+
   /* OUT OF MEM
   zx_print_str(s_row, s_col, "7 INTRO");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
@@ -257,7 +264,7 @@ void menu_main_print(void) {
   zx_print_str(s_row, s_col, "0 START");
   s_row = s_row + 5;
   zx_print_ink(INK_WHITE);
-  zx_print_str(s_row, 8, "2019  NOENTIENDO");
+  zx_print_str(s_row, 9, "2019 NOENTIENDO");
 }
 
 void menu_clear() {
@@ -272,7 +279,7 @@ void menu_clear() {
 
 void menu_redefine() {
   s_col1 = 12;
-  s_row1 = 10;
+  s_row1 = 11;
 
   menu_clear();
   zx_print_str(s_row1, s_col1 - 2, "PRESS A KEY");
@@ -366,7 +373,7 @@ unsigned char menu_read_code() {
   unsigned char checksum1;
   unsigned char valid;
   menu_clear();
-  s_row1 = 12;
+  s_row1 = 13;
   s_col1 = 11;
   zx_print_str(s_row1, s_col1, "ENTER CODE");
   game_paint_attrib(&attrib, 0, 31, (s_row1 << 3) + 8);
@@ -495,6 +502,7 @@ unsigned char menu_read_code() {
 }
 
 void menu_logo() {
+  game_cls();
   if (game_mode) {
     // zx_print_str(3, 10, "MANIC PIETRO");
     game_logo1(1, 16, 4, 8, 4);

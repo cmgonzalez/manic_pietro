@@ -217,8 +217,9 @@ extern unsigned char v3;
 
 extern unsigned char btiles[];
 extern uint16_t (*joyfunc1)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
-//extern uint16_t (*joyfunc2)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
+extern uint16_t (*joyfunc2)(udk_t *); //TODO REMOVE THIS AS IS PART NOW OF input.h
 extern udk_t k1;
+extern udk_t k2;
 
 
 extern unsigned char dirs;
@@ -431,3 +432,5 @@ extern unsigned char *deltas;
 
 extern unsigned char code0[GAME_CODELEN];
 extern unsigned char code1[GAME_CODELEN];
+
+extern unsigned char game_tune;
