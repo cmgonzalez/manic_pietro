@@ -36,18 +36,24 @@ void menu_main() {
   unsigned char s_col_e;
   unsigned char s_row;
   unsigned char c;
+  unsigned char color;
+
   unsigned int start_time;
 
 
   f_input = 1;
   s_col = 12;
   s_col_e = 12 + 9;
-  s_row = 7;
+
   c = 0;
   game_code = 0;
   map_paper = PAPER_BLACK;
 
   audio_menu();
+  game_cls();
+  menu_logo();
+  game_attribs();
+
   menu_main_print();
   i = 0;
   start_time = zx_clock();
@@ -57,7 +63,7 @@ void menu_main() {
     c = in_inkey();
     // in_wait_nokey();
 
-    s_row = ((6 + menu_curr_sel) << 3) + 8;
+    s_row = ((9 + menu_curr_sel) << 3) + 8;
     // ROTATE PAPER
     v0 = attrib_hl[0];
     v1 = i % 3;
@@ -145,11 +151,18 @@ void menu_main() {
         //game_cls();
         game_round_init();
         start_time = zx_clock();
+        color = 0;
         while (!game_check_time(&start_time, 500) && !c) {
           enemy_turn();
           if (game_check_time(&time_key, 4)) {
             time_key = zx_clock();
             game_key_paint();
+            zx_print_ink(PAPER_BLACK | color | BRIGHT);
+            zx_print_str(22,0," MANIC PIETRO   2019 NOENTIENDO");
+            color++;
+            if (color == 8){
+              color = 0;
+            }
           }
           if (game_conveyor_col0 > 0) {
             if (game_check_time(&time_conv, 5)) {
@@ -173,8 +186,13 @@ void menu_main() {
       }
       start_time = zx_clock();
       //spr_clear_scr();
-      //game_cls();
+      zx_border(INK_BLACK);
+      game_attribs();
+      game_cls();
+      menu_logo();
+      menu_clear();
       menu_main_print();
+      audio_menu();
       game_atrac = 0;
     }
   }
@@ -185,26 +203,11 @@ void menu_main_print(void) {
   unsigned char s_row;
   unsigned char s_col;
   unsigned char s_col_e;
-  s_row = 7;
+  s_row = 10;
   s_col = 11;
   s_col_e = 21;
   // intrinsic_halt();
-  game_cls();
-  audio_menu();
-  // Manic Pietro Logo
-  // NIRVANAP_spriteT(0, TILE_TITLE, 32, 11);
-  // NIRVANAP_spriteT(1, TILE_TITLE + 1, 32, 13);
-  // NIRVANAP_spriteT(2, TILE_TITLE + 2, 32, 15);
-  // NIRVANAP_spriteT(3, TILE_TITLE + 3, 32, 17);
-  game_attribs();
-
-  if (game_mode) {
-    zx_print_str(3, 10, "MANIC PIETRO");
-  } else {
-    zx_print_str(3, 10, "MANIC  MINER");
-  }
-
-  game_paint_attrib(&attrib, 10, 22, (3 << 3) + 8);
+  menu_clear();
 
   zx_print_str(s_row, s_col, "1 SINCLAIR");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
@@ -221,32 +224,38 @@ void menu_main_print(void) {
   zx_print_str(s_row, s_col, "5 DEFINE");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
   ++s_row;
-  ++s_row;
   zx_print_str(s_row, s_col, "6 CODES");
   game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
   ++s_row;
-  game_paint_attrib(&attrib, s_col, s_col_e + 4, (s_row << 3) + 8);
-  zx_print_str(s_row, s_col, "0 START");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-  s_row = s_row + 8;
+  ++s_row;
   zx_print_ink(INK_CYAN);
 
-  zx_print_str(s_row, 8, "2019 NOENTIENDO");
-  game_paint_attrib(&attrib, 0, 31, (s_row << 3) + 8);
+  zx_print_str(s_row, s_col, "0 START");
+  s_row = s_row + 5;
+  zx_print_ink(INK_WHITE);
+  zx_print_str(s_row, 8, "2019  NOENTIENDO");
+}
 
-  // zx_print_str(23, 2, "INT.RELEASE DON'T DISTRIBUTE");
+void menu_clear () {
+  zx_print_ink(PAPER_BLACK | INK_WHITE | BRIGHT);
+  for (v0 = 9; v0 < 20; ++v0) {
+    game_paint_attrib(&attrib, 0, 31, (v0 << 3) + 8);
+  }
+  for (v0 = 9; v0 < 23; ++v0) {
+    game_fill_row(v0,32);
+  }
 }
 
 void menu_redefine() {
-
-  for (v0 = 5; v0 < 14; ++v0) {
-    game_paint_attrib(&attrib, 0, 31, (v0 << 3) + 8);
-  }
-  zx_paper_fill(INK_BLACK | PAPER_BLACK);
-  intrinsic_halt();
-
-  s_col1 = 10;
+  s_col1 = 12;
   s_row1 = 10;
+
+  menu_clear();
+  zx_print_str(s_row1, s_col1-2, "PRESS A KEY");
+  game_paint_attrib(&attrib, 0, 31, (s_row1 << 3) + 8);
+  s_row1++;
+  s_row1++;
+
   zx_print_str(s_row1, s_col1, "LEFT");
   k1.left = menu_define_key();
 
@@ -328,28 +337,17 @@ unsigned char menu_mcodechk(unsigned char *s) {
 }
 
 unsigned char menu_read_code() {
-  unsigned char s_row;
-  unsigned char s_col;
+
   unsigned char checksum0;
   unsigned char checksum1;
-
   unsigned char valid;
-
-  for (v0 = 5; v0 < 14; ++v0) {
-    game_paint_attrib(&attrib, 0, 31, (v0 << 3) + 8);
-  }
-
-  zx_paper_fill(INK_BLACK | PAPER_BLACK);
-  intrinsic_halt();
-  s_row = 12;
-  s_col = 11;
-  zx_print_ink(INK_CYAN);
-
-  zx_print_str(s_row, s_col, "ENTER CODE");
-  game_paint_attrib(&attrib, 0, 31, (s_row << 3) + 8);
-
-  zx_print_str(s_row + 1, s_col + 1, "________");
-  game_paint_attrib(&attrib, 0, 31, ((s_row + 1) << 3) + 8);
+  menu_clear();
+  s_row1 = 12;
+  s_col1 = 11;
+  zx_print_str(s_row1, s_col1, "ENTER CODE");
+  game_paint_attrib(&attrib, 0, 31, (s_row1 << 3) + 8);
+  zx_print_str(s_row1 + 1, s_col1 + 1, "________");
+  game_paint_attrib(&attrib, 0, 31, ((s_row1 + 1) << 3) + 8);
 
   // Read Key
   v1 = 0;
@@ -358,7 +356,7 @@ unsigned char menu_read_code() {
 
   while (v1 < GAME_CODELEN) {
     code0[v1] = 0;
-    v0 = menu_read_key(s_row + 1, s_col + 1 + v1);
+    v0 = menu_read_key(s_row1 + 1, s_col1 + 1 + v1);
     v2 = 0;
     while ((v2 < 10) && (game_encode[v2] != v0)) {
       ++v2;
@@ -443,7 +441,7 @@ unsigned char menu_read_code() {
         game_mode = 1;
         scr_curr = 20;
       }
-
+      menu_logo();
       game_code = 0;
       menu_main_print();
       return 0;
@@ -461,13 +459,23 @@ unsigned char menu_read_code() {
     }
   }
   ay_song_stop();
-  s_row = 16;
-  s_col = 13;
-  zx_print_str(s_row, s_col, "NOPSIE");
-  game_paint_attrib(&attrib_hl, s_col, s_col + 6, (s_row << 3) + 8);
+  s_row1 = 16;
+  s_col1 = 13;
+  zx_print_str(s_row1, s_col1, "NOPSIE");
+  game_paint_attrib(&attrib_hl, s_col1, s_col1 + 6, (s_row1 << 3) + 8);
   z80_delay_ms(350);
   zx_border(INK_RED);
   menu_main_print();
 
   return 0;
+}
+
+void menu_logo() {
+  if (game_mode) {
+    //zx_print_str(3, 10, "MANIC PIETRO");
+    game_logo1(1,16,4,8,4);
+  } else {
+    //zx_print_str(3, 10, "MANIC  MINER");
+    game_logo1(2,16,0,16,4);
+  }
 }

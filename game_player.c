@@ -95,7 +95,7 @@ void player_turn(void) {
     }
 
     // Magic Keys
-    player_debug_keys();
+    if (game_debug) player_debug_keys();
 
     // zx_print_chr(21, 0, colint[INDEX_P1]);
     // zx_print_chr(21, 0, lin[INDEX_P1]);

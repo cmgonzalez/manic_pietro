@@ -46,6 +46,12 @@ extern void ay_reset(void) __preserves_regs(b,c,d,e,h,l);
 
 //BANK 1 Images
 extern unsigned char img1[];
+extern unsigned char cartoon0[];
+extern unsigned char cartoon1[];
+extern unsigned char cartoon2[];
+//extern unsigned char cartoon3[];
+extern unsigned char logo1[];
+extern unsigned char logo2[];
 
 //BANK 3 Sprites 16x16
 extern unsigned char hisprites1[];

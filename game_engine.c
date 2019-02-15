@@ -342,6 +342,82 @@ void game_solar_ray0() {
   }
 }
 
+void game_logo1(unsigned char f_img, unsigned char f_lin, unsigned char f_col,
+                unsigned char f_width, unsigned char f_height) {
+
+  unsigned char i;
+  unsigned char *src;
+  unsigned char *dest;
+  unsigned int len;
+  len = f_width * f_height;
+  // 8 x 4 = 32 logo1
+  // Read Draw
+  NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
+  intrinsic_di();
+  i = 0;
+  while (i < 8) {
+    NIRVANAP_spriteT(i, 0, 0, 0);
+    ++i;
+  }
+  if (f_img) {
+    switch (f_img) {
+    case 1: // Logo Pietro
+      src = &logo1[0];
+      break;
+    case 2: // Miner Logo
+      src = &logo2[0];
+      break;
+    }
+
+    dest = &btiles[0];
+
+    page(1);
+    memcpy(dest, src, 48 * len);
+    page(0);
+  }
+  i = 0;
+  s_col1 = f_col;
+  s_lin1 = f_lin;
+
+  while (i < (len)) {
+    NIRVANAP_drawT_raw(i, s_lin1, s_col1 * 2);
+    ++i;
+    ++s_col1;
+    if ((i % f_width) == 0) {
+      s_lin1 = s_lin1 + 16;
+      s_col1 = f_col;
+    }
+  }
+  intrinsic_ei();
+
+  /*
+  k = 0;
+  v0 = 16;
+  v1 = 0;
+
+  while (k < (16 * 4)) {
+
+    i = 0;
+    li = k * 48;
+    NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
+    dest = &btiles[SPRITE_TMP];
+    src = &logo1[li];
+    page(1);
+    memcpy(dest, src, 48);
+    page(0);
+    NIRVANAP_drawT_raw(96, v0, v1);
+    if (v1 == 30) {
+      v0 = v0 + 16;
+      v1 = 0;
+    } else {
+      v1 = v1 + 2;
+    }
+
+    ++k;
+  }
+  */
+}
+
 void game_img1() {
 
   unsigned int li;
@@ -375,6 +451,7 @@ void game_img1() {
     ++k;
   }
 }
+
 void game_cell_paint_index() {
 
   s_col1 = index1 % 32;
@@ -611,6 +688,7 @@ void game_round_init(void) {
     game_crumb_end = 11;
     lapse_crumb = 4;
   }
+
   game_page_map();
   game_copy_sprite_color_reset();
   game_color_hacks();
@@ -629,12 +707,6 @@ void game_round_init(void) {
   // Round presentation
   if (!game_debug && !game_atrac) {
 
-    // game_paint_attrib(&attrib, 0, 31, (10 << 3) + 8);
-    // zx_print_str(10, 10, "ROUNDXX");
-    // zx_print_chr(10, 15, scr_curr + 1);
-
-    // game_paint_attrib(&attrib, 0, 31, (11 << 3) + 8);
-
     audio_round_init();
     game_fill_row(10, 32);
     s_col0 = 1;
@@ -645,7 +717,7 @@ void game_round_init(void) {
         game_paint_attrib(&attrib, s_col0 - 1, s_col0, (11 << 3) + 8);
       }
 
-      if (scr_curr > 20) {
+      if (scr_curr >= 20) {
         zx_print_chr(10, 17, scr_curr + 1 - 20);
         zx_print_str(10, 21, "A");
       } else {
@@ -1151,29 +1223,8 @@ void game_intro() {
     }
 
     z80_delay_ms(350);
-    // in_wait_key();
-    // LOADING IMAGE
-    game_cls();
-    NIRVANAP_stop();
-    v0 = 0;
-    v1 = 0;
-    v2 = 8;
-    intrinsic_di();
-    while (v1 < 160) {
-      while (v0 < 16) {
-        NIRVANAP_drawT_raw(v2, v1 + GAME_OFFSET_Y, v0 + 8);
-        v0 = v0 + 2;
-        ++v2;
-      }
-      v1 = v1 + 16;
-      v0 = 0;
-    }
-
-    intrinsic_ei();
-    NIRVANAP_start();
-    NIRVANAP_halt();
+    game_logo1(0, 16, 4, 8, 10);
     z80_delay_ms(1000);
-    // in_wait_key();
   }
 }
 
@@ -1232,7 +1283,7 @@ void game_shoe() {
   code0[7] = v3 / 100;
   code0[4] = (v3 - (code0[7] * 100)) / 10;
   code0[1] = v3 - (code0[7] * 100 + code0[4] * 10);
-
+  zx_print_ink(PAPER_BLACK | INK_YELLOW | BRIGHT);
   zx_print_str(20, 8, "CODE : ");
   i = 0;
   while (i < 8) {
@@ -1308,4 +1359,8 @@ void zx_print_char(unsigned char ui_row, unsigned char ui_col,
   str[0] = c;
   str[1] = 0;
   zx_print_str(ui_row, ui_col, str);
+}
+
+void game_message( unsigned char f_index, unsigned char f_row ) {
+  unsigned char map_names[32];
 }
