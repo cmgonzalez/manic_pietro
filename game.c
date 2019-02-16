@@ -37,7 +37,7 @@ void main(void) {
   unsigned int counter;
 
   zx_border(INK_BLACK);
-  //zx_print_ink(INK_WHITE);
+  zx_print_ink(INK_WHITE);
 
   // DEBUG
   game_debug = 0;
@@ -57,7 +57,7 @@ void main(void) {
     game_fps_show = 1;
     game_inmune = 1;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 19;
+    scr_curr = 12;
     game_menu = 0;
     game_effect = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);

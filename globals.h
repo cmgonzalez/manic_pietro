@@ -401,8 +401,6 @@ extern unsigned char map_border;
 extern unsigned char map_paper;
 extern unsigned char map_clear;
 
-extern const unsigned char key_map[];
-extern const unsigned int scan_map[];
 
 extern const unsigned char tile_class[];
 //extern unsigned char *map_names[];

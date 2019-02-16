@@ -309,30 +309,23 @@ unsigned int menu_define_key() {
 
   while (1) {
     in_wait_key();
-    v1 = in_inkey();
-
+    v0 = in_inkey();
+    v1 = v0;
     in_wait_nokey();
-    v0 = 0;
-    while (v0 < 38) {
-      if (v1 == key_map[v0]) {
-        if (v1 >= 61 && v1 <= 122) {
-          v1 = v1 - 32; // TO UPPER
-        }
-        if ((v1 >= 30 && v1 <= 39) || (v1 >= 65 && v1 <= 90)) {
-          zx_print_char(s_row1, s_col1 + 10, v1);
-        }
-        if (v1 == 13) {
-          zx_print_str(s_row1, s_col1 + 10, "ENTER");
-        }
-        if (v1 == 32) {
-          zx_print_str(s_row1, s_col1 + 10, "SPACE");
-        }
-        return scan_map[v0];
-      }
-      ++v0;
+    if (v1 >= 61 && v1 <= 122) {
+      v1 = v1 - 32; // TO UPPER
     }
+    if ((v1 >= 30 && v1 <= 39) || (v1 >= 65 && v1 <= 90)) {
+      zx_print_char(s_row1, s_col1 + 10, v1);
+    }
+    if (v1 == 13) {
+      zx_print_str(s_row1, s_col1 + 10, "ENTER");
+    }
+    if (v1 == 32) {
+      zx_print_str(s_row1, s_col1 + 10, "SPACE");
+    }
+    return in_key_scancode(v0);
   }
-  // return 0;
 }
 
 unsigned char menu_read_key(unsigned char row, unsigned char col) {

@@ -62,14 +62,18 @@ void audio_ingame(void) {
 }
 
 void audio_round_init(void) {
-  ay_song_play(AY_SONG_ONCE, 6, ay_song_round_init);
+  if (game_tune != 4) {
+    ay_song_play(AY_SONG_ONCE, 6, ay_song_round_init);
+  }
 }
 
-void audio_game_over(void) { ay_song_play(AY_SONG_ONCE, 4, ay_song_game_over); }
+void audio_game_over(void) {
+  ay_song_play(AY_SONG_ONCE, 4, ay_song_game_over); 
+}
 
 void audio_time(void) {
   ay_song_stop();
-  if (!game_debug) {
+  if (!game_debug && game_tune !=4) {
     ay_song_play(AY_SONG_ONCE, 6, ay_song_time_atack);
   };
 }
@@ -79,7 +83,9 @@ void audio_dead(void) {
   ay_fx_play(4, ay_fx_dead);
 }
 
-void audio_crumble(void) { ay_fx_play(4, ay_fx_crumble); }
+void audio_crumble(void) {
+  ay_fx_play(4, ay_fx_crumble);
+}
 
 void audio_jump(void) {
   ay_fx_play(4, ay_fx_jump);
@@ -93,44 +99,26 @@ void audio_fall(void) {
     player_fall_start = 0;
   }
 }
-void audio_game_start(void) { ay_fx_play(4, ay_fx_game_start); }
+void audio_game_start(void) {
+  ay_fx_play(4, ay_fx_game_start);
+}
 
-void audio_door_open(void) { ay_fx_play(4, ay_fx_door_open); }
+void audio_door_open(void) {
+  ay_fx_play(4, ay_fx_door_open);
+}
+
 void audio_tick(void) {
   ay_fx_stop();
   ay_fx_play(4, ay_fx_tick);
 }
 void audio_coin(void) {
-  // ay_fx_stop();
   ay_fx_play(4, ay_fx_coin);
 }
 void audio_coin_noentiendo(void) {
-  // ay_fx_stop();
   ay_song_play(AY_SONG_ONCE, 4, ay_song_coin_noentiendo);
-  // ay_fx_play(4, ay_fx_coin_noentiendo);
-}
-void audio_puerta(void) {
-  // ay_fx_play(4, ay_fx_puerta);
 }
 
-void audio_level_start(void) {
-  ay_reset();
-  // ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_start);
-}
-void audio_level_complete(void) {
-  ay_reset();
-  // ay_song_play(AY_SONG_ONCE, 6, ay_song_06_lotr_level_complete);
-}
-void audio_game_end(void) {
-  ay_reset();
-  // ay_song_play(AY_SONG_ONCE, 3, ay_song_03_sunflower);
-}
 void audio_menu(void) {
   ay_reset();
   ay_song_play(AY_SONG_ONCE, 4, ay_song_menu);
-}
-
-void audio_levelup(void) {
-  ay_fx_stop();
-  // ay_fx_play(4, ay_fx_levelup);
 }

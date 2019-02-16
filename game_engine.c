@@ -91,14 +91,15 @@ void game_loop(void) {
         }
       }
 
-      if (scr_curr == 18) {
+      if (scr_curr == 18 && !game_atrac) {
         game_solar_ray();
       }
       ++loop_count;
       ++fps;
+      //CAPS y SYMBOL READ
 
-      dirs = (joyfunc2)(&k2);
-      if (dirs & IN_STICK_LEFT) {
+      v0 = (joyfunc2)(&k2);
+      if (v0 & IN_STICK_LEFT) { //CAPS
         ++game_tune;
         //0 DEF
         //1 Pietro
@@ -108,11 +109,28 @@ void game_loop(void) {
         if (game_tune > 4) {
           game_tune = 1;
         }
+        zx_print_ink(INK_WHITE | BRIGHT);
+        switch (game_tune) {
+          case 1:
+          zx_print_str(0,13,"TUNE A");
+          break;
+          case 2:
+          zx_print_str(0,13,"TUNE B");
+          break;
+          case 3:
+          zx_print_str(0,13,"TUNE C");
+          break;
+          case 4:
+          zx_print_str(0,12,"TUNE OFF");
+          break;
+        }
+        in_wait_nokey();
         audio_ingame();
-        z80_delay_ms(100);
+        z80_delay_ms(25);
+        game_fill_row(0,32);
       };
       color = 0;
-      if (dirs & IN_STICK_RIGHT) {
+      if (v0 & IN_STICK_RIGHT) { //SYMBOL
         z80_delay_ms(100);
         ay_song_stop();
         v0=1;
@@ -134,7 +152,6 @@ void game_loop(void) {
         audio_ingame();
         z80_delay_ms(100);
       };
-
 
     }
 

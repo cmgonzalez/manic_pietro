@@ -68,12 +68,10 @@ void player_turn(void) {
     s_lin0 = lin[INDEX_P1];
     s_col0 = col[INDEX_P1];
 
-    if (!BIT_CHK(state[INDEX_P1], STAT_JUMP) &&
-        !BIT_CHK(state[INDEX_P1], STAT_FALL)) {
-      dirs_last = dirs;
-    }
 
     dirs = (joyfunc1)(&k1);
+
+
     player_move();
     player_handle_lock();
     player_collision();
@@ -94,6 +92,12 @@ void player_turn(void) {
       }
     }
 
+    //Store Last dir for LOCK managment
+    if (!BIT_CHK(state[INDEX_P1], STAT_JUMP) &&
+        !BIT_CHK(state[INDEX_P1], STAT_FALL)) {
+      dirs_last = dirs;
+    }
+
     // Magic Keys
     if (game_debug) player_debug_keys();
 
@@ -106,6 +110,8 @@ void player_turn(void) {
     // zx_print_chr(21, 16, BIT_CHK(state[INDEX_P1], STAT_FALL));
     // zx_print_chr(22, 8, dirs);
     // zx_print_chr(22, 16, dirs_last);
+
+
   }
 }
 
@@ -396,10 +402,11 @@ void player_handle_lock() {
         if (dirs & IN_STICK_FIRE) {
           dirs_last = dirs_last | IN_STICK_FIRE;
         } else {
-          dirs_last = dirs_last & 0x7F;
+          dirs_last = dirs_last & 0x7F; //Remove Fire Bits
         }
         if (dirs == dirs_last) {
           BIT_SET(state_a[INDEX_P1], STAT_LOCK);
+          dirs_last = dirs;// & 0x7F;
         } else {
           BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
         }
