@@ -542,7 +542,7 @@ void spr_clear_fast_vert(void) {
   }
 
 }
-
+/*
 void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
   spr_count--;
   s_lin0 = lin[f_sprite];
@@ -558,7 +558,7 @@ void spr_destroy(unsigned char f_sprite) __z88dk_fastcall {
   state[f_sprite] = 0;
   state_a[f_sprite] = 0;
 }
-
+*/
 unsigned char spr_get_tile(unsigned char *f_sprite) __z88dk_fastcall {
   // Search enemy class associated Values
   return spr_get_tile_dir(&spr_tile[*f_sprite], &spr_altset[*f_sprite]);
@@ -609,7 +609,7 @@ void spr_back_repaint(void) {
   s_col1++;
   spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
 }
-
+/*
 void spr_turn_horizontal(void) {
   if (BIT_CHK(state[sprite], STAT_DIRR)) {
     spr_set_left();
@@ -619,3 +619,4 @@ void spr_turn_horizontal(void) {
   // state[sprite] = state[sprite];
   tile[sprite] = spr_get_tile(&sprite);
 }
+*/

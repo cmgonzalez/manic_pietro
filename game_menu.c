@@ -73,20 +73,7 @@ void menu_main() {
     if (color > 6) {
       color = 0;
     }
-    /*
-    v1 = i % 3;
-    switch (v1) {
-    case 0:
-      v0 = PAPER_RED;
-      break;
-    case 1:
-      v0 = PAPER_MAGENTA;
-      break;
-    case 2:
-      v0 = PAPER_BLUE;
-      break;
-    }
-    */
+
     attrib_hl[0] = (attrib_hl[0] & 0xC7) | v0;
     attrib_hl[1] = (attrib_hl[1] & 0xC7) | v0;
     attrib_hl[2] = (attrib_hl[2] & 0xC7) | v0;
@@ -171,21 +158,14 @@ void menu_main() {
         // game_cls();
         game_round_init();
         start_time = zx_clock();
-        color = 0;
         while (!game_check_time(&start_time, 500) && !c) {
           enemy_turn();
           if (game_check_time(&time_key, 4)) {
             time_key = zx_clock();
             game_key_paint();
             zx_print_ink((map_border << 3) | color);
-            // zx_print_str(22,0," MANIC PIETRO   2019 NOENTIENDO");
             zx_print_str(0, 10, "MANIC PIETRO");
-            //zx_print_ink((map_border << 3) | color | BRIGHT);
-            //zx_print_str(22, 7, "ZXDEV MIA REMAKES");
-            color++;
-            if (color == 8) {
-              color = 0;
-            }
+            menu_rotcolor();
           }
           if (game_conveyor_col0 > 0) {
             if (game_check_time(&time_conv, 5)) {
@@ -502,5 +482,12 @@ void menu_logo() {
   } else {
     // zx_print_str(3, 10, "MANIC  MINER");
     game_logo1(2, 16, 0, 16, 4);
+  }
+}
+
+void menu_rotcolor() {
+  ++color;
+  if (color > 7) {
+    color = 0;
   }
 }

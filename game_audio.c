@@ -33,31 +33,26 @@
 void audio_ingame(void) {
   ay_song_stop();
 
-  if (!game_tune)
-     {
-      if (game_song_play && !game_song_play_start) {
-        game_song_play_start = 1;
-        if (game_mode == 0) {
-          ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
-          game_tune = 1;
-        } else {
-          ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame1);
-          game_tune = 2;
-        }
-      }
-    }
-  else {
-    switch (game_tune) {
-    case 1: // PIETRO
+  switch (game_tune) {
+  case 0:
+    if (game_mode == 0) {
       ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
-      break;
-    case 2: // WILLY
+      game_tune = 1;
+    } else {
       ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame1);
-      break;
-    case 3: // MENU
-      ay_song_play(AY_SONG_LOOP, 4, ay_song_menu);
-      break;
+      game_tune = 2;
     }
+    audio_ingame();
+    break;
+  case 1: // PIETRO
+    ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
+    break;
+  case 2: // WILLY
+    ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame1);
+    break;
+  case 3: // MENU
+    ay_song_play(AY_SONG_LOOP, 4, ay_song_menu);
+    break;
   }
 }
 
@@ -67,13 +62,11 @@ void audio_round_init(void) {
   }
 }
 
-void audio_game_over(void) {
-  ay_song_play(AY_SONG_ONCE, 4, ay_song_game_over); 
-}
+void audio_game_over(void) { ay_song_play(AY_SONG_ONCE, 4, ay_song_game_over); }
 
 void audio_time(void) {
   ay_song_stop();
-  if (!game_debug && game_tune !=4) {
+  if ( game_tune != 4) {
     ay_song_play(AY_SONG_ONCE, 6, ay_song_time_atack);
   };
 }
@@ -83,9 +76,7 @@ void audio_dead(void) {
   ay_fx_play(4, ay_fx_dead);
 }
 
-void audio_crumble(void) {
-  ay_fx_play(4, ay_fx_crumble);
-}
+void audio_crumble(void) { ay_fx_play(4, ay_fx_crumble); }
 
 void audio_jump(void) {
   ay_fx_play(4, ay_fx_jump);
@@ -99,21 +90,15 @@ void audio_fall(void) {
     player_fall_start = 0;
   }
 }
-void audio_game_start(void) {
-  ay_fx_play(4, ay_fx_game_start);
-}
+void audio_game_start(void) { ay_fx_play(4, ay_fx_game_start); }
 
-void audio_door_open(void) {
-  ay_fx_play(4, ay_fx_door_open);
-}
+void audio_door_open(void) { ay_fx_play(4, ay_fx_door_open); }
 
 void audio_tick(void) {
   ay_fx_stop();
   ay_fx_play(4, ay_fx_tick);
 }
-void audio_coin(void) {
-  ay_fx_play(4, ay_fx_coin);
-}
+void audio_coin(void) { ay_fx_play(4, ay_fx_coin); }
 void audio_coin_noentiendo(void) {
   ay_song_play(AY_SONG_ONCE, 4, ay_song_coin_noentiendo);
 }

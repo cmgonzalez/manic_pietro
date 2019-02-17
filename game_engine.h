@@ -36,7 +36,6 @@ extern void          game_paint_attrib( unsigned char *f_attrib[], char f_start,
 extern void			     game_colour_message( unsigned char f_row, unsigned char f_col, unsigned char f_col2, unsigned int f_miliseconds, unsigned char skip);
 extern void			     game_key_paint(void);
 extern unsigned char game_check_time(unsigned int *start, unsigned int lapse);
-extern void          game_print_header(void);
 extern void          game_attribs(void);
 extern void          game_page_map(void);
 extern void          game_flash_exit(unsigned char f_attrib);
@@ -51,7 +50,7 @@ extern void          game_solar_ray(void);
 extern void          game_solar_ray1();
 extern void          game_solar_ray0();
 extern void          game_crumble();
-extern void          game_set_attr(unsigned char f_lin, unsigned char f_col, unsigned char f_attrib );
+//extern void          game_set_attr(unsigned char f_lin, unsigned char f_col, unsigned char f_attrib );
 extern void          page( unsigned char bank );
 extern unsigned char reverse(unsigned char b);
 extern void          zx_print_char(unsigned char ui_row, unsigned char ui_col, unsigned char c);

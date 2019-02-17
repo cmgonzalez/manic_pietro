@@ -81,14 +81,14 @@ void player_turn(void) {
       player_lost_life();
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
     }
-    if (scr_curr < 20) {
+
+    if (scr_curr < 20 || !last_time_b[INDEX_P1]) {
       //Normal Crumble
       game_crumble();
     } else {
-      //Timed Crumble
-      if (game_check_time(&last_time_b[INDEX_P1], 8)) {
+      //Timed Crumble //FIXME AL SALTAR NO LO RESPETA
+      if (game_check_time(&last_time_b[INDEX_P1], 6)) {
         game_crumble();
-        last_time_b[INDEX_P1] = zx_clock();
       }
     }
 
@@ -116,6 +116,38 @@ void player_turn(void) {
 }
 
 void player_debug_keys() {
+  v0 = in_inkey();
+  switch (v0) {
+    case 49: //1
+    --scr_curr;
+    game_round_up = 1;
+    if (scr_curr == 255) {
+      scr_curr = 39;
+    }
+    in_wait_nokey();
+    break;
+    case 50:
+    ++scr_curr;
+    game_round_up = 1;
+    if (scr_curr == 40) {
+      scr_curr = 0;
+    }
+    in_wait_nokey();
+    break;
+    case 51:
+    game_inmune = !game_inmune;
+    BIT_CLR(state[INDEX_P1], STAT_KILLED);
+    if (game_inmune) {
+      zx_border(INK_GREEN);
+    } else {
+      zx_border(INK_RED);
+    }
+    in_wait_nokey();
+    break;
+
+  }
+
+  /* OUT OF MEM
   unsigned char c;
 
   c = in_inkey();
@@ -175,6 +207,7 @@ void player_debug_keys() {
     z80_delay_ms(250);
     in_wait_nokey();
   }
+  */
 }
 
 void player_check_exit() {
@@ -276,6 +309,7 @@ unsigned char player_move_jump(void) {
 
     player_jump_top = s_lin1;
   } else {
+
     // Falling
     if (s_lin1 > (GAME_LIN_FLOOR - 16)) {
       // Out Screen bottom
@@ -313,12 +347,13 @@ unsigned char player_move_jump(void) {
 
       player_handle_conveyor();
       ay_fx_stop();
-
+/* NOT NEEDED???
       // FOR CRUMBLE FLOOR
       if ((dirs & IN_STICK_FIRE)) {
         player_check_floor(0);
         player_check_floor(1);
       }
+*/
       // Recover speed if the jump 100% vertical
       spr_speed[INDEX_P1] = PLAYER_SPEED;
 
@@ -399,12 +434,28 @@ void player_handle_lock() {
       BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
     } else {
       if ((dirs & IN_STICK_LEFT) || (dirs & IN_STICK_RIGHT)) {
+        /*
         if (dirs & IN_STICK_FIRE) {
           dirs_last = dirs_last | IN_STICK_FIRE;
         } else {
           dirs_last = dirs_last & 0x7F; //Remove Fire Bits
         }
+
         if (dirs == dirs_last) {
+          BIT_SET(state_a[INDEX_P1], STAT_LOCK);
+          dirs_last = dirs;// & 0x7F;
+        } else {
+          BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+        }
+        */
+        /*
+        v0 = (dirs & !IN_STICK_FIRE);
+        v1 = (dirs_last & !IN_STICK_FIRE);
+
+        if (v0 == v1) {
+
+          */
+       if ((dirs & !IN_STICK_FIRE) == (dirs_last & !IN_STICK_FIRE) ) { 
           BIT_SET(state_a[INDEX_P1], STAT_LOCK);
           dirs_last = dirs;// & 0x7F;
         } else {
@@ -602,25 +653,33 @@ void player_collision() {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[INDEX_P1]);
 
-      switch (spr_kind[i]) {
-      case E_SKYLAB:
-        v1 = 1;
-        break;
-      case E_HORIZONTAL:
-        v1 = colint[i];
-        break;
-      case E_VERTICAL:
-        v1 = 1;
-        break;
-      case E_EUGENE:
-        v1 = 1;
-        break;
-      case E_ZIGZAG:
-        v1 = colint[i];
-        break;
-      }
+
 
       if (v0 == 1) {
+        if (spr_kind[i] == E_HORIZONTAL || spr_kind[i] == E_ZIGZAG) {
+          v1 = colint[i];
+        } else {
+          v1 = 1;
+        }
+        /*
+        switch (spr_kind[i]) {
+        case E_SKYLAB:
+          v1 = 1;
+          break;
+        case E_HORIZONTAL:
+          v1 = colint[i];
+          break;
+        case E_VERTICAL:
+          v1 = 1;
+          break;
+        case E_EUGENE:
+          v1 = 1;
+          break;
+        case E_ZIGZAG:
+          v1 = colint[i];
+          break;
+        }
+        */
         // Depende del tipo de enemigo!!!!
 
         if (colint[INDEX_P1] == 0) {
@@ -845,6 +904,7 @@ void player_crumble() {
     // GASTA BRICK TODO OPTIMIZE CALC
     s_row1 = (((lin[INDEX_P1] + 16) >> 3) + 1) << 3;
     spr_draw8(scr_map[index1], s_row1, s_col1);
+    last_time_b[INDEX_P1] = zx_clock();
   } else {
     last_time_b[INDEX_P1] = 0;
   }

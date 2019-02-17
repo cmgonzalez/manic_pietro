@@ -41,36 +41,32 @@ void main(void) {
 
   // DEBUG
   game_debug = 0;
-  game_mode = 1;  //PIETRO DEFAULT
-  game_fps_show = 0;
+  game_mode = 1; // PIETRO DEFAULT
+
   nirv_sprite_index = 0;
   game_song_play = 1;
-
   game_gravity = 100; // GAME_GRAVITY;
   game_inmune = 0;    // GAME_INMUNE;
   game_inf_lives = 0; // GAME_INF_LIVES;
   // Nirvana Attributes lookup tables
-  attribs = (unsigned char * ) 0xFCC8;
-  deltas = (unsigned char *) 0xFF01;
+  attribs = (unsigned char *)0xFCC8;
+  deltas = (unsigned char *)0xFF01;
 
   if (game_debug) {
-    game_fps_show = 1;
     game_inmune = 1;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 12;
+    scr_curr = 17;
     game_menu = 0;
     game_effect = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
-    menu_curr_sel = 2;   //Sync Menu
+    menu_curr_sel = 2; // Sync Menu
   } else {
     z80_delay_ms(666); // SATANIC DELAY
     scr_curr = 20;
-    game_fps_show = 0;
     game_menu = 1;
     game_effect = 1;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
-    menu_curr_sel = 1;   //Sync Menu
-
+    menu_curr_sel = 1; // Sync Menu
   }
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -91,7 +87,6 @@ void main(void) {
   // must be defined otherwise up is always true
   k1.up = IN_KEY_SCANCODE_DISABLE;
   k1.down = IN_KEY_SCANCODE_DISABLE;
-
 
   k2.left = IN_KEY_SCANCODE_CAPS;
   k2.right = IN_KEY_SCANCODE_SYM;
@@ -116,7 +111,6 @@ void main(void) {
   }
   srand(counter);
 
-
   // Clear Screen and init Nirvana
   NIRVANAP_tiles(_btiles);
   NIRVANAP_start();
@@ -128,15 +122,14 @@ void main(void) {
   frame_time = zx_clock();
 
   // GAME INTRO
-  //BUGGY SPECTACUTOR audio_game_over();
-  //z80_delay_ms(5000);
-  if (game_effect){
+  // BUGGY SPECTACUTOR audio_game_over();
+  // z80_delay_ms(5000);
+  if (game_effect) {
     game_intro();
   }
 
-
   while (1) {
-    game_tune = 0; //default
+    game_tune = 0; // default
     game_cls();
     // MENU
     if (game_menu) {
@@ -160,13 +153,5 @@ void main(void) {
         scr_curr = 0;
       }
     }
-
-
   }
 }
-
-
-
-void test_proc() {}
-
-unsigned char test_func() { return 0; }

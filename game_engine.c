@@ -85,7 +85,7 @@ void game_loop(void) {
         game_anim_air();
         time_air = zx_clock();
         // Each second aprox - update fps
-        if (game_fps_show && game_check_time(&frame_time, TIME_EVENT)) {
+        if (game_debug && game_check_time(&frame_time, TIME_EVENT)) {
           game_fps();
           frame_time = zx_clock();
         }
@@ -96,63 +96,61 @@ void game_loop(void) {
       }
       ++loop_count;
       ++fps;
-      //CAPS y SYMBOL READ
+      // CAPS y SYMBOL READ
 
       v0 = (joyfunc2)(&k2);
-      if (v0 & IN_STICK_LEFT) { //CAPS
+      if (v0 & IN_STICK_LEFT) { // CAPS
         ++game_tune;
-        //0 DEF
-        //1 Pietro
-        //2 Willy
-        //3 MENU
-        //4 Off
+        // 0 DEF
+        // 1 Pietro
+        // 2 Willy
+        // 3 MENU
+        // 4 Off
         if (game_tune > 4) {
           game_tune = 1;
         }
-        zx_print_ink(INK_WHITE | BRIGHT);
+        zx_print_ink( (map_border << 3) | INK_WHITE);
+        zx_print_str(0, 13, "TUNE");
         switch (game_tune) {
-          case 1:
-          zx_print_str(0,13,"TUNE A");
+        case 1:
+          zx_print_str(0, 18, "A");
           break;
-          case 2:
-          zx_print_str(0,13,"TUNE B");
+        case 2:
+          zx_print_str(0, 18, "B");
           break;
-          case 3:
-          zx_print_str(0,13,"TUNE C");
+        case 3:
+          zx_print_str(0, 18, "C");
           break;
-          case 4:
-          zx_print_str(0,12,"TUNE OFF");
+        case 4:
+          zx_print_str(0, 18, "OFF");
           break;
         }
         in_wait_nokey();
         audio_ingame();
         z80_delay_ms(25);
-        game_fill_row(0,32);
+        game_fill_row(0, 32);
       };
-      color = 0;
-      if (v0 & IN_STICK_RIGHT) { //SYMBOL
-        z80_delay_ms(100);
+
+      if (v0 & IN_STICK_RIGHT) { // SYMBOL
         ay_song_stop();
-        v0=1;
-        while(v0) {
+        z80_delay_ms(100);
+        ay_fx_play(4, ay_fx_pause);
+        v0 = 1;
+        while (v0) {
           dirs = (joyfunc2)(&k2);
           z80_delay_ms(10);
           if (dirs & IN_STICK_RIGHT) {
             v0 = 0;
           }
 
-          ++color;
-          if (color > 7) {
-            color = 0;
-          }
+          menu_rotcolor();
           zx_print_ink((map_border << 3) | color);
-          zx_print_str(0,14,"PAUSE");
+          zx_print_str(0, 14, "PAUSE");
         }
         game_fill_row(0, 32);
         audio_ingame();
         z80_delay_ms(100);
       };
-
     }
 
     if (game_round_up) {
@@ -424,8 +422,16 @@ void game_logo1(unsigned char f_img, unsigned char f_lin, unsigned char f_col,
     case 2: // Miner Logo
       src = &logo2[0];
       break;
+    case 3: // cartoon0
+      src = &cartoon0[0];
+      break;
+    case 4: // cartoon1
+      src = &cartoon1[0];
+      break;
+    case 5: // cartoon2
+      src = &cartoon2[0];
+      break;
     }
-
     dest = &btiles[0];
 
     page(1);
@@ -525,7 +531,7 @@ void game_end() {}
 
 void game_print_footer(void) {
 
-  if (game_fps_show) {
+  if (game_debug) {
     /* phase osd bottom*/
     zx_print_ink(INK_WHITE | PAPER_BLACK);
     zx_print_str(23, 20, "LPS:");
@@ -539,6 +545,7 @@ void game_print_score(void) {
   zx_print_int(20, 27, player_score);
   zx_print_int(20, 12, game_score_top); // SCORE TOP
 }
+
 void game_print_lives(void) {
   v0 = 0;
 
@@ -757,7 +764,7 @@ void game_round_init(void) {
   key_attrib[2] = key_attrib[0];
   key_attrib[3] = key_attrib[0];
 
-  game_song_play_start = 0;
+  //game_song_play_start = 0;
   intrinsic_ei();
   NIRVANAP_start();
   NIRVANAP_halt();
@@ -911,14 +918,7 @@ void game_color_hacks() {
     }
   }
 }
-void game_print_header(void) {
 
-  // zx_print_ink(INK_RED);
-  // zx_print_str(0, 11, "$%|");
-  // zx_print_ink(INK_WHITE);
-  /* Print score */
-  game_print_score();
-}
 
 unsigned char game_check_map(unsigned char f_lin, unsigned char f_col) {
   // TODO A SINGLE FUNCTION TO SAVE BYTES
@@ -1014,7 +1014,7 @@ void game_attribs() {
   attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;
   attrib_osd[2] = PAPER_BLACK | INK_CYAN | BRIGHT;
   attrib_osd[3] = PAPER_BLACK | INK_YELLOW | BRIGHT;
-
+/*
   attrib_sol0[0] = PAPER_GREEN | INK_GREEN;
   attrib_sol0[1] = PAPER_GREEN | INK_GREEN;
   attrib_sol0[2] = PAPER_GREEN | INK_GREEN;
@@ -1024,6 +1024,7 @@ void game_attribs() {
   attrib_sol1[1] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
   attrib_sol1[2] = PAPER_YELLOW | INK_YELLOW | BRIGHT;
   attrib_sol1[3] = PAPER_YELLOW | INK_YELLOW;
+  */
 }
 
 void game_page_map(void) {
@@ -1278,16 +1279,35 @@ void game_intro() {
         NIRVANAP_halt();
       }
     }
-
-    z80_delay_ms(350);
+    z80_delay_ms(500);
     game_logo1(0, 16, 4, 8, 10);
-    game_text(0,19);
-    game_text(1,20);
-    game_text(2,21);
-    game_text(3,22);
-    z80_delay_ms(1000);
+    game_text(0, 19);
+    game_text(1, 20);
+    game_text(2, 21);
+    game_text(3, 22);
+    z80_delay_ms(25);
+    game_cls();
+    game_logo1(3, 32, 2, 10, 6);
+    game_text(0, 19);
+    game_text(1, 20);
+    game_text(2, 21);
+    game_text(3, 22);
+    z80_delay_ms(25);
+    game_cls();
+    game_logo1(4, 32, 2, 10, 6);
+    game_text(0, 19);
+    game_text(1, 20);
+    game_text(2, 21);
+    game_text(3, 22);
+    z80_delay_ms(25);
+    game_cls();
+    game_logo1(5, 32, 2, 10, 6);
+    game_text(0, 19);
+    game_text(1, 20);
+    game_text(2, 21);
+    game_text(3, 22);
+    z80_delay_ms(25);
   }
-
 }
 
 void game_shoe() {
@@ -1373,26 +1393,26 @@ void game_shoe() {
     z80_delay_ms(10);
   }
 }
-
+/*
 void game_set_attr(unsigned char f_lin, unsigned char f_col,
                    unsigned char f_attrib) {
   unsigned char *pbyte;
 
-  /*
-  colonel32 wrote: »
-  Hi Einar. I'm trying to figure out a formula that takes a NIRVANA+ line and
-  column, and returns an 8x2 attribute address. The attribute address is:
-  race_raster + (lin-16)*82 + deltas[col]
-  where 16 <= lin < 200 (lin must be even)
-  and 0 <= col <= 31
-  Since race_raster starts at address 56695:
-  56695 + (lin-16)*82 + deltas[col]
-  In practice, NIRVANA+ uses the lookup table attribs to avoid multiplication,
-  as follows: attribs[lin] + 256*attribs[lin+1] + deltas[col] The lookup table
-  attribs is located at address $fcc8 and deltas is located at address $ff01,
-  therefore: PEEK($fcc8+lin) + 256*PEEK($fcc8+lin+1) + PEEK($ff00+col+1) This
-  is exactly the calculation you see in the code.
-  */
+
+  //colonel32 wrote: »
+  //Hi Einar. I'm trying to figure out a formula that takes a NIRVANA+ line and
+  //column, and returns an 8x2 attribute address. The attribute address is:
+  //race_raster + (lin-16)*82 + deltas[col]
+  //where 16 <= lin < 200 (lin must be even)
+  //and 0 <= col <= 31
+  //Since race_raster starts at address 56695:
+  //56695 + (lin-16)*82 + deltas[col]
+  //In practice, NIRVANA+ uses the lookup table attribs to avoid multiplication,
+  //as follows: attribs[lin] + 256*attribs[lin+1] + deltas[col] The lookup table
+  //attribs is located at address $fcc8 and deltas is located at address $ff01,
+  //therefore: PEEK($fcc8+lin) + 256*PEEK($fcc8+lin+1) + PEEK($ff00+col+1) This
+  //is exactly the calculation you see in the code.
+
 
   // val0 = 16 + ((f_lin - 16) << 1);
   pbyte = (unsigned char *)(*(attribs + f_lin)) +
@@ -1400,7 +1420,7 @@ void game_set_attr(unsigned char f_lin, unsigned char f_col,
 
   *pbyte = f_attrib;
 }
-
+*/
 void game_crumble() {
 
   if (!BIT_CHK(state[INDEX_P1], STAT_JUMP) &&
@@ -1423,32 +1443,37 @@ void zx_print_char(unsigned char ui_row, unsigned char ui_col,
   zx_print_str(ui_row, ui_col, str);
 }
 
-void game_text( unsigned char f_index, unsigned char f_row ) {
+void game_text(unsigned char f_index, unsigned char f_row) {
   unsigned char text_buff[32];
   unsigned char *src;
   unsigned char *dest;
   unsigned char k;
 
-
-  src = &texts[32*f_index];
+  src = &texts[32 * f_index];
   dest = &text_buff[0];
+  intrinsic_di();
   page(6);
   memcpy(dest, src, 32);
   page(0);
+  intrinsic_ei();
 
   k = 1;
   v0 = 0;
   s_col1 = 0;
   color = 1;
   while (k) {
+    v3 = in_test_key();
     color = 1;
-    while ( color < 8) {
+    while (color < 8) {
       zx_print_ink(PAPER_BLACK | color | BRIGHT);
       zx_print_char(f_row, s_col1, text_buff[v0]);
-      z80_delay_ms(1);
+      if (!v3) {
+        z80_delay_ms(1);
+      }
       ++color;
     }
-    z80_delay_ms(8);
+    if (!v3)
+      z80_delay_ms(8);
     ++v0;
     ++s_col1;
     ++color;
@@ -1459,5 +1484,4 @@ void game_text( unsigned char f_index, unsigned char f_row ) {
       k = 0;
     }
   }
-
 }

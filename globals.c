@@ -103,7 +103,7 @@ unsigned char nirv_sprite_index;
 
 signed int game_gravity;
 unsigned char game_song_play;
-unsigned char game_song_play_start;
+//unsigned char game_song_play_start;
 unsigned char game_conveyor_dir;
 unsigned char game_conveyor_lin;
 unsigned char game_conveyor_col0;
@@ -129,7 +129,6 @@ unsigned int fps;
 
 unsigned char sprite;
 unsigned char game_debug;
-unsigned char game_fps_show;
 
 unsigned char s_lin0;
 unsigned char s_lin1;
@@ -146,8 +145,8 @@ unsigned char attrib[4];
 unsigned char attrib_hl[4];
 unsigned char attrib_osd[4];
 
-unsigned char attrib_sol0[4];
-unsigned char attrib_sol1[4];
+//unsigned char attrib_sol0[4];
+//unsigned char attrib_sol1[4];
 unsigned char g_ray1;
 
 
@@ -246,7 +245,6 @@ unsigned char spr_clr;
 unsigned char *attribs;
 unsigned char *deltas;
 
-∫
 const unsigned char tile_class[32];
 
 //Hack for horizontal jump increment
@@ -259,6 +257,7 @@ unsigned char player_fall_start;
 //CODE
 unsigned char code0[GAME_CODELEN];
 unsigned char code1[GAME_CODELEN];
+
 
 //Jump Geometry HORIZONTAL extra increment to emulate Willy Jump
 

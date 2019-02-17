@@ -95,3 +95,7 @@ BINARY "fx/crumble.afx"
 PUBLIC _ay_fx_door_open
 _ay_fx_door_open:
 BINARY "fx/door_open.afx"
+
+PUBLIC _ay_fx_pause
+_ay_fx_pause:
+BINARY "fx/pause.afx"

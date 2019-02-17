@@ -272,7 +272,7 @@ extern unsigned char player_lin_scr;
 
 extern signed   int  game_gravity;
 extern unsigned char game_song_play;
-extern unsigned char game_song_play_start;
+//extern unsigned char game_song_play_start;
 extern unsigned char game_conveyor_dir;
 extern unsigned char game_conveyor_lin;
 extern unsigned char game_conveyor_col0;
@@ -298,7 +298,6 @@ extern unsigned int fps;
 
 extern unsigned char sprite;
 extern unsigned char game_debug;
-extern unsigned char game_fps_show;
 
 extern unsigned char player_jump_top;
 
@@ -318,8 +317,8 @@ extern unsigned char zx_val_asm;
 extern unsigned char attrib[4];
 extern unsigned char attrib_hl[4];
 extern unsigned char attrib_osd[4];
-extern unsigned char attrib_sol0[4];
-extern unsigned char attrib_sol1[4];
+//extern unsigned char attrib_sol0[4];
+//extern unsigned char attrib_sol1[4];
 extern unsigned char g_ray1;
 
 
