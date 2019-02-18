@@ -40,7 +40,7 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
-  game_debug = 0;
+  game_debug = 1;
   game_mode = 1; // PIETRO DEFAULT
 
   nirv_sprite_index = 0;
@@ -55,11 +55,12 @@ void main(void) {
   if (game_debug) {
     game_inmune = 1;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 17;
+    scr_curr = 39;
     game_menu = 0;
     game_effect = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
     menu_curr_sel = 2; // Sync Menu
+    game_tune = 4;
   } else {
     z80_delay_ms(666); // SATANIC DELAY
     scr_curr = 20;
@@ -67,6 +68,7 @@ void main(void) {
     game_effect = 1;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
     menu_curr_sel = 1; // Sync Menu
+
   }
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
@@ -129,7 +131,7 @@ void main(void) {
   }
 
   while (1) {
-    game_tune = 0; // default
+
     game_cls();
     // MENU
     if (game_menu) {

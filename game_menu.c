@@ -117,6 +117,7 @@ void menu_main() {
       ay_reset();
       if (v0) {
         intrinsic_halt();
+        game_tune = 0; // default
         f_input = 0; // Exit Loop
       }
       start_time = zx_clock();
@@ -139,6 +140,7 @@ void menu_main() {
       ay_reset();
       audio_game_start();
       z80_delay_ms(300);
+      game_tune = 0; // default
       f_input = 0; // Exit Loop
       break;
     }

@@ -68,9 +68,7 @@ void player_turn(void) {
     s_lin0 = lin[INDEX_P1];
     s_col0 = col[INDEX_P1];
 
-
     dirs = (joyfunc1)(&k1);
-
 
     player_move();
     player_handle_lock();
@@ -83,23 +81,24 @@ void player_turn(void) {
     }
 
     if (scr_curr < 20 || !last_time_b[INDEX_P1]) {
-      //Normal Crumble
+      // Normal Crumble
       game_crumble();
     } else {
-      //Timed Crumble //FIXME AL SALTAR NO LO RESPETA
+      // Timed Crumble //FIXME AL SALTAR NO LO RESPETA
       if (game_check_time(&last_time_b[INDEX_P1], 6)) {
         game_crumble();
       }
     }
 
-    //Store Last dir for LOCK managment
+    // Store Last dir for LOCK managment
     if (!BIT_CHK(state[INDEX_P1], STAT_JUMP) &&
         !BIT_CHK(state[INDEX_P1], STAT_FALL)) {
       dirs_last = dirs;
     }
 
     // Magic Keys
-    if (game_debug) player_debug_keys();
+    if (game_debug)
+      player_debug_keys();
 
     // zx_print_chr(21, 0, colint[INDEX_P1]);
     // zx_print_chr(21, 0, lin[INDEX_P1]);
@@ -110,15 +109,13 @@ void player_turn(void) {
     // zx_print_chr(21, 16, BIT_CHK(state[INDEX_P1], STAT_FALL));
     // zx_print_chr(22, 8, dirs);
     // zx_print_chr(22, 16, dirs_last);
-
-
   }
 }
 
 void player_debug_keys() {
   v0 = in_inkey();
   switch (v0) {
-    case 49: //1
+  case 49: // 1
     --scr_curr;
     game_round_up = 1;
     if (scr_curr == 255) {
@@ -126,7 +123,7 @@ void player_debug_keys() {
     }
     in_wait_nokey();
     break;
-    case 50:
+  case 50:
     ++scr_curr;
     game_round_up = 1;
     if (scr_curr == 40) {
@@ -134,7 +131,7 @@ void player_debug_keys() {
     }
     in_wait_nokey();
     break;
-    case 51:
+  case 51:
     game_inmune = !game_inmune;
     BIT_CLR(state[INDEX_P1], STAT_KILLED);
     if (game_inmune) {
@@ -144,7 +141,6 @@ void player_debug_keys() {
     }
     in_wait_nokey();
     break;
-
   }
 
   /* OUT OF MEM
@@ -217,13 +213,6 @@ void player_check_exit() {
     v0 = abs((lin[INDEX_P1] + 16) - game_exit_lin);
 
     if (v0 < 8) {
-      ++scr_curr;
-      if (scr_curr == 20) {
-        scr_curr = 0;
-      }
-      if (scr_curr == 40) {
-        scr_curr = 20;
-      }
       game_round_up = 1;
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
       // Amimate Bonus Air
@@ -236,6 +225,16 @@ void player_check_exit() {
         player_score_add(8); // Carlos + Fede
         z80_delay_ms(5);
       }
+      ++scr_curr;
+      if (scr_curr == 20) {
+        game_end_willy();
+        scr_curr = 0;
+      }
+      if (scr_curr == 40) {
+        game_end_pietro();
+        scr_curr = 20;
+      }
+
     }
   }
 }
@@ -295,7 +294,6 @@ unsigned char player_move_jump(void) {
     // Asending
     spr_set_up();
 
-
     if (!player_check_ceil(s_lin1, col[INDEX_P1])) {
       player_vel_y = 0;
 
@@ -347,13 +345,13 @@ unsigned char player_move_jump(void) {
 
       player_handle_conveyor();
       ay_fx_stop();
-/* NOT NEEDED???
-      // FOR CRUMBLE FLOOR
-      if ((dirs & IN_STICK_FIRE)) {
-        player_check_floor(0);
-        player_check_floor(1);
-      }
-*/
+      /* NOT NEEDED???
+            // FOR CRUMBLE FLOOR
+            if ((dirs & IN_STICK_FIRE)) {
+              player_check_floor(0);
+              player_check_floor(1);
+            }
+      */
       // Recover speed if the jump 100% vertical
       spr_speed[INDEX_P1] = PLAYER_SPEED;
 
@@ -455,9 +453,9 @@ void player_handle_lock() {
         if (v0 == v1) {
 
           */
-       if ((dirs & !IN_STICK_FIRE) == (dirs_last & !IN_STICK_FIRE) ) { 
+        if ((dirs & !IN_STICK_FIRE) == (dirs_last & !IN_STICK_FIRE)) {
           BIT_SET(state_a[INDEX_P1], STAT_LOCK);
-          dirs_last = dirs;// & 0x7F;
+          dirs_last = dirs; // & 0x7F;
         } else {
           BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
         }
@@ -653,14 +651,11 @@ void player_collision() {
     if (class[i] > 0) {
       v0 = abs(col[i] - col[INDEX_P1]);
 
-
-
       if (v0 == 1) {
         if (spr_kind[i] == E_HORIZONTAL || spr_kind[i] == E_ZIGZAG) {
           v1 = colint[i];
-        } else {
-          v1 = 1;
-        }
+        } else
+           { v1 = 1; }
         /*
         switch (spr_kind[i]) {
         case E_SKYLAB:
@@ -816,8 +811,33 @@ unsigned char player_pick_deadly(unsigned char l_val) {
 unsigned char player_pick_extra(unsigned char l_val) {
 
   if (l_val == TILE_EXTRA) {
+    if (scr_curr == 39) {
+      scr_map[index1] = TILE_EMPTY;
+      game_cell_paint_index();
+      v0 = 0;
+      index1 = 361;
+      // Kill Bowser
+      while (v0 < 14) {
+        scr_map[index1] = TILE_EMPTY;
+        game_cell_paint_index();
+        z80_delay_ms(25);
+        index1++;
+        ++v0;
+      }
+      spr_kind[1] = E_FALL;
+      spr_speed[1] = 4;
 
-    // HACK
+      // Free Princess
+      v0 = 0;
+      index1 = 217;
+      while (v0 < 4) {
+        scr_map[index1] = TILE_EMPTY;
+        game_cell_paint_index();
+        index1 = index1 + 32;
+        ++v0;
+      }
+    }
+    // UGLY HACK
     if (scr_curr == 7 || scr_curr == 11) {
       // 7 Miner Willy meets the kong beast
       scr_map[index1] = TILE_EXTRA_OFF;

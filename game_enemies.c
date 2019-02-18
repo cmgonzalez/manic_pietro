@@ -105,7 +105,9 @@ void enemy_move(void) {
     break;
   case E_FALL:
     enemy_fall();
-    spr_paint();
+    if (class[sprite] ) {
+      spr_paint();
+    }
     if (spr_clr) {
       spr_clear_fast_vert();
     }
@@ -191,9 +193,23 @@ void enemy_fall() {
   game_cell_paint_index();
   index1 = spr_calc_index(s_lin0, s_col0 + 1);
   game_cell_paint_index();
-  if (lin[sprite] >= 104) {
+
+
+
+  if ( (scr_curr == 11 && lin[sprite] >= 104) || ( lin[sprite] >= 112 ) ) {
     class[sprite] = 0;
+
+    index1 = spr_calc_index(lin[sprite],col[sprite]);
+    game_cell_paint_index();
+    index1++;
+    game_cell_paint_index();
+    index1 = index1 + 32;
+    game_cell_paint_index();
+    index1--;
+    game_cell_paint_index();
     NIRVANAP_spriteT(sprite, 0, 0, 0);
+    NIRVANAP_halt();
+
   }
 }
 

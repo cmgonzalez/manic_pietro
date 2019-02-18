@@ -1485,3 +1485,39 @@ void game_text(unsigned char f_index, unsigned char f_row) {
     }
   }
 }
+
+void game_end_willy() {
+  game_cls();
+  game_logo1(4, 32, 2, 10, 6);
+  game_text(0, 19);
+  game_text(1, 20);
+  game_text(2, 21);
+  game_text(3, 22);
+  z80_delay_ms(25);
+  game_cls();
+  game_logo1(5, 32, 2, 10, 6);
+  game_text(0, 19);
+  game_text(1, 20);
+  game_text(2, 21);
+  game_text(3, 22);
+  z80_delay_ms(25);
+  game_cls();
+}
+
+void game_end_pietro() {
+  game_cls();
+  game_logo1(4, 32, 2, 10, 6);
+  game_text(0, 19);
+  game_text(1, 20);
+  game_text(2, 21);
+  game_text(3, 22);
+  z80_delay_ms(25);
+  game_cls();
+  game_logo1(5, 32, 2, 10, 6);
+  game_text(0, 19);
+  game_text(1, 20);
+  game_text(2, 21);
+  game_text(3, 22);
+  z80_delay_ms(25);
+  game_cls();
+}
