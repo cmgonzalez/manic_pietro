@@ -40,7 +40,7 @@ void main(void) {
   zx_print_ink(INK_WHITE);
 
   // DEBUG
-  game_debug = 1;
+  game_debug = 0;
   game_mode = 1; // PIETRO DEFAULT
 
   nirv_sprite_index = 0;
@@ -55,7 +55,7 @@ void main(void) {
   if (game_debug) {
     game_inmune = 0;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 39;
+    scr_curr = 30;
     game_menu = 0;
     game_effect = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
@@ -70,6 +70,7 @@ void main(void) {
     menu_curr_sel = 1; // Sync Menu
 
   }
+
   // INTERRUPTS ARE DISABLED
   // RESET AY CHIP
   ay_reset();
@@ -114,10 +115,11 @@ void main(void) {
   srand(counter);
 
   // Clear Screen and init Nirvana
+  zx_paper_fill(INK_BLACK | PAPER_BLACK);
   NIRVANAP_tiles(_btiles);
   NIRVANAP_start();
   game_attribs();
-
+  
   game_over = 1;
 
   // Init Screen
@@ -138,10 +140,9 @@ void main(void) {
       menu_main();
     }
     // GAME
-    spr_clear_scr();
+    game_cls();
     player_next_extra = 10000;
     game_loop();
-    spr_clear_scr();
     game_cls();
     game_paint_attrib(&attrib, 0, 31, (11 << 3) + 8);
     game_shoe();

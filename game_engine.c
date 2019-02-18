@@ -564,6 +564,7 @@ void game_print_lives(void) {
 }
 
 void game_cls() {
+  /*
   NIRVANAP_stop();
   intrinsic_di();
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
@@ -586,6 +587,11 @@ void game_cls() {
     NIRVANAP_spriteT(v0, SPRITE_EMPTY, 0, 0);
     ++v0;
   }
+  */
+
+  spr_clear_scr();
+  zx_paper_fill(INK_BLACK | PAPER_BLACK);
+  zx_border(INK_BLACK);
 }
 
 void game_start_timer(void) {

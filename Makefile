@@ -12,8 +12,8 @@ OUTS = bin/manic_pietro.sna
 ORG = 23584
 
 //CFLAGS = -SO3 --max-allocs-per-node200000 --opt-code-size
-//CFLAGS = -SO3 --max-allocs-per-node10000 --opt-code-size
-CFLAGS = -SO3 --max-allocs-per-node1000 --opt-code-size
+CFLAGS = -SO3 --max-allocs-per-node10000 --opt-code-size
+//CFLAGS = -SO3 --max-allocs-per-node1000 --opt-code-size
 
 .PHONY: depend clean
 

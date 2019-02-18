@@ -453,7 +453,10 @@ void player_handle_lock() {
         if (v0 == v1) {
 
           */
-        if ((dirs & !IN_STICK_FIRE) == (dirs_last & !IN_STICK_FIRE)) {
+          v0 = dirs & !IN_STICK_FIRE;
+          v1 = dirs_last & !IN_STICK_FIRE;
+        //if ((dirs & !IN_STICK_FIRE) == (dirs_last & !IN_STICK_FIRE)) {
+       if (v0 == v1) {
           BIT_SET(state_a[INDEX_P1], STAT_LOCK);
           dirs_last = dirs; // & 0x7F;
         } else {
