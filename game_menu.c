@@ -31,6 +31,7 @@
 #include <z80.h>
 
 void menu_main() {
+
   unsigned char f_input;
   unsigned char s_col;
   unsigned char s_col_e;

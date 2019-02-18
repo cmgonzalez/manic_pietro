@@ -53,7 +53,7 @@ void main(void) {
   deltas = (unsigned char *)0xFF01;
 
   if (game_debug) {
-    game_inmune = 1;    // GAME_INMUNE;
+    game_inmune = 0;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
     scr_curr = 39;
     game_menu = 0;

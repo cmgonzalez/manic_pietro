@@ -1009,7 +1009,7 @@
 1006  00E2  CD 00 00    	call	_spr_clear_fast_vert
 1007  00E5  18 49       	jr	l_enemy_move_00127
 1008  00E7              l_enemy_move_00114:
-1009  00E7  CD 89 05    	call	_enemy_eugene
+1009  00E7  CD 98 05    	call	_enemy_eugene
 1010  00EA  CD 00 00    	call	_spr_paint
 1011  00ED  3A 00 00    	ld	a,(_spr_clr)
 1012  00F0  B7          	or	a, a
@@ -1581,794 +1581,960 @@
 1578  04A3              ; ---------------------------------
 1579  04A3              _enemy_vertical:
 1580  04A3  CD 00 00    	call	___sdcc_enter_ix
-1581  04A6  3B          	dec	sp
-1582  04A7  2A 00 00    	ld	hl,(_sprite)
-1583  04AA  26 00       	ld	h,0x00
-1584  04AC  01 00 00    	ld	bc,_spr_speed_a
-1585  04AF  09          	add	hl,bc
-1586  04B0  4E          	ld	c, (hl)
-1587  04B1  06 00       	ld	b,0x00
-1588  04B3  2A 00 00    	ld	hl,(_sprite)
-1589  04B6  60          	ld	h,b
-1590  04B7  29          	add	hl, hl
-1591  04B8  11 00 00    	ld	de,_last_time_a
-1592  04BB  19          	add	hl, de
-1593  04BC  C5          	push	bc
-1594  04BD  E5          	push	hl
-1595  04BE  CD 00 00    	call	_game_check_time
-1596  04C1  F1          	pop	af
-1597  04C2  F1          	pop	af
-1598  04C3  7D          	ld	a, l
-1599  04C4  B7          	or	a, a
-1600  04C5  28 3B       	jr	Z,l_enemy_vertical_00104
-1601  04C7  01 00 00    	ld	bc,_colint+0
-1602  04CA  79          	ld	a, c
-1603  04CB  21 00 00    	ld	hl,_sprite
-1604  04CE  86          	add	a, (hl)
-1605  04CF  5F          	ld	e, a
-1606  04D0  78          	ld	a, b
-1607  04D1  CE 00       	adc	a,0x00
-1608  04D3  57          	ld	d, a
-1609  04D4  1A          	ld	a, (de)
-1610  04D5  3C          	inc	a
-1611  04D6  12          	ld	(de), a
-1612  04D7  79          	ld	a, c
-1613  04D8  86          	add	a, (hl)
-1614  04D9  4F          	ld	c, a
-1615  04DA  78          	ld	a, b
-1616  04DB  CE 00       	adc	a,0x00
-1617  04DD  47          	ld	b, a
-1618  04DE  0A          	ld	a, (bc)
-1619  04DF  DD 77 FF    	ld	(ix-1),a
-1620  04E2  5E          	ld	e,(hl)
-1621  04E3  16 00       	ld	d,0x00
-1622  04E5  21 00 00    	ld	hl,_spr_frames
-1623  04E8  19          	add	hl,de
-1624  04E9  DD 7E FF    	ld	a,(ix-1)
-1625  04EC  96          	sub	a,(hl)
-1626  04ED  20 02       	jr	NZ,l_enemy_vertical_00102
-1627  04EF  AF          	xor	a, a
-1628  04F0  02          	ld	(bc), a
-1629  04F1              l_enemy_vertical_00102:
-1630  04F1  2A 00 00    	ld	hl,(_sprite)
-1631  04F4  26 00       	ld	h,0x00
-1632  04F6  29          	add	hl,hl
-1633  04F7  01 00 00    	ld	bc,_last_time_a
-1634  04FA  09          	add	hl,bc
-1635  04FB  ED 5B 00 00 	ld	de,(_curr_time)
-1636  04FF  73          	ld	(hl),e
-1637  0500  23          	inc	hl
-1638  0501  72          	ld	(hl),d
-1639  0502              l_enemy_vertical_00104:
-1640  0502  2A 00 00    	ld	hl,(_sprite)
-1641  0505  26 00       	ld	h,0x00
-1642  0507  01 00 00    	ld	bc,_spr_speed_b
-1643  050A  09          	add	hl,bc
-1644  050B  4E          	ld	c, (hl)
-1645  050C  06 00       	ld	b,0x00
-1646  050E  2A 00 00    	ld	hl,(_sprite)
-1647  0511  60          	ld	h,b
-1648  0512  29          	add	hl, hl
-1649  0513  11 00 00    	ld	de,_last_time_b
-1650  0516  19          	add	hl, de
-1651  0517  C5          	push	bc
-1652  0518  E5          	push	hl
-1653  0519  CD 00 00    	call	_game_check_time
-1654  051C  F1          	pop	af
-1655  051D  F1          	pop	af
-1656  051E  7D          	ld	a, l
-1657  051F  B7          	or	a, a
-1658  0520  28 63       	jr	Z,l_enemy_vertical_00114
-1659  0522  2A 00 00    	ld	hl,(_sprite)
-1660  0525  26 00       	ld	h,0x00
-1661  0527  01 00 00    	ld	bc,_state
-1662  052A  09          	add	hl,bc
-1663  052B  7E          	ld	a,(hl)
-1664  052C  0F          	rrca
-1665  052D  30 24       	jr	NC,l_enemy_vertical_00110
-1666  052F  CD 00 00    	call	_spr_move_up_f
-1667  0532  2A 00 00    	ld	hl,(_sprite)
-1668  0535  26 00       	ld	h,0x00
-1669  0537  01 00 00    	ld	bc,_lin
-1670  053A  09          	add	hl,bc
-1671  053B  4E          	ld	c, (hl)
-1672  053C  3A 00 00    	ld	a,(_sprite)
-1673  053F  5F          	ld	e,a
-1674  0540  16 00       	ld	d,0x00
-1675  0542  21 00 00    	ld	hl,_value_a
-1676  0545  19          	add	hl,de
-1677  0546  46          	ld	b, (hl)
-1678  0547  79          	ld	a, c
-1679  0548  90          	sub	a, b
-1680  0549  20 29       	jr	NZ,l_enemy_vertical_00111
-1681  054B  CD 00 00    	call	_spr_clear_fast_vert
-1682  054E  CD 00 00    	call	_spr_set_down
-1683  0551  18 21       	jr	l_enemy_vertical_00111
-1684  0553              l_enemy_vertical_00110:
-1685  0553  CD 00 00    	call	_spr_move_down_f
-1686  0556  2A 00 00    	ld	hl,(_sprite)
-1687  0559  26 00       	ld	h,0x00
-1688  055B  01 00 00    	ld	bc,_lin
-1689  055E  09          	add	hl,bc
-1690  055F  4E          	ld	c, (hl)
-1691  0560  3A 00 00    	ld	a,(_sprite)
-1692  0563  5F          	ld	e,a
-1693  0564  16 00       	ld	d,0x00
-1694  0566  21 00 00    	ld	hl,_value_b
-1695  0569  19          	add	hl,de
-1696  056A  7E          	ld	a,(hl)
-1697  056B  91          	sub	a, c
-1698  056C  20 06       	jr	NZ,l_enemy_vertical_00111
-1699  056E  CD 00 00    	call	_spr_clear_fast_vert
-1700  0571  CD 00 00    	call	_spr_set_up
-1701  0574              l_enemy_vertical_00111:
-1702  0574  2A 00 00    	ld	hl,(_sprite)
-1703  0577  26 00       	ld	h,0x00
-1704  0579  29          	add	hl,hl
-1705  057A  01 00 00    	ld	bc,_last_time_b
-1706  057D  09          	add	hl,bc
-1707  057E  ED 5B 00 00 	ld	de,(_curr_time)
-1708  0582  73          	ld	(hl),e
-1709  0583  23          	inc	hl
-1710  0584  72          	ld	(hl),d
-1711  0585              l_enemy_vertical_00114:
-1712  0585  33          	inc	sp
-1713  0586  DD E1       	pop	ix
-1714  0588  C9          	ret
-1715  0589              	SECTION code_compiler
-1716  0589              ;	---------------------------------
-1717  0589              ; Function enemy_eugene
-1718  0589              ; ---------------------------------
-1719  0589              _enemy_eugene:
-1720  0589  3A 00 00    	ld	a,(_obj_count)
-1721  058C  3C          	inc	a
-1722  058D  28 10       	jr	Z,l_enemy_eugene_00108
-1723  058F  2A 00 00    	ld	hl,(_sprite)
-1724  0592  26 00       	ld	h,0x00
-1725  0594  01 00 00    	ld	bc,_spr_frames
-1726  0597  09          	add	hl,bc
-1727  0598  36 01       	ld	(hl),0x01
-1728  059A  CD A3 04    	call	_enemy_vertical
-1729  059D  18 6B       	jr	l_enemy_eugene_00110
-1730  059F              l_enemy_eugene_00108:
-1731  059F  2A 00 00    	ld	hl,(_sprite)
-1732  05A2  26 00       	ld	h,0x00
-1733  05A4  01 00 00    	ld	bc,_spr_speed_b
-1734  05A7  09          	add	hl,bc
-1735  05A8  4E          	ld	c, (hl)
-1736  05A9  06 00       	ld	b,0x00
-1737  05AB  2A 00 00    	ld	hl,(_sprite)
-1738  05AE  60          	ld	h,b
-1739  05AF  29          	add	hl, hl
-1740  05B0  11 00 00    	ld	de,_last_time_b
-1741  05B3  19          	add	hl, de
-1742  05B4  C5          	push	bc
-1743  05B5  E5          	push	hl
-1744  05B6  CD 00 00    	call	_game_check_time
-1745  05B9  F1          	pop	af
-1746  05BA  F1          	pop	af
-1747  05BB  7D          	ld	a, l
-1748  05BC  B7          	or	a, a
-1749  05BD  28 4B       	jr	Z,l_enemy_eugene_00110
-1750  05BF  01 00 00    	ld	bc,_colint+0
-1751  05C2  79          	ld	a, c
-1752  05C3  21 00 00    	ld	hl,_sprite
-1753  05C6  86          	add	a, (hl)
-1754  05C7  5F          	ld	e, a
-1755  05C8  78          	ld	a, b
-1756  05C9  CE 00       	adc	a,0x00
-1757  05CB  57          	ld	d, a
-1758  05CC  1A          	ld	a, (de)
-1759  05CD  3C          	inc	a
-1760  05CE  12          	ld	(de), a
-1761  05CF  6E          	ld	l,(hl)
-1762  05D0  26 00       	ld	h,0x00
-1763  05D2  09          	add	hl,bc
-1764  05D3  5E          	ld	e,(hl)
-1765  05D4  3E 03       	ld	a,0x03
-1766  05D6  93          	sub	a,e
-1767  05D7  30 02       	jr	NC,l_enemy_eugene_00102
-1768  05D9  AF          	xor	a,a
-1769  05DA  77          	ld	(hl),a
-1770  05DB              l_enemy_eugene_00102:
-1771  05DB  2A 00 00    	ld	hl,(_sprite)
-1772  05DE  26 00       	ld	h,0x00
-1773  05E0  01 00 00    	ld	bc,_lin
-1774  05E3  09          	add	hl,bc
-1775  05E4  7E          	ld	a,(hl)
-1776  05E5  D6 58       	sub	a,0x58
-1777  05E7  30 10       	jr	NC,l_enemy_eugene_00104
-1778  05E9  2A 00 00    	ld	hl,(_sprite)
-1779  05EC  26 00       	ld	h,0x00
-1780  05EE  01 00 00    	ld	bc,_state
-1781  05F1  09          	add	hl,bc
-1782  05F2  7E          	ld	a,(hl)
-1783  05F3  F6 02       	or	a,0x02
-1784  05F5  77          	ld	(hl),a
-1785  05F6  CD 00 00    	call	_spr_move_down_f
-1786  05F9              l_enemy_eugene_00104:
-1787  05F9  2A 00 00    	ld	hl,(_sprite)
-1788  05FC  26 00       	ld	h,0x00
-1789  05FE  29          	add	hl,hl
-1790  05FF  01 00 00    	ld	bc,_last_time_b
-1791  0602  09          	add	hl,bc
-1792  0603  ED 5B 00 00 	ld	de,(_curr_time)
-1793  0607  73          	ld	(hl),e
-1794  0608  23          	inc	hl
-1795  0609  72          	ld	(hl),d
-1796  060A              l_enemy_eugene_00110:
-1797  060A  C9          	ret
-1798  060B              	SECTION code_compiler
-1799  060B              ;	---------------------------------
-1800  060B              ; Function enemy_init
-1801  060B              ; ---------------------------------
-1802  060B              _enemy_init:
-1803  060B  CD 00 00    	call	___sdcc_enter_ix
-1804  060E  F5          	push	af
-1805  060F  F5          	push	af
-1806  0610  F5          	push	af
-1807  0611  3B          	dec	sp
-1808  0612  01 00 00    	ld	bc,_scr_map
-1809  0615  2A 00 00    	ld	hl,(_index1)
-1810  0618  09          	add	hl,bc
-1811  0619  7E          	ld	a,(hl)
-1812  061A  DD 77 FD    	ld	(ix-3),a
-1813  061D  DD 36 FC 00 	ld	(ix-4),0x00
-1814  0621  DD CB FD 46 	bit	0,(ix-3)
-1815  0625  28 07       	jr	Z,l_enemy_init_00102
-1816  0627  DD 35 FD    	dec	(ix-3)
-1817  062A  DD 36 FC 01 	ld	(ix-4),0x01
-1818  062E              l_enemy_init_00102:
-1819  062E  3E 00       	ld	a,0x00
-1820  0630  32 00 00    	ld	(_sprite),a
-1821  0633  4F          	ld	c,a
-1822  0634              l_enemy_init_00107:
-1823  0634  21 00 00    	ld	hl,_sprite
-1824  0637  7E          	ld	a, (hl)
-1825  0638  D6 08       	sub	a,0x08
-1826  063A  30 19       	jr	NC,l_enemy_init_00177
-1827  063C  5E          	ld	e,(hl)
-1828  063D  16 00       	ld	d,0x00
-1829  063F  21 00 00    	ld	hl,_class
-1830  0642  19          	add	hl,de
-1831  0643  7E          	ld	a,(hl)
-1832  0644  47          	ld	b,a
-1833  0645  B7          	or	a, a
-1834  0646  28 0D       	jr	Z,l_enemy_init_00177
-1835  0648  DD 7E FD    	ld	a,(ix-3)
-1836  064B  90          	sub	a, b
-1837  064C  20 01       	jr	NZ,l_enemy_init_00106
-1838  064E  0C          	inc	c
-1839  064F              l_enemy_init_00106:
-1840  064F  21 00 00    	ld	hl,_sprite
-1841  0652  34          	inc	(hl)
-1842  0653  18 DF       	jr	l_enemy_init_00107
-1843  0655              l_enemy_init_00177:
-1844  0655  DD 71 FF    	ld	(ix-1),c
-1845  0658  21 00 00    	ld	hl,0x0000
-1846  065B  E3          	ex	(sp), hl
-1847  065C              l_enemy_init_00146:
-1848  065C  3E 0E       	ld	a,0x0e
-1849  065E  DD BE F9    	cp	a,(ix-7)
-1850  0661  3E 01       	ld	a,0x01
-1851  0663  DD 9E FA    	sbc	a,(ix-6)
-1852  0666  DA F8 09    	jp	C, l_enemy_init_00149
-1853  0669  3E 00       	ld	a, +((_spr_init) & 0xFF)
-1854  066B  DD 86 F9    	add	a,(ix-7)
-1855  066E  4F          	ld	c, a
-1856  066F  3E 00       	ld	a, +((_spr_init) / 256)
-1857  0671  DD 8E FA    	adc	a,(ix-6)
-1858  0674  47          	ld	b, a
-1859  0675  0A          	ld	a, (bc)
-1860  0676  5F          	ld	e, a
-1861  0677  DD 7E FD    	ld	a,(ix-3)
-1862  067A  93          	sub	a, e
-1863  067B  C2 E5 09    	jp	NZ,l_enemy_init_00144
-1864  067E  69          	ld	l, c
-1865  067F  60          	ld	h, b
-1866  0680  23          	inc	hl
-1867  0681  7E          	ld	a, (hl)
-1868  0682  DD 77 FB    	ld	(ix-5),a
-1869  0685  3A 00 00    	ld	a,(_sprite)
-1870  0688  C6 00       	add	a,+((_spr_frames) & 0xFF)
-1871  068A  5F          	ld	e,a
-1872  068B  3E 00       	ld	a,+((_spr_frames) / 256)
-1873  068D  CE 00       	adc	a,0x00
-1874  068F  57          	ld	d,a
-1875  0690  69          	ld	l, c
-1876  0691  60          	ld	h, b
-1877  0692  23          	inc	hl
-1878  0693  23          	inc	hl
-1879  0694  7E          	ld	a, (hl)
-1880  0695  12          	ld	(de), a
-1881  0696  3A 00 00    	ld	a,(_sprite)
-1882  0699  C6 00       	add	a,+((_spr_altset) & 0xFF)
-1883  069B  5F          	ld	e,a
-1884  069C  3E 00       	ld	a,+((_spr_altset) / 256)
-1885  069E  CE 00       	adc	a,0x00
-1886  06A0  57          	ld	d,a
-1887  06A1  69          	ld	l, c
-1888  06A2  60          	ld	h, b
-1889  06A3  23          	inc	hl
-1890  06A4  23          	inc	hl
-1891  06A5  23          	inc	hl
-1892  06A6  7E          	ld	a, (hl)
-1893  06A7  12          	ld	(de), a
-1894  06A8  3A 00 00    	ld	a,(_sprite)
-1895  06AB  C6 00       	add	a,+((_spr_kind) & 0xFF)
-1896  06AD  5F          	ld	e,a
-1897  06AE  3E 00       	ld	a,+((_spr_kind) / 256)
-1898  06B0  CE 00       	adc	a,0x00
-1899  06B2  57          	ld	d,a
-1900  06B3  69          	ld	l, c
-1901  06B4  60          	ld	h, b
-1902  06B5  23          	inc	hl
-1903  06B6  23          	inc	hl
-1904  06B7  23          	inc	hl
-1905  06B8  23          	inc	hl
-1906  06B9  7E          	ld	a, (hl)
-1907  06BA  12          	ld	(de), a
-1908  06BB  21 05 00    	ld	hl,0x0005
-1909  06BE  09          	add	hl,bc
-1910  06BF  7E          	ld	a, (hl)
-1911  06C0  32 00 00    	ld	(_spr_init_cin0),a
-1912  06C3  DD 7E FF    	ld	a,(ix-1)
-1913  06C6  B7          	or	a, a
-1914  06C7  28 13       	jr	Z,l_enemy_init_00110
-1915  06C9  3D          	dec	a
-1916  06CA  28 1C       	jr	Z,l_enemy_init_00111
-1917  06CC  DD 7E FF    	ld	a,(ix-1)
-1918  06CF  D6 02       	sub	a,0x02
-1919  06D1  28 1F       	jr	Z,l_enemy_init_00112
-1920  06D3  DD 7E FF    	ld	a,(ix-1)
-1921  06D6  D6 03       	sub	a,0x03
-1922  06D8  28 22       	jr	Z,l_enemy_init_00113
-1923  06DA  18 28       	jr	l_enemy_init_00114
-1924  06DC              l_enemy_init_00110:
-1925  06DC  21 00 00    	ld	hl,_spr_init_cin0
-1926  06DF  36 00       	ld	(hl),0x00
-1927  06E1  21 00 00    	ld	hl,_spr_init_cout0
-1928  06E4  36 00       	ld	(hl),0x00
-1929  06E6  18 1C       	jr	l_enemy_init_00114
-1930  06E8              l_enemy_init_00111:
-1931  06E8  21 06 00    	ld	hl,0x0006
-1932  06EB  09          	add	hl,bc
-1933  06EC  7E          	ld	a, (hl)
-1934  06ED  32 00 00    	ld	(_spr_init_cout0),a
-1935  06F0  18 12       	jr	l_enemy_init_00114
-1936  06F2              l_enemy_init_00112:
-1937  06F2  21 07 00    	ld	hl,0x0007
-1938  06F5  09          	add	hl,bc
-1939  06F6  7E          	ld	a, (hl)
-1940  06F7  32 00 00    	ld	(_spr_init_cout0),a
-1941  06FA  18 08       	jr	l_enemy_init_00114
-1942  06FC              l_enemy_init_00113:
-1943  06FC  21 08 00    	ld	hl,0x0008
-1944  06FF  09          	add	hl,bc
-1945  0700  7E          	ld	a, (hl)
-1946  0701  32 00 00    	ld	(_spr_init_cout0),a
-1947  0704              l_enemy_init_00114:
-1948  0704  2A 00 00    	ld	hl,(_sprite)
-1949  0707  26 00       	ld	h,0x00
-1950  0709  01 00 00    	ld	bc,_class
-1951  070C  09          	add	hl,bc
-1952  070D  4D          	ld	c,l
-1953  070E  44          	ld	b,h
-1954  070F  21 00 00    	ld	hl,_sprite
-1955  0712  DD 7E FD    	ld	a,(ix-3)
-1956  0715  02          	ld	(bc), a
-1957  0716  3E 00       	ld	a, +((_spr_speed) & 0xFF)
-1958  0718  86          	add	a, (hl)
-1959  0719  4F          	ld	c, a
-1960  071A  3E 00       	ld	a, +((_spr_speed) / 256)
-1961  071C  CE 00       	adc	a,0x00
-1962  071E  47          	ld	b, a
-1963  071F  ED 5B 00 00 	ld	de,(_index1)
-1964  0723  13          	inc	de
-1965  0724  21 00 00    	ld	hl,_scr_map
-1966  0727  19          	add	hl, de
-1967  0728  7E          	ld	a, (hl)
-1968  0729  02          	ld	(bc), a
-1969  072A  2A 00 00    	ld	hl,(_sprite)
-1970  072D  26 00       	ld	h,0x00
-1971  072F  01 00 00    	ld	bc,_value_a
-1972  0732  09          	add	hl,bc
-1973  0733  4D          	ld	c,l
-1974  0734  44          	ld	b,h
-1975  0735  2A 00 00    	ld	hl,(_index1)
-1976  0738  11 20 00    	ld	de,0x0020
-1977  073B  19          	add	hl,de
-1978  073C  11 00 00    	ld	de,_scr_map
-1979  073F  19          	add	hl, de
-1980  0740  7E          	ld	a, (hl)
-1981  0741  02          	ld	(bc), a
-1982  0742  2A 00 00    	ld	hl,(_sprite)
-1983  0745  26 00       	ld	h,0x00
-1984  0747  01 00 00    	ld	bc,_value_b
-1985  074A  09          	add	hl,bc
-1986  074B  4D          	ld	c,l
-1987  074C  44          	ld	b,h
-1988  074D  2A 00 00    	ld	hl,(_index1)
-1989  0750  11 21 00    	ld	de,0x0021
-1990  0753  19          	add	hl,de
-1991  0754  11 00 00    	ld	de,_scr_map
-1992  0757  19          	add	hl, de
-1993  0758  7E          	ld	a, (hl)
-1994  0759  02          	ld	(bc), a
-1995  075A  2A 00 00    	ld	hl,(_index1)
-1996  075D  01 00 00    	ld	bc,_scr_map
-1997  0760  09          	add	hl,bc
-1998  0761  AF          	xor	a,a
-1999  0762  77          	ld	(hl),a
-2000  0763  ED 4B 00 00 	ld	bc,(_index1)
-2001  0767  03          	inc	bc
-2002  0768  21 00 00    	ld	hl,_scr_map
-2003  076B  09          	add	hl, bc
-2004  076C  36 00       	ld	(hl),0x00
-2005  076E  2A 00 00    	ld	hl,(_index1)
-2006  0771  01 20 00    	ld	bc,0x0020
-2007  0774  09          	add	hl,bc
-2008  0775  01 00 00    	ld	bc,_scr_map
-2009  0778  09          	add	hl,bc
-2010  0779  36 00       	ld	(hl),0x00
-2011  077B  2A 00 00    	ld	hl,(_index1)
-2012  077E  01 21 00    	ld	bc,0x0021
-2013  0781  09          	add	hl,bc
-2014  0782  01 00 00    	ld	bc,_scr_map
-2015  0785  09          	add	hl,bc
-2016  0786  36 00       	ld	(hl),0x00
-2017  0788  2A 00 00    	ld	hl,(_sprite)
-2018  078B  26 00       	ld	h,0x00
-2019  078D  01 00 00    	ld	bc,_state
-2020  0790  09          	add	hl,bc
-2021  0791  AF          	xor	a,a
-2022  0792  77          	ld	(hl),a
-2023  0793  2A 00 00    	ld	hl,(_sprite)
-2024  0796  26 00       	ld	h,0x00
-2025  0798  01 00 00    	ld	bc,_state_a
-2026  079B  09          	add	hl,bc
-2027  079C  AF          	xor	a,a
-2028  079D  77          	ld	(hl),a
-2029  079E  2A 00 00    	ld	hl,(_sprite)
-2030  07A1  26 00       	ld	h,0x00
-2031  07A3  01 00 00    	ld	bc,_lin
-2032  07A6  09          	add	hl,bc
-2033  07A7  ED 5B 00 00 	ld	de,(_index1)
-2034  07AB  7B          	ld	a,e
-2035  07AC  1E 05       	ld	e,0x05
-2036  07AE  4D          	ld	c,l
-2037  07AF  44          	ld	b,h
-2038  07B0              l_enemy_init_00265:
-2039  07B0  CB 3A       	srl	d
-2040  07B2  1F          	rra
-2041  07B3  1D          	dec	e
-2042  07B4  20 FA       	jr	NZ,l_enemy_init_00265
-2043  07B6  5F          	ld	e,a
-2044  07B7  07          	rlca
-2045  07B8  07          	rlca
-2046  07B9  07          	rlca
-2047  07BA  E6 F8       	and	a,0xf8
-2048  07BC  02          	ld	(bc), a
-2049  07BD  01 00 00    	ld	bc,_col+0
-2050  07C0  2A 00 00    	ld	hl,(_sprite)
-2051  07C3  26 00       	ld	h,0x00
-2052  07C5  09          	add	hl,bc
-2053  07C6  3A 00 00    	ld	a,(_index1)
-2054  07C9  EB          	ex	de,hl
-2055  07CA  E6 1F       	and	a,0x1f
-2056  07CC  12          	ld	(de), a
-2057  07CD  3A 00 00    	ld	a,(_sprite)
-2058  07D0  C6 00       	add	a,+((_colint) & 0xFF)
-2059  07D2  5F          	ld	e,a
-2060  07D3  3E 00       	ld	a,+((_colint) / 256)
-2061  07D5  CE 00       	adc	a,0x00
-2062  07D7  57          	ld	d,a
-2063  07D8  AF          	xor	a, a
-2064  07D9  12          	ld	(de), a
-2065  07DA  3A 00 00    	ld	a,(_scr_curr)
-2066  07DD  3D          	dec	a
-2067  07DE  20 0A       	jr	NZ,l_enemy_init_00116
-2068  07E0  2A 00 00    	ld	hl,(_sprite)
-2069  07E3  26 00       	ld	h,0x00
-2070  07E5  09          	add	hl,bc
-2071  07E6  7E          	ld	a,(hl)
-2072  07E7  C6 02       	add	a,0x02
-2073  07E9  77          	ld	(hl),a
-2074  07EA              l_enemy_init_00116:
-2075  07EA  2A 00 00    	ld	hl,(_sprite)
-2076  07ED  26 00       	ld	h,0x00
-2077  07EF  01 00 00    	ld	bc,_spr_kind
-2078  07F2  09          	add	hl,bc
-2079  07F3  7E          	ld	a,(hl)
-2080  07F4  21 00 00    	ld	hl,_sprite
-2081  07F7  DD 77 FE    	ld	(ix-2),a
-2082  07FA  3D          	dec	a
-2083  07FB  28 38       	jr	Z,l_enemy_init_00118
-2084  07FD  3E 00       	ld	a, +((_spr_altset) & 0xFF)
-2085  07FF  86          	add	a, (hl)
-2086  0800  5F          	ld	e, a
-2087  0801  3E 00       	ld	a, +((_spr_altset) / 256)
-2088  0803  CE 00       	adc	a,0x00
-2089  0805  57          	ld	d, a
-2090  0806  DD 7E FE    	ld	a,(ix-2)
-2091  0809  D6 02       	sub	a,0x02
-2092  080B  28 53       	jr	Z,l_enemy_init_00122
-2093  080D  DD 7E FE    	ld	a,(ix-2)
-2094  0810  D6 06       	sub	a,0x06
-2095  0812  28 13       	jr	Z,l_enemy_init_00117
-2096  0814  DD 7E FE    	ld	a,(ix-2)
-2097  0817  D6 08       	sub	a,0x08
-2098  0819  CA F6 08    	jp	Z,l_enemy_init_00130
-2099  081C  DD 7E FE    	ld	a,(ix-2)
-2100  081F  D6 09       	sub	a,0x09
-2101  0821  CA AC 08    	jp	Z,l_enemy_init_00126
-2102  0824  C3 40 09    	jp	l_enemy_init_00134
-2103  0827              l_enemy_init_00117:
-2104  0827  2A 00 00    	ld	hl,(_sprite)
-2105  082A  26 00       	ld	h,0x00
-2106  082C  01 00 00    	ld	bc,_spr_speed_a
-2107  082F  09          	add	hl,bc
-2108  0830  1A          	ld	a,(de)
-2109  0831  77          	ld	(hl),a
-2110  0832  C3 40 09    	jp	l_enemy_init_00134
-2111  0835              l_enemy_init_00118:
-2112  0835  2A 00 00    	ld	hl,(_sprite)
-2113  0838  26 00       	ld	h,0x00
-2114  083A  01 00 00    	ld	bc,_state
-2115  083D  09          	add	hl,bc
-2116  083E  5E          	ld	e,(hl)
-2117  083F  DD 7E FC    	ld	a,(ix-4)
-2118  0842  B7          	or	a,a
-2119  0843  4D          	ld	c,l
-2120  0844  44          	ld	b,h
-2121  0845  28 07       	jr	Z,l_enemy_init_00120
-2122  0847  7B          	ld	a, e
-2123  0848  F6 04       	or	a,0x04
-2124  084A  02          	ld	(bc), a
-2125  084B  C3 40 09    	jp	l_enemy_init_00134
-2126  084E              l_enemy_init_00120:
-2127  084E  7B          	ld	a, e
-2128  084F  F6 08       	or	a,0x08
-2129  0851  02          	ld	(bc), a
-2130  0852  2A 00 00    	ld	hl,(_sprite)
-2131  0855  26 00       	ld	h,0x00
-2132  0857  01 00 00    	ld	bc,_colint
-2133  085A  09          	add	hl,bc
-2134  085B  36 03       	ld	(hl),0x03
-2135  085D  C3 40 09    	jp	l_enemy_init_00134
-2136  0860              l_enemy_init_00122:
-2137  0860  2A 00 00    	ld	hl,(_sprite)
-2138  0863  26 00       	ld	h,0x00
-2139  0865  01 00 00    	ld	bc,_spr_speed_a
-2140  0868  09          	add	hl,bc
-2141  0869  1A          	ld	a,(de)
-2142  086A  77          	ld	(hl),a
-2143  086B  2A 00 00    	ld	hl,(_sprite)
-2144  086E  26 00       	ld	h,0x00
-2145  0870  01 00 00    	ld	bc,_spr_speed_b
-2146  0873  09          	add	hl,bc
-2147  0874  4D          	ld	c,l
-2148  0875  44          	ld	b,h
-2149  0876  2A 00 00    	ld	hl,(_sprite)
-2150  0879  26 00       	ld	h,0x00
-2151  087B  11 00 00    	ld	de,_spr_speed
-2152  087E  19          	add	hl,de
-2153  087F  7E          	ld	a,(hl)
-2154  0880  02          	ld	(bc),a
-2155  0881  2A 00 00    	ld	hl,(_sprite)
-2156  0884  26 00       	ld	h,0x00
-2157  0886  01 00 00    	ld	bc,_spr_speed
-2158  0889  09          	add	hl,bc
-2159  088A  36 02       	ld	(hl),0x02
-2160  088C  2A 00 00    	ld	hl,(_sprite)
-2161  088F  26 00       	ld	h,0x00
-2162  0891  01 00 00    	ld	bc,_state
-2163  0894  09          	add	hl,bc
-2164  0895  5E          	ld	e,(hl)
-2165  0896  DD 7E FC    	ld	a,(ix-4)
-2166  0899  B7          	or	a,a
-2167  089A  4D          	ld	c,l
-2168  089B  44          	ld	b,h
-2169  089C  28 07       	jr	Z,l_enemy_init_00124
-2170  089E  7B          	ld	a, e
-2171  089F  F6 01       	or	a,0x01
-2172  08A1  02          	ld	(bc), a
-2173  08A2  C3 40 09    	jp	l_enemy_init_00134
-2174  08A5              l_enemy_init_00124:
-2175  08A5  7B          	ld	a, e
-2176  08A6  F6 02       	or	a,0x02
-2177  08A8  02          	ld	(bc), a
-2178  08A9  C3 40 09    	jp	l_enemy_init_00134
-2179  08AC              l_enemy_init_00126:
-2180  08AC  2A 00 00    	ld	hl,(_sprite)
-2181  08AF  26 00       	ld	h,0x00
-2182  08B1  01 00 00    	ld	bc,_spr_speed_a
-2183  08B4  09          	add	hl,bc
-2184  08B5  1A          	ld	a,(de)
-2185  08B6  77          	ld	(hl),a
-2186  08B7  2A 00 00    	ld	hl,(_sprite)
-2187  08BA  26 00       	ld	h,0x00
-2188  08BC  01 00 00    	ld	bc,_spr_speed_b
-2189  08BF  09          	add	hl,bc
-2190  08C0  4D          	ld	c,l
-2191  08C1  44          	ld	b,h
-2192  08C2  2A 00 00    	ld	hl,(_sprite)
-2193  08C5  26 00       	ld	h,0x00
-2194  08C7  11 00 00    	ld	de,_spr_speed
-2195  08CA  19          	add	hl,de
-2196  08CB  7E          	ld	a,(hl)
-2197  08CC  02          	ld	(bc),a
-2198  08CD  2A 00 00    	ld	hl,(_sprite)
-2199  08D0  26 00       	ld	h,0x00
-2200  08D2  01 00 00    	ld	bc,_spr_speed
-2201  08D5  09          	add	hl,bc
-2202  08D6  36 02       	ld	(hl),0x02
-2203  08D8  2A 00 00    	ld	hl,(_sprite)
-2204  08DB  26 00       	ld	h,0x00
-2205  08DD  01 00 00    	ld	bc,_state
-2206  08E0  09          	add	hl,bc
-2207  08E1  5E          	ld	e,(hl)
-2208  08E2  DD 7E FC    	ld	a,(ix-4)
-2209  08E5  B7          	or	a,a
-2210  08E6  4D          	ld	c,l
-2211  08E7  44          	ld	b,h
-2212  08E8  28 06       	jr	Z,l_enemy_init_00128
-2213  08EA  7B          	ld	a, e
-2214  08EB  F6 01       	or	a,0x01
-2215  08ED  02          	ld	(bc), a
-2216  08EE  18 50       	jr	l_enemy_init_00134
-2217  08F0              l_enemy_init_00128:
-2218  08F0  7B          	ld	a, e
-2219  08F1  F6 02       	or	a,0x02
-2220  08F3  02          	ld	(bc), a
-2221  08F4  18 4A       	jr	l_enemy_init_00134
-2222  08F6              l_enemy_init_00130:
-2223  08F6  2A 00 00    	ld	hl,(_sprite)
-2224  08F9  26 00       	ld	h,0x00
-2225  08FB  01 00 00    	ld	bc,_value_c
-2226  08FE  09          	add	hl,bc
-2227  08FF  4D          	ld	c,l
-2228  0900  44          	ld	b,h
-2229  0901  2A 00 00    	ld	hl,(_sprite)
-2230  0904  26 00       	ld	h,0x00
-2231  0906  11 00 00    	ld	de,_lin
-2232  0909  19          	add	hl,de
-2233  090A  7E          	ld	a,(hl)
-2234  090B  02          	ld	(bc),a
-2235  090C  2A 00 00    	ld	hl,(_sprite)
-2236  090F  26 00       	ld	h,0x00
-2237  0911  01 00 00    	ld	bc,_state
-2238  0914  09          	add	hl,bc
-2239  0915  7E          	ld	a,(hl)
-2240  0916  F6 01       	or	a,0x01
-2241  0918  77          	ld	(hl),a
-2242  0919  2A 00 00    	ld	hl,(_sprite)
-2243  091C  26 00       	ld	h,0x00
-2244  091E  01 00 00    	ld	bc,_state
-2245  0921  09          	add	hl,bc
-2246  0922  5E          	ld	e,(hl)
-2247  0923  DD 7E FC    	ld	a,(ix-4)
-2248  0926  B7          	or	a,a
-2249  0927  4D          	ld	c,l
-2250  0928  44          	ld	b,h
-2251  0929  28 06       	jr	Z,l_enemy_init_00132
-2252  092B  7B          	ld	a, e
-2253  092C  F6 04       	or	a,0x04
-2254  092E  02          	ld	(bc), a
-2255  092F  18 0F       	jr	l_enemy_init_00134
-2256  0931              l_enemy_init_00132:
-2257  0931  7B          	ld	a, e
-2258  0932  F6 08       	or	a,0x08
-2259  0934  02          	ld	(bc), a
-2260  0935  2A 00 00    	ld	hl,(_sprite)
-2261  0938  26 00       	ld	h,0x00
-2262  093A  01 00 00    	ld	bc,_colint
-2263  093D  09          	add	hl,bc
-2264  093E  36 03       	ld	(hl),0x03
-2265  0940              l_enemy_init_00134:
-2266  0940  2A 00 00    	ld	hl,(_sprite)
-2267  0943  26 00       	ld	h,0x00
-2268  0945  01 00 00    	ld	bc,_spr_frames
-2269  0948  09          	add	hl,bc
-2270  0949  7E          	ld	a,(hl)
-2271  094A  D6 04       	sub	a,0x04
-2272  094C  20 1E       	jr	NZ,l_enemy_init_00139
-2273  094E  2A 00 00    	ld	hl,(_sprite)
-2274  0951  26 00       	ld	h,0x00
-2275  0953  01 00 00    	ld	bc,_spr_tile
-2276  0956  09          	add	hl,bc
-2277  0957  3A 00 00    	ld	a,(_game_tile_cnt)
-2278  095A  77          	ld	(hl),a
-2279  095B  F5          	push	af
-2280  095C  33          	inc	sp
-2281  095D  DD 7E FB    	ld	a,(ix-5)
-2282  0960  F5          	push	af
-2283  0961  33          	inc	sp
-2284  0962  CD 00 00    	call	_game_copy_sprite_std
-2285  0965  F1          	pop	af
-2286  0966  7D          	ld	a,l
-2287  0967  32 00 00    	ld	(_game_tile_cnt),a
-2288  096A  18 40       	jr	l_enemy_init_00140
-2289  096C              l_enemy_init_00139:
-2290  096C  21 00 00    	ld	hl,_i
-2291  096F  36 00       	ld	(hl),0x00
-2292  0971  2A 00 00    	ld	hl,(_sprite)
-2293  0974  26 00       	ld	h,0x00
-2294  0976  01 00 00    	ld	bc,_spr_tile
-2295  0979  09          	add	hl,bc
-2296  097A  3A 00 00    	ld	a,(_game_tile_cnt)
-2297  097D  77          	ld	(hl),a
-2298  097E              l_enemy_init_00135:
-2299  097E  2A 00 00    	ld	hl,(_sprite)
-2300  0981  26 00       	ld	h,0x00
-2301  0983  01 00 00    	ld	bc,_spr_frames
-2302  0986  09          	add	hl,bc
-2303  0987  4E          	ld	c,(hl)
-2304  0988  21 00 00    	ld	hl,_i
-2305  098B  7E          	ld	a, (hl)
-2306  098C  91          	sub	a, c
-2307  098D  30 1D       	jr	NC,l_enemy_init_00140
-2308  098F  DD 7E FB    	ld	a,(ix-5)
-2309  0992  86          	add	a, (hl)
-2310  0993  47          	ld	b, a
-2311  0994  AF          	xor	a, a
-2312  0995  F5          	push	af
-2313  0996  33          	inc	sp
-2314  0997  3A 00 00    	ld	a,(_game_tile_cnt)
-2315  099A  48          	ld	c,b
-2316  099B  47          	ld	b,a
-2317  099C  C5          	push	bc
-2318  099D  CD 00 00    	call	_game_copy_sprite
-2319  09A0  F1          	pop	af
-2320  09A1  33          	inc	sp
-2321  09A2  21 00 00    	ld	hl,_game_tile_cnt
-2322  09A5  34          	inc	(hl)
-2323  09A6  21 00 00    	ld	hl,_i
-2324  09A9  34          	inc	(hl)
-2325  09AA  18 D2       	jr	l_enemy_init_00135
-2326  09AC              l_enemy_init_00140:
-2327  09AC  2A 00 00    	ld	hl,(_sprite)
-2328  09AF  26 00       	ld	h,0x00
-2329  09B1  01 00 00    	ld	bc,_tile
-2330  09B4  09          	add	hl,bc
-2331  09B5  E5          	push	hl
-2332  09B6  21 00 00    	ld	hl,_sprite
-2333  09B9  CD 00 00    	call	_spr_get_tile
-2334  09BC  C1          	pop	bc
-2335  09BD  7D          	ld	a,l
-2336  09BE  02          	ld	(bc), a
-2337  09BF  DD 7E FD    	ld	a,(ix-3)
-2338  09C2  D6 52       	sub	a,0x52
-2339  09C4  20 0B       	jr	NZ,l_enemy_init_00142
-2340  09C6  2A 00 00    	ld	hl,(_sprite)
-2341  09C9  26 00       	ld	h,0x00
-2342  09CB  01 00 00    	ld	bc,_spr_frames
-2343  09CE  09          	add	hl,bc
-2344  09CF  36 02       	ld	(hl),0x02
-2345  09D1              l_enemy_init_00142:
-2346  09D1  21 00 00    	ld	hl,_spr_count
-2347  09D4  34          	inc	(hl)
-2348  09D5  2A 00 00    	ld	hl,(_sprite)
-2349  09D8  26 00       	ld	h,0x00
-2350  09DA  29          	add	hl, hl
-2351  09DB  11 00 00    	ld	de,_last_time
-2352  09DE  19          	add	hl, de
-2353  09DF  AF          	xor	a, a
-2354  09E0  77          	ld	(hl), a
-2355  09E1  23          	inc	hl
-2356  09E2  77          	ld	(hl), a
-2357  09E3  18 13       	jr	l_enemy_init_00149
-2358  09E5              l_enemy_init_00144:
-2359  09E5  DD 7E F9    	ld	a,(ix-7)
-2360  09E8  C6 09       	add	a,0x09
-2361  09EA  DD 77 F9    	ld	(ix-7),a
-2362  09ED  DD 7E FA    	ld	a,(ix-6)
-2363  09F0  CE 00       	adc	a,0x00
-2364  09F2  DD 77 FA    	ld	(ix-6),a
-2365  09F5  C3 5C 06    	jp	l_enemy_init_00146
-2366  09F8              l_enemy_init_00149:
-2367  09F8  DD F9       	ld	sp, ix
-2368  09FA  DD E1       	pop	ix
-2369  09FC  C9          	ret
-2370  09FD              	SECTION IGNORE
-2371  0000              
+1581  04A6  2A 00 00    	ld	hl,(_sprite)
+1582  04A9  F5          	push	af
+1583  04AA  F5          	push	af
+1584  04AB  26 00       	ld	h,0x00
+1585  04AD  01 00 00    	ld	bc,_spr_speed_a
+1586  04B0  09          	add	hl,bc
+1587  04B1  5E          	ld	e, (hl)
+1588  04B2  16 00       	ld	d,0x00
+1589  04B4  01 00 00    	ld	bc,_last_time_a+0
+1590  04B7  3A 00 00    	ld	a,(_sprite)
+1591  04BA  DD 77 FE    	ld	(ix-2),a
+1592  04BD  6F          	ld	l, a
+1593  04BE  26 00       	ld	h,0x00
+1594  04C0  DD 74 FF    	ld	(ix-1),h
+1595  04C3  29          	add	hl, hl
+1596  04C4  09          	add	hl, bc
+1597  04C5  C5          	push	bc
+1598  04C6  D5          	push	de
+1599  04C7  E5          	push	hl
+1600  04C8  CD 00 00    	call	_game_check_time
+1601  04CB  F1          	pop	af
+1602  04CC  F1          	pop	af
+1603  04CD  C1          	pop	bc
+1604  04CE  7D          	ld	a,l
+1605  04CF  B7          	or	a, a
+1606  04D0  28 3E       	jr	Z,l_enemy_vertical_00104
+1607  04D2  2A 00 00    	ld	hl,(_sprite)
+1608  04D5  26 00       	ld	h,0x00
+1609  04D7  11 00 00    	ld	de,_colint
+1610  04DA  19          	add	hl,de
+1611  04DB  7E          	ld	a,(hl)
+1612  04DC  3C          	inc	a
+1613  04DD  77          	ld	(hl),a
+1614  04DE  EB          	ex	de,hl
+1615  04DF  21 00 00    	ld	hl,_sprite
+1616  04E2  DD 77 FE    	ld	(ix-2),a
+1617  04E5  3E 00       	ld	a, +((_spr_frames) & 0xFF)
+1618  04E7  86          	add	a, (hl)
+1619  04E8  DD 77 FC    	ld	(ix-4),a
+1620  04EB  3E 00       	ld	a, +((_spr_frames) / 256)
+1621  04ED  CE 00       	adc	a,0x00
+1622  04EF  DD 77 FD    	ld	(ix-3),a
+1623  04F2  E1          	pop	hl
+1624  04F3  7E          	ld	a,(hl)
+1625  04F4  E5          	push	hl
+1626  04F5  DD 77 FC    	ld	(ix-4),a
+1627  04F8  DD 7E FE    	ld	a,(ix-2)
+1628  04FB  DD 96 FC    	sub	a,(ix-4)
+1629  04FE  20 02       	jr	NZ,l_enemy_vertical_00102
+1630  0500  AF          	xor	a, a
+1631  0501  12          	ld	(de), a
+1632  0502              l_enemy_vertical_00102:
+1633  0502  2A 00 00    	ld	hl,(_sprite)
+1634  0505  26 00       	ld	h,0x00
+1635  0507  29          	add	hl, hl
+1636  0508  09          	add	hl,bc
+1637  0509  ED 5B 00 00 	ld	de,(_curr_time)
+1638  050D  73          	ld	(hl),e
+1639  050E  23          	inc	hl
+1640  050F  72          	ld	(hl),d
+1641  0510              l_enemy_vertical_00104:
+1642  0510  2A 00 00    	ld	hl,(_sprite)
+1643  0513  26 00       	ld	h,0x00
+1644  0515  01 00 00    	ld	bc,_spr_speed_b
+1645  0518  09          	add	hl,bc
+1646  0519  4E          	ld	c, (hl)
+1647  051A  06 00       	ld	b,0x00
+1648  051C  2A 00 00    	ld	hl,(_sprite)
+1649  051F  60          	ld	h,b
+1650  0520  29          	add	hl, hl
+1651  0521  11 00 00    	ld	de,_last_time_b
+1652  0524  19          	add	hl, de
+1653  0525  C5          	push	bc
+1654  0526  E5          	push	hl
+1655  0527  CD 00 00    	call	_game_check_time
+1656  052A  F1          	pop	af
+1657  052B  F1          	pop	af
+1658  052C  7D          	ld	a, l
+1659  052D  B7          	or	a, a
+1660  052E  28 63       	jr	Z,l_enemy_vertical_00114
+1661  0530  2A 00 00    	ld	hl,(_sprite)
+1662  0533  26 00       	ld	h,0x00
+1663  0535  01 00 00    	ld	bc,_state
+1664  0538  09          	add	hl,bc
+1665  0539  7E          	ld	a,(hl)
+1666  053A  0F          	rrca
+1667  053B  30 24       	jr	NC,l_enemy_vertical_00110
+1668  053D  CD 00 00    	call	_spr_move_up_f
+1669  0540  2A 00 00    	ld	hl,(_sprite)
+1670  0543  26 00       	ld	h,0x00
+1671  0545  01 00 00    	ld	bc,_lin
+1672  0548  09          	add	hl,bc
+1673  0549  4E          	ld	c, (hl)
+1674  054A  3A 00 00    	ld	a,(_sprite)
+1675  054D  5F          	ld	e,a
+1676  054E  16 00       	ld	d,0x00
+1677  0550  21 00 00    	ld	hl,_value_a
+1678  0553  19          	add	hl,de
+1679  0554  46          	ld	b, (hl)
+1680  0555  79          	ld	a, c
+1681  0556  90          	sub	a, b
+1682  0557  20 29       	jr	NZ,l_enemy_vertical_00111
+1683  0559  CD 00 00    	call	_spr_clear_fast_vert
+1684  055C  CD 00 00    	call	_spr_set_down
+1685  055F  18 21       	jr	l_enemy_vertical_00111
+1686  0561              l_enemy_vertical_00110:
+1687  0561  CD 00 00    	call	_spr_move_down_f
+1688  0564  2A 00 00    	ld	hl,(_sprite)
+1689  0567  26 00       	ld	h,0x00
+1690  0569  01 00 00    	ld	bc,_lin
+1691  056C  09          	add	hl,bc
+1692  056D  4E          	ld	c, (hl)
+1693  056E  3A 00 00    	ld	a,(_sprite)
+1694  0571  5F          	ld	e,a
+1695  0572  16 00       	ld	d,0x00
+1696  0574  21 00 00    	ld	hl,_value_b
+1697  0577  19          	add	hl,de
+1698  0578  7E          	ld	a,(hl)
+1699  0579  91          	sub	a, c
+1700  057A  20 06       	jr	NZ,l_enemy_vertical_00111
+1701  057C  CD 00 00    	call	_spr_clear_fast_vert
+1702  057F  CD 00 00    	call	_spr_set_up
+1703  0582              l_enemy_vertical_00111:
+1704  0582  2A 00 00    	ld	hl,(_sprite)
+1705  0585  26 00       	ld	h,0x00
+1706  0587  29          	add	hl,hl
+1707  0588  01 00 00    	ld	bc,_last_time_b
+1708  058B  09          	add	hl,bc
+1709  058C  ED 5B 00 00 	ld	de,(_curr_time)
+1710  0590  73          	ld	(hl),e
+1711  0591  23          	inc	hl
+1712  0592  72          	ld	(hl),d
+1713  0593              l_enemy_vertical_00114:
+1714  0593  DD F9       	ld	sp, ix
+1715  0595  DD E1       	pop	ix
+1716  0597  C9          	ret
+1717  0598              	SECTION code_compiler
+1718  0598              ;	---------------------------------
+1719  0598              ; Function enemy_eugene
+1720  0598              ; ---------------------------------
+1721  0598              _enemy_eugene:
+1722  0598  3A 00 00    	ld	a,(_obj_count)
+1723  059B  3C          	inc	a
+1724  059C  28 10       	jr	Z,l_enemy_eugene_00108
+1725  059E  2A 00 00    	ld	hl,(_sprite)
+1726  05A1  26 00       	ld	h,0x00
+1727  05A3  01 00 00    	ld	bc,_spr_frames
+1728  05A6  09          	add	hl,bc
+1729  05A7  36 01       	ld	(hl),0x01
+1730  05A9  CD A3 04    	call	_enemy_vertical
+1731  05AC  18 6B       	jr	l_enemy_eugene_00110
+1732  05AE              l_enemy_eugene_00108:
+1733  05AE  2A 00 00    	ld	hl,(_sprite)
+1734  05B1  26 00       	ld	h,0x00
+1735  05B3  01 00 00    	ld	bc,_spr_speed_b
+1736  05B6  09          	add	hl,bc
+1737  05B7  4E          	ld	c, (hl)
+1738  05B8  06 00       	ld	b,0x00
+1739  05BA  2A 00 00    	ld	hl,(_sprite)
+1740  05BD  60          	ld	h,b
+1741  05BE  29          	add	hl, hl
+1742  05BF  11 00 00    	ld	de,_last_time_b
+1743  05C2  19          	add	hl, de
+1744  05C3  C5          	push	bc
+1745  05C4  E5          	push	hl
+1746  05C5  CD 00 00    	call	_game_check_time
+1747  05C8  F1          	pop	af
+1748  05C9  F1          	pop	af
+1749  05CA  7D          	ld	a, l
+1750  05CB  B7          	or	a, a
+1751  05CC  28 4B       	jr	Z,l_enemy_eugene_00110
+1752  05CE  01 00 00    	ld	bc,_colint+0
+1753  05D1  79          	ld	a, c
+1754  05D2  21 00 00    	ld	hl,_sprite
+1755  05D5  86          	add	a, (hl)
+1756  05D6  5F          	ld	e, a
+1757  05D7  78          	ld	a, b
+1758  05D8  CE 00       	adc	a,0x00
+1759  05DA  57          	ld	d, a
+1760  05DB  1A          	ld	a, (de)
+1761  05DC  3C          	inc	a
+1762  05DD  12          	ld	(de), a
+1763  05DE  6E          	ld	l,(hl)
+1764  05DF  26 00       	ld	h,0x00
+1765  05E1  09          	add	hl,bc
+1766  05E2  5E          	ld	e,(hl)
+1767  05E3  3E 03       	ld	a,0x03
+1768  05E5  93          	sub	a,e
+1769  05E6  30 02       	jr	NC,l_enemy_eugene_00102
+1770  05E8  AF          	xor	a,a
+1771  05E9  77          	ld	(hl),a
+1772  05EA              l_enemy_eugene_00102:
+1773  05EA  2A 00 00    	ld	hl,(_sprite)
+1774  05ED  26 00       	ld	h,0x00
+1775  05EF  01 00 00    	ld	bc,_lin
+1776  05F2  09          	add	hl,bc
+1777  05F3  7E          	ld	a,(hl)
+1778  05F4  D6 58       	sub	a,0x58
+1779  05F6  30 10       	jr	NC,l_enemy_eugene_00104
+1780  05F8  2A 00 00    	ld	hl,(_sprite)
+1781  05FB  26 00       	ld	h,0x00
+1782  05FD  01 00 00    	ld	bc,_state
+1783  0600  09          	add	hl,bc
+1784  0601  7E          	ld	a,(hl)
+1785  0602  F6 02       	or	a,0x02
+1786  0604  77          	ld	(hl),a
+1787  0605  CD 00 00    	call	_spr_move_down_f
+1788  0608              l_enemy_eugene_00104:
+1789  0608  2A 00 00    	ld	hl,(_sprite)
+1790  060B  26 00       	ld	h,0x00
+1791  060D  29          	add	hl,hl
+1792  060E  01 00 00    	ld	bc,_last_time_b
+1793  0611  09          	add	hl,bc
+1794  0612  ED 5B 00 00 	ld	de,(_curr_time)
+1795  0616  73          	ld	(hl),e
+1796  0617  23          	inc	hl
+1797  0618  72          	ld	(hl),d
+1798  0619              l_enemy_eugene_00110:
+1799  0619  C9          	ret
+1800  061A              	SECTION code_compiler
+1801  061A              ;	---------------------------------
+1802  061A              ; Function enemy_init
+1803  061A              ; ---------------------------------
+1804  061A              _enemy_init:
+1805  061A  CD 00 00    	call	___sdcc_enter_ix
+1806  061D  21 F1 FF    	ld	hl, -15
+1807  0620  39          	add	hl, sp
+1808  0621  F9          	ld	sp, hl
+1809  0622  01 00 00    	ld	bc,_scr_map
+1810  0625  2A 00 00    	ld	hl,(_index1)
+1811  0628  09          	add	hl,bc
+1812  0629  7E          	ld	a,(hl)
+1813  062A  DD 77 F5    	ld	(ix-11),a
+1814  062D  DD 36 F4 00 	ld	(ix-12),0x00
+1815  0631  DD CB F5 46 	bit	0,(ix-11)
+1816  0635  28 07       	jr	Z,l_enemy_init_00102
+1817  0637  DD 35 F5    	dec	(ix-11)
+1818  063A  DD 36 F4 01 	ld	(ix-12),0x01
+1819  063E              l_enemy_init_00102:
+1820  063E  21 00 00    	ld	hl,_sprite
+1821  0641  36 00       	ld	(hl),0x00
+1822  0643  DD 36 F6 00 	ld	(ix-10),0x00
+1823  0647              l_enemy_init_00107:
+1824  0647  21 00 00    	ld	hl,_sprite
+1825  064A  7E          	ld	a, (hl)
+1826  064B  D6 08       	sub	a,0x08
+1827  064D  30 23       	jr	NC,l_enemy_init_00177
+1828  064F  3E 00       	ld	a, +((_class) & 0xFF)
+1829  0651  86          	add	a, (hl)
+1830  0652  DD 77 FE    	ld	(ix-2),a
+1831  0655  6F          	ld	l,a
+1832  0656  3E 00       	ld	a,+((_class) / 256)
+1833  0658  CE 00       	adc	a,0x00
+1834  065A  DD 77 FF    	ld	(ix-1),a
+1835  065D  67          	ld	h,a
+1836  065E  7E          	ld	a,(hl)
+1837  065F  4F          	ld	c,a
+1838  0660  B7          	or	a, a
+1839  0661  28 0F       	jr	Z,l_enemy_init_00177
+1840  0663  DD 7E F5    	ld	a,(ix-11)
+1841  0666  91          	sub	a, c
+1842  0667  20 03       	jr	NZ,l_enemy_init_00106
+1843  0669  DD 34 F6    	inc	(ix-10)
+1844  066C              l_enemy_init_00106:
+1845  066C  21 00 00    	ld	hl,_sprite
+1846  066F  34          	inc	(hl)
+1847  0670  18 D5       	jr	l_enemy_init_00107
+1848  0672              l_enemy_init_00177:
+1849  0672  DD 7E F6    	ld	a,(ix-10)
+1850  0675  DD 77 FE    	ld	(ix-2),a
+1851  0678  21 00 00    	ld	hl,0x0000
+1852  067B  E3          	ex	(sp), hl
+1853  067C              l_enemy_init_00146:
+1854  067C  3E 0E       	ld	a,0x0e
+1855  067E  DD BE F1    	cp	a,(ix-15)
+1856  0681  3E 01       	ld	a,0x01
+1857  0683  DD 9E F2    	sbc	a,(ix-14)
+1858  0686  DA ED 0B    	jp	C, l_enemy_init_00149
+1859  0689  DD 6E F1    	ld	l,(ix-15)
+1860  068C  DD 66 F2    	ld	h,(ix-14)
+1861  068F  01 00 00    	ld	bc,_spr_init
+1862  0692  09          	add	hl,bc
+1863  0693  DD 75 FC    	ld	(ix-4),l
+1864  0696  DD 74 FD    	ld	(ix-3),h
+1865  0699  DD 7E F5    	ld	a,(ix-11)
+1866  069C  96          	sub	a,(hl)
+1867  069D  C2 DA 0B    	jp	NZ,l_enemy_init_00144
+1868  06A0  DD 7E FC    	ld	a,(ix-4)
+1869  06A3  DD 77 FA    	ld	(ix-6),a
+1870  06A6  6F          	ld	l, a
+1871  06A7  DD 7E FD    	ld	a,(ix-3)
+1872  06AA  DD 77 FB    	ld	(ix-5),a
+1873  06AD  67          	ld	h,a
+1874  06AE  23          	inc	hl
+1875  06AF  7E          	ld	a, (hl)
+1876  06B0  DD 77 F3    	ld	(ix-13),a
+1877  06B3  3E 00       	ld	a, +((_spr_frames) & 0xFF)
+1878  06B5  21 00 00    	ld	hl,_sprite
+1879  06B8  86          	add	a, (hl)
+1880  06B9  DD 77 FA    	ld	(ix-6),a
+1881  06BC  3E 00       	ld	a, +((_spr_frames) / 256)
+1882  06BE  CE 00       	adc	a,0x00
+1883  06C0  DD 77 FB    	ld	(ix-5),a
+1884  06C3  DD 6E FC    	ld	l,(ix-4)
+1885  06C6  DD 66 FD    	ld	h,(ix-3)
+1886  06C9  23          	inc	hl
+1887  06CA  23          	inc	hl
+1888  06CB  7E          	ld	a, (hl)
+1889  06CC  DD 77 F9    	ld	(ix-7),a
+1890  06CF  DD 6E FA    	ld	l,(ix-6)
+1891  06D2  DD 66 FB    	ld	h,(ix-5)
+1892  06D5  DD 7E F9    	ld	a,(ix-7)
+1893  06D8  77          	ld	(hl), a
+1894  06D9  3E 00       	ld	a, +((_spr_altset) & 0xFF)
+1895  06DB  21 00 00    	ld	hl,_sprite
+1896  06DE  86          	add	a, (hl)
+1897  06DF  DD 77 FA    	ld	(ix-6),a
+1898  06E2  3E 00       	ld	a, +((_spr_altset) / 256)
+1899  06E4  CE 00       	adc	a,0x00
+1900  06E6  DD 77 FB    	ld	(ix-5),a
+1901  06E9  DD 6E FC    	ld	l,(ix-4)
+1902  06EC  DD 66 FD    	ld	h,(ix-3)
+1903  06EF  23          	inc	hl
+1904  06F0  23          	inc	hl
+1905  06F1  23          	inc	hl
+1906  06F2  7E          	ld	a, (hl)
+1907  06F3  DD 77 F9    	ld	(ix-7),a
+1908  06F6  DD 6E FA    	ld	l,(ix-6)
+1909  06F9  DD 66 FB    	ld	h,(ix-5)
+1910  06FC  DD 7E F9    	ld	a,(ix-7)
+1911  06FF  77          	ld	(hl), a
+1912  0700  3E 00       	ld	a, +((_spr_kind) & 0xFF)
+1913  0702  21 00 00    	ld	hl,_sprite
+1914  0705  86          	add	a, (hl)
+1915  0706  DD 77 FA    	ld	(ix-6),a
+1916  0709  3E 00       	ld	a, +((_spr_kind) / 256)
+1917  070B  CE 00       	adc	a,0x00
+1918  070D  DD 77 FB    	ld	(ix-5),a
+1919  0710  DD 6E FC    	ld	l,(ix-4)
+1920  0713  DD 66 FD    	ld	h,(ix-3)
+1921  0716  11 04 00    	ld	de,0x0004
+1922  0719  19          	add	hl, de
+1923  071A  7E          	ld	a, (hl)
+1924  071B  DD 77 F9    	ld	(ix-7),a
+1925  071E  DD 6E FA    	ld	l,(ix-6)
+1926  0721  DD 66 FB    	ld	h,(ix-5)
+1927  0724  DD 7E F9    	ld	a,(ix-7)
+1928  0727  77          	ld	(hl), a
+1929  0728  DD 7E FC    	ld	a,(ix-4)
+1930  072B  DD 77 FA    	ld	(ix-6),a
+1931  072E  6F          	ld	l, a
+1932  072F  DD 7E FD    	ld	a,(ix-3)
+1933  0732  DD 77 FB    	ld	(ix-5),a
+1934  0735  67          	ld	h,a
+1935  0736  11 05 00    	ld	de,0x0005
+1936  0739  19          	add	hl, de
+1937  073A  7E          	ld	a, (hl)
+1938  073B  32 00 00    	ld	(_spr_init_cin0),a
+1939  073E  DD 7E FE    	ld	a,(ix-2)
+1940  0741  B7          	or	a, a
+1941  0742  28 13       	jr	Z,l_enemy_init_00110
+1942  0744  3D          	dec	a
+1943  0745  28 1C       	jr	Z,l_enemy_init_00111
+1944  0747  DD 7E FE    	ld	a,(ix-2)
+1945  074A  D6 02       	sub	a,0x02
+1946  074C  28 2D       	jr	Z,l_enemy_init_00112
+1947  074E  DD 7E FE    	ld	a,(ix-2)
+1948  0751  D6 03       	sub	a,0x03
+1949  0753  28 36       	jr	Z,l_enemy_init_00113
+1950  0755  18 42       	jr	l_enemy_init_00114
+1951  0757              l_enemy_init_00110:
+1952  0757  21 00 00    	ld	hl,_spr_init_cin0
+1953  075A  36 00       	ld	(hl),0x00
+1954  075C  21 00 00    	ld	hl,_spr_init_cout0
+1955  075F  36 00       	ld	(hl),0x00
+1956  0761  18 36       	jr	l_enemy_init_00114
+1957  0763              l_enemy_init_00111:
+1958  0763  DD 7E FC    	ld	a,(ix-4)
+1959  0766  DD 77 FA    	ld	(ix-6),a
+1960  0769  6F          	ld	l, a
+1961  076A  DD 7E FD    	ld	a,(ix-3)
+1962  076D  DD 77 FB    	ld	(ix-5),a
+1963  0770  67          	ld	h,a
+1964  0771  11 06 00    	ld	de,0x0006
+1965  0774  19          	add	hl, de
+1966  0775  7E          	ld	a, (hl)
+1967  0776  32 00 00    	ld	(_spr_init_cout0),a
+1968  0779  18 1E       	jr	l_enemy_init_00114
+1969  077B              l_enemy_init_00112:
+1970  077B  DD 6E FC    	ld	l,(ix-4)
+1971  077E  DD 66 FD    	ld	h,(ix-3)
+1972  0781  11 07 00    	ld	de,0x0007
+1973  0784  19          	add	hl, de
+1974  0785  7E          	ld	a, (hl)
+1975  0786  32 00 00    	ld	(_spr_init_cout0),a
+1976  0789  18 0E       	jr	l_enemy_init_00114
+1977  078B              l_enemy_init_00113:
+1978  078B  DD 6E FC    	ld	l,(ix-4)
+1979  078E  DD 66 FD    	ld	h,(ix-3)
+1980  0791  11 08 00    	ld	de,0x0008
+1981  0794  19          	add	hl, de
+1982  0795  7E          	ld	a, (hl)
+1983  0796  32 00 00    	ld	(_spr_init_cout0),a
+1984  0799              l_enemy_init_00114:
+1985  0799  2A 00 00    	ld	hl,(_sprite)
+1986  079C  26 00       	ld	h,0x00
+1987  079E  01 00 00    	ld	bc,_class
+1988  07A1  09          	add	hl,bc
+1989  07A2  4D          	ld	c,l
+1990  07A3  44          	ld	b,h
+1991  07A4  21 00 00    	ld	hl,_sprite
+1992  07A7  DD 7E F5    	ld	a,(ix-11)
+1993  07AA  02          	ld	(bc), a
+1994  07AB  3E 00       	ld	a, +((_spr_speed) & 0xFF)
+1995  07AD  86          	add	a, (hl)
+1996  07AE  4F          	ld	c, a
+1997  07AF  3E 00       	ld	a, +((_spr_speed) / 256)
+1998  07B1  CE 00       	adc	a,0x00
+1999  07B3  47          	ld	b, a
+2000  07B4  ED 5B 00 00 	ld	de,(_index1)
+2001  07B8  13          	inc	de
+2002  07B9  21 00 00    	ld	hl,_scr_map
+2003  07BC  19          	add	hl, de
+2004  07BD  7E          	ld	a, (hl)
+2005  07BE  02          	ld	(bc), a
+2006  07BF  2A 00 00    	ld	hl,(_sprite)
+2007  07C2  26 00       	ld	h,0x00
+2008  07C4  01 00 00    	ld	bc,_value_a
+2009  07C7  09          	add	hl,bc
+2010  07C8  4D          	ld	c,l
+2011  07C9  44          	ld	b,h
+2012  07CA  2A 00 00    	ld	hl,(_index1)
+2013  07CD  11 20 00    	ld	de,0x0020
+2014  07D0  19          	add	hl,de
+2015  07D1  11 00 00    	ld	de,_scr_map
+2016  07D4  19          	add	hl, de
+2017  07D5  7E          	ld	a, (hl)
+2018  07D6  02          	ld	(bc), a
+2019  07D7  2A 00 00    	ld	hl,(_sprite)
+2020  07DA  26 00       	ld	h,0x00
+2021  07DC  01 00 00    	ld	bc,_value_b
+2022  07DF  09          	add	hl,bc
+2023  07E0  4D          	ld	c,l
+2024  07E1  44          	ld	b,h
+2025  07E2  2A 00 00    	ld	hl,(_index1)
+2026  07E5  11 21 00    	ld	de,0x0021
+2027  07E8  19          	add	hl,de
+2028  07E9  11 00 00    	ld	de,_scr_map
+2029  07EC  19          	add	hl, de
+2030  07ED  7E          	ld	a, (hl)
+2031  07EE  02          	ld	(bc), a
+2032  07EF  2A 00 00    	ld	hl,(_index1)
+2033  07F2  01 00 00    	ld	bc,_scr_map
+2034  07F5  09          	add	hl,bc
+2035  07F6  AF          	xor	a,a
+2036  07F7  77          	ld	(hl),a
+2037  07F8  ED 4B 00 00 	ld	bc,(_index1)
+2038  07FC  03          	inc	bc
+2039  07FD  21 00 00    	ld	hl,_scr_map
+2040  0800  09          	add	hl, bc
+2041  0801  36 00       	ld	(hl),0x00
+2042  0803  2A 00 00    	ld	hl,(_index1)
+2043  0806  01 20 00    	ld	bc,0x0020
+2044  0809  09          	add	hl,bc
+2045  080A  01 00 00    	ld	bc,_scr_map
+2046  080D  09          	add	hl,bc
+2047  080E  36 00       	ld	(hl),0x00
+2048  0810  2A 00 00    	ld	hl,(_index1)
+2049  0813  01 21 00    	ld	bc,0x0021
+2050  0816  09          	add	hl,bc
+2051  0817  01 00 00    	ld	bc,_scr_map
+2052  081A  09          	add	hl,bc
+2053  081B  DD 75 FA    	ld	(ix-6),l
+2054  081E  DD 74 FB    	ld	(ix-5),h
+2055  0821  36 00       	ld	(hl),0x00
+2056  0823  3E 00       	ld	a, +((_state) & 0xFF)
+2057  0825  21 00 00    	ld	hl,_sprite
+2058  0828  86          	add	a, (hl)
+2059  0829  DD 77 FA    	ld	(ix-6),a
+2060  082C  6F          	ld	l,a
+2061  082D  3E 00       	ld	a,+((_state) / 256)
+2062  082F  CE 00       	adc	a,0x00
+2063  0831  DD 77 FB    	ld	(ix-5),a
+2064  0834  67          	ld	h,a
+2065  0835  36 00       	ld	(hl),0x00
+2066  0837  3E 00       	ld	a, +((_state_a) & 0xFF)
+2067  0839  21 00 00    	ld	hl,_sprite
+2068  083C  86          	add	a, (hl)
+2069  083D  DD 77 FA    	ld	(ix-6),a
+2070  0840  6F          	ld	l,a
+2071  0841  3E 00       	ld	a,+((_state_a) / 256)
+2072  0843  CE 00       	adc	a,0x00
+2073  0845  DD 77 FB    	ld	(ix-5),a
+2074  0848  67          	ld	h,a
+2075  0849  36 00       	ld	(hl),0x00
+2076  084B  3E 00       	ld	a, +((_lin) & 0xFF)
+2077  084D  21 00 00    	ld	hl,_sprite
+2078  0850  86          	add	a, (hl)
+2079  0851  DD 77 FA    	ld	(ix-6),a
+2080  0854  3E 00       	ld	a, +((_lin) / 256)
+2081  0856  CE 00       	adc	a,0x00
+2082  0858  DD 77 FB    	ld	(ix-5),a
+2083  085B  11 FC FF    	ld	de,-4
+2084  085E  21 00 00    	ld	hl,_index1
+2085  0861  CD 00 00    	call	____sdcc_2_copy_src_mhl_dst_deix
+2086  0864  06 05       	ld	b,0x05
+2087  0866              l_enemy_init_00265:
+2088  0866  DD CB FD 3E 	srl	(ix-3)
+2089  086A  DD CB FC 1E 	rr	(ix-4)
+2090  086E  10 F6       	djnz	l_enemy_init_00265
+2091  0870  DD 7E FC    	ld	a,(ix-4)
+2092  0873  DD 77 F9    	ld	(ix-7),a
+2093  0876  07          	rlca
+2094  0877  07          	rlca
+2095  0878  07          	rlca
+2096  0879  E6 F8       	and	a,0xf8
+2097  087B  DD 77 F9    	ld	(ix-7),a
+2098  087E  DD 6E FA    	ld	l,(ix-6)
+2099  0881  DD 66 FB    	ld	h,(ix-5)
+2100  0884  DD 7E F9    	ld	a,(ix-7)
+2101  0887  77          	ld	(hl), a
+2102  0888  3E 00       	ld	a, +((_col) & 0xFF)
+2103  088A  21 00 00    	ld	hl,_sprite
+2104  088D  86          	add	a, (hl)
+2105  088E  DD 77 FA    	ld	(ix-6),a
+2106  0891  3E 00       	ld	a, +((_col) / 256)
+2107  0893  CE 00       	adc	a,0x00
+2108  0895  DD 77 FB    	ld	(ix-5),a
+2109  0898  3A 00 00    	ld	a,(_index1)
+2110  089B  DD 77 F9    	ld	(ix-7),a
+2111  089E  E6 1F       	and	a,0x1f
+2112  08A0  DD 77 F9    	ld	(ix-7),a
+2113  08A3  DD 6E FA    	ld	l,(ix-6)
+2114  08A6  DD 66 FB    	ld	h,(ix-5)
+2115  08A9  DD 7E F9    	ld	a,(ix-7)
+2116  08AC  77          	ld	(hl), a
+2117  08AD  2A 00 00    	ld	hl,(_sprite)
+2118  08B0  26 00       	ld	h,0x00
+2119  08B2  01 00 00    	ld	bc,_colint
+2120  08B5  09          	add	hl,bc
+2121  08B6  AF          	xor	a,a
+2122  08B7  77          	ld	(hl),a
+2123  08B8  3A 00 00    	ld	a,(_scr_curr)
+2124  08BB  3D          	dec	a
+2125  08BC  20 0D       	jr	NZ,l_enemy_init_00116
+2126  08BE  2A 00 00    	ld	hl,(_sprite)
+2127  08C1  26 00       	ld	h,0x00
+2128  08C3  01 00 00    	ld	bc,_col
+2129  08C6  09          	add	hl,bc
+2130  08C7  7E          	ld	a,(hl)
+2131  08C8  C6 02       	add	a,0x02
+2132  08CA  77          	ld	(hl),a
+2133  08CB              l_enemy_init_00116:
+2134  08CB  2A 00 00    	ld	hl,(_sprite)
+2135  08CE  26 00       	ld	h,0x00
+2136  08D0  01 00 00    	ld	bc,_spr_kind
+2137  08D3  09          	add	hl,bc
+2138  08D4  7E          	ld	a,(hl)
+2139  08D5  21 00 00    	ld	hl,_sprite
+2140  08D8  DD 77 F9    	ld	(ix-7),a
+2141  08DB  3D          	dec	a
+2142  08DC  28 45       	jr	Z,l_enemy_init_00118
+2143  08DE  3E 00       	ld	a, +((_spr_altset) & 0xFF)
+2144  08E0  86          	add	a, (hl)
+2145  08E1  DD 77 FA    	ld	(ix-6),a
+2146  08E4  3E 00       	ld	a, +((_spr_altset) / 256)
+2147  08E6  CE 00       	adc	a,0x00
+2148  08E8  DD 77 FB    	ld	(ix-5),a
+2149  08EB  DD 7E F9    	ld	a,(ix-7)
+2150  08EE  D6 02       	sub	a,0x02
+2151  08F0  CA 73 09    	jp	Z,l_enemy_init_00122
+2152  08F3  DD 7E F9    	ld	a,(ix-7)
+2153  08F6  D6 06       	sub	a,0x06
+2154  08F8  28 13       	jr	Z,l_enemy_init_00117
+2155  08FA  DD 7E F9    	ld	a,(ix-7)
+2156  08FD  D6 08       	sub	a,0x08
+2157  08FF  CA 7D 0A    	jp	Z,l_enemy_init_00130
+2158  0902  DD 7E F9    	ld	a,(ix-7)
+2159  0905  D6 09       	sub	a,0x09
+2160  0907  CA F8 09    	jp	Z,l_enemy_init_00126
+2161  090A  C3 15 0B    	jp	l_enemy_init_00134
+2162  090D              l_enemy_init_00117:
+2163  090D  2A 00 00    	ld	hl,(_sprite)
+2164  0910  26 00       	ld	h,0x00
+2165  0912  01 00 00    	ld	bc,_spr_speed_a
+2166  0915  09          	add	hl,bc
+2167  0916  4D          	ld	c,l
+2168  0917  DD 6E FA    	ld	l,(ix-6)
+2169  091A  44          	ld	b,h
+2170  091B  DD 66 FB    	ld	h,(ix-5)
+2171  091E  7E          	ld	a, (hl)
+2172  091F  02          	ld	(bc), a
+2173  0920  C3 15 0B    	jp	l_enemy_init_00134
+2174  0923              l_enemy_init_00118:
+2175  0923  3E 00       	ld	a, +((_state) & 0xFF)
+2176  0925  21 00 00    	ld	hl,_sprite
+2177  0928  86          	add	a, (hl)
+2178  0929  DD 77 FC    	ld	(ix-4),a
+2179  092C  6F          	ld	l,a
+2180  092D  3E 00       	ld	a,+((_state) / 256)
+2181  092F  CE 00       	adc	a,0x00
+2182  0931  DD 77 FD    	ld	(ix-3),a
+2183  0934  67          	ld	h,a
+2184  0935  7E          	ld	a, (hl)
+2185  0936  DD 77 F9    	ld	(ix-7),a
+2186  0939  DD 7E F4    	ld	a,(ix-12)
+2187  093C  B7          	or	a, a
+2188  093D  28 0F       	jr	Z,l_enemy_init_00120
+2189  093F  DD 7E F9    	ld	a,(ix-7)
+2190  0942  F6 04       	or	a,0x04
+2191  0944  DD 6E FC    	ld	l,(ix-4)
+2192  0947  DD 66 FD    	ld	h,(ix-3)
+2193  094A  77          	ld	(hl), a
+2194  094B  C3 15 0B    	jp	l_enemy_init_00134
+2195  094E              l_enemy_init_00120:
+2196  094E  DD CB F9 DE 	set	3,(ix-7)
+2197  0952  DD 6E FC    	ld	l,(ix-4)
+2198  0955  DD 66 FD    	ld	h,(ix-3)
+2199  0958  DD 7E F9    	ld	a,(ix-7)
+2200  095B  77          	ld	(hl), a
+2201  095C  3E 00       	ld	a, +((_colint) & 0xFF)
+2202  095E  21 00 00    	ld	hl,_sprite
+2203  0961  86          	add	a, (hl)
+2204  0962  DD 77 FC    	ld	(ix-4),a
+2205  0965  6F          	ld	l,a
+2206  0966  3E 00       	ld	a,+((_colint) / 256)
+2207  0968  CE 00       	adc	a,0x00
+2208  096A  DD 77 FD    	ld	(ix-3),a
+2209  096D  67          	ld	h,a
+2210  096E  36 03       	ld	(hl),0x03
+2211  0970  C3 15 0B    	jp	l_enemy_init_00134
+2212  0973              l_enemy_init_00122:
+2213  0973  3E 00       	ld	a, +((_spr_speed_a) & 0xFF)
+2214  0975  21 00 00    	ld	hl,_sprite
+2215  0978  86          	add	a, (hl)
+2216  0979  DD 77 FC    	ld	(ix-4),a
+2217  097C  3E 00       	ld	a, +((_spr_speed_a) / 256)
+2218  097E  CE 00       	adc	a,0x00
+2219  0980  DD 77 FD    	ld	(ix-3),a
+2220  0983  DD 6E FA    	ld	l,(ix-6)
+2221  0986  DD 66 FB    	ld	h,(ix-5)
+2222  0989  7E          	ld	a, (hl)
+2223  098A  DD 77 F9    	ld	(ix-7),a
+2224  098D  DD 6E FC    	ld	l,(ix-4)
+2225  0990  DD 66 FD    	ld	h,(ix-3)
+2226  0993  DD 7E F9    	ld	a,(ix-7)
+2227  0996  77          	ld	(hl), a
+2228  0997  3E 00       	ld	a, +((_spr_speed_b) & 0xFF)
+2229  0999  21 00 00    	ld	hl,_sprite
+2230  099C  86          	add	a, (hl)
+2231  099D  DD 77 FC    	ld	(ix-4),a
+2232  09A0  3E 00       	ld	a, +((_spr_speed_b) / 256)
+2233  09A2  CE 00       	adc	a,0x00
+2234  09A4  DD 77 FD    	ld	(ix-3),a
+2235  09A7  3E 00       	ld	a, +((_spr_speed) & 0xFF)
+2236  09A9  86          	add	a, (hl)
+2237  09AA  DD 77 F7    	ld	(ix-9),a
+2238  09AD  6F          	ld	l,a
+2239  09AE  3E 00       	ld	a,+((_spr_speed) / 256)
+2240  09B0  CE 00       	adc	a,0x00
+2241  09B2  DD 77 F8    	ld	(ix-8),a
+2242  09B5  67          	ld	h,a
+2243  09B6  7E          	ld	a, (hl)
+2244  09B7  DD 77 F7    	ld	(ix-9),a
+2245  09BA  DD 6E FC    	ld	l,(ix-4)
+2246  09BD  DD 66 FD    	ld	h,(ix-3)
+2247  09C0  DD 7E F7    	ld	a,(ix-9)
+2248  09C3  77          	ld	(hl), a
+2249  09C4  3E 00       	ld	a, +((_spr_speed) & 0xFF)
+2250  09C6  21 00 00    	ld	hl,_sprite
+2251  09C9  86          	add	a, (hl)
+2252  09CA  DD 77 F7    	ld	(ix-9),a
+2253  09CD  6F          	ld	l,a
+2254  09CE  3E 00       	ld	a,+((_spr_speed) / 256)
+2255  09D0  CE 00       	adc	a,0x00
+2256  09D2  DD 77 F8    	ld	(ix-8),a
+2257  09D5  67          	ld	h,a
+2258  09D6  36 02       	ld	(hl),0x02
+2259  09D8  2A 00 00    	ld	hl,(_sprite)
+2260  09DB  26 00       	ld	h,0x00
+2261  09DD  01 00 00    	ld	bc,_state
+2262  09E0  09          	add	hl,bc
+2263  09E1  5E          	ld	e,(hl)
+2264  09E2  DD 7E F4    	ld	a,(ix-12)
+2265  09E5  B7          	or	a,a
+2266  09E6  4D          	ld	c,l
+2267  09E7  44          	ld	b,h
+2268  09E8  28 07       	jr	Z,l_enemy_init_00124
+2269  09EA  7B          	ld	a, e
+2270  09EB  F6 01       	or	a,0x01
+2271  09ED  02          	ld	(bc), a
+2272  09EE  C3 15 0B    	jp	l_enemy_init_00134
+2273  09F1              l_enemy_init_00124:
+2274  09F1  7B          	ld	a, e
+2275  09F2  F6 02       	or	a,0x02
+2276  09F4  02          	ld	(bc), a
+2277  09F5  C3 15 0B    	jp	l_enemy_init_00134
+2278  09F8              l_enemy_init_00126:
+2279  09F8  3E 00       	ld	a, +((_spr_speed_a) & 0xFF)
+2280  09FA  21 00 00    	ld	hl,_sprite
+2281  09FD  86          	add	a, (hl)
+2282  09FE  DD 77 F7    	ld	(ix-9),a
+2283  0A01  3E 00       	ld	a, +((_spr_speed_a) / 256)
+2284  0A03  CE 00       	adc	a,0x00
+2285  0A05  DD 77 F8    	ld	(ix-8),a
+2286  0A08  DD 6E FA    	ld	l,(ix-6)
+2287  0A0B  DD 66 FB    	ld	h,(ix-5)
+2288  0A0E  7E          	ld	a, (hl)
+2289  0A0F  DD 77 F9    	ld	(ix-7),a
+2290  0A12  DD 6E F7    	ld	l,(ix-9)
+2291  0A15  DD 66 F8    	ld	h,(ix-8)
+2292  0A18  DD 7E F9    	ld	a,(ix-7)
+2293  0A1B  77          	ld	(hl), a
+2294  0A1C  3E 00       	ld	a, +((_spr_speed_b) & 0xFF)
+2295  0A1E  21 00 00    	ld	hl,_sprite
+2296  0A21  86          	add	a, (hl)
+2297  0A22  DD 77 F7    	ld	(ix-9),a
+2298  0A25  3E 00       	ld	a, +((_spr_speed_b) / 256)
+2299  0A27  CE 00       	adc	a,0x00
+2300  0A29  DD 77 F8    	ld	(ix-8),a
+2301  0A2C  3E 00       	ld	a, +((_spr_speed) & 0xFF)
+2302  0A2E  86          	add	a, (hl)
+2303  0A2F  DD 77 FA    	ld	(ix-6),a
+2304  0A32  6F          	ld	l,a
+2305  0A33  3E 00       	ld	a,+((_spr_speed) / 256)
+2306  0A35  CE 00       	adc	a,0x00
+2307  0A37  DD 77 FB    	ld	(ix-5),a
+2308  0A3A  67          	ld	h,a
+2309  0A3B  7E          	ld	a, (hl)
+2310  0A3C  DD 77 F9    	ld	(ix-7),a
+2311  0A3F  DD 6E F7    	ld	l,(ix-9)
+2312  0A42  DD 66 F8    	ld	h,(ix-8)
+2313  0A45  DD 7E F9    	ld	a,(ix-7)
+2314  0A48  77          	ld	(hl), a
+2315  0A49  3E 00       	ld	a, +((_spr_speed) & 0xFF)
+2316  0A4B  21 00 00    	ld	hl,_sprite
+2317  0A4E  86          	add	a, (hl)
+2318  0A4F  DD 77 F7    	ld	(ix-9),a
+2319  0A52  6F          	ld	l,a
+2320  0A53  3E 00       	ld	a,+((_spr_speed) / 256)
+2321  0A55  CE 00       	adc	a,0x00
+2322  0A57  DD 77 F8    	ld	(ix-8),a
+2323  0A5A  67          	ld	h,a
+2324  0A5B  36 02       	ld	(hl),0x02
+2325  0A5D  2A 00 00    	ld	hl,(_sprite)
+2326  0A60  26 00       	ld	h,0x00
+2327  0A62  01 00 00    	ld	bc,_state
+2328  0A65  09          	add	hl,bc
+2329  0A66  5E          	ld	e,(hl)
+2330  0A67  DD 7E F4    	ld	a,(ix-12)
+2331  0A6A  B7          	or	a,a
+2332  0A6B  4D          	ld	c,l
+2333  0A6C  44          	ld	b,h
+2334  0A6D  28 07       	jr	Z,l_enemy_init_00128
+2335  0A6F  7B          	ld	a, e
+2336  0A70  F6 01       	or	a,0x01
+2337  0A72  02          	ld	(bc), a
+2338  0A73  C3 15 0B    	jp	l_enemy_init_00134
+2339  0A76              l_enemy_init_00128:
+2340  0A76  7B          	ld	a, e
+2341  0A77  F6 02       	or	a,0x02
+2342  0A79  02          	ld	(bc), a
+2343  0A7A  C3 15 0B    	jp	l_enemy_init_00134
+2344  0A7D              l_enemy_init_00130:
+2345  0A7D  3E 00       	ld	a, +((_value_c) & 0xFF)
+2346  0A7F  21 00 00    	ld	hl,_sprite
+2347  0A82  86          	add	a, (hl)
+2348  0A83  DD 77 F7    	ld	(ix-9),a
+2349  0A86  3E 00       	ld	a, +((_value_c) / 256)
+2350  0A88  CE 00       	adc	a,0x00
+2351  0A8A  DD 77 F8    	ld	(ix-8),a
+2352  0A8D  3E 00       	ld	a, +((_lin) & 0xFF)
+2353  0A8F  86          	add	a, (hl)
+2354  0A90  DD 77 FA    	ld	(ix-6),a
+2355  0A93  6F          	ld	l,a
+2356  0A94  3E 00       	ld	a,+((_lin) / 256)
+2357  0A96  CE 00       	adc	a,0x00
+2358  0A98  DD 77 FB    	ld	(ix-5),a
+2359  0A9B  67          	ld	h,a
+2360  0A9C  7E          	ld	a, (hl)
+2361  0A9D  DD 77 F9    	ld	(ix-7),a
+2362  0AA0  DD 6E F7    	ld	l,(ix-9)
+2363  0AA3  DD 66 F8    	ld	h,(ix-8)
+2364  0AA6  DD 7E F9    	ld	a,(ix-7)
+2365  0AA9  77          	ld	(hl), a
+2366  0AAA  3E 00       	ld	a, +((_state) & 0xFF)
+2367  0AAC  21 00 00    	ld	hl,_sprite
+2368  0AAF  86          	add	a, (hl)
+2369  0AB0  DD 77 F7    	ld	(ix-9),a
+2370  0AB3  6F          	ld	l,a
+2371  0AB4  3E 00       	ld	a,+((_state) / 256)
+2372  0AB6  CE 00       	adc	a,0x00
+2373  0AB8  DD 77 F8    	ld	(ix-8),a
+2374  0ABB  67          	ld	h,a
+2375  0ABC  7E          	ld	a, (hl)
+2376  0ABD  F6 01       	or	a,0x01
+2377  0ABF  DD 77 F9    	ld	(ix-7),a
+2378  0AC2  DD 6E F7    	ld	l,(ix-9)
+2379  0AC5  DD 66 F8    	ld	h,(ix-8)
+2380  0AC8  DD 7E F9    	ld	a,(ix-7)
+2381  0ACB  77          	ld	(hl), a
+2382  0ACC  3E 00       	ld	a, +((_state) & 0xFF)
+2383  0ACE  21 00 00    	ld	hl,_sprite
+2384  0AD1  86          	add	a, (hl)
+2385  0AD2  DD 77 F7    	ld	(ix-9),a
+2386  0AD5  6F          	ld	l,a
+2387  0AD6  3E 00       	ld	a,+((_state) / 256)
+2388  0AD8  CE 00       	adc	a,0x00
+2389  0ADA  DD 77 F8    	ld	(ix-8),a
+2390  0ADD  67          	ld	h,a
+2391  0ADE  4E          	ld	c, (hl)
+2392  0ADF  DD 7E F4    	ld	a,(ix-12)
+2393  0AE2  B7          	or	a, a
+2394  0AE3  28 0C       	jr	Z,l_enemy_init_00132
+2395  0AE5  79          	ld	a, c
+2396  0AE6  F6 04       	or	a,0x04
+2397  0AE8  DD 6E F7    	ld	l,(ix-9)
+2398  0AEB  DD 66 F8    	ld	h,(ix-8)
+2399  0AEE  77          	ld	(hl), a
+2400  0AEF  18 24       	jr	l_enemy_init_00134
+2401  0AF1              l_enemy_init_00132:
+2402  0AF1  79          	ld	a, c
+2403  0AF2  F6 08       	or	a,0x08
+2404  0AF4  DD 77 F9    	ld	(ix-7),a
+2405  0AF7  DD 6E F7    	ld	l,(ix-9)
+2406  0AFA  DD 66 F8    	ld	h,(ix-8)
+2407  0AFD  DD 7E F9    	ld	a,(ix-7)
+2408  0B00  77          	ld	(hl), a
+2409  0B01  3E 00       	ld	a, +((_colint) & 0xFF)
+2410  0B03  21 00 00    	ld	hl,_sprite
+2411  0B06  86          	add	a, (hl)
+2412  0B07  DD 77 F7    	ld	(ix-9),a
+2413  0B0A  6F          	ld	l,a
+2414  0B0B  3E 00       	ld	a,+((_colint) / 256)
+2415  0B0D  CE 00       	adc	a,0x00
+2416  0B0F  DD 77 F8    	ld	(ix-8),a
+2417  0B12  67          	ld	h,a
+2418  0B13  36 03       	ld	(hl),0x03
+2419  0B15              l_enemy_init_00134:
+2420  0B15  2A 00 00    	ld	hl,(_sprite)
+2421  0B18  26 00       	ld	h,0x00
+2422  0B1A  01 00 00    	ld	bc,_spr_frames
+2423  0B1D  09          	add	hl,bc
+2424  0B1E  7E          	ld	a,(hl)
+2425  0B1F  D6 04       	sub	a,0x04
+2426  0B21  20 27       	jr	NZ,l_enemy_init_00139
+2427  0B23  3E 00       	ld	a,+((_spr_tile) & 0xFF)
+2428  0B25  21 00 00    	ld	hl,_sprite
+2429  0B28  86          	add	a, (hl)
+2430  0B29  DD 77 F7    	ld	(ix-9),a
+2431  0B2C  6F          	ld	l,a
+2432  0B2D  3E 00       	ld	a,+((_spr_tile) / 256)
+2433  0B2F  CE 00       	adc	a,0x00
+2434  0B31  DD 77 F8    	ld	(ix-8),a
+2435  0B34  67          	ld	h,a
+2436  0B35  3A 00 00    	ld	a,(_game_tile_cnt)
+2437  0B38  77          	ld	(hl),a
+2438  0B39  F5          	push	af
+2439  0B3A  33          	inc	sp
+2440  0B3B  DD 7E F3    	ld	a,(ix-13)
+2441  0B3E  F5          	push	af
+2442  0B3F  33          	inc	sp
+2443  0B40  CD 00 00    	call	_game_copy_sprite_std
+2444  0B43  F1          	pop	af
+2445  0B44  7D          	ld	a,l
+2446  0B45  32 00 00    	ld	(_game_tile_cnt),a
+2447  0B48  18 40       	jr	l_enemy_init_00140
+2448  0B4A              l_enemy_init_00139:
+2449  0B4A  21 00 00    	ld	hl,_i
+2450  0B4D  36 00       	ld	(hl),0x00
+2451  0B4F  2A 00 00    	ld	hl,(_sprite)
+2452  0B52  26 00       	ld	h,0x00
+2453  0B54  01 00 00    	ld	bc,_spr_tile
+2454  0B57  09          	add	hl,bc
+2455  0B58  3A 00 00    	ld	a,(_game_tile_cnt)
+2456  0B5B  77          	ld	(hl),a
+2457  0B5C              l_enemy_init_00135:
+2458  0B5C  2A 00 00    	ld	hl,(_sprite)
+2459  0B5F  26 00       	ld	h,0x00
+2460  0B61  01 00 00    	ld	bc,_spr_frames
+2461  0B64  09          	add	hl,bc
+2462  0B65  4E          	ld	c,(hl)
+2463  0B66  21 00 00    	ld	hl,_i
+2464  0B69  7E          	ld	a, (hl)
+2465  0B6A  91          	sub	a, c
+2466  0B6B  30 1D       	jr	NC,l_enemy_init_00140
+2467  0B6D  DD 7E F3    	ld	a,(ix-13)
+2468  0B70  86          	add	a, (hl)
+2469  0B71  47          	ld	b, a
+2470  0B72  AF          	xor	a, a
+2471  0B73  F5          	push	af
+2472  0B74  33          	inc	sp
+2473  0B75  3A 00 00    	ld	a,(_game_tile_cnt)
+2474  0B78  48          	ld	c,b
+2475  0B79  47          	ld	b,a
+2476  0B7A  C5          	push	bc
+2477  0B7B  CD 00 00    	call	_game_copy_sprite
+2478  0B7E  F1          	pop	af
+2479  0B7F  33          	inc	sp
+2480  0B80  21 00 00    	ld	hl,_game_tile_cnt
+2481  0B83  34          	inc	(hl)
+2482  0B84  21 00 00    	ld	hl,_i
+2483  0B87  34          	inc	(hl)
+2484  0B88  18 D2       	jr	l_enemy_init_00135
+2485  0B8A              l_enemy_init_00140:
+2486  0B8A  3E 00       	ld	a, +((_tile) & 0xFF)
+2487  0B8C  21 00 00    	ld	hl,_sprite
+2488  0B8F  86          	add	a, (hl)
+2489  0B90  DD 77 F7    	ld	(ix-9),a
+2490  0B93  3E 00       	ld	a, +((_tile) / 256)
+2491  0B95  CE 00       	adc	a,0x00
+2492  0B97  DD 77 F8    	ld	(ix-8),a
+2493  0B9A  21 00 00    	ld	hl,_sprite
+2494  0B9D  CD 00 00    	call	_spr_get_tile
+2495  0BA0  4D          	ld	c, l
+2496  0BA1  DD 6E F7    	ld	l,(ix-9)
+2497  0BA4  DD 66 F8    	ld	h,(ix-8)
+2498  0BA7  71          	ld	(hl), c
+2499  0BA8  DD 7E F5    	ld	a,(ix-11)
+2500  0BAB  D6 52       	sub	a,0x52
+2501  0BAD  20 0B       	jr	NZ,l_enemy_init_00142
+2502  0BAF  2A 00 00    	ld	hl,(_sprite)
+2503  0BB2  26 00       	ld	h,0x00
+2504  0BB4  01 00 00    	ld	bc,_spr_frames
+2505  0BB7  09          	add	hl,bc
+2506  0BB8  36 02       	ld	(hl),0x02
+2507  0BBA              l_enemy_init_00142:
+2508  0BBA  21 00 00    	ld	hl,_spr_count
+2509  0BBD  34          	inc	(hl)
+2510  0BBE  2A 00 00    	ld	hl,(_sprite)
+2511  0BC1  26 00       	ld	h,0x00
+2512  0BC3  29          	add	hl,hl
+2513  0BC4  DD 75 F7    	ld	(ix-9),l
+2514  0BC7  DD 74 F8    	ld	(ix-8),h
+2515  0BCA  01 00 00    	ld	bc,_last_time
+2516  0BCD  09          	add	hl,bc
+2517  0BCE  DD 75 F7    	ld	(ix-9),l
+2518  0BD1  DD 74 F8    	ld	(ix-8),h
+2519  0BD4  AF          	xor	a, a
+2520  0BD5  77          	ld	(hl), a
+2521  0BD6  23          	inc	hl
+2522  0BD7  77          	ld	(hl), a
+2523  0BD8  18 13       	jr	l_enemy_init_00149
+2524  0BDA              l_enemy_init_00144:
+2525  0BDA  DD 7E F1    	ld	a,(ix-15)
+2526  0BDD  C6 09       	add	a,0x09
+2527  0BDF  DD 77 F1    	ld	(ix-15),a
+2528  0BE2  DD 7E F2    	ld	a,(ix-14)
+2529  0BE5  CE 00       	adc	a,0x00
+2530  0BE7  DD 77 F2    	ld	(ix-14),a
+2531  0BEA  C3 7C 06    	jp	l_enemy_init_00146
+2532  0BED              l_enemy_init_00149:
+2533  0BED  DD F9       	ld	sp, ix
+2534  0BEF  DD E1       	pop	ix
+2535  0BF1  C9          	ret
+2536  0BF2              	SECTION IGNORE
+2537  0000              

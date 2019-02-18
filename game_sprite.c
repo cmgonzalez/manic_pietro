@@ -169,6 +169,8 @@ unsigned char spr_move_right(void) {
           *f_colint = 0;
           if (*f_col > SCR_COLS_M) {
             *f_col = SCR_COLS_M;
+            *f_colint = spr_frames[sprite] - 1;
+            BIT_CLR(state[sprite], STAT_DIRR);
             return 1;
           }
         }
@@ -200,6 +202,8 @@ unsigned char spr_move_left(void) {
           ;
           if (*f_col == 255) {
             *f_col = 0;
+            *f_colint = 0;
+            BIT_CLR(state[sprite], STAT_DIRL);
             return 1;
           }
         }
