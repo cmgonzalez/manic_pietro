@@ -1488,18 +1488,18 @@
 1485  0351  20 6F       	jr	NZ,l_spr_move_left_00111
 1486  0353  0A          	ld	a, (bc)
 1487  0354  C6 FF       	add	a,0xff
-1488  0356  DD 77 FF    	ld	(ix-1),a
+1488  0356  DD 77 FB    	ld	(ix-5),a
 1489  0359  02          	ld	(bc),a
 1490  035A  3E 00       	ld	a, +((_spr_frames) & 0xFF)
 1491  035C  21 00 00    	ld	hl,_sprite
 1492  035F  86          	add	a, (hl)
-1493  0360  DD 77 FD    	ld	(ix-3),a
+1493  0360  DD 77 FE    	ld	(ix-2),a
 1494  0363  6F          	ld	l,a
 1495  0364  3E 00       	ld	a,+((_spr_frames) / 256)
 1496  0366  CE 00       	adc	a,0x00
-1497  0368  DD 77 FE    	ld	(ix-2),a
+1497  0368  DD 77 FF    	ld	(ix-1),a
 1498  036B  67          	ld	h,a
-1499  036C  DD 7E FF    	ld	a,(ix-1)
+1499  036C  DD 7E FB    	ld	a,(ix-5)
 1500  036F  96          	sub	a,(hl)
 1501  0370  38 50       	jr	C,l_spr_move_left_00111
 1502  0372  1A          	ld	a, (de)
@@ -1523,21 +1523,21 @@
 1520  038B              l_spr_move_left_00104:
 1521  038B  1A          	ld	a, (de)
 1522  038C  C6 FF       	add	a,0xff
-1523  038E  DD 77 FD    	ld	(ix-3),a
+1523  038E  DD 77 FE    	ld	(ix-2),a
 1524  0391  12          	ld	(de),a
 1525  0392  3E 00       	ld	a, +((_spr_frames) & 0xFF)
 1526  0394  21 00 00    	ld	hl,_sprite
 1527  0397  86          	add	a, (hl)
-1528  0398  DD 77 FB    	ld	(ix-5),a
-1529  039B  3E 00       	ld	a, +((_spr_frames) / 256)
-1530  039D  CE 00       	adc	a,0x00
-1531  039F  DD 77 FC    	ld	(ix-4),a
-1532  03A2  E1          	pop	hl
-1533  03A3  7E          	ld	a,(hl)
-1534  03A4  E5          	push	hl
+1528  0398  DD 77 FC    	ld	(ix-4),a
+1529  039B  6F          	ld	l,a
+1530  039C  3E 00       	ld	a,+((_spr_frames) / 256)
+1531  039E  CE 00       	adc	a,0x00
+1532  03A0  DD 77 FD    	ld	(ix-3),a
+1533  03A3  67          	ld	h,a
+1534  03A4  7E          	ld	a, (hl)
 1535  03A5  C6 FF       	add	a,0xff
 1536  03A7  02          	ld	(bc), a
-1537  03A8  DD 7E FD    	ld	a,(ix-3)
+1537  03A8  DD 7E FE    	ld	a,(ix-2)
 1538  03AB  3C          	inc	a
 1539  03AC  20 14       	jr	NZ,l_spr_move_left_00111
 1540  03AE  AF          	xor	a,a

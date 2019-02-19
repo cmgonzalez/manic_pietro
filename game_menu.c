@@ -48,9 +48,10 @@ void menu_main() {
   game_code = 0;
   map_paper = PAPER_BLACK;
 
-  audio_menu();
+
   game_cls();
   menu_logo();
+  audio_menu();
   game_attribs();
 
   menu_main_print();
@@ -85,30 +86,19 @@ void menu_main() {
     switch (c) {
     case 1: // SINCLAIR
       joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
-      // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 1;
       break;
     case 2: // KEYBOARD
       joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
-      // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 2;
       break;
     case 3: // KEMPSTON
       joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_kempston);
-      // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 3;
       break;
-    /*
-    case 4: // CURSOR
-      joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_cursor);
-      // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-      menu_curr_sel = 4;
-      break;
-    */
     case 4: // DEFINE
       menu_redefine();
       joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
-      // game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
       menu_curr_sel = 2;
       start_time = zx_clock();
       break;
@@ -136,7 +126,7 @@ void menu_main() {
       break;
     */
     case 0:
-      intrinsic_halt();
+
       game_cls();
       ay_reset();
       audio_game_start();
@@ -149,7 +139,7 @@ void menu_main() {
       game_paint_attrib(&attrib, s_col, s_col_e, s_row);
     ++i;
 
-    if (game_check_time(&start_time, 1600)) {
+    if (game_check_time(&start_time, 1700)) {
 
       ay_reset();
       game_atrac = 1;
@@ -205,49 +195,22 @@ void menu_main() {
 
 void menu_main_print(void) {
 
-  unsigned char s_row;
-  unsigned char s_col;
-  unsigned char s_col_e;
-  s_row = 11;
-  s_col = 11;
-  s_col_e = 21;
   // intrinsic_halt();
   menu_clear();
-
-  zx_print_str(s_row, s_col, "1 SINCLAIR");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-  ++s_row;
-  zx_print_str(s_row, s_col, "2 KEYBOARD");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-  ++s_row;
-  zx_print_str(s_row, s_col, "3 KEMPSTON");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-/*
-  ++s_row;
-  zx_print_str(s_row, s_col, "4 CURSOR");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-*/
-  ++s_row;
-  ++s_row;
-  zx_print_str(s_row, s_col, "4 DEFINE");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-  ++s_row;
-  zx_print_str(s_row, s_col, "5 CODES");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-
-  /* OUT OF MEM
-  zx_print_str(s_row, s_col, "7 INTRO");
-  game_paint_attrib(&attrib, s_col, s_col_e, (s_row << 3) + 8);
-  ++s_row;
-  */
-  ++s_row;
-  ++s_row;
+  zx_print_str(11, 11, "1 SINCLAIR");
+  game_paint_attrib(&attrib, 11, 11+10, (11 * 8) + 8);
+  zx_print_str(12, 11, "2 KEYBOARD");
+  game_paint_attrib(&attrib, 11, 11+10, (12 * 8) + 8);
+  zx_print_str(13, 11, "3 KEMPSTON");
+  game_paint_attrib(&attrib, 11, 11+10, (13 * 8) + 8);
+  zx_print_str(14, 11, "4 DEFINE");
+  game_paint_attrib(&attrib, 11, 11+8, (14 * 8) + 8);
+  zx_print_str(15, 11, "5 CODES");
+  game_paint_attrib(&attrib, 11, 11+7, (15 * 8) + 8);
   zx_print_ink(INK_CYAN);
-
-  zx_print_str(s_row, s_col, "0 START");
-  s_row = s_row + 5;
+  zx_print_str(17, 11, "0 START");
   zx_print_ink(INK_WHITE);
-  zx_print_str(s_row, 9, "2019 NOENTIENDO");
+  zx_print_str(23, 9, "2019 NOENTIENDO");
 }
 
 void menu_clear() {
@@ -261,28 +224,24 @@ void menu_clear() {
 }
 
 void menu_redefine() {
-  s_col1 = 12;
-  s_row1 = 11;
+
 
   menu_clear();
-  zx_print_str(s_row1, s_col1 - 2, "PRESS A KEY");
+  s_row1 = 11;
+  zx_print_str(s_row1, 10, "PRESS A KEY");
   game_paint_attrib(&attrib, 0, 31, (s_row1 << 3) + 8);
   s_row1++;
   s_row1++;
-
-  zx_print_str(s_row1, s_col1, "LEFT");
+  zx_print_str(s_row1, 12, "LEFT");
   k1.left = menu_define_key();
-
   s_row1++;
-  zx_print_str(s_row1, s_col1, "RIGHT");
+  zx_print_str(s_row1, 12, "RIGHT");
   k1.right = menu_define_key();
-
   s_row1++;
-  zx_print_str(s_row1, s_col1, "JUMP");
+  zx_print_str(s_row1, 12, "JUMP");
   k1.fire = menu_define_key();
-
-  k1.up = IN_KEY_SCANCODE_DISABLE;
-  k1.down = IN_KEY_SCANCODE_DISABLE;
+  //k1.up = IN_KEY_SCANCODE_DISABLE;
+  //k1.down = IN_KEY_SCANCODE_DISABLE;
   z80_delay_ms(255);
   // game_fill_row(12, 32);
   menu_main_print();
@@ -299,13 +258,13 @@ unsigned int menu_define_key() {
       v1 = v1 - 32; // TO UPPER
     }
     if ((v1 >= 30 && v1 <= 39) || (v1 >= 65 && v1 <= 90)) {
-      zx_print_char(s_row1, s_col1 + 10, v1);
+      zx_print_char(s_row1, 18, v1);
     }
     if (v1 == 13) {
-      zx_print_str(s_row1, s_col1 + 10, "ENTER");
+      zx_print_str(s_row1, 18, "ENTER");
     }
     if (v1 == 32) {
-      zx_print_str(s_row1, s_col1 + 10, "SPACE");
+      zx_print_str(s_row1, 18, "SPACE");
     }
     return in_key_scancode(v0);
   }
@@ -349,12 +308,12 @@ unsigned char menu_read_code() {
   unsigned char checksum1;
   unsigned char valid;
   menu_clear();
-  s_row1 = 13;
-  s_col1 = 11;
-  zx_print_str(s_row1, s_col1, "ENTER CODE");
-  game_paint_attrib(&attrib, 0, 31, (s_row1 << 3) + 8);
-  zx_print_str(s_row1 + 1, s_col1 + 1, "________");
-  game_paint_attrib(&attrib, 0, 31, ((s_row1 + 1) << 3) + 8);
+
+
+  zx_print_str(13, 11, "ENTER CODE");
+  game_paint_attrib(&attrib, 0, 31, (13 << 3) + 8);
+  zx_print_str(13 + 1, 11 + 1, "________");
+  game_paint_attrib(&attrib, 0, 31, ((13 + 1) << 3) + 8);
 
   // Read Key
   v1 = 0;
@@ -363,7 +322,7 @@ unsigned char menu_read_code() {
 
   while (v1 < GAME_CODELEN) {
     code0[v1] = 0;
-    v0 = menu_read_key(s_row1 + 1, s_col1 + 1 + v1);
+    v0 = menu_read_key(13 + 1, 11 + 1 + v1);
     v2 = 0;
     while ((v2 < 10) && (game_encode[v2] != v0)) {
       ++v2;
@@ -417,30 +376,17 @@ unsigned char menu_read_code() {
 
   } else {
     // Could be a magic code...
-
+    valid = 0;
     if (menu_mcodechk("DEPURAME")) {
-
-      ay_song_stop();
-      audio_coin_noentiendo();
-      zx_border(INK_MAGENTA);
-      z80_delay_ms(350);
-
       if (game_debug) {
         game_debug = 0;
       } else {
         game_debug = 1;
       }
-
       game_code = 0;
-      menu_main_print();
-      return 0;
+      valid = 1;
     }
     if (menu_mcodechk("MATTHEWS")) {
-      ay_song_stop();
-      audio_coin_noentiendo();
-      zx_border(INK_MAGENTA);
-      z80_delay_ms(350);
-
       if (game_mode) {
         game_mode = 0;
         scr_curr = 0;
@@ -448,28 +394,30 @@ unsigned char menu_read_code() {
         game_mode = 1;
         scr_curr = 20;
       }
-      menu_logo();
       game_code = 0;
-      menu_main_print();
-      return 0;
+      valid = 2;
     }
     if (menu_mcodechk("CHIMUELO")) {
+      player_lives = 255;
+      game_code = 1;
+      valid = 1;
+    }
+    if (valid) {
       ay_song_stop();
       audio_coin_noentiendo();
       zx_border(INK_MAGENTA);
       z80_delay_ms(350);
-
-      player_lives = 255;
-      game_code = 1;
+      if (valid == 2) {
+        menu_logo();
+      }
       menu_main_print();
       return 0;
+
     }
   }
   ay_song_stop();
-  s_row1 = 16;
-  s_col1 = 13;
-  zx_print_str(s_row1, s_col1, "NOPSIE");
-  game_paint_attrib(&attrib_hl, s_col1, s_col1 + 6, (s_row1 << 3) + 8);
+  zx_print_str(16, 13, "NOPSIE");
+  game_paint_attrib(&attrib_hl, 13, 13 + 6, (16 << 3) + 8);
   z80_delay_ms(350);
   zx_border(INK_RED);
   menu_main_print();
@@ -484,7 +432,20 @@ void menu_logo() {
     game_logo1(1, 16, 4, 8, 4);
   } else {
     // zx_print_str(3, 10, "MANIC  MINER");
-    game_logo1(2, 16, 0, 16, 4);
+    game_logo1(6, 16, 0, 16, 4); //Back
+
+    NIRVANAP_drawT(56,64,26);
+    NIRVANAP_drawT(56,64,28);
+    NIRVANAP_drawT(56,64,30);
+
+    NIRVANAP_drawT(40,48,18);
+    NIRVANAP_drawT(40,48,20);
+    NIRVANAP_drawT(40,48,22);
+    NIRVANAP_drawT(40,48,24);
+    NIRVANAP_drawT(40,48,26);
+    NIRVANAP_drawT(40,48,28);
+    NIRVANAP_drawT(40,48,30);
+    game_logo1(2, 64, 3, 10, 1); //Logo
   }
 }
 

@@ -155,8 +155,8 @@ void game_loop(void) {
 
     if (game_round_up) {
       zx_print_ink(INK_BLACK | PAPER_YELLOW);
-      game_lives =
-          player_lives; // Store start of level lives to give on the code...
+      // Store start of level lives to give on the code...
+      game_lives = player_lives;
       game_round_init();
       NIRVANAP_spriteT(NIRV_SPRITE_DOOR, SPRITE_DOOR, game_exit_lin,
                        game_exit_col);
@@ -418,23 +418,28 @@ void game_logo1(unsigned char f_img, unsigned char f_lin, unsigned char f_col,
     switch (f_img) {
     case 1: // Logo Pietro
       src = &logo1[0];
+      page(3);
       break;
     case 2: // Miner Logo
       src = &logo2[0];
+      page(3);
       break;
     case 3: // cartoon0
       src = &cartoon0[0];
-      break;
+      page(1);
     case 4: // cartoon1
       src = &cartoon1[0];
-      break;
+      page(1);
     case 5: // cartoon2
       src = &cartoon2[0];
+      page(1);
+      break;
+    case 6: // Miner back
+      src = &img1[0];
+      page(3);
       break;
     }
     dest = &btiles[0];
-
-    page(1);
     memcpy(dest, src, 48 * len);
     page(0);
   }
@@ -492,15 +497,16 @@ void game_img1() {
   k = 0;
   v0 = 16;
   v1 = 0;
-
+  intrinsic_di();
   while (k < (16 * 4)) {
 
     i = 0;
     li = k * 48;
-    NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
+
     dest = &btiles[SPRITE_TMP];
     src = &img1[li];
-    page(1);
+
+    page(3);
     memcpy(dest, src, 48);
     page(0);
     NIRVANAP_drawT_raw(96, v0, v1);
@@ -513,6 +519,7 @@ void game_img1() {
 
     ++k;
   }
+  intrinsic_ei();
 }
 
 void game_cell_paint_index() {
@@ -588,7 +595,7 @@ void game_cls() {
     ++v0;
   }
   */
-
+  NIRVANAP_halt();
   spr_clear_scr();
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
   zx_border(INK_BLACK);
@@ -842,7 +849,7 @@ void game_round_init(void) {
   zx_print_ink(INK_YELLOW);
   zx_print_str(20, 0, "High Score         Score      ");
   game_print_score();
-  game_print_lives();
+  if (!game_atrac) game_print_lives();
 
   zx_print_ink(INK_WHITE | PAPER_BLACK);
   fps = 0;

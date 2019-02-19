@@ -55,9 +55,8 @@ void main(void) {
   if (game_debug) {
     game_inmune = 0;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 30;
+    scr_curr = 19;
     game_menu = 0;
-    game_effect = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
     menu_curr_sel = 2; // Sync Menu
     game_tune = 4;
@@ -65,10 +64,9 @@ void main(void) {
     z80_delay_ms(666); // SATANIC DELAY
     scr_curr = 20;
     game_menu = 1;
-    game_effect = 1;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
     menu_curr_sel = 1; // Sync Menu
-
+    game_effect = 1;
   }
 
   // INTERRUPTS ARE DISABLED
@@ -119,7 +117,7 @@ void main(void) {
   NIRVANAP_tiles(_btiles);
   NIRVANAP_start();
   game_attribs();
-  
+
   game_over = 1;
 
   // Init Screen

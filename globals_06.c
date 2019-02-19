@@ -79,7 +79,7 @@ const unsigned char map_names0[1312]  = {
       "         Super Oki Doki         "
       "         Darius the Kid         "
       " Senior Mutant Alcoholic Turtles"
-      "            Feli Man            "
+      "          Felipe Man            "
       "        Beyker The Sonico       "
       "           Fede Simbel          "
       "            Work Over           "

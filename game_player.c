@@ -306,6 +306,9 @@ unsigned char player_move_jump(void) {
     }
 
     player_jump_top = s_lin1;
+    if (player_jump_top > 128) {
+      player_jump_top = 0;
+    }
   } else {
 
     // Falling

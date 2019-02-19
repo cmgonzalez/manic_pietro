@@ -58,7 +58,7 @@ void audio_ingame(void) {
 
 void audio_round_init(void) {
   if (game_tune != 4) {
-    ay_song_play(AY_SONG_ONCE, 6, ay_song_round_init);
+    ay_song_play(AY_SONG_ONCE, 4, ay_song_round_init);
   }
 }
 
