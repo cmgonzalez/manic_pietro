@@ -21,6 +21,11 @@ defb "Pietro aturdido despierta       "
 defb "sorprendido en el reino de sus  "
 defb "buenos amigos...                "
 
+defb "Pietro despierta,               "
+defb "despierta mi amor...            "
+defb "Menudo susto nos has dado bribon"
+defb "Pensaba que de esta no salias.  "
+defb "    MATTHEWS ES EL CODIGO       "
 
 PUBLIC _texts_en
 _texts_en:
@@ -33,7 +38,11 @@ defb "right on his face.              "
 defb "Pietro shacked wakes surprised  "
 defb "on the kingdom of his           "
 defb "good friends...                 "
-
+defb "Wake up Pietro,                 "
+defb "wake up my love...              "
+defb "What a fright you have given us "
+defb "I thought that you did return.  "
+defb "     MATTHEWS IS THE CODE       "
 
 ;PUBLIC bank7_filler
 ;bank7_filler:

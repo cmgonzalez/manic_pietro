@@ -1485,7 +1485,7 @@ void game_intro() {
     game_img(&btiles[0]    , 0, 32, 1, 8, 5);
     game_text(0, 17);
     game_text(1, 18);
-    game_img(&btiles[40*48], 0, 48, 4, 8, 5);
+    game_img(&btiles[40*48], 0, 48, 5, 8, 5);
     game_text(2, 21);
     game_text(3, 22);
     z80_delay_ms(100);
@@ -1496,7 +1496,7 @@ void game_intro() {
     game_img(&cartoon1[0]    , 1, 40, 6, 10, 6);
     game_text(6, 21);
     game_text(7, 22);
-    game_img(&cartoon2[0]    , 1, 32, 4, 6, 7);
+    game_img(&cartoon2[0]    , 1, 32, 5, 6, 7);
     game_text(8, 23);
     ay_reset();
     z80_delay_ms(100);
@@ -1506,37 +1506,39 @@ void game_intro() {
 
 
 void game_end_willy() {
+  ay_song_play(AY_SONG_LOOP, 6, ay_song_medievo);
   game_cls();
-  //game_logo1(4, 32, 2, 10, 6);
-  game_text(0, 19);
-  game_text(1, 20);
-  game_text(2, 22);
-  game_text(3, 23);
-  z80_delay_ms(25);
-  game_cls();
-  //game_logo1(5, 32, 2, 10, 6);
-  game_text(0, 19);
-  game_text(1, 20);
-  game_text(2, 21);
-  game_text(3, 22);
-  z80_delay_ms(25);
+
+  game_img(&cartoon3[0]    , 1, 16, 2, 3, 6);
+  game_text( 9, 18);
+  game_text(10, 19);
+  game_img(&cartoon4[0]    , 1, 32, 12, 4, 6);
+  game_text(11, 20);
+  game_img(&cartoon5[0]    , 1, 48, 6, 4, 6);
+  game_text(12, 21);
+  game_text(13, 23);
+  v0 = 0;
+  while (v0 == 0) {
+    v0 = in_test_key();
+  }
   game_cls();
 }
 
 void game_end_pietro() {
+  ay_song_play(AY_SONG_LOOP, 6, ay_song_medievo);
   game_cls();
-  //game_logo1(4, 32, 2, 10, 6);
-  game_text(0, 19);
-  game_text(1, 20);
-  game_text(2, 21);
-  game_text(3, 22);
-  z80_delay_ms(25);
-  game_cls();
-  //game_logo1(5, 32, 2, 10, 6);
-  game_text(0, 19);
-  game_text(1, 20);
-  game_text(2, 21);
-  game_text(3, 22);
-  z80_delay_ms(25);
+
+  game_img(&cartoon3[0]    , 1, 16, 2, 3, 6);
+  game_text( 9, 18);
+  game_text(10, 19);
+  game_img(&cartoon4[0]    , 1, 32, 11, 4, 6);
+  game_text(11, 20);
+  game_img(&cartoon5[0]    , 1, 48, 6, 4, 6);
+  game_text(12, 21);
+  game_text(13, 23);
+  v0 = 0;
+  while (v0 == 0) {
+    v0 = in_test_key();
+  }
   game_cls();
 }

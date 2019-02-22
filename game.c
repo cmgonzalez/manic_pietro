@@ -55,8 +55,8 @@ void main(void) {
   if (game_debug) {
     game_inmune = 0;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 34;
-    game_menu = 1;
+    scr_curr = 19;
+    game_menu = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
     menu_curr_sel = 2; // Sync Menu
     game_tune = 4;
@@ -124,9 +124,9 @@ void main(void) {
   frame_time = zx_clock();
 
   // GAME INTRO
-  // BUGGY SPECTACUTOR audio_game_over();
-  // z80_delay_ms(5000);
+  
   if (game_effect) {
+
     game_intro();
   }
 

@@ -49,6 +49,9 @@ extern unsigned char img1[];
 extern unsigned char cartoon0[];
 extern unsigned char cartoon1[];
 extern unsigned char cartoon2[];
+extern unsigned char cartoon3[];
+extern unsigned char cartoon4[];
+extern unsigned char cartoon5[];
 
 extern unsigned char logo1[];
 extern unsigned char logo2[];

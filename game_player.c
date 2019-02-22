@@ -210,12 +210,18 @@ void player_check_exit() {
   // Level UP
   if (obj_count == 0xFF && ((col[INDEX_P1] == game_exit_col) ||
                             col[INDEX_P1] == (game_exit_col + 1))) {
+
     v0 = abs((lin[INDEX_P1] + 16) - game_exit_lin);
 
     if (v0 < 8) {
       game_round_up = 1;
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
       // Amimate Bonus Air
+      if (scr_curr == 19 && !game_code) {
+          //SwordFish
+          NIRVANAP_spriteT(6, 88, game_exit_lin, game_exit_col);
+          z80_delay_ms(500);
+      }
       ay_song_stop();
       while ((unsigned int)air_curr_byte > (unsigned int)air_end_byte) {
         audio_tick();
