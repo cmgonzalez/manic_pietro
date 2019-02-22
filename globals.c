@@ -114,6 +114,7 @@ unsigned char game_code;
 unsigned char game_menu;
 unsigned char game_effect;
 unsigned char game_tune;
+unsigned char game_lang;
 
 
 unsigned char game_tileset;

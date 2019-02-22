@@ -49,7 +49,6 @@ PUBLIC _ay_song_ingame1
 _ay_song_ingame1:
 BINARY "songs/Davos_MOZART.pt3"
 
-
 PUBLIC _ay_song_menu
 _ay_song_menu:
 BINARY "songs/pietro_blue.pt3"

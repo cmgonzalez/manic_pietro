@@ -78,8 +78,8 @@ const unsigned char map_names0[1312]  = {
       "          Dr. Errazking         "
       "         Super Oki Doki         "
       "         Darius the Kid         "
-      " Senior Mutant Alcoholic Turtles"
-      "          Felipe Man            "
+      "Old Alcoholic Anonymous Turtles "
+      "        Felipe is the Man       "
       "        Beyker The Sonico       "
       "           Fede Simbel          "
       "            Work Over           "
@@ -207,14 +207,32 @@ const unsigned char spr_init1[] = { //WILLY MODE
    122,  36, 4,   4, E_HORIZONTAL, 0x04, 0x03, 0x05, 0x06, // CARRITO COPIA PARA OTROS COLORES
 };
 
-const unsigned char texts[] = { //GAME TEXT
-"Lorem ipsum dolor sit amet,     "
-"consectetur adipiscing elit, sed"
-"do eiusmod tempor incididunt ut "
-"labore et dolore magna aliqua.  "
+/*
+const unsigned char texts_es[] = { //GAME TEXT
+  "En la alcantarilla bajo tu casa,"
+  "Pietro siempre trabaja.         "
+  "Esta noche algo no esta bien, un"
+  "desconocido olor...      Es gas!"
+  "La tuberia explota golpeando en "
+  "pleno rostro.                   "
+  "Pietro aturdido despierta       "
+  "sorprendido en el reino de sus  "
+  "buenos amigos...                "
 };
 
-
+const unsigned char texts_en[] = { //GAME TEXT
+  "En la alcantarilla bajo tu casa,"
+  "On the sewer under your house,  "
+  "Pietro allways works.           "
+  "Tonight something is different, "
+  "an extrange smell...   It's Gas!"
+  "The pipe explodes hitting him   "
+  "right on his face.              "
+  "Pietro shacked wakes surprised  "
+  "on the kingdom of his           "
+  "good friends...                 "
+};
+*/
 
 const unsigned char spr_init2[] = { //PIETRO MODE
     64,   4, 4,   4, E_HORIZONTAL, 0xFF, 0xFF, 0xFF, 0xFF, // TORTUGA

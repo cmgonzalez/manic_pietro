@@ -21,4 +21,12 @@ INCLUDE "src/mfx.asm"
 SECTION BANK_6_AUDIO
 PUBLIC _ay_song_time_atack
 _ay_song_time_atack:
-  BINARY "songs/time_atack.pt3"
+BINARY "songs/time_atack.pt3"
+
+PUBLIC _ay_song_mistery
+_ay_song_mistery:
+BINARY "songs/mistery.pt3"
+
+PUBLIC _ay_song_medievo
+_ay_song_medievo:
+BINARY "songs/medievo.pt3"

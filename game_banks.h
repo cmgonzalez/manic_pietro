@@ -49,7 +49,7 @@ extern unsigned char img1[];
 extern unsigned char cartoon0[];
 extern unsigned char cartoon1[];
 extern unsigned char cartoon2[];
-//extern unsigned char cartoon3[];
+
 extern unsigned char logo1[];
 extern unsigned char logo2[];
 
@@ -77,10 +77,15 @@ extern unsigned char ay_fx_pause[];
 extern unsigned char ay_song_time_atack[];
 extern unsigned char ay_song_game_over[];
 extern unsigned char ay_song_coin_noentiendo[];
+
+extern unsigned char ay_song_mistery[];
+extern unsigned char ay_song_medievo[];
 //BANK 7 Tiles 8x8
 extern unsigned char hitiles1[];
 extern unsigned char hitiles2[];
 
+extern unsigned char texts_es[];
+extern unsigned char texts_en[];
 
 
 

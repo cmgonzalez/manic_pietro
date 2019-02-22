@@ -14,3 +14,4 @@ PUBLIC _cartoon2
 ;Tiles 8x8
 _cartoon2:
 BINARY "gfx/game_cartoon2.btile"
+ 

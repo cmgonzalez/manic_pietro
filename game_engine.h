@@ -55,8 +55,11 @@ extern void          page( unsigned char bank );
 extern unsigned char reverse(unsigned char b);
 extern void          zx_print_char(unsigned char ui_row, unsigned char ui_col, unsigned char c);
 extern void          game_anim_conveyor();
-extern void          game_logo1(unsigned char f_img, unsigned char f_lin, unsigned char f_col, unsigned char f_width, unsigned char f_height);
+
 extern void          game_text( unsigned char f_index, unsigned char f_row );
 extern void          game_end_willy();
 extern void          game_end_pietro();
+extern void          game_img( unsigned char *f_img, unsigned char f_page,
+                               unsigned char f_lin, unsigned char f_col,
+                              unsigned char f_width, unsigned char f_height) ;
 #endif

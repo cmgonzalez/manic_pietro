@@ -197,6 +197,11 @@ void menu_main_print(void) {
 
   // intrinsic_halt();
   menu_clear();
+  attrib_osd[0] = PAPER_BLACK | INK_MAGENTA;
+  attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;
+  attrib_osd[2] = PAPER_BLACK | INK_RED;
+  attrib_osd[3] = PAPER_BLACK | INK_MAGENTA;
+
   zx_print_str(11, 11, "1 SINCLAIR");
   game_paint_attrib(&attrib, 11, 11+10, (11 * 8) + 8);
   zx_print_str(12, 11, "2 KEYBOARD");
@@ -204,9 +209,9 @@ void menu_main_print(void) {
   zx_print_str(13, 11, "3 KEMPSTON");
   game_paint_attrib(&attrib, 11, 11+10, (13 * 8) + 8);
   zx_print_str(14, 11, "4 DEFINE");
-  game_paint_attrib(&attrib, 11, 11+8, (14 * 8) + 8);
+  game_paint_attrib(&attrib_osd, 11, 11+8, (14 * 8) + 8);
   zx_print_str(15, 11, "5 CODES");
-  game_paint_attrib(&attrib, 11, 11+7, (15 * 8) + 8);
+  game_paint_attrib(&attrib_osd, 11, 11+7, (15 * 8) + 8);
   zx_print_ink(INK_CYAN);
   zx_print_str(17, 11, "0 START");
   zx_print_ink(INK_WHITE);
@@ -429,15 +434,30 @@ void menu_logo() {
   game_cls();
   if (game_mode) {
     // zx_print_str(3, 10, "MANIC PIETRO");
-    game_logo1(1, 16, 4, 8, 4);
+    //game_logo1(1, 16, 4, 8, 4);
+    game_img(&logo1[0],3, 16, 4, 8, 4);
   } else {
     // zx_print_str(3, 10, "MANIC  MINER");
-    game_logo1(6, 16, 0, 16, 4); //Back
+    //game_logo1(6, 16, 0, 16, 4); //Back
+    game_img(&img1[0],3, 16, 0, 16, 4);
 
+    i = 26;
+    while (i <= 30) {
+    NIRVANAP_drawT(56,64,i);
+      i  = i + 2;
+    }
+
+/*
     NIRVANAP_drawT(56,64,26);
     NIRVANAP_drawT(56,64,28);
     NIRVANAP_drawT(56,64,30);
-
+*/
+    i = 18;
+    while (i <= 30) {
+      NIRVANAP_drawT(40,48,i);
+      i  = i + 2;
+    }
+/*
     NIRVANAP_drawT(40,48,18);
     NIRVANAP_drawT(40,48,20);
     NIRVANAP_drawT(40,48,22);
@@ -445,7 +465,9 @@ void menu_logo() {
     NIRVANAP_drawT(40,48,26);
     NIRVANAP_drawT(40,48,28);
     NIRVANAP_drawT(40,48,30);
-    game_logo1(2, 64, 3, 10, 1); //Logo
+*/
+    game_img(&logo2[0], 3, 64, 3, 10, 1); //Logo
+    //game_logo1(2, 64, 3, 10, 1); //Logo
   }
 }
 

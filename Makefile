@@ -19,6 +19,7 @@ CFLAGS = -SO3 --max-allocs-per-node10000 --opt-code-size
 
 default: loader.tap game_scr.bin game.font $(OUT)
 	@touch game.c
+	@sleep 1
 	@-rm -f zcc_opt.def
 	@-ls -l *.bin
 	@find . -type f -name '*.bin' -exec du -ch {} + | grep total$
