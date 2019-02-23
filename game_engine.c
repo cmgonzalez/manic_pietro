@@ -1245,7 +1245,7 @@ void page(unsigned char bank) {
 void game_shoe() {
 
   game_cls();
-
+  game_attribs();
   audio_game_over();
   if (scr_curr > 19) {
     NIRVANAP_drawT(90, 96, 15); // Pietro

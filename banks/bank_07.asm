@@ -30,9 +30,9 @@ defb "    MATTHEWS ES EL CODIGO       "
 PUBLIC _texts_en
 _texts_en:
 defb "On the sewer under your house,  "
-defb "Pietro allways works.           "
+defb "Pietro always works.            "
 defb "Tonight something is different, "
-defb "an extrange smell...   It's Gas!"
+defb "a strange smell...     It's Gas!"
 defb "The pipe explodes hitting him   "
 defb "right on his face.              "
 defb "Pietro shacked wakes surprised  "
