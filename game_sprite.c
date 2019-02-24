@@ -301,8 +301,7 @@ v0 = lin[INDEX_P1] + 16;
 if ( v0 <= 128 ) {
 
   //IN Screen
-  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1] + colint[INDEX_P1],
-                   lin[INDEX_P1] + 16, col[INDEX_P1]);
+  NIRVANAP_spriteT(NIRV_SPRITE_P1, tile[INDEX_P1] + colint[INDEX_P1], v0, col[INDEX_P1]);
   spr_back_repaint();
 } else {
   //OUT Of Screen

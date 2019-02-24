@@ -75,6 +75,7 @@ extern unsigned char ay_fx_tick[];
 extern unsigned char ay_fx_door_open[];
 extern unsigned char ay_fx_crumble[];
 extern unsigned char ay_fx_pause[];
+extern unsigned char ay_fx_select[];
 
 //BANK 6 Songs
 extern unsigned char ay_song_time_atack[];

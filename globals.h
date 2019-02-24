@@ -193,6 +193,7 @@
 
 
 // Sound Mode Variables
+/*
 #define GAME_SOUND_48_FX_ON          0x01
 #define GAME_SOUND_48_FX_OFF         0xfe
 #define GAME_SOUND_48_MUS_ON         0x02
@@ -201,7 +202,7 @@
 #define GAME_SOUND_AY_FX_OFF         0xfb
 #define GAME_SOUND_AY_MUS_ON         0x08
 #define GAME_SOUND_AY_MUS_OFF        0xf7
-
+*/
 
 //typedef uint16_t (*JOYFUNC)(udk_t *);
 #endif
@@ -345,7 +346,7 @@ extern unsigned char spr_count;
 
 extern unsigned char game_inmune;
 extern unsigned char game_inf_lives;
-extern unsigned char game_sound;
+//extern unsigned char game_sound;
 extern unsigned char game_tile_cnt;
 
 extern unsigned char game_over;

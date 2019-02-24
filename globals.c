@@ -182,7 +182,7 @@ unsigned char spr_count;
 unsigned char game_inmune;
 unsigned char game_inf_lives;
 
-unsigned char game_sound;
+//unsigned char game_sound;
 unsigned char game_tile_cnt;
 
 unsigned char game_over;

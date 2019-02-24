@@ -98,6 +98,11 @@ void audio_tick(void) {
   ay_fx_stop();
   ay_fx_play(4, ay_fx_tick);
 }
+
+void audio_select(void) {
+  ay_fx_play(4, ay_fx_select);
+}
+
 void audio_coin(void) { ay_fx_play(4, ay_fx_coin); }
 void audio_coin_noentiendo(void) {
   ay_song_play(AY_SONG_ONCE, 4, ay_song_coin_noentiendo);

@@ -1440,66 +1440,77 @@ void game_intro() {
       v0 = v0 + 2;
       ++v2;
     }
-    //NIRVANAP_drawT( 89, 120, 10);
-    gbyte = &btiles[89*48];
     zx_print_ink(INK_WHITE);
     game_paint_attrib(&attrib, 0, 31, (15 * 8) + 8);
+    if (spec128) {
+      //NIRVANAP_drawT( 89, 120, 10);
+      gbyte = &btiles[89*48];
 
-    zx_print_str(15,12,"1");
-    NIRVANAP_printQ(gbyte, gbyte + 32, 128,13);
 
-    zx_print_str(15,18,"2");
-    NIRVANAP_printQ(gbyte+1, gbyte + 40, 128,19);
 
-    v0 = 1;
-    while (v0) {
-      //in_wait_key();
-      v1 = in_inkey();
-      //in_wait_nokey();
-      //zx_print_chr(23, 1, v1);
-      v1 = v1 - 48;
+      zx_print_str(15,12,"1");
+      NIRVANAP_printQ(gbyte, gbyte + 32, 128,13);
 
-      if (v1 == 1 || v1 == 2) {
-        v0 = 0;
-        game_lang = 0xFF + v1;
+      zx_print_str(15,18,"2");
+      NIRVANAP_printQ(gbyte+1, gbyte + 40, 128,19);
+
+      v0 = 1;
+      while (v0) {
+        //in_wait_key();
+        v1 = in_inkey();
+        //in_wait_nokey();
+        //zx_print_chr(23, 1, v1);
+        v1 = v1 - 48;
+
+        if (v1 == 1 || v1 == 2) {
+          v0 = 0;
+          game_lang = 0xFF + v1;
+        }
+      }
+  /*
+      while (v0 < 16) {
+        NIRVANAP_spriteT(v1, v2, 96, v0 + 8);
+        v0 = v0 + 2;
+        ++v2;
+        ++v1;
+        if (v1 == NIRV_TOTAL_SPRITES) {
+          v1 = 0;
+          NIRVANAP_halt();
+        }
+      }
+  */
+
+      //z80_delay_ms(25);
+      ay_song_play(AY_SONG_LOOP, 6, ay_song_mistery);
+      // ADDR PAGE ROW COL
+      // *f_addr, f_page, unsigned char f_lin, unsigned char f_col, unsigned char f_width, unsigned char f_height)
+      game_cls();
+      game_img(&btiles[0]    , 0, 32, 1, 8, 5);
+      game_text(0, 17);
+      game_text(1, 18);
+      game_img(&btiles[40*48], 0, 48, 7, 8, 5);
+      game_text(2, 21);
+      game_text(3, 22);
+      z80_delay_ms(100);
+      game_cls();
+      game_img(&cartoon0[0]    , 1, 16, 1, 4, 6);
+      game_text(4, 18);
+      game_text(5, 19);
+      game_img(&cartoon1[0]    , 1, 40, 6, 10, 6);
+      game_text(6, 21);
+      game_text(7, 22);
+      game_img(&cartoon2[0]    , 1, 20, 5, 6, 7);
+      game_text(8, 23);
+      ay_reset();
+      z80_delay_ms(100);
+    } else {
+      zx_print_str(15,5,"THIS GAME NEEDS 128KB");
+
+      while(1) {
+        //Eternal loop
       }
     }
-/*
-    while (v0 < 16) {
-      NIRVANAP_spriteT(v1, v2, 96, v0 + 8);
-      v0 = v0 + 2;
-      ++v2;
-      ++v1;
-      if (v1 == NIRV_TOTAL_SPRITES) {
-        v1 = 0;
-        NIRVANAP_halt();
-      }
-    }
-*/
 
-    //z80_delay_ms(25);
-    ay_song_play(AY_SONG_LOOP, 6, ay_song_mistery);
-    // ADDR PAGE ROW COL
-    // *f_addr, f_page, unsigned char f_lin, unsigned char f_col, unsigned char f_width, unsigned char f_height)
-    game_cls();
-    game_img(&btiles[0]    , 0, 32, 1, 8, 5);
-    game_text(0, 17);
-    game_text(1, 18);
-    game_img(&btiles[40*48], 0, 48, 5, 8, 5);
-    game_text(2, 21);
-    game_text(3, 22);
-    z80_delay_ms(100);
-    game_cls();
-    game_img(&cartoon0[0]    , 1, 16, 0, 4, 6);
-    game_text(4, 18);
-    game_text(5, 19);
-    game_img(&cartoon1[0]    , 1, 40, 6, 10, 6);
-    game_text(6, 21);
-    game_text(7, 22);
-    game_img(&cartoon2[0]    , 1, 32, 5, 6, 7);
-    game_text(8, 23);
-    ay_reset();
-    z80_delay_ms(100);
 
   }
 }

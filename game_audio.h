@@ -27,6 +27,7 @@ extern void audio_coin(void);
 extern void audio_coin_noentiendo(void);
 extern void audio_door_open(void);
 extern void audio_tick(void);
+extern void audio_select(void);
 extern void audio_crumble(void);
 extern void audio_puerta(void);
 extern void audio_level_start(void);

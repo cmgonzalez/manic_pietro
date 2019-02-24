@@ -38,8 +38,8 @@ void enemy_turn(void) {
     if (nirv_sprite_index == NIRV_SPRITE_P1) {
       // This Nirvana Version have only 7 sprites -1 door -1 player
       //NIRVANAP_halt();
-      //z80_delay_ms(2); //FASTER WHY????
-      z80_delay_tstate(4400); //?????? MAGIC!
+      z80_delay_ms(3); //FASTER WHY????
+      //z80_delay_tstate(4800); //?????? MAGIC!
       nirv_sprite_index = 0;
     }
     if (class[sprite] && spr_chktime()) {

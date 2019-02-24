@@ -102,3 +102,7 @@ BINARY "fx/door_open.afx"
 PUBLIC _ay_fx_pause
 _ay_fx_pause:
 BINARY "fx/pause.afx"
+
+PUBLIC _ay_fx_select
+_ay_fx_select:
+BINARY "fx/select.afx"
