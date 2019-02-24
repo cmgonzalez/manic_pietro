@@ -107,7 +107,7 @@ void menu_main() {
       v0 = menu_read_code();
       ay_reset();
       if (v0) {
-        intrinsic_halt();
+        NIRVANAP_halt();
         game_tune = 0; // default
         f_input = 0; // Exit Loop
       }
@@ -195,7 +195,6 @@ void menu_main() {
 
 void menu_main_print(void) {
 
-  // intrinsic_halt();
   menu_clear();
   attrib_osd[0] = PAPER_BLACK | INK_MAGENTA;
   attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;

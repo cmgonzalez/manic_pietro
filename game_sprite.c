@@ -587,9 +587,10 @@ unsigned char spr_get_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {
 
 void spr_back_repaint(void) {
   index1 = spr_calc_index(s_lin0, s_col0);
-  s_lin1 = s_lin0 >> 3;
-  s_lin1 = s_lin1 << 3;
-  s_lin1 = s_lin1 + 16;
+  //s_lin1 = s_lin0 >> 3;
+  //s_lin1 = s_lin1 << 3;
+  //s_lin1 = s_lin1 + 16;
+  s_lin1 = 16 + ((s_lin0 >> 3) << 3 ) ;
 
   s_row1 = (s_lin0 >> 3) + 1;
   s_col1 = s_col0;

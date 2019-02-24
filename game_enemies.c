@@ -37,11 +37,12 @@ void enemy_turn(void) {
     ++nirv_sprite_index;
     if (nirv_sprite_index == NIRV_SPRITE_P1) {
       // This Nirvana Version have only 7 sprites -1 door -1 player
-      NIRVANAP_halt();
-      // z80_delay_ms(2);
+      //NIRVANAP_halt();
+      //z80_delay_ms(2); //FASTER WHY????
+      z80_delay_tstate(4400); //?????? MAGIC!
       nirv_sprite_index = 0;
     }
-    if (class[sprite] != 0 && spr_chktime()) {
+    if (class[sprite] && spr_chktime()) {
       s_lin0 = lin[sprite];
       s_col0 = col[sprite];
       enemy_move();
@@ -49,7 +50,7 @@ void enemy_turn(void) {
 
     ++sprite;
   }
-  if (nirv_sprite_index != 0xFF && spr_count >= NIRV_SPRITE_P1) {
+  if (spr_count >= NIRV_SPRITE_P1) {
     NIRVANAP_halt();
   }
 }

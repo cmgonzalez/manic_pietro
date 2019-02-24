@@ -966,1303 +966,1306 @@
 963   0000              	GLOBAL _hisprites1
 964   0000              	GLOBAL _logo2
 965   0000              	GLOBAL _logo1
-966   0000              	GLOBAL _cartoon2
-967   0000              	GLOBAL _cartoon1
-968   0000              	GLOBAL _cartoon0
-969   0000              	GLOBAL _img1
-970   0000              	GLOBAL _air_end_byte
-971   0000              	GLOBAL _air_start_byte
-972   0000              	GLOBAL _tile_class
-973   0000              	GLOBAL _map_names0
-974   0000              	GLOBAL _game_borders0
-975   0000              	GLOBAL _spr_init2
-976   0000              	GLOBAL _spr_init1
-977   0000              	GLOBAL _tile_class2
-978   0000              	GLOBAL _tile_class1
-979   0000              	GLOBAL _paper0
-980   0000              	GLOBAL _lenght0
-981   0000              	GLOBAL _world0
-982   0000              	GLOBAL _spr_init
-983   0000              	GLOBAL _game_encode
-984   0000              	GLOBAL _player_jump_hor
-985   0000              ;--------------------------------------------------------
-986   0000              ; special function registers
-987   0000              ;--------------------------------------------------------
-988   0000              defc _IO_FE	=	0x00fe
-989   0000              defc _IO_1FFD	=	0x1ffd
-990   0000              defc _IO_7FFD	=	0x7ffd
-991   0000              ;--------------------------------------------------------
-992   0000              ; ram data
-993   0000              ;--------------------------------------------------------
-994   0000              	SECTION bss_compiler
-995   0000              ;--------------------------------------------------------
-996   0000              ; ram data
-997   0000              ;--------------------------------------------------------
-998   0000              
-999   0000              IF 0
-1000  0000              
-1001  0000              ; .area _INITIALIZED removed by z88dk
-1002  0000              
+966   0000              	GLOBAL _cartoon5
+967   0000              	GLOBAL _cartoon4
+968   0000              	GLOBAL _cartoon3
+969   0000              	GLOBAL _cartoon2
+970   0000              	GLOBAL _cartoon1
+971   0000              	GLOBAL _cartoon0
+972   0000              	GLOBAL _img1
+973   0000              	GLOBAL _air_end_byte
+974   0000              	GLOBAL _air_start_byte
+975   0000              	GLOBAL _tile_class
+976   0000              	GLOBAL _map_names0
+977   0000              	GLOBAL _game_borders0
+978   0000              	GLOBAL _spr_init2
+979   0000              	GLOBAL _spr_init1
+980   0000              	GLOBAL _tile_class2
+981   0000              	GLOBAL _tile_class1
+982   0000              	GLOBAL _paper0
+983   0000              	GLOBAL _lenght0
+984   0000              	GLOBAL _world0
+985   0000              	GLOBAL _spr_init
+986   0000              	GLOBAL _game_encode
+987   0000              	GLOBAL _player_jump_hor
+988   0000              ;--------------------------------------------------------
+989   0000              ; special function registers
+990   0000              ;--------------------------------------------------------
+991   0000              defc _IO_FE	=	0x00fe
+992   0000              defc _IO_1FFD	=	0x1ffd
+993   0000              defc _IO_7FFD	=	0x7ffd
+994   0000              ;--------------------------------------------------------
+995   0000              ; ram data
+996   0000              ;--------------------------------------------------------
+997   0000              	SECTION bss_compiler
+998   0000              ;--------------------------------------------------------
+999   0000              ; ram data
+1000  0000              ;--------------------------------------------------------
+1001  0000              
+1002  0000              IF 0
 1003  0000              
-1004  0000              ENDIF
+1004  0000              ; .area _INITIALIZED removed by z88dk
 1005  0000              
-1006  0000              ;--------------------------------------------------------
-1007  0000              ; absolute external ram data
-1008  0000              ;--------------------------------------------------------
-1009  0000              	SECTION IGNORE
-1010  0000              ;--------------------------------------------------------
-1011  0000              ; global & static initialisations
-1012  0000              ;--------------------------------------------------------
-1013  0000              	SECTION code_crt_init
-1014  0000              ;--------------------------------------------------------
-1015  0000              ; Home
-1016  0000              ;--------------------------------------------------------
-1017  0000              	SECTION IGNORE
-1018  0000              ;--------------------------------------------------------
-1019  0000              ; code
-1020  0000              ;--------------------------------------------------------
-1021  0000              	SECTION code_compiler
-1022  0000              ;	---------------------------------
-1023  0000              ; Function menu_main
-1024  0000              ; ---------------------------------
-1025  0000              _menu_main:
-1026  0000  CD 00 00    	call	___sdcc_enter_ix
-1027  0003  F5          	push	af
-1028  0004  F5          	push	af
-1029  0005  3B          	dec	sp
-1030  0006  DD 36 FF 01 	ld	(ix-1),0x01
-1031  000A  21 00 00    	ld	hl,_game_code
-1032  000D  36 00       	ld	(hl),0x00
-1033  000F  21 00 00    	ld	hl,_map_paper
-1034  0012  36 00       	ld	(hl),0x00
-1035  0014  CD 00 00    	call	_game_cls
-1036  0017  CD 3F 07    	call	_menu_logo
-1037  001A  CD 00 00    	call	_audio_menu
-1038  001D  CD 00 00    	call	_game_attribs
-1039  0020  CD 7C 02    	call	_menu_main_print
-1040  0023  D1          	pop	de
-1041  0024  21 00 00    	ld	hl,_i
-1042  0027  36 00       	ld	(hl),0x00
-1043  0029  2A 00 00    	ld	hl,(_curr_time)
-1044  002C  E5          	push	hl
-1045  002D  21 00 00    	ld	hl,_color
-1046  0030  36 00       	ld	(hl),0x00
-1047  0032              l_menu_main_00138:
-1048  0032  DD 7E FF    	ld	a,(ix-1)
-1049  0035  B7          	or	a, a
-1050  0036  CA 77 02    	jp	Z, l_menu_main_00141
-1051  0039  21 14 00    	ld	hl,0x0014
-1052  003C  CD 00 00    	call	_z80_delay_ms_fastcall
-1053  003F  CD 00 00    	call	_in_inkey
-1054  0042  3A 00 00    	ld	a,(_menu_curr_sel)
-1055  0045  C6 0A       	add	a,0x0a
-1056  0047  4D          	ld	c,l
-1057  0048  44          	ld	b,h
-1058  0049  07          	rlca
-1059  004A  07          	rlca
-1060  004B  07          	rlca
-1061  004C  E6 F8       	and	a,0xf8
-1062  004E  C6 08       	add	a,0x08
-1063  0050  DD 77 FE    	ld	(ix-2),a
-1064  0053  3A 00 00    	ld	a,(_color)
-1065  0056  07          	rlca
-1066  0057  07          	rlca
-1067  0058  07          	rlca
-1068  0059  E6 F8       	and	a,0xf8
-1069  005B  32 00 00    	ld	(_v0),a
-1070  005E  21 00 00    	ld	hl,_color
-1071  0061  7E          	ld	a,(hl)
-1072  0062  3C          	inc	a
-1073  0063  77          	ld	(hl),a
-1074  0064  D6 05       	sub	a,0x05
-1075  0066  20 04       	jr	NZ,l_menu_main_00102
-1076  0068  21 00 00    	ld	hl,_color
-1077  006B  34          	inc	(hl)
-1078  006C              l_menu_main_00102:
-1079  006C  3E 06       	ld	a,0x06
-1080  006E  21 00 00    	ld	hl,_color
-1081  0071  96          	sub	a, (hl)
-1082  0072  30 02       	jr	NC,l_menu_main_00104
-1083  0074  36 00       	ld	(hl),0x00
-1084  0076              l_menu_main_00104:
-1085  0076  3A 00 00    	ld	a,(_attrib_hl)
-1086  0079  E6 C7       	and	a,0xc7
-1087  007B  21 00 00    	ld	hl,_v0
-1088  007E  B6          	or	a, (hl)
-1089  007F  32 00 00    	ld	(_attrib_hl),a
-1090  0082  11 01 00    	ld	de,_attrib_hl + 1
-1091  0085  1A          	ld	a, (de)
-1092  0086  E6 C7       	and	a,0xc7
-1093  0088  21 00 00    	ld	hl,_v0
-1094  008B  B6          	or	a, (hl)
-1095  008C  12          	ld	(de), a
-1096  008D  11 02 00    	ld	de,_attrib_hl + 2
-1097  0090  1A          	ld	a, (de)
-1098  0091  E6 C7       	and	a,0xc7
-1099  0093  B6          	or	a, (hl)
-1100  0094  12          	ld	(de), a
-1101  0095  11 03 00    	ld	de,_attrib_hl + 3
-1102  0098  1A          	ld	a, (de)
-1103  0099  E6 C7       	and	a,0xc7
-1104  009B  B6          	or	a, (hl)
-1105  009C  12          	ld	(de), a
-1106  009D  C5          	push	bc
-1107  009E  DD 7E FE    	ld	a,(ix-2)
-1108  00A1  F5          	push	af
-1109  00A2  33          	inc	sp
-1110  00A3  21 0D 15    	ld	hl,0x150d
-1111  00A6  E5          	push	hl
-1112  00A7  21 00 00    	ld	hl,_attrib_hl
-1113  00AA  E5          	push	hl
-1114  00AB  CD 00 00    	call	_game_paint_attrib
-1115  00AE  F1          	pop	af
-1116  00AF  F1          	pop	af
-1117  00B0  33          	inc	sp
-1118  00B1  C1          	pop	bc
-1119  00B2  79          	ld	a, c
-1120  00B3  C6 D0       	add	a,0xd0
-1121  00B5  DD 77 FD    	ld	(ix-3),a
-1122  00B8  3E 05       	ld	a,0x05
-1123  00BA  DD 96 FD    	sub	a,(ix-3)
-1124  00BD  DA 5B 01    	jp	C, l_menu_main_00113
-1125  00C0  DD 4E FD    	ld	c,(ix-3)
-1126  00C3  06 00       	ld	b,0x00
-1127  00C5  21 CC 00    	ld	hl,l_menu_main_00221
-1128  00C8  09          	add	hl, bc
-1129  00C9  09          	add	hl, bc
-1130  00CA  09          	add	hl, bc
-1131  00CB  E9          	jp	(hl)
-1132  00CC              l_menu_main_00221:
-1133  00CC  C3 43 01    	jp	l_menu_main_00112
-1134  00CF  C3 DE 00    	jp	l_menu_main_00105
-1135  00D2  C3 EB 00    	jp	l_menu_main_00106
-1136  00D5  C3 F8 00    	jp	l_menu_main_00107
-1137  00D8  C3 05 01    	jp	l_menu_main_00108
-1138  00DB  C3 1A 01    	jp	l_menu_main_00109
-1139  00DE              l_menu_main_00105:
-1140  00DE  21 00 00    	ld	hl,_in_stick_sinclair1
-1141  00E1  22 00 00    	ld	(_joyfunc1),hl
-1142  00E4  21 00 00    	ld	hl,_menu_curr_sel
-1143  00E7  36 01       	ld	(hl),0x01
-1144  00E9  18 70       	jr	l_menu_main_00113
-1145  00EB              l_menu_main_00106:
-1146  00EB  21 00 00    	ld	hl,_in_stick_keyboard
-1147  00EE  22 00 00    	ld	(_joyfunc1),hl
-1148  00F1  21 00 00    	ld	hl,_menu_curr_sel
-1149  00F4  36 02       	ld	(hl),0x02
-1150  00F6  18 63       	jr	l_menu_main_00113
-1151  00F8              l_menu_main_00107:
-1152  00F8  21 00 00    	ld	hl,_in_stick_kempston
-1153  00FB  22 00 00    	ld	(_joyfunc1),hl
-1154  00FE  21 00 00    	ld	hl,_menu_curr_sel
-1155  0101  36 03       	ld	(hl),0x03
-1156  0103  18 56       	jr	l_menu_main_00113
-1157  0105              l_menu_main_00108:
-1158  0105  CD 7D 03    	call	_menu_redefine
-1159  0108  D1          	pop	de
-1160  0109  21 00 00    	ld	hl,_in_stick_keyboard
-1161  010C  22 00 00    	ld	(_joyfunc1),hl
-1162  010F  21 00 00    	ld	hl,_menu_curr_sel
-1163  0112  36 02       	ld	(hl),0x02
-1164  0114  2A 00 00    	ld	hl,(_curr_time)
-1165  0117  E5          	push	hl
-1166  0118  18 41       	jr	l_menu_main_00113
-1167  011A              l_menu_main_00109:
-1168  011A  CD 00 00    	call	_game_attribs
-1169  011D  CD E0 04    	call	_menu_read_code
-1170  0120  7D          	ld	a,l
-1171  0121  32 00 00    	ld	(_v0),a
-1172  0124  CD 00 00    	call	_ay_reset
-1173  0127  3A 00 00    	ld	a,(_v0)
-1174  012A  B7          	or	a, a
-1175  012B  28 0A       	jr	Z,l_menu_main_00111
-1176  012D  76          	halt
-1177  012E  21 00 00    	ld	hl,_game_tune
-1178  0131  36 00       	ld	(hl),0x00
-1179  0133  DD 36 FF 00 	ld	(ix-1),0x00
-1180  0137              l_menu_main_00111:
-1181  0137  D1          	pop	de
-1182  0138  2A 00 00    	ld	hl,(_curr_time)
-1183  013B  E5          	push	hl
-1184  013C  2E 00       	ld	l,0x00
-1185  013E  CD 00 00    	call	_zx_border_fastcall
-1186  0141  18 18       	jr	l_menu_main_00113
-1187  0143              l_menu_main_00112:
-1188  0143  CD 00 00    	call	_game_cls
-1189  0146  CD 00 00    	call	_ay_reset
-1190  0149  CD 00 00    	call	_audio_game_start
-1191  014C  21 2C 01    	ld	hl,0x012c
-1192  014F  CD 00 00    	call	_z80_delay_ms_fastcall
-1193  0152  21 00 00    	ld	hl,_game_tune
-1194  0155  36 00       	ld	(hl),0x00
-1195  0157  DD 36 FF 00 	ld	(ix-1),0x00
-1196  015B              l_menu_main_00113:
-1197  015B  DD 7E FD    	ld	a,(ix-3)
-1198  015E  B7          	or	a, a
-1199  015F  28 17       	jr	Z,l_menu_main_00115
-1200  0161  D6 05       	sub	a,0x05
-1201  0163  30 13       	jr	NC,l_menu_main_00115
-1202  0165  DD 7E FE    	ld	a,(ix-2)
-1203  0168  F5          	push	af
-1204  0169  33          	inc	sp
-1205  016A  21 0C 15    	ld	hl,0x150c
-1206  016D  E5          	push	hl
-1207  016E  21 00 00    	ld	hl,_attrib
-1208  0171  E5          	push	hl
-1209  0172  CD 00 00    	call	_game_paint_attrib
-1210  0175  F1          	pop	af
-1211  0176  F1          	pop	af
-1212  0177  33          	inc	sp
-1213  0178              l_menu_main_00115:
-1214  0178  21 00 00    	ld	hl,_i
-1215  017B  34          	inc	(hl)
-1216  017C  21 00 00    	ld	hl,0x0000
-1217  017F  39          	add	hl, sp
-1218  0180  01 A4 06    	ld	bc,0x06a4
-1219  0183  C5          	push	bc
-1220  0184  E5          	push	hl
-1221  0185  CD 00 00    	call	_game_check_time
-1222  0188  F1          	pop	af
-1223  0189  F1          	pop	af
-1224  018A  7D          	ld	a, l
-1225  018B  B7          	or	a, a
-1226  018C  CA 32 00    	jp	Z, l_menu_main_00138
-1227  018F  CD 00 00    	call	_ay_reset
-1228  0192  21 00 00    	ld	hl,_game_atrac
-1229  0195  36 01       	ld	(hl),0x01
-1230  0197  1E 00       	ld	e,0x00
-1231  0199              l_menu_main_00130:
-1232  0199  7B          	ld	a, e
-1233  019A  B7          	or	a, a
-1234  019B  C2 3C 02    	jp	NZ, l_menu_main_00132
-1235  019E  CD 00 00    	call	_in_inkey
-1236  01A1  5D          	ld	e, l
-1237  01A2  D5          	push	de
-1238  01A3  CD 00 00    	call	_game_round_init
-1239  01A6  D1          	pop	de
-1240  01A7  E1          	pop	hl
-1241  01A8  2A 00 00    	ld	hl,(_curr_time)
-1242  01AB  E5          	push	hl
-1243  01AC              l_menu_main_00124:
-1244  01AC  21 00 00    	ld	hl,0x0000
-1245  01AF  39          	add	hl, sp
-1246  01B0  4D          	ld	c, l
-1247  01B1  44          	ld	b, h
-1248  01B2  D5          	push	de
-1249  01B3  21 F4 01    	ld	hl,0x01f4
-1250  01B6  E5          	push	hl
-1251  01B7  C5          	push	bc
-1252  01B8  CD 00 00    	call	_game_check_time
-1253  01BB  F1          	pop	af
-1254  01BC  F1          	pop	af
-1255  01BD  D1          	pop	de
-1256  01BE  7D          	ld	a, l
-1257  01BF  B7          	or	a,a
-1258  01C0  20 63       	jr	NZ,l_menu_main_00126
-1259  01C2  B3          	or	a,e
-1260  01C3  20 60       	jr	NZ,l_menu_main_00126
-1261  01C5  CD 00 00    	call	_enemy_turn
-1262  01C8  21 04 00    	ld	hl,0x0004
-1263  01CB  E5          	push	hl
-1264  01CC  21 00 00    	ld	hl,_time_key
-1265  01CF  E5          	push	hl
-1266  01D0  CD 00 00    	call	_game_check_time
-1267  01D3  F1          	pop	af
-1268  01D4  F1          	pop	af
-1269  01D5  7D          	ld	a, l
-1270  01D6  B7          	or	a, a
-1271  01D7  28 26       	jr	Z,l_menu_main_00118
-1272  01D9  2A 00 00    	ld	hl,(_curr_time)
-1273  01DC  22 00 00    	ld	(_time_key),hl
-1274  01DF  CD 00 00    	call	_game_key_paint
-1275  01E2  3A 00 00    	ld	a,(_map_border)
-1276  01E5  07          	rlca
-1277  01E6  07          	rlca
-1278  01E7  07          	rlca
-1279  01E8  E6 F8       	and	a,0xf8
-1280  01EA  21 00 00    	ld	hl,_color
-1281  01ED  B6          	or	a, (hl)
-1282  01EE  32 00 00    	ld	(_screen_ink),a
-1283  01F1  21 00 00    	ld	hl,___str_0
-1284  01F4  E5          	push	hl
-1285  01F5  21 00 0A    	ld	hl,0x0a00
-1286  01F8  E5          	push	hl
-1287  01F9  CD 00 00    	call	_zx_print_str
-1288  01FC  CD CA 07    	call	_menu_rotcolor
-1289  01FF              l_menu_main_00118:
-1290  01FF  3A 00 00    	ld	a,(_game_conveyor_col0)
-1291  0202  B7          	or	a, a
-1292  0203  28 1A       	jr	Z,l_menu_main_00122
-1293  0205  21 05 00    	ld	hl,0x0005
-1294  0208  E5          	push	hl
-1295  0209  21 00 00    	ld	hl,_time_conv
-1296  020C  E5          	push	hl
-1297  020D  CD 00 00    	call	_game_check_time
-1298  0210  F1          	pop	af
-1299  0211  F1          	pop	af
-1300  0212  7D          	ld	a, l
-1301  0213  B7          	or	a, a
-1302  0214  28 09       	jr	Z,l_menu_main_00122
-1303  0216  2A 00 00    	ld	hl,(_curr_time)
-1304  0219  22 00 00    	ld	(_time_conv),hl
-1305  021C  CD 00 00    	call	_game_anim_conveyor
-1306  021F              l_menu_main_00122:
-1307  021F  CD 00 00    	call	_in_inkey
-1308  0222  5D          	ld	e, l
-1309  0223  18 87       	jr	l_menu_main_00124
-1310  0225              l_menu_main_00126:
-1311  0225  21 00 00    	ld	hl,_scr_curr
-1312  0228  7E          	ld	a,(hl)
-1313  0229  3C          	inc	a
-1314  022A  77          	ld	(hl),a
-1315  022B  D6 14       	sub	a,0x14
-1316  022D  28 08       	jr	Z,l_menu_main_00127
-1317  022F  3A 00 00    	ld	a,(_scr_curr)
-1318  0232  D6 28       	sub	a,0x28
-1319  0234  C2 99 01    	jp	NZ,l_menu_main_00130
-1320  0237              l_menu_main_00127:
-1321  0237  1E FF       	ld	e,0xff
-1322  0239  C3 99 01    	jp	l_menu_main_00130
-1323  023C              l_menu_main_00132:
-1324  023C  21 00 00    	ld	hl,_map_paper
-1325  023F  36 00       	ld	(hl),0x00
-1326  0241  3A 00 00    	ld	a,(_game_mode)
-1327  0244  B7          	or	a, a
-1328  0245  28 07       	jr	Z,l_menu_main_00134
-1329  0247  21 00 00    	ld	hl,_scr_curr
-1330  024A  36 14       	ld	(hl),0x14
-1331  024C  18 05       	jr	l_menu_main_00135
-1332  024E              l_menu_main_00134:
-1333  024E  21 00 00    	ld	hl,_scr_curr
-1334  0251  36 00       	ld	(hl),0x00
-1335  0253              l_menu_main_00135:
-1336  0253  D1          	pop	de
-1337  0254  2A 00 00    	ld	hl,(_curr_time)
-1338  0257  E5          	push	hl
-1339  0258  2E 00       	ld	l,0x00
-1340  025A  CD 00 00    	call	_zx_border_fastcall
-1341  025D  CD 00 00    	call	_game_attribs
-1342  0260  CD 00 00    	call	_game_cls
-1343  0263  CD 3F 07    	call	_menu_logo
-1344  0266  CD 39 03    	call	_menu_clear
-1345  0269  CD 7C 02    	call	_menu_main_print
-1346  026C  CD 00 00    	call	_audio_menu
-1347  026F  21 00 00    	ld	hl,_game_atrac
-1348  0272  36 00       	ld	(hl),0x00
-1349  0274  C3 32 00    	jp	l_menu_main_00138
-1350  0277              l_menu_main_00141:
-1351  0277  DD F9       	ld	sp, ix
-1352  0279  DD E1       	pop	ix
-1353  027B  C9          	ret
-1354  027C              	SECTION rodata_compiler
-1355  0000              ___str_0:
-1356  0000  4D 41 4E 49 43 20 50 49 45 54 52 4F 
+1006  0000              
+1007  0000              ENDIF
+1008  0000              
+1009  0000              ;--------------------------------------------------------
+1010  0000              ; absolute external ram data
+1011  0000              ;--------------------------------------------------------
+1012  0000              	SECTION IGNORE
+1013  0000              ;--------------------------------------------------------
+1014  0000              ; global & static initialisations
+1015  0000              ;--------------------------------------------------------
+1016  0000              	SECTION code_crt_init
+1017  0000              ;--------------------------------------------------------
+1018  0000              ; Home
+1019  0000              ;--------------------------------------------------------
+1020  0000              	SECTION IGNORE
+1021  0000              ;--------------------------------------------------------
+1022  0000              ; code
+1023  0000              ;--------------------------------------------------------
+1024  0000              	SECTION code_compiler
+1025  0000              ;	---------------------------------
+1026  0000              ; Function menu_main
+1027  0000              ; ---------------------------------
+1028  0000              _menu_main:
+1029  0000  CD 00 00    	call	___sdcc_enter_ix
+1030  0003  F5          	push	af
+1031  0004  F5          	push	af
+1032  0005  3B          	dec	sp
+1033  0006  DD 36 FF 01 	ld	(ix-1),0x01
+1034  000A  21 00 00    	ld	hl,_game_code
+1035  000D  36 00       	ld	(hl),0x00
+1036  000F  21 00 00    	ld	hl,_map_paper
+1037  0012  36 00       	ld	(hl),0x00
+1038  0014  CD 00 00    	call	_game_cls
+1039  0017  CD 3F 07    	call	_menu_logo
+1040  001A  CD 00 00    	call	_audio_menu
+1041  001D  CD 00 00    	call	_game_attribs
+1042  0020  CD 7C 02    	call	_menu_main_print
+1043  0023  D1          	pop	de
+1044  0024  21 00 00    	ld	hl,_i
+1045  0027  36 00       	ld	(hl),0x00
+1046  0029  2A 00 00    	ld	hl,(_curr_time)
+1047  002C  E5          	push	hl
+1048  002D  21 00 00    	ld	hl,_color
+1049  0030  36 00       	ld	(hl),0x00
+1050  0032              l_menu_main_00138:
+1051  0032  DD 7E FF    	ld	a,(ix-1)
+1052  0035  B7          	or	a, a
+1053  0036  CA 77 02    	jp	Z, l_menu_main_00141
+1054  0039  21 14 00    	ld	hl,0x0014
+1055  003C  CD 00 00    	call	_z80_delay_ms_fastcall
+1056  003F  CD 00 00    	call	_in_inkey
+1057  0042  3A 00 00    	ld	a,(_menu_curr_sel)
+1058  0045  C6 0A       	add	a,0x0a
+1059  0047  4D          	ld	c,l
+1060  0048  44          	ld	b,h
+1061  0049  07          	rlca
+1062  004A  07          	rlca
+1063  004B  07          	rlca
+1064  004C  E6 F8       	and	a,0xf8
+1065  004E  C6 08       	add	a,0x08
+1066  0050  DD 77 FE    	ld	(ix-2),a
+1067  0053  3A 00 00    	ld	a,(_color)
+1068  0056  07          	rlca
+1069  0057  07          	rlca
+1070  0058  07          	rlca
+1071  0059  E6 F8       	and	a,0xf8
+1072  005B  32 00 00    	ld	(_v0),a
+1073  005E  21 00 00    	ld	hl,_color
+1074  0061  7E          	ld	a,(hl)
+1075  0062  3C          	inc	a
+1076  0063  77          	ld	(hl),a
+1077  0064  D6 05       	sub	a,0x05
+1078  0066  20 04       	jr	NZ,l_menu_main_00102
+1079  0068  21 00 00    	ld	hl,_color
+1080  006B  34          	inc	(hl)
+1081  006C              l_menu_main_00102:
+1082  006C  3E 06       	ld	a,0x06
+1083  006E  21 00 00    	ld	hl,_color
+1084  0071  96          	sub	a, (hl)
+1085  0072  30 02       	jr	NC,l_menu_main_00104
+1086  0074  36 00       	ld	(hl),0x00
+1087  0076              l_menu_main_00104:
+1088  0076  3A 00 00    	ld	a,(_attrib_hl)
+1089  0079  E6 C7       	and	a,0xc7
+1090  007B  21 00 00    	ld	hl,_v0
+1091  007E  B6          	or	a, (hl)
+1092  007F  32 00 00    	ld	(_attrib_hl),a
+1093  0082  11 01 00    	ld	de,_attrib_hl + 1
+1094  0085  1A          	ld	a, (de)
+1095  0086  E6 C7       	and	a,0xc7
+1096  0088  21 00 00    	ld	hl,_v0
+1097  008B  B6          	or	a, (hl)
+1098  008C  12          	ld	(de), a
+1099  008D  11 02 00    	ld	de,_attrib_hl + 2
+1100  0090  1A          	ld	a, (de)
+1101  0091  E6 C7       	and	a,0xc7
+1102  0093  B6          	or	a, (hl)
+1103  0094  12          	ld	(de), a
+1104  0095  11 03 00    	ld	de,_attrib_hl + 3
+1105  0098  1A          	ld	a, (de)
+1106  0099  E6 C7       	and	a,0xc7
+1107  009B  B6          	or	a, (hl)
+1108  009C  12          	ld	(de), a
+1109  009D  C5          	push	bc
+1110  009E  DD 7E FE    	ld	a,(ix-2)
+1111  00A1  F5          	push	af
+1112  00A2  33          	inc	sp
+1113  00A3  21 0D 15    	ld	hl,0x150d
+1114  00A6  E5          	push	hl
+1115  00A7  21 00 00    	ld	hl,_attrib_hl
+1116  00AA  E5          	push	hl
+1117  00AB  CD 00 00    	call	_game_paint_attrib
+1118  00AE  F1          	pop	af
+1119  00AF  F1          	pop	af
+1120  00B0  33          	inc	sp
+1121  00B1  C1          	pop	bc
+1122  00B2  79          	ld	a, c
+1123  00B3  C6 D0       	add	a,0xd0
+1124  00B5  DD 77 FD    	ld	(ix-3),a
+1125  00B8  3E 05       	ld	a,0x05
+1126  00BA  DD 96 FD    	sub	a,(ix-3)
+1127  00BD  DA 5B 01    	jp	C, l_menu_main_00113
+1128  00C0  DD 4E FD    	ld	c,(ix-3)
+1129  00C3  06 00       	ld	b,0x00
+1130  00C5  21 CC 00    	ld	hl,l_menu_main_00221
+1131  00C8  09          	add	hl, bc
+1132  00C9  09          	add	hl, bc
+1133  00CA  09          	add	hl, bc
+1134  00CB  E9          	jp	(hl)
+1135  00CC              l_menu_main_00221:
+1136  00CC  C3 43 01    	jp	l_menu_main_00112
+1137  00CF  C3 DE 00    	jp	l_menu_main_00105
+1138  00D2  C3 EB 00    	jp	l_menu_main_00106
+1139  00D5  C3 F8 00    	jp	l_menu_main_00107
+1140  00D8  C3 05 01    	jp	l_menu_main_00108
+1141  00DB  C3 1A 01    	jp	l_menu_main_00109
+1142  00DE              l_menu_main_00105:
+1143  00DE  21 00 00    	ld	hl,_in_stick_sinclair1
+1144  00E1  22 00 00    	ld	(_joyfunc1),hl
+1145  00E4  21 00 00    	ld	hl,_menu_curr_sel
+1146  00E7  36 01       	ld	(hl),0x01
+1147  00E9  18 70       	jr	l_menu_main_00113
+1148  00EB              l_menu_main_00106:
+1149  00EB  21 00 00    	ld	hl,_in_stick_keyboard
+1150  00EE  22 00 00    	ld	(_joyfunc1),hl
+1151  00F1  21 00 00    	ld	hl,_menu_curr_sel
+1152  00F4  36 02       	ld	(hl),0x02
+1153  00F6  18 63       	jr	l_menu_main_00113
+1154  00F8              l_menu_main_00107:
+1155  00F8  21 00 00    	ld	hl,_in_stick_kempston
+1156  00FB  22 00 00    	ld	(_joyfunc1),hl
+1157  00FE  21 00 00    	ld	hl,_menu_curr_sel
+1158  0101  36 03       	ld	(hl),0x03
+1159  0103  18 56       	jr	l_menu_main_00113
+1160  0105              l_menu_main_00108:
+1161  0105  CD 7D 03    	call	_menu_redefine
+1162  0108  D1          	pop	de
+1163  0109  21 00 00    	ld	hl,_in_stick_keyboard
+1164  010C  22 00 00    	ld	(_joyfunc1),hl
+1165  010F  21 00 00    	ld	hl,_menu_curr_sel
+1166  0112  36 02       	ld	(hl),0x02
+1167  0114  2A 00 00    	ld	hl,(_curr_time)
+1168  0117  E5          	push	hl
+1169  0118  18 41       	jr	l_menu_main_00113
+1170  011A              l_menu_main_00109:
+1171  011A  CD 00 00    	call	_game_attribs
+1172  011D  CD E0 04    	call	_menu_read_code
+1173  0120  7D          	ld	a,l
+1174  0121  32 00 00    	ld	(_v0),a
+1175  0124  CD 00 00    	call	_ay_reset
+1176  0127  3A 00 00    	ld	a,(_v0)
+1177  012A  B7          	or	a, a
+1178  012B  28 0A       	jr	Z,l_menu_main_00111
+1179  012D  76          	halt
+1180  012E  21 00 00    	ld	hl,_game_tune
+1181  0131  36 00       	ld	(hl),0x00
+1182  0133  DD 36 FF 00 	ld	(ix-1),0x00
+1183  0137              l_menu_main_00111:
+1184  0137  D1          	pop	de
+1185  0138  2A 00 00    	ld	hl,(_curr_time)
+1186  013B  E5          	push	hl
+1187  013C  2E 00       	ld	l,0x00
+1188  013E  CD 00 00    	call	_zx_border_fastcall
+1189  0141  18 18       	jr	l_menu_main_00113
+1190  0143              l_menu_main_00112:
+1191  0143  CD 00 00    	call	_game_cls
+1192  0146  CD 00 00    	call	_ay_reset
+1193  0149  CD 00 00    	call	_audio_game_start
+1194  014C  21 2C 01    	ld	hl,0x012c
+1195  014F  CD 00 00    	call	_z80_delay_ms_fastcall
+1196  0152  21 00 00    	ld	hl,_game_tune
+1197  0155  36 00       	ld	(hl),0x00
+1198  0157  DD 36 FF 00 	ld	(ix-1),0x00
+1199  015B              l_menu_main_00113:
+1200  015B  DD 7E FD    	ld	a,(ix-3)
+1201  015E  B7          	or	a, a
+1202  015F  28 17       	jr	Z,l_menu_main_00115
+1203  0161  D6 05       	sub	a,0x05
+1204  0163  30 13       	jr	NC,l_menu_main_00115
+1205  0165  DD 7E FE    	ld	a,(ix-2)
+1206  0168  F5          	push	af
+1207  0169  33          	inc	sp
+1208  016A  21 0C 15    	ld	hl,0x150c
+1209  016D  E5          	push	hl
+1210  016E  21 00 00    	ld	hl,_attrib
+1211  0171  E5          	push	hl
+1212  0172  CD 00 00    	call	_game_paint_attrib
+1213  0175  F1          	pop	af
+1214  0176  F1          	pop	af
+1215  0177  33          	inc	sp
+1216  0178              l_menu_main_00115:
+1217  0178  21 00 00    	ld	hl,_i
+1218  017B  34          	inc	(hl)
+1219  017C  21 00 00    	ld	hl,0x0000
+1220  017F  39          	add	hl, sp
+1221  0180  01 A4 06    	ld	bc,0x06a4
+1222  0183  C5          	push	bc
+1223  0184  E5          	push	hl
+1224  0185  CD 00 00    	call	_game_check_time
+1225  0188  F1          	pop	af
+1226  0189  F1          	pop	af
+1227  018A  7D          	ld	a, l
+1228  018B  B7          	or	a, a
+1229  018C  CA 32 00    	jp	Z, l_menu_main_00138
+1230  018F  CD 00 00    	call	_ay_reset
+1231  0192  21 00 00    	ld	hl,_game_atrac
+1232  0195  36 01       	ld	(hl),0x01
+1233  0197  1E 00       	ld	e,0x00
+1234  0199              l_menu_main_00130:
+1235  0199  7B          	ld	a, e
+1236  019A  B7          	or	a, a
+1237  019B  C2 3C 02    	jp	NZ, l_menu_main_00132
+1238  019E  CD 00 00    	call	_in_inkey
+1239  01A1  5D          	ld	e, l
+1240  01A2  D5          	push	de
+1241  01A3  CD 00 00    	call	_game_round_init
+1242  01A6  D1          	pop	de
+1243  01A7  E1          	pop	hl
+1244  01A8  2A 00 00    	ld	hl,(_curr_time)
+1245  01AB  E5          	push	hl
+1246  01AC              l_menu_main_00124:
+1247  01AC  21 00 00    	ld	hl,0x0000
+1248  01AF  39          	add	hl, sp
+1249  01B0  4D          	ld	c, l
+1250  01B1  44          	ld	b, h
+1251  01B2  D5          	push	de
+1252  01B3  21 F4 01    	ld	hl,0x01f4
+1253  01B6  E5          	push	hl
+1254  01B7  C5          	push	bc
+1255  01B8  CD 00 00    	call	_game_check_time
+1256  01BB  F1          	pop	af
+1257  01BC  F1          	pop	af
+1258  01BD  D1          	pop	de
+1259  01BE  7D          	ld	a, l
+1260  01BF  B7          	or	a,a
+1261  01C0  20 63       	jr	NZ,l_menu_main_00126
+1262  01C2  B3          	or	a,e
+1263  01C3  20 60       	jr	NZ,l_menu_main_00126
+1264  01C5  CD 00 00    	call	_enemy_turn
+1265  01C8  21 04 00    	ld	hl,0x0004
+1266  01CB  E5          	push	hl
+1267  01CC  21 00 00    	ld	hl,_time_key
+1268  01CF  E5          	push	hl
+1269  01D0  CD 00 00    	call	_game_check_time
+1270  01D3  F1          	pop	af
+1271  01D4  F1          	pop	af
+1272  01D5  7D          	ld	a, l
+1273  01D6  B7          	or	a, a
+1274  01D7  28 26       	jr	Z,l_menu_main_00118
+1275  01D9  2A 00 00    	ld	hl,(_curr_time)
+1276  01DC  22 00 00    	ld	(_time_key),hl
+1277  01DF  CD 00 00    	call	_game_key_paint
+1278  01E2  3A 00 00    	ld	a,(_map_border)
+1279  01E5  07          	rlca
+1280  01E6  07          	rlca
+1281  01E7  07          	rlca
+1282  01E8  E6 F8       	and	a,0xf8
+1283  01EA  21 00 00    	ld	hl,_color
+1284  01ED  B6          	or	a, (hl)
+1285  01EE  32 00 00    	ld	(_screen_ink),a
+1286  01F1  21 00 00    	ld	hl,___str_0
+1287  01F4  E5          	push	hl
+1288  01F5  21 00 0A    	ld	hl,0x0a00
+1289  01F8  E5          	push	hl
+1290  01F9  CD 00 00    	call	_zx_print_str
+1291  01FC  CD CA 07    	call	_menu_rotcolor
+1292  01FF              l_menu_main_00118:
+1293  01FF  3A 00 00    	ld	a,(_game_conveyor_col0)
+1294  0202  B7          	or	a, a
+1295  0203  28 1A       	jr	Z,l_menu_main_00122
+1296  0205  21 05 00    	ld	hl,0x0005
+1297  0208  E5          	push	hl
+1298  0209  21 00 00    	ld	hl,_time_conv
+1299  020C  E5          	push	hl
+1300  020D  CD 00 00    	call	_game_check_time
+1301  0210  F1          	pop	af
+1302  0211  F1          	pop	af
+1303  0212  7D          	ld	a, l
+1304  0213  B7          	or	a, a
+1305  0214  28 09       	jr	Z,l_menu_main_00122
+1306  0216  2A 00 00    	ld	hl,(_curr_time)
+1307  0219  22 00 00    	ld	(_time_conv),hl
+1308  021C  CD 00 00    	call	_game_anim_conveyor
+1309  021F              l_menu_main_00122:
+1310  021F  CD 00 00    	call	_in_inkey
+1311  0222  5D          	ld	e, l
+1312  0223  18 87       	jr	l_menu_main_00124
+1313  0225              l_menu_main_00126:
+1314  0225  21 00 00    	ld	hl,_scr_curr
+1315  0228  7E          	ld	a,(hl)
+1316  0229  3C          	inc	a
+1317  022A  77          	ld	(hl),a
+1318  022B  D6 14       	sub	a,0x14
+1319  022D  28 08       	jr	Z,l_menu_main_00127
+1320  022F  3A 00 00    	ld	a,(_scr_curr)
+1321  0232  D6 28       	sub	a,0x28
+1322  0234  C2 99 01    	jp	NZ,l_menu_main_00130
+1323  0237              l_menu_main_00127:
+1324  0237  1E FF       	ld	e,0xff
+1325  0239  C3 99 01    	jp	l_menu_main_00130
+1326  023C              l_menu_main_00132:
+1327  023C  21 00 00    	ld	hl,_map_paper
+1328  023F  36 00       	ld	(hl),0x00
+1329  0241  3A 00 00    	ld	a,(_game_mode)
+1330  0244  B7          	or	a, a
+1331  0245  28 07       	jr	Z,l_menu_main_00134
+1332  0247  21 00 00    	ld	hl,_scr_curr
+1333  024A  36 14       	ld	(hl),0x14
+1334  024C  18 05       	jr	l_menu_main_00135
+1335  024E              l_menu_main_00134:
+1336  024E  21 00 00    	ld	hl,_scr_curr
+1337  0251  36 00       	ld	(hl),0x00
+1338  0253              l_menu_main_00135:
+1339  0253  D1          	pop	de
+1340  0254  2A 00 00    	ld	hl,(_curr_time)
+1341  0257  E5          	push	hl
+1342  0258  2E 00       	ld	l,0x00
+1343  025A  CD 00 00    	call	_zx_border_fastcall
+1344  025D  CD 00 00    	call	_game_attribs
+1345  0260  CD 00 00    	call	_game_cls
+1346  0263  CD 3F 07    	call	_menu_logo
+1347  0266  CD 39 03    	call	_menu_clear
+1348  0269  CD 7C 02    	call	_menu_main_print
+1349  026C  CD 00 00    	call	_audio_menu
+1350  026F  21 00 00    	ld	hl,_game_atrac
+1351  0272  36 00       	ld	(hl),0x00
+1352  0274  C3 32 00    	jp	l_menu_main_00138
+1353  0277              l_menu_main_00141:
+1354  0277  DD F9       	ld	sp, ix
+1355  0279  DD E1       	pop	ix
+1356  027B  C9          	ret
+1357  027C              	SECTION rodata_compiler
+1358  0000              ___str_0:
+1359  0000  4D 41 4E 49 43 20 50 49 45 54 52 4F 
                         	DEFM "MANIC PIETRO"
-1357  000C  00          	DEFB 0x00
-1358  000D              	SECTION code_compiler
-1359  027C              ;	---------------------------------
-1360  027C              ; Function menu_main_print
-1361  027C              ; ---------------------------------
-1362  027C              _menu_main_print:
-1363  027C  CD 39 03    	call	_menu_clear
-1364  027F  21 03 43    	ld	hl,0x4303
-1365  0282  22 00 00    	ld	(_attrib_osd),hl
-1366  0285  21 02 03    	ld	hl,0x0302
-1367  0288  22 02 00    	ld	(_attrib_osd + 2),hl
-1368  028B  21 0D 00    	ld	hl,___str_1
-1369  028E  E5          	push	hl
-1370  028F  21 0B 0B    	ld	hl,0x0b0b
-1371  0292  E5          	push	hl
-1372  0293  CD 00 00    	call	_zx_print_str
-1373  0296  21 15 60    	ld	hl,0x6015
-1374  0299  E5          	push	hl
-1375  029A  3E 0B       	ld	a,0x0b
-1376  029C  F5          	push	af
-1377  029D  33          	inc	sp
-1378  029E  21 00 00    	ld	hl,_attrib
-1379  02A1  E5          	push	hl
-1380  02A2  CD 00 00    	call	_game_paint_attrib
-1381  02A5  F1          	pop	af
-1382  02A6  33          	inc	sp
-1383  02A7  21 18 00    	ld	hl,___str_2
-1384  02AA  E3          	ex	(sp),hl
-1385  02AB  21 0C 0B    	ld	hl,0x0b0c
-1386  02AE  E5          	push	hl
-1387  02AF  CD 00 00    	call	_zx_print_str
-1388  02B2  21 15 68    	ld	hl,0x6815
-1389  02B5  E5          	push	hl
-1390  02B6  3E 0B       	ld	a,0x0b
-1391  02B8  F5          	push	af
-1392  02B9  33          	inc	sp
-1393  02BA  21 00 00    	ld	hl,_attrib
-1394  02BD  E5          	push	hl
-1395  02BE  CD 00 00    	call	_game_paint_attrib
-1396  02C1  F1          	pop	af
-1397  02C2  33          	inc	sp
-1398  02C3  21 23 00    	ld	hl,___str_3
-1399  02C6  E3          	ex	(sp),hl
-1400  02C7  21 0D 0B    	ld	hl,0x0b0d
-1401  02CA  E5          	push	hl
-1402  02CB  CD 00 00    	call	_zx_print_str
-1403  02CE  21 15 70    	ld	hl,0x7015
-1404  02D1  E5          	push	hl
-1405  02D2  3E 0B       	ld	a,0x0b
-1406  02D4  F5          	push	af
-1407  02D5  33          	inc	sp
-1408  02D6  21 00 00    	ld	hl,_attrib
-1409  02D9  E5          	push	hl
-1410  02DA  CD 00 00    	call	_game_paint_attrib
-1411  02DD  F1          	pop	af
-1412  02DE  33          	inc	sp
-1413  02DF  21 2E 00    	ld	hl,___str_4
-1414  02E2  E3          	ex	(sp),hl
-1415  02E3  21 0E 0B    	ld	hl,0x0b0e
-1416  02E6  E5          	push	hl
-1417  02E7  CD 00 00    	call	_zx_print_str
-1418  02EA  21 13 78    	ld	hl,0x7813
-1419  02ED  E5          	push	hl
-1420  02EE  3E 0B       	ld	a,0x0b
-1421  02F0  F5          	push	af
-1422  02F1  33          	inc	sp
-1423  02F2  21 00 00    	ld	hl,_attrib_osd
-1424  02F5  E5          	push	hl
-1425  02F6  CD 00 00    	call	_game_paint_attrib
-1426  02F9  F1          	pop	af
-1427  02FA  33          	inc	sp
-1428  02FB  21 37 00    	ld	hl,___str_5
-1429  02FE  E3          	ex	(sp),hl
-1430  02FF  21 0F 0B    	ld	hl,0x0b0f
-1431  0302  E5          	push	hl
-1432  0303  CD 00 00    	call	_zx_print_str
-1433  0306  21 12 80    	ld	hl,0x8012
-1434  0309  E5          	push	hl
-1435  030A  3E 0B       	ld	a,0x0b
-1436  030C  F5          	push	af
-1437  030D  33          	inc	sp
-1438  030E  21 00 00    	ld	hl,_attrib_osd
-1439  0311  E5          	push	hl
-1440  0312  CD 00 00    	call	_game_paint_attrib
-1441  0315  F1          	pop	af
-1442  0316  F1          	pop	af
-1443  0317  33          	inc	sp
-1444  0318  21 00 00    	ld	hl,_screen_ink
-1445  031B  36 05       	ld	(hl),0x05
-1446  031D  21 3F 00    	ld	hl,___str_6
-1447  0320  E5          	push	hl
-1448  0321  21 11 0B    	ld	hl,0x0b11
-1449  0324  E5          	push	hl
-1450  0325  CD 00 00    	call	_zx_print_str
-1451  0328  21 00 00    	ld	hl,_screen_ink
-1452  032B  36 07       	ld	(hl),0x07
-1453  032D  21 47 00    	ld	hl,___str_7
-1454  0330  E5          	push	hl
-1455  0331  21 17 09    	ld	hl,0x0917
-1456  0334  E5          	push	hl
-1457  0335  CD 00 00    	call	_zx_print_str
-1458  0338  C9          	ret
-1459  0339              	SECTION rodata_compiler
-1460  000D              ___str_1:
-1461  000D  31 20 53 49 4E 43 4C 41 49 52 
+1360  000C  00          	DEFB 0x00
+1361  000D              	SECTION code_compiler
+1362  027C              ;	---------------------------------
+1363  027C              ; Function menu_main_print
+1364  027C              ; ---------------------------------
+1365  027C              _menu_main_print:
+1366  027C  CD 39 03    	call	_menu_clear
+1367  027F  21 03 43    	ld	hl,0x4303
+1368  0282  22 00 00    	ld	(_attrib_osd),hl
+1369  0285  21 02 03    	ld	hl,0x0302
+1370  0288  22 02 00    	ld	(_attrib_osd + 2),hl
+1371  028B  21 0D 00    	ld	hl,___str_1
+1372  028E  E5          	push	hl
+1373  028F  21 0B 0B    	ld	hl,0x0b0b
+1374  0292  E5          	push	hl
+1375  0293  CD 00 00    	call	_zx_print_str
+1376  0296  21 15 60    	ld	hl,0x6015
+1377  0299  E5          	push	hl
+1378  029A  3E 0B       	ld	a,0x0b
+1379  029C  F5          	push	af
+1380  029D  33          	inc	sp
+1381  029E  21 00 00    	ld	hl,_attrib
+1382  02A1  E5          	push	hl
+1383  02A2  CD 00 00    	call	_game_paint_attrib
+1384  02A5  F1          	pop	af
+1385  02A6  33          	inc	sp
+1386  02A7  21 18 00    	ld	hl,___str_2
+1387  02AA  E3          	ex	(sp),hl
+1388  02AB  21 0C 0B    	ld	hl,0x0b0c
+1389  02AE  E5          	push	hl
+1390  02AF  CD 00 00    	call	_zx_print_str
+1391  02B2  21 15 68    	ld	hl,0x6815
+1392  02B5  E5          	push	hl
+1393  02B6  3E 0B       	ld	a,0x0b
+1394  02B8  F5          	push	af
+1395  02B9  33          	inc	sp
+1396  02BA  21 00 00    	ld	hl,_attrib
+1397  02BD  E5          	push	hl
+1398  02BE  CD 00 00    	call	_game_paint_attrib
+1399  02C1  F1          	pop	af
+1400  02C2  33          	inc	sp
+1401  02C3  21 23 00    	ld	hl,___str_3
+1402  02C6  E3          	ex	(sp),hl
+1403  02C7  21 0D 0B    	ld	hl,0x0b0d
+1404  02CA  E5          	push	hl
+1405  02CB  CD 00 00    	call	_zx_print_str
+1406  02CE  21 15 70    	ld	hl,0x7015
+1407  02D1  E5          	push	hl
+1408  02D2  3E 0B       	ld	a,0x0b
+1409  02D4  F5          	push	af
+1410  02D5  33          	inc	sp
+1411  02D6  21 00 00    	ld	hl,_attrib
+1412  02D9  E5          	push	hl
+1413  02DA  CD 00 00    	call	_game_paint_attrib
+1414  02DD  F1          	pop	af
+1415  02DE  33          	inc	sp
+1416  02DF  21 2E 00    	ld	hl,___str_4
+1417  02E2  E3          	ex	(sp),hl
+1418  02E3  21 0E 0B    	ld	hl,0x0b0e
+1419  02E6  E5          	push	hl
+1420  02E7  CD 00 00    	call	_zx_print_str
+1421  02EA  21 13 78    	ld	hl,0x7813
+1422  02ED  E5          	push	hl
+1423  02EE  3E 0B       	ld	a,0x0b
+1424  02F0  F5          	push	af
+1425  02F1  33          	inc	sp
+1426  02F2  21 00 00    	ld	hl,_attrib_osd
+1427  02F5  E5          	push	hl
+1428  02F6  CD 00 00    	call	_game_paint_attrib
+1429  02F9  F1          	pop	af
+1430  02FA  33          	inc	sp
+1431  02FB  21 37 00    	ld	hl,___str_5
+1432  02FE  E3          	ex	(sp),hl
+1433  02FF  21 0F 0B    	ld	hl,0x0b0f
+1434  0302  E5          	push	hl
+1435  0303  CD 00 00    	call	_zx_print_str
+1436  0306  21 12 80    	ld	hl,0x8012
+1437  0309  E5          	push	hl
+1438  030A  3E 0B       	ld	a,0x0b
+1439  030C  F5          	push	af
+1440  030D  33          	inc	sp
+1441  030E  21 00 00    	ld	hl,_attrib_osd
+1442  0311  E5          	push	hl
+1443  0312  CD 00 00    	call	_game_paint_attrib
+1444  0315  F1          	pop	af
+1445  0316  F1          	pop	af
+1446  0317  33          	inc	sp
+1447  0318  21 00 00    	ld	hl,_screen_ink
+1448  031B  36 05       	ld	(hl),0x05
+1449  031D  21 3F 00    	ld	hl,___str_6
+1450  0320  E5          	push	hl
+1451  0321  21 11 0B    	ld	hl,0x0b11
+1452  0324  E5          	push	hl
+1453  0325  CD 00 00    	call	_zx_print_str
+1454  0328  21 00 00    	ld	hl,_screen_ink
+1455  032B  36 07       	ld	(hl),0x07
+1456  032D  21 47 00    	ld	hl,___str_7
+1457  0330  E5          	push	hl
+1458  0331  21 17 09    	ld	hl,0x0917
+1459  0334  E5          	push	hl
+1460  0335  CD 00 00    	call	_zx_print_str
+1461  0338  C9          	ret
+1462  0339              	SECTION rodata_compiler
+1463  000D              ___str_1:
+1464  000D  31 20 53 49 4E 43 4C 41 49 52 
                         	DEFM "1 SINCLAIR"
-1462  0017  00          	DEFB 0x00
-1463  0018              	SECTION rodata_compiler
-1464  0018              ___str_2:
-1465  0018  32 20 4B 45 59 42 4F 41 52 44 
+1465  0017  00          	DEFB 0x00
+1466  0018              	SECTION rodata_compiler
+1467  0018              ___str_2:
+1468  0018  32 20 4B 45 59 42 4F 41 52 44 
                         	DEFM "2 KEYBOARD"
-1466  0022  00          	DEFB 0x00
-1467  0023              	SECTION rodata_compiler
-1468  0023              ___str_3:
-1469  0023  33 20 4B 45 4D 50 53 54 4F 4E 
+1469  0022  00          	DEFB 0x00
+1470  0023              	SECTION rodata_compiler
+1471  0023              ___str_3:
+1472  0023  33 20 4B 45 4D 50 53 54 4F 4E 
                         	DEFM "3 KEMPSTON"
-1470  002D  00          	DEFB 0x00
-1471  002E              	SECTION rodata_compiler
-1472  002E              ___str_4:
-1473  002E  34 20 44 45 46 49 4E 45 
+1473  002D  00          	DEFB 0x00
+1474  002E              	SECTION rodata_compiler
+1475  002E              ___str_4:
+1476  002E  34 20 44 45 46 49 4E 45 
                         	DEFM "4 DEFINE"
-1474  0036  00          	DEFB 0x00
-1475  0037              	SECTION rodata_compiler
-1476  0037              ___str_5:
-1477  0037  35 20 43 4F 44 45 53 
+1477  0036  00          	DEFB 0x00
+1478  0037              	SECTION rodata_compiler
+1479  0037              ___str_5:
+1480  0037  35 20 43 4F 44 45 53 
                         	DEFM "5 CODES"
-1478  003E  00          	DEFB 0x00
-1479  003F              	SECTION rodata_compiler
-1480  003F              ___str_6:
-1481  003F  30 20 53 54 41 52 54 
+1481  003E  00          	DEFB 0x00
+1482  003F              	SECTION rodata_compiler
+1483  003F              ___str_6:
+1484  003F  30 20 53 54 41 52 54 
                         	DEFM "0 START"
-1482  0046  00          	DEFB 0x00
-1483  0047              	SECTION rodata_compiler
-1484  0047              ___str_7:
-1485  0047  32 30 31 39 20 4E 4F 45 4E 54 49 45 4E 44 4F 
+1485  0046  00          	DEFB 0x00
+1486  0047              	SECTION rodata_compiler
+1487  0047              ___str_7:
+1488  0047  32 30 31 39 20 4E 4F 45 4E 54 49 45 4E 44 4F 
                         	DEFM "2019 NOENTIENDO"
-1486  0056  00          	DEFB 0x00
-1487  0057              	SECTION code_compiler
-1488  0339              ;	---------------------------------
-1489  0339              ; Function menu_clear
-1490  0339              ; ---------------------------------
-1491  0339              _menu_clear:
-1492  0339  21 00 00    	ld	hl,_screen_ink
-1493  033C  36 47       	ld	(hl),0x47
-1494  033E  21 00 00    	ld	hl,_v0
-1495  0341  36 09       	ld	(hl),0x09
-1496  0343              l_menu_clear_00103:
-1497  0343  3A 00 00    	ld	a,(_v0)
-1498  0346  07          	rlca
-1499  0347  07          	rlca
-1500  0348  07          	rlca
-1501  0349  E6 F8       	and	a,0xf8
-1502  034B  C6 08       	add	a,0x08
-1503  034D  F5          	push	af
-1504  034E  33          	inc	sp
-1505  034F  21 00 1F    	ld	hl,0x1f00
-1506  0352  E5          	push	hl
-1507  0353  21 00 00    	ld	hl,_attrib
-1508  0356  E5          	push	hl
-1509  0357  CD 00 00    	call	_game_paint_attrib
-1510  035A  F1          	pop	af
-1511  035B  F1          	pop	af
-1512  035C  33          	inc	sp
-1513  035D  21 00 00    	ld	hl,_v0
-1514  0360  7E          	ld	a,(hl)
-1515  0361  3C          	inc	a
-1516  0362  77          	ld	(hl),a
-1517  0363  D6 14       	sub	a,0x14
-1518  0365  38 DC       	jr	C,l_menu_clear_00103
-1519  0367  36 09       	ld	(hl),0x09
-1520  0369              l_menu_clear_00105:
-1521  0369  2A 00 00    	ld	hl,(_v0)
-1522  036C  26 20       	ld	h,0x20
-1523  036E  E5          	push	hl
-1524  036F  CD 00 00    	call	_game_fill_row
-1525  0372  21 00 00    	ld	hl,_v0
-1526  0375  7E          	ld	a,(hl)
-1527  0376  3C          	inc	a
-1528  0377  77          	ld	(hl),a
-1529  0378  D6 17       	sub	a,0x17
-1530  037A  38 ED       	jr	C,l_menu_clear_00105
-1531  037C  C9          	ret
-1532  037D              	SECTION code_compiler
-1533  037D              ;	---------------------------------
-1534  037D              ; Function menu_redefine
-1535  037D              ; ---------------------------------
-1536  037D              _menu_redefine:
-1537  037D  CD 39 03    	call	_menu_clear
-1538  0380  21 00 00    	ld	hl,_s_row1
-1539  0383  36 0B       	ld	(hl),0x0b
-1540  0385  21 57 00    	ld	hl,___str_8
-1541  0388  E5          	push	hl
-1542  0389  21 0B 0A    	ld	hl,0x0a0b
-1543  038C  E5          	push	hl
-1544  038D  CD 00 00    	call	_zx_print_str
-1545  0390  3A 00 00    	ld	a,(_s_row1)
-1546  0393  07          	rlca
-1547  0394  07          	rlca
-1548  0395  07          	rlca
-1549  0396  E6 F8       	and	a,0xf8
-1550  0398  C6 08       	add	a,0x08
-1551  039A  F5          	push	af
-1552  039B  33          	inc	sp
-1553  039C  21 00 1F    	ld	hl,0x1f00
-1554  039F  E5          	push	hl
-1555  03A0  21 00 00    	ld	hl,_attrib
-1556  03A3  E5          	push	hl
-1557  03A4  CD 00 00    	call	_game_paint_attrib
-1558  03A7  F1          	pop	af
-1559  03A8  F1          	pop	af
-1560  03A9  33          	inc	sp
-1561  03AA  21 00 00    	ld	hl,_s_row1
-1562  03AD  34          	inc	(hl)
-1563  03AE  34          	inc	(hl)
-1564  03AF  21 63 00    	ld	hl,___str_9
-1565  03B2  E5          	push	hl
-1566  03B3  2A 00 00    	ld	hl,(_s_row1)
-1567  03B6  26 0C       	ld	h,0x0c
-1568  03B8  E5          	push	hl
-1569  03B9  CD 00 00    	call	_zx_print_str
-1570  03BC  CD FA 03    	call	_menu_define_key
-1571  03BF  22 04 00    	ld	(_k1 + 0x0004),hl
-1572  03C2  21 00 00    	ld	hl,_s_row1
-1573  03C5  34          	inc	(hl)
-1574  03C6  21 68 00    	ld	hl,___str_10
-1575  03C9  E5          	push	hl
-1576  03CA  2A 00 00    	ld	hl,(_s_row1)
-1577  03CD  26 0C       	ld	h,0x0c
-1578  03CF  E5          	push	hl
-1579  03D0  CD 00 00    	call	_zx_print_str
-1580  03D3  CD FA 03    	call	_menu_define_key
-1581  03D6  22 02 00    	ld	(_k1 + 0x0002),hl
-1582  03D9  21 00 00    	ld	hl,_s_row1
-1583  03DC  34          	inc	(hl)
-1584  03DD  21 6E 00    	ld	hl,___str_11
-1585  03E0  E5          	push	hl
-1586  03E1  2A 00 00    	ld	hl,(_s_row1)
-1587  03E4  26 0C       	ld	h,0x0c
-1588  03E6  E5          	push	hl
-1589  03E7  CD 00 00    	call	_zx_print_str
-1590  03EA  CD FA 03    	call	_menu_define_key
-1591  03ED  22 00 00    	ld	(_k1),hl
-1592  03F0  21 FF 00    	ld	hl,0x00ff
-1593  03F3  CD 00 00    	call	_z80_delay_ms_fastcall
-1594  03F6  CD 7C 02    	call	_menu_main_print
-1595  03F9  C9          	ret
-1596  03FA              	SECTION rodata_compiler
-1597  0057              ___str_8:
-1598  0057  50 52 45 53 53 20 41 20 4B 45 59 
+1489  0056  00          	DEFB 0x00
+1490  0057              	SECTION code_compiler
+1491  0339              ;	---------------------------------
+1492  0339              ; Function menu_clear
+1493  0339              ; ---------------------------------
+1494  0339              _menu_clear:
+1495  0339  21 00 00    	ld	hl,_screen_ink
+1496  033C  36 47       	ld	(hl),0x47
+1497  033E  21 00 00    	ld	hl,_v0
+1498  0341  36 09       	ld	(hl),0x09
+1499  0343              l_menu_clear_00103:
+1500  0343  3A 00 00    	ld	a,(_v0)
+1501  0346  07          	rlca
+1502  0347  07          	rlca
+1503  0348  07          	rlca
+1504  0349  E6 F8       	and	a,0xf8
+1505  034B  C6 08       	add	a,0x08
+1506  034D  F5          	push	af
+1507  034E  33          	inc	sp
+1508  034F  21 00 1F    	ld	hl,0x1f00
+1509  0352  E5          	push	hl
+1510  0353  21 00 00    	ld	hl,_attrib
+1511  0356  E5          	push	hl
+1512  0357  CD 00 00    	call	_game_paint_attrib
+1513  035A  F1          	pop	af
+1514  035B  F1          	pop	af
+1515  035C  33          	inc	sp
+1516  035D  21 00 00    	ld	hl,_v0
+1517  0360  7E          	ld	a,(hl)
+1518  0361  3C          	inc	a
+1519  0362  77          	ld	(hl),a
+1520  0363  D6 14       	sub	a,0x14
+1521  0365  38 DC       	jr	C,l_menu_clear_00103
+1522  0367  36 09       	ld	(hl),0x09
+1523  0369              l_menu_clear_00105:
+1524  0369  2A 00 00    	ld	hl,(_v0)
+1525  036C  26 20       	ld	h,0x20
+1526  036E  E5          	push	hl
+1527  036F  CD 00 00    	call	_game_fill_row
+1528  0372  21 00 00    	ld	hl,_v0
+1529  0375  7E          	ld	a,(hl)
+1530  0376  3C          	inc	a
+1531  0377  77          	ld	(hl),a
+1532  0378  D6 17       	sub	a,0x17
+1533  037A  38 ED       	jr	C,l_menu_clear_00105
+1534  037C  C9          	ret
+1535  037D              	SECTION code_compiler
+1536  037D              ;	---------------------------------
+1537  037D              ; Function menu_redefine
+1538  037D              ; ---------------------------------
+1539  037D              _menu_redefine:
+1540  037D  CD 39 03    	call	_menu_clear
+1541  0380  21 00 00    	ld	hl,_s_row1
+1542  0383  36 0B       	ld	(hl),0x0b
+1543  0385  21 57 00    	ld	hl,___str_8
+1544  0388  E5          	push	hl
+1545  0389  21 0B 0A    	ld	hl,0x0a0b
+1546  038C  E5          	push	hl
+1547  038D  CD 00 00    	call	_zx_print_str
+1548  0390  3A 00 00    	ld	a,(_s_row1)
+1549  0393  07          	rlca
+1550  0394  07          	rlca
+1551  0395  07          	rlca
+1552  0396  E6 F8       	and	a,0xf8
+1553  0398  C6 08       	add	a,0x08
+1554  039A  F5          	push	af
+1555  039B  33          	inc	sp
+1556  039C  21 00 1F    	ld	hl,0x1f00
+1557  039F  E5          	push	hl
+1558  03A0  21 00 00    	ld	hl,_attrib
+1559  03A3  E5          	push	hl
+1560  03A4  CD 00 00    	call	_game_paint_attrib
+1561  03A7  F1          	pop	af
+1562  03A8  F1          	pop	af
+1563  03A9  33          	inc	sp
+1564  03AA  21 00 00    	ld	hl,_s_row1
+1565  03AD  34          	inc	(hl)
+1566  03AE  34          	inc	(hl)
+1567  03AF  21 63 00    	ld	hl,___str_9
+1568  03B2  E5          	push	hl
+1569  03B3  2A 00 00    	ld	hl,(_s_row1)
+1570  03B6  26 0C       	ld	h,0x0c
+1571  03B8  E5          	push	hl
+1572  03B9  CD 00 00    	call	_zx_print_str
+1573  03BC  CD FA 03    	call	_menu_define_key
+1574  03BF  22 04 00    	ld	(_k1 + 0x0004),hl
+1575  03C2  21 00 00    	ld	hl,_s_row1
+1576  03C5  34          	inc	(hl)
+1577  03C6  21 68 00    	ld	hl,___str_10
+1578  03C9  E5          	push	hl
+1579  03CA  2A 00 00    	ld	hl,(_s_row1)
+1580  03CD  26 0C       	ld	h,0x0c
+1581  03CF  E5          	push	hl
+1582  03D0  CD 00 00    	call	_zx_print_str
+1583  03D3  CD FA 03    	call	_menu_define_key
+1584  03D6  22 02 00    	ld	(_k1 + 0x0002),hl
+1585  03D9  21 00 00    	ld	hl,_s_row1
+1586  03DC  34          	inc	(hl)
+1587  03DD  21 6E 00    	ld	hl,___str_11
+1588  03E0  E5          	push	hl
+1589  03E1  2A 00 00    	ld	hl,(_s_row1)
+1590  03E4  26 0C       	ld	h,0x0c
+1591  03E6  E5          	push	hl
+1592  03E7  CD 00 00    	call	_zx_print_str
+1593  03EA  CD FA 03    	call	_menu_define_key
+1594  03ED  22 00 00    	ld	(_k1),hl
+1595  03F0  21 FF 00    	ld	hl,0x00ff
+1596  03F3  CD 00 00    	call	_z80_delay_ms_fastcall
+1597  03F6  CD 7C 02    	call	_menu_main_print
+1598  03F9  C9          	ret
+1599  03FA              	SECTION rodata_compiler
+1600  0057              ___str_8:
+1601  0057  50 52 45 53 53 20 41 20 4B 45 59 
                         	DEFM "PRESS A KEY"
-1599  0062  00          	DEFB 0x00
-1600  0063              	SECTION rodata_compiler
-1601  0063              ___str_9:
-1602  0063  4C 45 46 54 	DEFM "LEFT"
-1603  0067  00          	DEFB 0x00
-1604  0068              	SECTION rodata_compiler
-1605  0068              ___str_10:
-1606  0068  52 49 47 48 54 
+1602  0062  00          	DEFB 0x00
+1603  0063              	SECTION rodata_compiler
+1604  0063              ___str_9:
+1605  0063  4C 45 46 54 	DEFM "LEFT"
+1606  0067  00          	DEFB 0x00
+1607  0068              	SECTION rodata_compiler
+1608  0068              ___str_10:
+1609  0068  52 49 47 48 54 
                         	DEFM "RIGHT"
-1607  006D  00          	DEFB 0x00
-1608  006E              	SECTION rodata_compiler
-1609  006E              ___str_11:
-1610  006E  4A 55 4D 50 	DEFM "JUMP"
-1611  0072  00          	DEFB 0x00
-1612  0073              	SECTION code_compiler
-1613  03FA              ;	---------------------------------
-1614  03FA              ; Function menu_define_key
-1615  03FA              ; ---------------------------------
-1616  03FA              _menu_define_key:
-1617  03FA  CD 00 00    	call	_in_wait_key
-1618  03FD  CD 00 00    	call	_in_inkey
-1619  0400  7D          	ld	a,l
-1620  0401  32 00 00    	ld	(_v0),a
-1621  0404  32 00 00    	ld	(_v1),a
-1622  0407  CD 00 00    	call	_in_wait_nokey
-1623  040A  21 00 00    	ld	hl,_v1
-1624  040D  7E          	ld	a, (hl)
-1625  040E  D6 3D       	sub	a,0x3d
-1626  0410  38 09       	jr	C,l_menu_define_key_00102
-1627  0412  3E 7A       	ld	a,0x7a
-1628  0414  96          	sub	a, (hl)
-1629  0415  38 04       	jr	C,l_menu_define_key_00102
-1630  0417  7E          	ld	a, (hl)
-1631  0418  C6 E0       	add	a,0xe0
-1632  041A  77          	ld	(hl), a
-1633  041B              l_menu_define_key_00102:
-1634  041B  21 00 00    	ld	hl,_v1
-1635  041E  7E          	ld	a, (hl)
-1636  041F  D6 1E       	sub	a,0x1e
-1637  0421  38 05       	jr	C,l_menu_define_key_00108
-1638  0423  3E 27       	ld	a,0x27
-1639  0425  96          	sub	a, (hl)
-1640  0426  30 0D       	jr	NC,l_menu_define_key_00104
-1641  0428              l_menu_define_key_00108:
-1642  0428  21 00 00    	ld	hl,_v1
-1643  042B  7E          	ld	a, (hl)
-1644  042C  D6 41       	sub	a,0x41
-1645  042E  38 16       	jr	C,l_menu_define_key_00105
-1646  0430  3E 5A       	ld	a,0x5a
-1647  0432  96          	sub	a, (hl)
-1648  0433  38 11       	jr	C,l_menu_define_key_00105
-1649  0435              l_menu_define_key_00104:
-1650  0435  3A 00 00    	ld	a,(_v1)
-1651  0438  57          	ld	d,a
-1652  0439  1E 12       	ld	e,0x12
-1653  043B  3A 00 00    	ld	a,(_s_row1)
-1654  043E  D5          	push	de
-1655  043F  F5          	push	af
-1656  0440  33          	inc	sp
-1657  0441  CD 00 00    	call	_zx_print_char
-1658  0444  F1          	pop	af
-1659  0445  33          	inc	sp
-1660  0446              l_menu_define_key_00105:
-1661  0446  3A 00 00    	ld	a,(_v1)
-1662  0449  D6 0D       	sub	a,0x0d
-1663  044B  20 0D       	jr	NZ,l_menu_define_key_00110
-1664  044D  21 73 00    	ld	hl,___str_12
-1665  0450  E5          	push	hl
-1666  0451  2A 00 00    	ld	hl,(_s_row1)
-1667  0454  26 12       	ld	h,0x12
-1668  0456  E5          	push	hl
-1669  0457  CD 00 00    	call	_zx_print_str
-1670  045A              l_menu_define_key_00110:
-1671  045A  3A 00 00    	ld	a,(_v1)
-1672  045D  D6 20       	sub	a,0x20
-1673  045F  20 0D       	jr	NZ,l_menu_define_key_00112
-1674  0461  21 79 00    	ld	hl,___str_13
-1675  0464  E5          	push	hl
-1676  0465  2A 00 00    	ld	hl,(_s_row1)
-1677  0468  26 12       	ld	h,0x12
-1678  046A  E5          	push	hl
-1679  046B  CD 00 00    	call	_zx_print_str
-1680  046E              l_menu_define_key_00112:
-1681  046E  2A 00 00    	ld	hl,(_v0)
-1682  0471  26 00       	ld	h,0x00
-1683  0473  CD 00 00    	call	_in_key_scancode_fastcall
-1684  0476  C9          	ret
-1685  0477              	SECTION rodata_compiler
-1686  0073              ___str_12:
-1687  0073  45 4E 54 45 52 
+1610  006D  00          	DEFB 0x00
+1611  006E              	SECTION rodata_compiler
+1612  006E              ___str_11:
+1613  006E  4A 55 4D 50 	DEFM "JUMP"
+1614  0072  00          	DEFB 0x00
+1615  0073              	SECTION code_compiler
+1616  03FA              ;	---------------------------------
+1617  03FA              ; Function menu_define_key
+1618  03FA              ; ---------------------------------
+1619  03FA              _menu_define_key:
+1620  03FA  CD 00 00    	call	_in_wait_key
+1621  03FD  CD 00 00    	call	_in_inkey
+1622  0400  7D          	ld	a,l
+1623  0401  32 00 00    	ld	(_v0),a
+1624  0404  32 00 00    	ld	(_v1),a
+1625  0407  CD 00 00    	call	_in_wait_nokey
+1626  040A  21 00 00    	ld	hl,_v1
+1627  040D  7E          	ld	a, (hl)
+1628  040E  D6 3D       	sub	a,0x3d
+1629  0410  38 09       	jr	C,l_menu_define_key_00102
+1630  0412  3E 7A       	ld	a,0x7a
+1631  0414  96          	sub	a, (hl)
+1632  0415  38 04       	jr	C,l_menu_define_key_00102
+1633  0417  7E          	ld	a, (hl)
+1634  0418  C6 E0       	add	a,0xe0
+1635  041A  77          	ld	(hl), a
+1636  041B              l_menu_define_key_00102:
+1637  041B  21 00 00    	ld	hl,_v1
+1638  041E  7E          	ld	a, (hl)
+1639  041F  D6 1E       	sub	a,0x1e
+1640  0421  38 05       	jr	C,l_menu_define_key_00108
+1641  0423  3E 27       	ld	a,0x27
+1642  0425  96          	sub	a, (hl)
+1643  0426  30 0D       	jr	NC,l_menu_define_key_00104
+1644  0428              l_menu_define_key_00108:
+1645  0428  21 00 00    	ld	hl,_v1
+1646  042B  7E          	ld	a, (hl)
+1647  042C  D6 41       	sub	a,0x41
+1648  042E  38 16       	jr	C,l_menu_define_key_00105
+1649  0430  3E 5A       	ld	a,0x5a
+1650  0432  96          	sub	a, (hl)
+1651  0433  38 11       	jr	C,l_menu_define_key_00105
+1652  0435              l_menu_define_key_00104:
+1653  0435  3A 00 00    	ld	a,(_v1)
+1654  0438  57          	ld	d,a
+1655  0439  1E 12       	ld	e,0x12
+1656  043B  3A 00 00    	ld	a,(_s_row1)
+1657  043E  D5          	push	de
+1658  043F  F5          	push	af
+1659  0440  33          	inc	sp
+1660  0441  CD 00 00    	call	_zx_print_char
+1661  0444  F1          	pop	af
+1662  0445  33          	inc	sp
+1663  0446              l_menu_define_key_00105:
+1664  0446  3A 00 00    	ld	a,(_v1)
+1665  0449  D6 0D       	sub	a,0x0d
+1666  044B  20 0D       	jr	NZ,l_menu_define_key_00110
+1667  044D  21 73 00    	ld	hl,___str_12
+1668  0450  E5          	push	hl
+1669  0451  2A 00 00    	ld	hl,(_s_row1)
+1670  0454  26 12       	ld	h,0x12
+1671  0456  E5          	push	hl
+1672  0457  CD 00 00    	call	_zx_print_str
+1673  045A              l_menu_define_key_00110:
+1674  045A  3A 00 00    	ld	a,(_v1)
+1675  045D  D6 20       	sub	a,0x20
+1676  045F  20 0D       	jr	NZ,l_menu_define_key_00112
+1677  0461  21 79 00    	ld	hl,___str_13
+1678  0464  E5          	push	hl
+1679  0465  2A 00 00    	ld	hl,(_s_row1)
+1680  0468  26 12       	ld	h,0x12
+1681  046A  E5          	push	hl
+1682  046B  CD 00 00    	call	_zx_print_str
+1683  046E              l_menu_define_key_00112:
+1684  046E  2A 00 00    	ld	hl,(_v0)
+1685  0471  26 00       	ld	h,0x00
+1686  0473  CD 00 00    	call	_in_key_scancode_fastcall
+1687  0476  C9          	ret
+1688  0477              	SECTION rodata_compiler
+1689  0073              ___str_12:
+1690  0073  45 4E 54 45 52 
                         	DEFM "ENTER"
-1688  0078  00          	DEFB 0x00
-1689  0079              	SECTION rodata_compiler
-1690  0079              ___str_13:
-1691  0079  53 50 41 43 45 
+1691  0078  00          	DEFB 0x00
+1692  0079              	SECTION rodata_compiler
+1693  0079              ___str_13:
+1694  0079  53 50 41 43 45 
                         	DEFM "SPACE"
-1692  007E  00          	DEFB 0x00
-1693  007F              	SECTION code_compiler
-1694  0477              ;	---------------------------------
-1695  0477              ; Function menu_read_key
-1696  0477              ; ---------------------------------
-1697  0477              _menu_read_key:
-1698  0477  CD 00 00    	call	___sdcc_enter_ix
-1699  047A              l_menu_read_key_00105:
-1700  047A  CD 00 00    	call	_in_wait_key
-1701  047D  CD 00 00    	call	_in_inkey
-1702  0480  4D          	ld	c, l
-1703  0481  CD 00 00    	call	_in_wait_nokey
-1704  0484  79          	ld	a, c
-1705  0485  D6 61       	sub	a,0x61
-1706  0487  38 F1       	jr	C,l_menu_read_key_00105
-1707  0489  3E 7A       	ld	a,0x7a
-1708  048B  91          	sub	a, c
-1709  048C  38 EC       	jr	C,l_menu_read_key_00105
-1710  048E  79          	ld	a, c
-1711  048F  C6 E0       	add	a,0xe0
-1712  0491  47          	ld	b, a
-1713  0492  C5          	push	bc
-1714  0493  C5          	push	bc
-1715  0494  33          	inc	sp
-1716  0495  DD 66 05    	ld	h,(ix+5)
-1717  0498  DD 6E 04    	ld	l,(ix+4)
-1718  049B  E5          	push	hl
-1719  049C  CD 00 00    	call	_zx_print_char
-1720  049F  F1          	pop	af
-1721  04A0  33          	inc	sp
-1722  04A1  C1          	pop	bc
-1723  04A2  68          	ld	l, b
-1724  04A3  DD E1       	pop	ix
-1725  04A5  C9          	ret
-1726  04A6              	SECTION code_compiler
-1727  04A6              ;	---------------------------------
-1728  04A6              ; Function menu_mcodechk
-1729  04A6              ; ---------------------------------
-1730  04A6              _menu_mcodechk:
-1731  04A6  CD 00 00    	call	___sdcc_enter_ix
-1732  04A9  21 00 00    	ld	hl,_i
-1733  04AC  36 00       	ld	(hl),0x00
-1734  04AE  0E 01       	ld	c,0x01
-1735  04B0              l_menu_mcodechk_00103:
-1736  04B0  21 00 00    	ld	hl,_i
-1737  04B3  7E          	ld	a, (hl)
-1738  04B4  D6 08       	sub	a,0x08
-1739  04B6  30 24       	jr	NC,l_menu_mcodechk_00105
-1740  04B8  3E 00       	ld	a, +((_code0) & 0xFF)
-1741  04BA  86          	add	a, (hl)
-1742  04BB  5F          	ld	e, a
-1743  04BC  3E 00       	ld	a, +((_code0) / 256)
-1744  04BE  CE 00       	adc	a,0x00
-1745  04C0  57          	ld	d, a
-1746  04C1  1A          	ld	a, (de)
-1747  04C2  47          	ld	b, a
-1748  04C3  DD 7E 04    	ld	a,(ix+4)
-1749  04C6  86          	add	a, (hl)
-1750  04C7  5F          	ld	e, a
-1751  04C8  DD 7E 05    	ld	a,(ix+5)
-1752  04CB  CE 00       	adc	a,0x00
-1753  04CD  57          	ld	d, a
-1754  04CE  1A          	ld	a, (de)
-1755  04CF  5F          	ld	e, a
-1756  04D0  78          	ld	a, b
-1757  04D1  93          	sub	a, e
-1758  04D2  28 02       	jr	Z,l_menu_mcodechk_00102
-1759  04D4  0E 00       	ld	c,0x00
-1760  04D6              l_menu_mcodechk_00102:
-1761  04D6  21 00 00    	ld	hl,_i
-1762  04D9  34          	inc	(hl)
-1763  04DA  18 D4       	jr	l_menu_mcodechk_00103
-1764  04DC              l_menu_mcodechk_00105:
-1765  04DC  69          	ld	l, c
-1766  04DD  DD E1       	pop	ix
-1767  04DF  C9          	ret
-1768  04E0              	SECTION code_compiler
-1769  04E0              ;	---------------------------------
-1770  04E0              ; Function menu_read_code
-1771  04E0              ; ---------------------------------
-1772  04E0              _menu_read_code:
-1773  04E0  CD 00 00    	call	___sdcc_enter_ix
-1774  04E3  F5          	push	af
-1775  04E4  F5          	push	af
-1776  04E5  CD 39 03    	call	_menu_clear
-1777  04E8  21 7F 00    	ld	hl,___str_14
-1778  04EB  E5          	push	hl
-1779  04EC  21 0D 0B    	ld	hl,0x0b0d
-1780  04EF  E5          	push	hl
-1781  04F0  CD 00 00    	call	_zx_print_str
-1782  04F3  21 1F 70    	ld	hl,0x701f
-1783  04F6  E5          	push	hl
-1784  04F7  AF          	xor	a, a
-1785  04F8  F5          	push	af
-1786  04F9  33          	inc	sp
-1787  04FA  21 00 00    	ld	hl,_attrib
-1788  04FD  E5          	push	hl
-1789  04FE  CD 00 00    	call	_game_paint_attrib
-1790  0501  F1          	pop	af
-1791  0502  33          	inc	sp
-1792  0503  21 8A 00    	ld	hl,___str_15
-1793  0506  E3          	ex	(sp),hl
-1794  0507  21 0E 0C    	ld	hl,0x0c0e
-1795  050A  E5          	push	hl
-1796  050B  CD 00 00    	call	_zx_print_str
-1797  050E  21 1F 78    	ld	hl,0x781f
-1798  0511  E5          	push	hl
-1799  0512  AF          	xor	a, a
-1800  0513  F5          	push	af
-1801  0514  33          	inc	sp
-1802  0515  21 00 00    	ld	hl,_attrib
-1803  0518  E5          	push	hl
-1804  0519  CD 00 00    	call	_game_paint_attrib
-1805  051C  F1          	pop	af
-1806  051D  F1          	pop	af
-1807  051E  33          	inc	sp
-1808  051F  21 00 00    	ld	hl,_v1
-1809  0522  36 00       	ld	(hl),0x00
-1810  0524  0E 01       	ld	c,0x01
-1811  0526              l_menu_read_code_00108:
-1812  0526  21 00 00    	ld	hl,_v1
-1813  0529  7E          	ld	a, (hl)
-1814  052A  D6 08       	sub	a,0x08
-1815  052C  30 6B       	jr	NC,l_menu_read_code_00110
-1816  052E  3E 00       	ld	a, +((_code0) & 0xFF)
-1817  0530  86          	add	a, (hl)
-1818  0531  5F          	ld	e, a
-1819  0532  3E 00       	ld	a, +((_code0) / 256)
-1820  0534  CE 00       	adc	a,0x00
-1821  0536  57          	ld	d, a
-1822  0537  AF          	xor	a, a
-1823  0538  12          	ld	(de), a
-1824  0539  7E          	ld	a, (hl)
-1825  053A  C6 0C       	add	a,0x0c
-1826  053C  47          	ld	b, a
-1827  053D  C5          	push	bc
-1828  053E  0E 0E       	ld	c,0x0e
-1829  0540  C5          	push	bc
-1830  0541  CD 77 04    	call	_menu_read_key
-1831  0544  F1          	pop	af
-1832  0545  C1          	pop	bc
-1833  0546  7D          	ld	a,l
-1834  0547  32 00 00    	ld	(_v0),a
-1835  054A  21 00 00    	ld	hl,_v2
-1836  054D  36 00       	ld	(hl),0x00
-1837  054F              l_menu_read_code_00102:
-1838  054F  21 00 00    	ld	hl,_v2
-1839  0552  7E          	ld	a, (hl)
-1840  0553  D6 0A       	sub	a,0x0a
-1841  0555  30 14       	jr	NC,l_menu_read_code_00104
-1842  0557  5E          	ld	e,(hl)
-1843  0558  16 00       	ld	d,0x00
-1844  055A  21 00 00    	ld	hl,_game_encode
-1845  055D  19          	add	hl,de
-1846  055E  46          	ld	b, (hl)
-1847  055F  3A 00 00    	ld	a,(_v0)
-1848  0562  90          	sub	a, b
-1849  0563  28 06       	jr	Z,l_menu_read_code_00104
-1850  0565  21 00 00    	ld	hl,_v2
-1851  0568  34          	inc	(hl)
-1852  0569  18 E4       	jr	l_menu_read_code_00102
-1853  056B              l_menu_read_code_00104:
-1854  056B  3A 00 00    	ld	a,(_v1)
-1855  056E  C6 00       	add	a,+((_code0) & 0xFF)
-1856  0570  5F          	ld	e,a
-1857  0571  3E 00       	ld	a,+((_code0) / 256)
-1858  0573  CE 00       	adc	a,0x00
-1859  0575  57          	ld	d,a
-1860  0576  3A 00 00    	ld	a,(_v0)
-1861  0579  12          	ld	(de), a
-1862  057A  3A 00 00    	ld	a,(_v2)
-1863  057D  D6 0A       	sub	a,0x0a
-1864  057F  20 03       	jr	NZ,l_menu_read_code_00106
-1865  0581  4F          	ld	c,a
-1866  0582  18 0F       	jr	l_menu_read_code_00107
-1867  0584              l_menu_read_code_00106:
-1868  0584  3A 00 00    	ld	a,(_v1)
-1869  0587  C6 00       	add	a,+((_code1) & 0xFF)
-1870  0589  5F          	ld	e,a
-1871  058A  3E 00       	ld	a,+((_code1) / 256)
-1872  058C  CE 00       	adc	a,0x00
-1873  058E  57          	ld	d,a
-1874  058F  3A 00 00    	ld	a,(_v2)
-1875  0592  12          	ld	(de), a
-1876  0593              l_menu_read_code_00107:
-1877  0593  21 00 00    	ld	hl,_v1
-1878  0596  34          	inc	(hl)
-1879  0597  18 8D       	jr	l_menu_read_code_00108
-1880  0599              l_menu_read_code_00110:
-1881  0599  79          	ld	a, c
-1882  059A  B7          	or	a, a
-1883  059B  CA 73 06    	jp	Z, l_menu_read_code_00137
-1884  059E  21 00 00    	ld	hl,_v1
-1885  05A1  36 00       	ld	(hl),0x00
-1886  05A3  21 00 00    	ld	hl,_v2
-1887  05A6  36 00       	ld	(hl),0x00
-1888  05A8  21 00 00    	ld	hl,_v0
-1889  05AB  36 64       	ld	(hl),0x64
-1890  05AD  3A 05 00    	ld	a,(_code1 + 5)
-1891  05B0  DD 77 FF    	ld	(ix-1),a
-1892  05B3  4F          	ld	c, a
-1893  05B4  87          	add	a, a
-1894  05B5  87          	add	a, a
-1895  05B6  81          	add	a, c
-1896  05B7  87          	add	a, a
-1897  05B8  4F          	ld	c, a
-1898  05B9  3A 02 00    	ld	a,(_code1 + 2)
-1899  05BC  DD 77 FE    	ld	(ix-2),a
-1900  05BF  79          	ld	a, c
-1901  05C0  DD 86 FE    	add	a,(ix-2)
-1902  05C3  32 00 00    	ld	(_game_start_scr),a
-1903  05C6  3A 03 00    	ld	a,(_code1 + 3)
-1904  05C9  DD 77 FD    	ld	(ix-3),a
-1905  05CC  4F          	ld	c, a
-1906  05CD  87          	add	a, a
-1907  05CE  81          	add	a, c
-1908  05CF  87          	add	a, a
-1909  05D0  87          	add	a, a
-1910  05D1  87          	add	a, a
-1911  05D2  81          	add	a, c
-1912  05D3  87          	add	a, a
-1913  05D4  87          	add	a, a
-1914  05D5  4F          	ld	c, a
-1915  05D6  21 06 00    	ld	hl,_code1 + 6
-1916  05D9  7E          	ld	a, (hl)
-1917  05DA  DD 77 FC    	ld	(ix-4),a
-1918  05DD  6F          	ld	l, a
-1919  05DE  5D          	ld	e, l
-1920  05DF  29          	add	hl, hl
-1921  05E0  29          	add	hl, hl
-1922  05E1  19          	add	hl, de
-1923  05E2  29          	add	hl, hl
-1924  05E3  79          	ld	a, c
-1925  05E4  85          	add	a, l
-1926  05E5  4F          	ld	c, a
-1927  05E6  21 00 00    	ld	hl,_code1
-1928  05E9  5E          	ld	e, (hl)
-1929  05EA  79          	ld	a, c
-1930  05EB  83          	add	a, e
-1931  05EC  32 00 00    	ld	(_player_lives),a
-1932  05EF  3A 07 00    	ld	a, (_code1 + 7)
-1933  05F2  4F          	ld	c, a
-1934  05F3  87          	add	a, a
-1935  05F4  81          	add	a, c
-1936  05F5  87          	add	a, a
-1937  05F6  87          	add	a, a
-1938  05F7  87          	add	a, a
-1939  05F8  81          	add	a, c
-1940  05F9  87          	add	a, a
-1941  05FA  87          	add	a, a
-1942  05FB  47          	ld	b, a
-1943  05FC  21 04 00    	ld	hl,_code1 + 4
-1944  05FF  4E          	ld	c, (hl)
-1945  0600  69          	ld	l, c
-1946  0601  29          	add	hl, hl
-1947  0602  29          	add	hl, hl
-1948  0603  09          	add	hl, bc
-1949  0604  29          	add	hl, hl
-1950  0605  78          	ld	a, b
-1951  0606  85          	add	a, l
-1952  0607  4F          	ld	c, a
-1953  0608  21 01 00    	ld	hl,_code1 + 1
-1954  060B  6E          	ld	l, (hl)
-1955  060C  09          	add	hl, bc
-1956  060D  DD 7E FF    	ld	a,(ix-1)
-1957  0610  DD 86 FE    	add	a,(ix-2)
-1958  0613  4D          	ld	c,l
-1959  0614  6F          	ld	l, a
-1960  0615  19          	add	hl, de
-1961  0616  7D          	ld	a, l
-1962  0617  DD 86 FC    	add	a,(ix-4)
-1963  061A  DD 86 FD    	add	a,(ix-3)
-1964  061D  5F          	ld	e, a
-1965  061E  79          	ld	a, c
-1966  061F  93          	sub	a, e
-1967  0620  20 44       	jr	NZ,l_menu_read_code_00118
-1968  0622  3E 28       	ld	a,0x28
-1969  0624  21 00 00    	ld	hl,_game_start_scr
-1970  0627  96          	sub	a, (hl)
-1971  0628  DA 0A 07    	jp	C, l_menu_read_code_00138
-1972  062B  3A 00 00    	ld	a,(_player_lives)
-1973  062E  B7          	or	a, a
-1974  062F  CA 0A 07    	jp	Z, l_menu_read_code_00138
-1975  0632  3A 00 00    	ld	a,(_game_start_scr)
-1976  0635  D6 14       	sub	a,0x14
-1977  0637  30 07       	jr	NC,l_menu_read_code_00112
-1978  0639  21 00 00    	ld	hl,_game_mode
-1979  063C  36 00       	ld	(hl),0x00
-1980  063E  18 05       	jr	l_menu_read_code_00113
-1981  0640              l_menu_read_code_00112:
-1982  0640  21 00 00    	ld	hl,_game_mode
-1983  0643  36 01       	ld	(hl),0x01
-1984  0645              l_menu_read_code_00113:
-1985  0645  CD 00 00    	call	_ay_song_stop
-1986  0648  CD 00 00    	call	_audio_coin_noentiendo
-1987  064B  2E 04       	ld	l,0x04
-1988  064D  CD 00 00    	call	_zx_border_fastcall
-1989  0650  21 5E 01    	ld	hl,0x015e
-1990  0653  CD 00 00    	call	_z80_delay_ms_fastcall
-1991  0656  3A 00 00    	ld	a,(_game_start_scr)
-1992  0659  32 00 00    	ld	(_scr_curr),a
-1993  065C  21 00 00    	ld	hl,_game_code
-1994  065F  36 01       	ld	(hl),0x01
-1995  0661  2E 01       	ld	l,0x01
-1996  0663  C3 3A 07    	jp	l_menu_read_code_00139
-1997  0666              l_menu_read_code_00118:
-1998  0666  21 00 00    	ld	hl,_game_start_scr
-1999  0669  36 14       	ld	(hl),0x14
-2000  066B  21 00 00    	ld	hl,_player_lives
-2001  066E  36 03       	ld	(hl),0x03
-2002  0670  C3 0A 07    	jp	l_menu_read_code_00138
-2003  0673              l_menu_read_code_00137:
-2004  0673  0E 00       	ld	c,0x00
-2005  0675  C5          	push	bc
-2006  0676  21 93 00    	ld	hl,___str_16
-2007  0679  E5          	push	hl
-2008  067A  CD A6 04    	call	_menu_mcodechk
-2009  067D  F1          	pop	af
-2010  067E  C1          	pop	bc
-2011  067F  7D          	ld	a,l
-2012  0680  B7          	or	a, a
-2013  0681  28 17       	jr	Z,l_menu_read_code_00124
-2014  0683  21 00 00    	ld	hl,_game_debug
-2015  0686  7E          	ld	a, (hl)
-2016  0687  B7          	or	a, a
-2017  0688  28 04       	jr	Z,l_menu_read_code_00121
-2018  068A  36 00       	ld	(hl),0x00
-2019  068C  18 05       	jr	l_menu_read_code_00122
-2020  068E              l_menu_read_code_00121:
-2021  068E  21 00 00    	ld	hl,_game_debug
-2022  0691  36 01       	ld	(hl),0x01
-2023  0693              l_menu_read_code_00122:
-2024  0693  21 00 00    	ld	hl,_game_code
-2025  0696  36 00       	ld	(hl),0x00
-2026  0698  0E 01       	ld	c,0x01
-2027  069A              l_menu_read_code_00124:
-2028  069A  C5          	push	bc
-2029  069B  21 9C 00    	ld	hl,___str_17
-2030  069E  E5          	push	hl
-2031  069F  CD A6 04    	call	_menu_mcodechk
-2032  06A2  F1          	pop	af
-2033  06A3  C1          	pop	bc
-2034  06A4  7D          	ld	a,l
-2035  06A5  B7          	or	a, a
-2036  06A6  28 21       	jr	Z,l_menu_read_code_00129
-2037  06A8  21 00 00    	ld	hl,_game_mode
-2038  06AB  7E          	ld	a, (hl)
-2039  06AC  B7          	or	a, a
-2040  06AD  28 09       	jr	Z,l_menu_read_code_00126
-2041  06AF  36 00       	ld	(hl),0x00
-2042  06B1  21 00 00    	ld	hl,_scr_curr
-2043  06B4  36 00       	ld	(hl),0x00
-2044  06B6  18 0A       	jr	l_menu_read_code_00127
-2045  06B8              l_menu_read_code_00126:
-2046  06B8  21 00 00    	ld	hl,_game_mode
-2047  06BB  36 01       	ld	(hl),0x01
-2048  06BD  21 00 00    	ld	hl,_scr_curr
-2049  06C0  36 14       	ld	(hl),0x14
-2050  06C2              l_menu_read_code_00127:
-2051  06C2  21 00 00    	ld	hl,_game_code
-2052  06C5  36 00       	ld	(hl),0x00
-2053  06C7  0E 02       	ld	c,0x02
-2054  06C9              l_menu_read_code_00129:
-2055  06C9  C5          	push	bc
-2056  06CA  21 A5 00    	ld	hl,___str_18
-2057  06CD  E5          	push	hl
-2058  06CE  CD A6 04    	call	_menu_mcodechk
-2059  06D1  F1          	pop	af
-2060  06D2  C1          	pop	bc
-2061  06D3  7D          	ld	a,l
-2062  06D4  B7          	or	a, a
-2063  06D5  28 0B       	jr	Z,l_menu_read_code_00131
-2064  06D7  21 00 00    	ld	hl,_player_lives
-2065  06DA  36 FF       	ld	(hl),0xff
-2066  06DC  3E 01       	ld	a,0x01
-2067  06DE  32 00 00    	ld	(_game_code),a
-2068  06E1  4F          	ld	c,a
-2069  06E2              l_menu_read_code_00131:
-2070  06E2  79          	ld	a, c
-2071  06E3  B7          	or	a, a
-2072  06E4  28 24       	jr	Z,l_menu_read_code_00138
-2073  06E6  CD 00 00    	call	_ay_song_stop
-2074  06E9  C5          	push	bc
-2075  06EA  CD 00 00    	call	_audio_coin_noentiendo
-2076  06ED  C1          	pop	bc
-2077  06EE  2E 03       	ld	l,0x03
-2078  06F0  CD 00 00    	call	_zx_border_fastcall
-2079  06F3  C5          	push	bc
-2080  06F4  21 5E 01    	ld	hl,0x015e
-2081  06F7  CD 00 00    	call	_z80_delay_ms_fastcall
-2082  06FA  C1          	pop	bc
-2083  06FB  79          	ld	a, c
-2084  06FC  D6 02       	sub	a,0x02
-2085  06FE  20 03       	jr	NZ,l_menu_read_code_00133
-2086  0700  CD 3F 07    	call	_menu_logo
-2087  0703              l_menu_read_code_00133:
-2088  0703  CD 7C 02    	call	_menu_main_print
-2089  0706  2E 00       	ld	l,0x00
-2090  0708  18 30       	jr	l_menu_read_code_00139
-2091  070A              l_menu_read_code_00138:
-2092  070A  CD 00 00    	call	_ay_song_stop
-2093  070D  21 AE 00    	ld	hl,___str_19
-2094  0710  E5          	push	hl
-2095  0711  21 10 0D    	ld	hl,0x0d10
-2096  0714  E5          	push	hl
-2097  0715  CD 00 00    	call	_zx_print_str
-2098  0718  21 13 88    	ld	hl,0x8813
-2099  071B  E5          	push	hl
-2100  071C  3E 0D       	ld	a,0x0d
-2101  071E  F5          	push	af
-2102  071F  33          	inc	sp
-2103  0720  21 00 00    	ld	hl,_attrib_hl
-2104  0723  E5          	push	hl
-2105  0724  CD 00 00    	call	_game_paint_attrib
-2106  0727  F1          	pop	af
-2107  0728  F1          	pop	af
-2108  0729  33          	inc	sp
-2109  072A  21 5E 01    	ld	hl,0x015e
-2110  072D  CD 00 00    	call	_z80_delay_ms_fastcall
-2111  0730  2E 02       	ld	l,0x02
-2112  0732  CD 00 00    	call	_zx_border_fastcall
-2113  0735  CD 7C 02    	call	_menu_main_print
-2114  0738  2E 00       	ld	l,0x00
-2115  073A              l_menu_read_code_00139:
-2116  073A  DD F9       	ld	sp, ix
-2117  073C  DD E1       	pop	ix
-2118  073E  C9          	ret
-2119  073F              	SECTION rodata_compiler
-2120  007F              ___str_14:
-2121  007F  45 4E 54 45 52 20 43 4F 44 45 
+1695  007E  00          	DEFB 0x00
+1696  007F              	SECTION code_compiler
+1697  0477              ;	---------------------------------
+1698  0477              ; Function menu_read_key
+1699  0477              ; ---------------------------------
+1700  0477              _menu_read_key:
+1701  0477  CD 00 00    	call	___sdcc_enter_ix
+1702  047A              l_menu_read_key_00105:
+1703  047A  CD 00 00    	call	_in_wait_key
+1704  047D  CD 00 00    	call	_in_inkey
+1705  0480  4D          	ld	c, l
+1706  0481  CD 00 00    	call	_in_wait_nokey
+1707  0484  79          	ld	a, c
+1708  0485  D6 61       	sub	a,0x61
+1709  0487  38 F1       	jr	C,l_menu_read_key_00105
+1710  0489  3E 7A       	ld	a,0x7a
+1711  048B  91          	sub	a, c
+1712  048C  38 EC       	jr	C,l_menu_read_key_00105
+1713  048E  79          	ld	a, c
+1714  048F  C6 E0       	add	a,0xe0
+1715  0491  47          	ld	b, a
+1716  0492  C5          	push	bc
+1717  0493  C5          	push	bc
+1718  0494  33          	inc	sp
+1719  0495  DD 66 05    	ld	h,(ix+5)
+1720  0498  DD 6E 04    	ld	l,(ix+4)
+1721  049B  E5          	push	hl
+1722  049C  CD 00 00    	call	_zx_print_char
+1723  049F  F1          	pop	af
+1724  04A0  33          	inc	sp
+1725  04A1  C1          	pop	bc
+1726  04A2  68          	ld	l, b
+1727  04A3  DD E1       	pop	ix
+1728  04A5  C9          	ret
+1729  04A6              	SECTION code_compiler
+1730  04A6              ;	---------------------------------
+1731  04A6              ; Function menu_mcodechk
+1732  04A6              ; ---------------------------------
+1733  04A6              _menu_mcodechk:
+1734  04A6  CD 00 00    	call	___sdcc_enter_ix
+1735  04A9  21 00 00    	ld	hl,_i
+1736  04AC  36 00       	ld	(hl),0x00
+1737  04AE  0E 01       	ld	c,0x01
+1738  04B0              l_menu_mcodechk_00103:
+1739  04B0  21 00 00    	ld	hl,_i
+1740  04B3  7E          	ld	a, (hl)
+1741  04B4  D6 08       	sub	a,0x08
+1742  04B6  30 24       	jr	NC,l_menu_mcodechk_00105
+1743  04B8  3E 00       	ld	a, +((_code0) & 0xFF)
+1744  04BA  86          	add	a, (hl)
+1745  04BB  5F          	ld	e, a
+1746  04BC  3E 00       	ld	a, +((_code0) / 256)
+1747  04BE  CE 00       	adc	a,0x00
+1748  04C0  57          	ld	d, a
+1749  04C1  1A          	ld	a, (de)
+1750  04C2  47          	ld	b, a
+1751  04C3  DD 7E 04    	ld	a,(ix+4)
+1752  04C6  86          	add	a, (hl)
+1753  04C7  5F          	ld	e, a
+1754  04C8  DD 7E 05    	ld	a,(ix+5)
+1755  04CB  CE 00       	adc	a,0x00
+1756  04CD  57          	ld	d, a
+1757  04CE  1A          	ld	a, (de)
+1758  04CF  5F          	ld	e, a
+1759  04D0  78          	ld	a, b
+1760  04D1  93          	sub	a, e
+1761  04D2  28 02       	jr	Z,l_menu_mcodechk_00102
+1762  04D4  0E 00       	ld	c,0x00
+1763  04D6              l_menu_mcodechk_00102:
+1764  04D6  21 00 00    	ld	hl,_i
+1765  04D9  34          	inc	(hl)
+1766  04DA  18 D4       	jr	l_menu_mcodechk_00103
+1767  04DC              l_menu_mcodechk_00105:
+1768  04DC  69          	ld	l, c
+1769  04DD  DD E1       	pop	ix
+1770  04DF  C9          	ret
+1771  04E0              	SECTION code_compiler
+1772  04E0              ;	---------------------------------
+1773  04E0              ; Function menu_read_code
+1774  04E0              ; ---------------------------------
+1775  04E0              _menu_read_code:
+1776  04E0  CD 00 00    	call	___sdcc_enter_ix
+1777  04E3  F5          	push	af
+1778  04E4  F5          	push	af
+1779  04E5  CD 39 03    	call	_menu_clear
+1780  04E8  21 7F 00    	ld	hl,___str_14
+1781  04EB  E5          	push	hl
+1782  04EC  21 0D 0B    	ld	hl,0x0b0d
+1783  04EF  E5          	push	hl
+1784  04F0  CD 00 00    	call	_zx_print_str
+1785  04F3  21 1F 70    	ld	hl,0x701f
+1786  04F6  E5          	push	hl
+1787  04F7  AF          	xor	a, a
+1788  04F8  F5          	push	af
+1789  04F9  33          	inc	sp
+1790  04FA  21 00 00    	ld	hl,_attrib
+1791  04FD  E5          	push	hl
+1792  04FE  CD 00 00    	call	_game_paint_attrib
+1793  0501  F1          	pop	af
+1794  0502  33          	inc	sp
+1795  0503  21 8A 00    	ld	hl,___str_15
+1796  0506  E3          	ex	(sp),hl
+1797  0507  21 0E 0C    	ld	hl,0x0c0e
+1798  050A  E5          	push	hl
+1799  050B  CD 00 00    	call	_zx_print_str
+1800  050E  21 1F 78    	ld	hl,0x781f
+1801  0511  E5          	push	hl
+1802  0512  AF          	xor	a, a
+1803  0513  F5          	push	af
+1804  0514  33          	inc	sp
+1805  0515  21 00 00    	ld	hl,_attrib
+1806  0518  E5          	push	hl
+1807  0519  CD 00 00    	call	_game_paint_attrib
+1808  051C  F1          	pop	af
+1809  051D  F1          	pop	af
+1810  051E  33          	inc	sp
+1811  051F  21 00 00    	ld	hl,_v1
+1812  0522  36 00       	ld	(hl),0x00
+1813  0524  0E 01       	ld	c,0x01
+1814  0526              l_menu_read_code_00108:
+1815  0526  21 00 00    	ld	hl,_v1
+1816  0529  7E          	ld	a, (hl)
+1817  052A  D6 08       	sub	a,0x08
+1818  052C  30 6B       	jr	NC,l_menu_read_code_00110
+1819  052E  3E 00       	ld	a, +((_code0) & 0xFF)
+1820  0530  86          	add	a, (hl)
+1821  0531  5F          	ld	e, a
+1822  0532  3E 00       	ld	a, +((_code0) / 256)
+1823  0534  CE 00       	adc	a,0x00
+1824  0536  57          	ld	d, a
+1825  0537  AF          	xor	a, a
+1826  0538  12          	ld	(de), a
+1827  0539  7E          	ld	a, (hl)
+1828  053A  C6 0C       	add	a,0x0c
+1829  053C  47          	ld	b, a
+1830  053D  C5          	push	bc
+1831  053E  0E 0E       	ld	c,0x0e
+1832  0540  C5          	push	bc
+1833  0541  CD 77 04    	call	_menu_read_key
+1834  0544  F1          	pop	af
+1835  0545  C1          	pop	bc
+1836  0546  7D          	ld	a,l
+1837  0547  32 00 00    	ld	(_v0),a
+1838  054A  21 00 00    	ld	hl,_v2
+1839  054D  36 00       	ld	(hl),0x00
+1840  054F              l_menu_read_code_00102:
+1841  054F  21 00 00    	ld	hl,_v2
+1842  0552  7E          	ld	a, (hl)
+1843  0553  D6 0A       	sub	a,0x0a
+1844  0555  30 14       	jr	NC,l_menu_read_code_00104
+1845  0557  5E          	ld	e,(hl)
+1846  0558  16 00       	ld	d,0x00
+1847  055A  21 00 00    	ld	hl,_game_encode
+1848  055D  19          	add	hl,de
+1849  055E  46          	ld	b, (hl)
+1850  055F  3A 00 00    	ld	a,(_v0)
+1851  0562  90          	sub	a, b
+1852  0563  28 06       	jr	Z,l_menu_read_code_00104
+1853  0565  21 00 00    	ld	hl,_v2
+1854  0568  34          	inc	(hl)
+1855  0569  18 E4       	jr	l_menu_read_code_00102
+1856  056B              l_menu_read_code_00104:
+1857  056B  3A 00 00    	ld	a,(_v1)
+1858  056E  C6 00       	add	a,+((_code0) & 0xFF)
+1859  0570  5F          	ld	e,a
+1860  0571  3E 00       	ld	a,+((_code0) / 256)
+1861  0573  CE 00       	adc	a,0x00
+1862  0575  57          	ld	d,a
+1863  0576  3A 00 00    	ld	a,(_v0)
+1864  0579  12          	ld	(de), a
+1865  057A  3A 00 00    	ld	a,(_v2)
+1866  057D  D6 0A       	sub	a,0x0a
+1867  057F  20 03       	jr	NZ,l_menu_read_code_00106
+1868  0581  4F          	ld	c,a
+1869  0582  18 0F       	jr	l_menu_read_code_00107
+1870  0584              l_menu_read_code_00106:
+1871  0584  3A 00 00    	ld	a,(_v1)
+1872  0587  C6 00       	add	a,+((_code1) & 0xFF)
+1873  0589  5F          	ld	e,a
+1874  058A  3E 00       	ld	a,+((_code1) / 256)
+1875  058C  CE 00       	adc	a,0x00
+1876  058E  57          	ld	d,a
+1877  058F  3A 00 00    	ld	a,(_v2)
+1878  0592  12          	ld	(de), a
+1879  0593              l_menu_read_code_00107:
+1880  0593  21 00 00    	ld	hl,_v1
+1881  0596  34          	inc	(hl)
+1882  0597  18 8D       	jr	l_menu_read_code_00108
+1883  0599              l_menu_read_code_00110:
+1884  0599  79          	ld	a, c
+1885  059A  B7          	or	a, a
+1886  059B  CA 73 06    	jp	Z, l_menu_read_code_00137
+1887  059E  21 00 00    	ld	hl,_v1
+1888  05A1  36 00       	ld	(hl),0x00
+1889  05A3  21 00 00    	ld	hl,_v2
+1890  05A6  36 00       	ld	(hl),0x00
+1891  05A8  21 00 00    	ld	hl,_v0
+1892  05AB  36 64       	ld	(hl),0x64
+1893  05AD  3A 05 00    	ld	a,(_code1 + 5)
+1894  05B0  DD 77 FF    	ld	(ix-1),a
+1895  05B3  4F          	ld	c, a
+1896  05B4  87          	add	a, a
+1897  05B5  87          	add	a, a
+1898  05B6  81          	add	a, c
+1899  05B7  87          	add	a, a
+1900  05B8  4F          	ld	c, a
+1901  05B9  3A 02 00    	ld	a,(_code1 + 2)
+1902  05BC  DD 77 FE    	ld	(ix-2),a
+1903  05BF  79          	ld	a, c
+1904  05C0  DD 86 FE    	add	a,(ix-2)
+1905  05C3  32 00 00    	ld	(_game_start_scr),a
+1906  05C6  3A 03 00    	ld	a,(_code1 + 3)
+1907  05C9  DD 77 FD    	ld	(ix-3),a
+1908  05CC  4F          	ld	c, a
+1909  05CD  87          	add	a, a
+1910  05CE  81          	add	a, c
+1911  05CF  87          	add	a, a
+1912  05D0  87          	add	a, a
+1913  05D1  87          	add	a, a
+1914  05D2  81          	add	a, c
+1915  05D3  87          	add	a, a
+1916  05D4  87          	add	a, a
+1917  05D5  4F          	ld	c, a
+1918  05D6  21 06 00    	ld	hl,_code1 + 6
+1919  05D9  7E          	ld	a, (hl)
+1920  05DA  DD 77 FC    	ld	(ix-4),a
+1921  05DD  6F          	ld	l, a
+1922  05DE  5D          	ld	e, l
+1923  05DF  29          	add	hl, hl
+1924  05E0  29          	add	hl, hl
+1925  05E1  19          	add	hl, de
+1926  05E2  29          	add	hl, hl
+1927  05E3  79          	ld	a, c
+1928  05E4  85          	add	a, l
+1929  05E5  4F          	ld	c, a
+1930  05E6  21 00 00    	ld	hl,_code1
+1931  05E9  5E          	ld	e, (hl)
+1932  05EA  79          	ld	a, c
+1933  05EB  83          	add	a, e
+1934  05EC  32 00 00    	ld	(_player_lives),a
+1935  05EF  3A 07 00    	ld	a, (_code1 + 7)
+1936  05F2  4F          	ld	c, a
+1937  05F3  87          	add	a, a
+1938  05F4  81          	add	a, c
+1939  05F5  87          	add	a, a
+1940  05F6  87          	add	a, a
+1941  05F7  87          	add	a, a
+1942  05F8  81          	add	a, c
+1943  05F9  87          	add	a, a
+1944  05FA  87          	add	a, a
+1945  05FB  47          	ld	b, a
+1946  05FC  21 04 00    	ld	hl,_code1 + 4
+1947  05FF  4E          	ld	c, (hl)
+1948  0600  69          	ld	l, c
+1949  0601  29          	add	hl, hl
+1950  0602  29          	add	hl, hl
+1951  0603  09          	add	hl, bc
+1952  0604  29          	add	hl, hl
+1953  0605  78          	ld	a, b
+1954  0606  85          	add	a, l
+1955  0607  4F          	ld	c, a
+1956  0608  21 01 00    	ld	hl,_code1 + 1
+1957  060B  6E          	ld	l, (hl)
+1958  060C  09          	add	hl, bc
+1959  060D  DD 7E FF    	ld	a,(ix-1)
+1960  0610  DD 86 FE    	add	a,(ix-2)
+1961  0613  4D          	ld	c,l
+1962  0614  6F          	ld	l, a
+1963  0615  19          	add	hl, de
+1964  0616  7D          	ld	a, l
+1965  0617  DD 86 FC    	add	a,(ix-4)
+1966  061A  DD 86 FD    	add	a,(ix-3)
+1967  061D  5F          	ld	e, a
+1968  061E  79          	ld	a, c
+1969  061F  93          	sub	a, e
+1970  0620  20 44       	jr	NZ,l_menu_read_code_00118
+1971  0622  3E 28       	ld	a,0x28
+1972  0624  21 00 00    	ld	hl,_game_start_scr
+1973  0627  96          	sub	a, (hl)
+1974  0628  DA 0A 07    	jp	C, l_menu_read_code_00138
+1975  062B  3A 00 00    	ld	a,(_player_lives)
+1976  062E  B7          	or	a, a
+1977  062F  CA 0A 07    	jp	Z, l_menu_read_code_00138
+1978  0632  3A 00 00    	ld	a,(_game_start_scr)
+1979  0635  D6 14       	sub	a,0x14
+1980  0637  30 07       	jr	NC,l_menu_read_code_00112
+1981  0639  21 00 00    	ld	hl,_game_mode
+1982  063C  36 00       	ld	(hl),0x00
+1983  063E  18 05       	jr	l_menu_read_code_00113
+1984  0640              l_menu_read_code_00112:
+1985  0640  21 00 00    	ld	hl,_game_mode
+1986  0643  36 01       	ld	(hl),0x01
+1987  0645              l_menu_read_code_00113:
+1988  0645  CD 00 00    	call	_ay_song_stop
+1989  0648  CD 00 00    	call	_audio_coin_noentiendo
+1990  064B  2E 04       	ld	l,0x04
+1991  064D  CD 00 00    	call	_zx_border_fastcall
+1992  0650  21 5E 01    	ld	hl,0x015e
+1993  0653  CD 00 00    	call	_z80_delay_ms_fastcall
+1994  0656  3A 00 00    	ld	a,(_game_start_scr)
+1995  0659  32 00 00    	ld	(_scr_curr),a
+1996  065C  21 00 00    	ld	hl,_game_code
+1997  065F  36 01       	ld	(hl),0x01
+1998  0661  2E 01       	ld	l,0x01
+1999  0663  C3 3A 07    	jp	l_menu_read_code_00139
+2000  0666              l_menu_read_code_00118:
+2001  0666  21 00 00    	ld	hl,_game_start_scr
+2002  0669  36 14       	ld	(hl),0x14
+2003  066B  21 00 00    	ld	hl,_player_lives
+2004  066E  36 03       	ld	(hl),0x03
+2005  0670  C3 0A 07    	jp	l_menu_read_code_00138
+2006  0673              l_menu_read_code_00137:
+2007  0673  0E 00       	ld	c,0x00
+2008  0675  C5          	push	bc
+2009  0676  21 93 00    	ld	hl,___str_16
+2010  0679  E5          	push	hl
+2011  067A  CD A6 04    	call	_menu_mcodechk
+2012  067D  F1          	pop	af
+2013  067E  C1          	pop	bc
+2014  067F  7D          	ld	a,l
+2015  0680  B7          	or	a, a
+2016  0681  28 17       	jr	Z,l_menu_read_code_00124
+2017  0683  21 00 00    	ld	hl,_game_debug
+2018  0686  7E          	ld	a, (hl)
+2019  0687  B7          	or	a, a
+2020  0688  28 04       	jr	Z,l_menu_read_code_00121
+2021  068A  36 00       	ld	(hl),0x00
+2022  068C  18 05       	jr	l_menu_read_code_00122
+2023  068E              l_menu_read_code_00121:
+2024  068E  21 00 00    	ld	hl,_game_debug
+2025  0691  36 01       	ld	(hl),0x01
+2026  0693              l_menu_read_code_00122:
+2027  0693  21 00 00    	ld	hl,_game_code
+2028  0696  36 00       	ld	(hl),0x00
+2029  0698  0E 01       	ld	c,0x01
+2030  069A              l_menu_read_code_00124:
+2031  069A  C5          	push	bc
+2032  069B  21 9C 00    	ld	hl,___str_17
+2033  069E  E5          	push	hl
+2034  069F  CD A6 04    	call	_menu_mcodechk
+2035  06A2  F1          	pop	af
+2036  06A3  C1          	pop	bc
+2037  06A4  7D          	ld	a,l
+2038  06A5  B7          	or	a, a
+2039  06A6  28 21       	jr	Z,l_menu_read_code_00129
+2040  06A8  21 00 00    	ld	hl,_game_mode
+2041  06AB  7E          	ld	a, (hl)
+2042  06AC  B7          	or	a, a
+2043  06AD  28 09       	jr	Z,l_menu_read_code_00126
+2044  06AF  36 00       	ld	(hl),0x00
+2045  06B1  21 00 00    	ld	hl,_scr_curr
+2046  06B4  36 00       	ld	(hl),0x00
+2047  06B6  18 0A       	jr	l_menu_read_code_00127
+2048  06B8              l_menu_read_code_00126:
+2049  06B8  21 00 00    	ld	hl,_game_mode
+2050  06BB  36 01       	ld	(hl),0x01
+2051  06BD  21 00 00    	ld	hl,_scr_curr
+2052  06C0  36 14       	ld	(hl),0x14
+2053  06C2              l_menu_read_code_00127:
+2054  06C2  21 00 00    	ld	hl,_game_code
+2055  06C5  36 00       	ld	(hl),0x00
+2056  06C7  0E 02       	ld	c,0x02
+2057  06C9              l_menu_read_code_00129:
+2058  06C9  C5          	push	bc
+2059  06CA  21 A5 00    	ld	hl,___str_18
+2060  06CD  E5          	push	hl
+2061  06CE  CD A6 04    	call	_menu_mcodechk
+2062  06D1  F1          	pop	af
+2063  06D2  C1          	pop	bc
+2064  06D3  7D          	ld	a,l
+2065  06D4  B7          	or	a, a
+2066  06D5  28 0B       	jr	Z,l_menu_read_code_00131
+2067  06D7  21 00 00    	ld	hl,_player_lives
+2068  06DA  36 FF       	ld	(hl),0xff
+2069  06DC  3E 01       	ld	a,0x01
+2070  06DE  32 00 00    	ld	(_game_code),a
+2071  06E1  4F          	ld	c,a
+2072  06E2              l_menu_read_code_00131:
+2073  06E2  79          	ld	a, c
+2074  06E3  B7          	or	a, a
+2075  06E4  28 24       	jr	Z,l_menu_read_code_00138
+2076  06E6  CD 00 00    	call	_ay_song_stop
+2077  06E9  C5          	push	bc
+2078  06EA  CD 00 00    	call	_audio_coin_noentiendo
+2079  06ED  C1          	pop	bc
+2080  06EE  2E 03       	ld	l,0x03
+2081  06F0  CD 00 00    	call	_zx_border_fastcall
+2082  06F3  C5          	push	bc
+2083  06F4  21 5E 01    	ld	hl,0x015e
+2084  06F7  CD 00 00    	call	_z80_delay_ms_fastcall
+2085  06FA  C1          	pop	bc
+2086  06FB  79          	ld	a, c
+2087  06FC  D6 02       	sub	a,0x02
+2088  06FE  20 03       	jr	NZ,l_menu_read_code_00133
+2089  0700  CD 3F 07    	call	_menu_logo
+2090  0703              l_menu_read_code_00133:
+2091  0703  CD 7C 02    	call	_menu_main_print
+2092  0706  2E 00       	ld	l,0x00
+2093  0708  18 30       	jr	l_menu_read_code_00139
+2094  070A              l_menu_read_code_00138:
+2095  070A  CD 00 00    	call	_ay_song_stop
+2096  070D  21 AE 00    	ld	hl,___str_19
+2097  0710  E5          	push	hl
+2098  0711  21 10 0D    	ld	hl,0x0d10
+2099  0714  E5          	push	hl
+2100  0715  CD 00 00    	call	_zx_print_str
+2101  0718  21 13 88    	ld	hl,0x8813
+2102  071B  E5          	push	hl
+2103  071C  3E 0D       	ld	a,0x0d
+2104  071E  F5          	push	af
+2105  071F  33          	inc	sp
+2106  0720  21 00 00    	ld	hl,_attrib_hl
+2107  0723  E5          	push	hl
+2108  0724  CD 00 00    	call	_game_paint_attrib
+2109  0727  F1          	pop	af
+2110  0728  F1          	pop	af
+2111  0729  33          	inc	sp
+2112  072A  21 5E 01    	ld	hl,0x015e
+2113  072D  CD 00 00    	call	_z80_delay_ms_fastcall
+2114  0730  2E 02       	ld	l,0x02
+2115  0732  CD 00 00    	call	_zx_border_fastcall
+2116  0735  CD 7C 02    	call	_menu_main_print
+2117  0738  2E 00       	ld	l,0x00
+2118  073A              l_menu_read_code_00139:
+2119  073A  DD F9       	ld	sp, ix
+2120  073C  DD E1       	pop	ix
+2121  073E  C9          	ret
+2122  073F              	SECTION rodata_compiler
+2123  007F              ___str_14:
+2124  007F  45 4E 54 45 52 20 43 4F 44 45 
                         	DEFM "ENTER CODE"
-2122  0089  00          	DEFB 0x00
-2123  008A              	SECTION rodata_compiler
-2124  008A              ___str_15:
-2125  008A  5F 5F 5F 5F 5F 5F 5F 5F 
+2125  0089  00          	DEFB 0x00
+2126  008A              	SECTION rodata_compiler
+2127  008A              ___str_15:
+2128  008A  5F 5F 5F 5F 5F 5F 5F 5F 
                         	DEFM "________"
-2126  0092  00          	DEFB 0x00
-2127  0093              	SECTION rodata_compiler
-2128  0093              ___str_16:
-2129  0093  44 45 50 55 52 41 4D 45 
+2129  0092  00          	DEFB 0x00
+2130  0093              	SECTION rodata_compiler
+2131  0093              ___str_16:
+2132  0093  44 45 50 55 52 41 4D 45 
                         	DEFM "DEPURAME"
-2130  009B  00          	DEFB 0x00
-2131  009C              	SECTION rodata_compiler
-2132  009C              ___str_17:
-2133  009C  4D 41 54 54 48 45 57 53 
+2133  009B  00          	DEFB 0x00
+2134  009C              	SECTION rodata_compiler
+2135  009C              ___str_17:
+2136  009C  4D 41 54 54 48 45 57 53 
                         	DEFM "MATTHEWS"
-2134  00A4  00          	DEFB 0x00
-2135  00A5              	SECTION rodata_compiler
-2136  00A5              ___str_18:
-2137  00A5  43 48 49 4D 55 45 4C 4F 
+2137  00A4  00          	DEFB 0x00
+2138  00A5              	SECTION rodata_compiler
+2139  00A5              ___str_18:
+2140  00A5  43 48 49 4D 55 45 4C 4F 
                         	DEFM "CHIMUELO"
-2138  00AD  00          	DEFB 0x00
-2139  00AE              	SECTION rodata_compiler
-2140  00AE              ___str_19:
-2141  00AE  4E 4F 50 53 49 45 
+2141  00AD  00          	DEFB 0x00
+2142  00AE              	SECTION rodata_compiler
+2143  00AE              ___str_19:
+2144  00AE  4E 4F 50 53 49 45 
                         	DEFM "NOPSIE"
-2142  00B4  00          	DEFB 0x00
-2143  00B5              	SECTION code_compiler
-2144  073F              ;	---------------------------------
-2145  073F              ; Function menu_logo
-2146  073F              ; ---------------------------------
-2147  073F              _menu_logo:
-2148  073F  CD 00 00    	call	_game_cls
-2149  0742  3A 00 00    	ld	a,(_game_mode)
-2150  0745  B7          	or	a, a
-2151  0746  28 18       	jr	Z,l_menu_logo_00108
-2152  0748  21 08 04    	ld	hl,0x0408
-2153  074B  E5          	push	hl
-2154  074C  2E 10       	ld	l,0x10
-2155  074E  E5          	push	hl
-2156  074F  3E 03       	ld	a,0x03
-2157  0751  F5          	push	af
-2158  0752  33          	inc	sp
-2159  0753  21 00 00    	ld	hl,_logo1
-2160  0756  E5          	push	hl
-2161  0757  CD 00 00    	call	_game_img
-2162  075A  F1          	pop	af
-2163  075B  F1          	pop	af
-2164  075C  F1          	pop	af
-2165  075D  33          	inc	sp
-2166  075E  18 69       	jr	l_menu_logo_00110
-2167  0760              l_menu_logo_00108:
-2168  0760  21 10 04    	ld	hl,0x0410
-2169  0763  E5          	push	hl
-2170  0764  26 00       	ld	h,0x00
-2171  0766  E5          	push	hl
-2172  0767  3E 03       	ld	a,0x03
-2173  0769  F5          	push	af
-2174  076A  33          	inc	sp
-2175  076B  21 00 00    	ld	hl,_img1
-2176  076E  E5          	push	hl
-2177  076F  CD 00 00    	call	_game_img
-2178  0772  F1          	pop	af
-2179  0773  F1          	pop	af
-2180  0774  F1          	pop	af
-2181  0775  33          	inc	sp
-2182  0776  21 00 00    	ld	hl,_i
-2183  0779  36 1A       	ld	(hl),0x1a
-2184  077B              l_menu_logo_00101:
-2185  077B  3E 1E       	ld	a,0x1e
-2186  077D  21 00 00    	ld	hl,_i
-2187  0780  96          	sub	a, (hl)
-2188  0781  38 11       	jr	C,l_menu_logo_00103
-2189  0783  7E          	ld	a, (hl)
-2190  0784  F5          	push	af
-2191  0785  33          	inc	sp
-2192  0786  21 38 40    	ld	hl,0x4038
-2193  0789  E5          	push	hl
-2194  078A  CD 00 00    	call	_NIRVANAP_drawT_callee
-2195  078D  21 00 00    	ld	hl,_i
-2196  0790  34          	inc	(hl)
-2197  0791  34          	inc	(hl)
-2198  0792  18 E7       	jr	l_menu_logo_00101
-2199  0794              l_menu_logo_00103:
-2200  0794  21 00 00    	ld	hl,_i
-2201  0797  36 12       	ld	(hl),0x12
-2202  0799              l_menu_logo_00104:
-2203  0799  3E 1E       	ld	a,0x1e
-2204  079B  21 00 00    	ld	hl,_i
-2205  079E  96          	sub	a, (hl)
-2206  079F  38 11       	jr	C,l_menu_logo_00106
-2207  07A1  7E          	ld	a, (hl)
-2208  07A2  F5          	push	af
-2209  07A3  33          	inc	sp
-2210  07A4  21 28 30    	ld	hl,0x3028
-2211  07A7  E5          	push	hl
-2212  07A8  CD 00 00    	call	_NIRVANAP_drawT_callee
-2213  07AB  21 00 00    	ld	hl,_i
-2214  07AE  34          	inc	(hl)
-2215  07AF  34          	inc	(hl)
-2216  07B0  18 E7       	jr	l_menu_logo_00104
-2217  07B2              l_menu_logo_00106:
-2218  07B2  21 0A 01    	ld	hl,0x010a
-2219  07B5  E5          	push	hl
-2220  07B6  21 40 03    	ld	hl,0x0340
-2221  07B9  E5          	push	hl
-2222  07BA  3E 03       	ld	a,0x03
-2223  07BC  F5          	push	af
-2224  07BD  33          	inc	sp
-2225  07BE  21 00 00    	ld	hl,_logo2
-2226  07C1  E5          	push	hl
-2227  07C2  CD 00 00    	call	_game_img
-2228  07C5  F1          	pop	af
-2229  07C6  F1          	pop	af
-2230  07C7  F1          	pop	af
-2231  07C8  33          	inc	sp
-2232  07C9              l_menu_logo_00110:
-2233  07C9  C9          	ret
-2234  07CA              	SECTION code_compiler
-2235  07CA              ;	---------------------------------
-2236  07CA              ; Function menu_rotcolor
-2237  07CA              ; ---------------------------------
-2238  07CA              _menu_rotcolor:
-2239  07CA  21 00 00    	ld	hl,_color
-2240  07CD  34          	inc	(hl)
-2241  07CE  3E 07       	ld	a,0x07
-2242  07D0  96          	sub	a, (hl)
-2243  07D1  D0          	ret	NC
-2244  07D2  36 00       	ld	(hl),0x00
-2245  07D4  C9          	ret
-2246  07D5              	SECTION IGNORE
-2247  0000              
+2145  00B4  00          	DEFB 0x00
+2146  00B5              	SECTION code_compiler
+2147  073F              ;	---------------------------------
+2148  073F              ; Function menu_logo
+2149  073F              ; ---------------------------------
+2150  073F              _menu_logo:
+2151  073F  CD 00 00    	call	_game_cls
+2152  0742  3A 00 00    	ld	a,(_game_mode)
+2153  0745  B7          	or	a, a
+2154  0746  28 18       	jr	Z,l_menu_logo_00108
+2155  0748  21 08 04    	ld	hl,0x0408
+2156  074B  E5          	push	hl
+2157  074C  2E 10       	ld	l,0x10
+2158  074E  E5          	push	hl
+2159  074F  3E 03       	ld	a,0x03
+2160  0751  F5          	push	af
+2161  0752  33          	inc	sp
+2162  0753  21 00 00    	ld	hl,_logo1
+2163  0756  E5          	push	hl
+2164  0757  CD 00 00    	call	_game_img
+2165  075A  F1          	pop	af
+2166  075B  F1          	pop	af
+2167  075C  F1          	pop	af
+2168  075D  33          	inc	sp
+2169  075E  18 69       	jr	l_menu_logo_00110
+2170  0760              l_menu_logo_00108:
+2171  0760  21 10 04    	ld	hl,0x0410
+2172  0763  E5          	push	hl
+2173  0764  26 00       	ld	h,0x00
+2174  0766  E5          	push	hl
+2175  0767  3E 03       	ld	a,0x03
+2176  0769  F5          	push	af
+2177  076A  33          	inc	sp
+2178  076B  21 00 00    	ld	hl,_img1
+2179  076E  E5          	push	hl
+2180  076F  CD 00 00    	call	_game_img
+2181  0772  F1          	pop	af
+2182  0773  F1          	pop	af
+2183  0774  F1          	pop	af
+2184  0775  33          	inc	sp
+2185  0776  21 00 00    	ld	hl,_i
+2186  0779  36 1A       	ld	(hl),0x1a
+2187  077B              l_menu_logo_00101:
+2188  077B  3E 1E       	ld	a,0x1e
+2189  077D  21 00 00    	ld	hl,_i
+2190  0780  96          	sub	a, (hl)
+2191  0781  38 11       	jr	C,l_menu_logo_00103
+2192  0783  7E          	ld	a, (hl)
+2193  0784  F5          	push	af
+2194  0785  33          	inc	sp
+2195  0786  21 38 40    	ld	hl,0x4038
+2196  0789  E5          	push	hl
+2197  078A  CD 00 00    	call	_NIRVANAP_drawT_callee
+2198  078D  21 00 00    	ld	hl,_i
+2199  0790  34          	inc	(hl)
+2200  0791  34          	inc	(hl)
+2201  0792  18 E7       	jr	l_menu_logo_00101
+2202  0794              l_menu_logo_00103:
+2203  0794  21 00 00    	ld	hl,_i
+2204  0797  36 12       	ld	(hl),0x12
+2205  0799              l_menu_logo_00104:
+2206  0799  3E 1E       	ld	a,0x1e
+2207  079B  21 00 00    	ld	hl,_i
+2208  079E  96          	sub	a, (hl)
+2209  079F  38 11       	jr	C,l_menu_logo_00106
+2210  07A1  7E          	ld	a, (hl)
+2211  07A2  F5          	push	af
+2212  07A3  33          	inc	sp
+2213  07A4  21 28 30    	ld	hl,0x3028
+2214  07A7  E5          	push	hl
+2215  07A8  CD 00 00    	call	_NIRVANAP_drawT_callee
+2216  07AB  21 00 00    	ld	hl,_i
+2217  07AE  34          	inc	(hl)
+2218  07AF  34          	inc	(hl)
+2219  07B0  18 E7       	jr	l_menu_logo_00104
+2220  07B2              l_menu_logo_00106:
+2221  07B2  21 0A 01    	ld	hl,0x010a
+2222  07B5  E5          	push	hl
+2223  07B6  21 40 03    	ld	hl,0x0340
+2224  07B9  E5          	push	hl
+2225  07BA  3E 03       	ld	a,0x03
+2226  07BC  F5          	push	af
+2227  07BD  33          	inc	sp
+2228  07BE  21 00 00    	ld	hl,_logo2
+2229  07C1  E5          	push	hl
+2230  07C2  CD 00 00    	call	_game_img
+2231  07C5  F1          	pop	af
+2232  07C6  F1          	pop	af
+2233  07C7  F1          	pop	af
+2234  07C8  33          	inc	sp
+2235  07C9              l_menu_logo_00110:
+2236  07C9  C9          	ret
+2237  07CA              	SECTION code_compiler
+2238  07CA              ;	---------------------------------
+2239  07CA              ; Function menu_rotcolor
+2240  07CA              ; ---------------------------------
+2241  07CA              _menu_rotcolor:
+2242  07CA  21 00 00    	ld	hl,_color
+2243  07CD  34          	inc	(hl)
+2244  07CE  3E 07       	ld	a,0x07
+2245  07D0  96          	sub	a, (hl)
+2246  07D1  D0          	ret	NC
+2247  07D2  36 00       	ld	(hl),0x00
+2248  07D4  C9          	ret
+2249  07D5              	SECTION IGNORE
+2250  0000              
