@@ -343,8 +343,8 @@ void spr_btile_paint_back() {
 */
 void spr_paint(void) {
 
-  NIRVANAP_spriteT(nirv_sprite_index, tile[sprite] + colint[sprite],
-                   lin[sprite] + GAME_OFFSET_Y, col[sprite]);
+//  NIRVANAP_spriteT(nirv_sprite_index, tile[sprite] + colint[sprite],
+//                   lin[sprite] + GAME_OFFSET_Y, col[sprite]);
 /*
   if (spr_clr) {
     // Method0 Using printC

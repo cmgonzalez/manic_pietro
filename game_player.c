@@ -69,7 +69,6 @@ void player_turn(void) {
     s_col0 = col[INDEX_P1];
 
     dirs = (joyfunc1)(&k1);
-    zx_border(map_border);
 
     player_move();
     player_handle_lock();

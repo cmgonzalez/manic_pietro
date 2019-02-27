@@ -29,30 +29,113 @@
 #include <stdlib.h>
 
 void enemy_turn(void) {
+  unsigned char lin0[8];
+  unsigned char col0[8];
+  unsigned char draw[8];
+  unsigned char clear[8];
 
   sprite = 0;
-  nirv_sprite_index = 0xFF;
   while (sprite < spr_count) {
-
-    ++nirv_sprite_index;
-    if (nirv_sprite_index == NIRV_SPRITE_P1) {
-      // This Nirvana Version have only 7 sprites -1 door -1 player
-      //NIRVANAP_halt();
-      //z80_delay_ms(3); //FASTER WHY????
-      //z80_delay_tstate(4800); //?????? MAGIC!
-      nirv_sprite_index = 0;
-    }
+    draw[sprite] = 0;
+    clear[sprite] = 0;
     if (class[sprite] && spr_chktime()) {
       s_lin0 = lin[sprite];
       s_col0 = col[sprite];
+      lin0[sprite] = s_lin0;
+      col0[sprite] = s_col0;
       enemy_move();
+      draw[sprite] = 1;
+      if (s_col0 != col[sprite] || s_lin0 != lin[sprite]) {
+        clear[sprite] = 1;
+      }
     }
-
     ++sprite;
   }
-  if (spr_count >= NIRV_SPRITE_P1) {
-    NIRVANAP_halt();
+
+  sprite = 0;
+  nirv_sprite_index = 0;
+  i = 1;
+  while (sprite < spr_count) {
+    if (draw[sprite]) {
+      if (i) {
+        i = 0;
+        //NIRVANAP_halt();
+      }
+      NIRVANAP_spriteT(nirv_sprite_index, tile[sprite] + colint[sprite],
+                       lin[sprite] + GAME_OFFSET_Y, col[sprite]);
+    }
+
+    // NIRVANAP_spriteT( nirv_sprite_index, tile[sprite] + colint[sprite],
+    // lin[sprite] + GAME_OFFSET_Y, col[sprite]);
+    if (clear[sprite]) {
+      s_lin0 = lin0[sprite];
+      s_col0 = col0[sprite];
+      /*if (scr_curr < 20) {
+        spr_clear_fast_hor();
+      } else {
+        spr_back_repaint();
+      }
+      */
+      switch (spr_kind[sprite]) {
+
+      case E_HORIZONTAL:
+        if (scr_curr >= 20) {
+            spr_back_repaint();
+          }  else {
+            spr_clear_fast_hor();
+          }
+        break;
+      case E_VERTICAL:
+        spr_clear_fast_vert();
+
+        break;
+      case E_EUGENE:
+        spr_clear_fast_vert();
+
+        break;
+      case E_SKYLAB:
+        spr_clear_fast();
+
+        break;
+      case E_FALL:
+        spr_clear_fast_vert();
+
+        break;
+      case E_ZIGZAG:
+        spr_back_repaint();
+
+        break;
+      }
+    }
+    ++nirv_sprite_index;
+    if (nirv_sprite_index == 5)
+       {
+        nirv_sprite_index = 0;
+        NIRVANAP_halt();
+      }
+    ++sprite;
   }
+
+  /*
+    sprite = 0;
+    nirv_sprite_index = 0;
+    while (sprite < spr_count) {
+      if (class[sprite] &&  lin0[sprite] && col0[sprite]) {
+       s_lin0 = lin0[sprite];
+       s_col0 = col0[sprite];
+       if (scr_curr >= 20) { // ON PIETRO MODE
+         spr_back_repaint();
+       } else {
+         spr_clear_fast_hor();
+       }
+      }
+       ++sprite;
+    }
+  */
+
+  // if (spr_count >= NIRV_SPRITE_P1) {
+  //  NIRVANAP_halt();
+  //}
 }
 
 void enemy_move(void) {
@@ -60,65 +143,24 @@ void enemy_move(void) {
   switch (spr_kind[sprite]) {
   case E_STATIC:
     enemy_static();
-    spr_paint();
-    // if (spr_clr)
-    //  spr_clear_fast();
     break;
   case E_HORIZONTAL:
     enemy_horizontal();
-    spr_paint();
-    if (spr_clr) {
-      if (scr_curr >= 20) { // ON PIETRO MODE
-        spr_back_repaint();
-      } else {
-        spr_clear_fast_hor();
-      }
-    }
-    break;
-  case E_WALK:
-    enemy_horizontal();
-    spr_paint();
-    if (spr_clr)
-      spr_clear_fast();
     break;
   case E_VERTICAL:
     enemy_vertical();
-
-    spr_paint();
-
-    if (spr_clr) {
-      spr_clear_fast_vert();
-    }
     break;
   case E_EUGENE:
     enemy_eugene();
-    spr_paint();
-    if (spr_clr) {
-      spr_clear_fast_vert();
-    }
     break;
   case E_SKYLAB:
     enemy_gota();
-    spr_paint();
-    if (spr_clr) {
-      spr_clear_fast();
-    }
     break;
   case E_FALL:
     enemy_fall();
-    if (class[sprite] ) {
-      spr_paint();
-    }
-    if (spr_clr) {
-      spr_clear_fast_vert();
-    }
     break;
   case E_ZIGZAG:
     enemy_zigzag();
-    spr_paint();
-    // NIRVANAP_drawT(SPRITE_EMPTY, s_lin0 + GAME_OFFSET_Y, s_col0);
-    spr_back_repaint();
-
     break;
   }
 }
@@ -195,12 +237,10 @@ void enemy_fall() {
   index1 = spr_calc_index(s_lin0, s_col0 + 1);
   game_cell_paint_index();
 
-
-
-  if ( (scr_curr == 11 && lin[sprite] >= 104) || ( lin[sprite] >= 112 ) ) {
+  if ((scr_curr == 11 && lin[sprite] >= 104) || (lin[sprite] >= 112)) {
     class[sprite] = 0;
 
-    index1 = spr_calc_index(lin[sprite],col[sprite]);
+    index1 = spr_calc_index(lin[sprite], col[sprite]);
     game_cell_paint_index();
     index1++;
     game_cell_paint_index();
@@ -210,7 +250,6 @@ void enemy_fall() {
     game_cell_paint_index();
     NIRVANAP_spriteT(sprite, 0, 0, 0);
     NIRVANAP_halt();
-
   }
 }
 
@@ -331,10 +370,10 @@ void enemy_init() {
     if (*(f_init + f_pos) == f_class) {
 
       // Read from ARRAY
-      f_basetile = *(f_init + f_pos + 1); //base tile
-      spr_frames[sprite] = *(f_init + f_pos + 2); //frames
+      f_basetile = *(f_init + f_pos + 1);         // base tile
+      spr_frames[sprite] = *(f_init + f_pos + 2); // frames
       spr_altset[sprite] = *(f_init + f_pos + 3);
-      spr_kind[sprite] = *(f_init + f_pos + 4); //Class of sprite
+      spr_kind[sprite] = *(f_init + f_pos + 4); // Class of sprite
 
       // Color Alternates
       spr_init_cin0 = *(f_init + f_pos + 5);
