@@ -119,7 +119,7 @@ void menu_main() {
       audio_select();
       game_attribs();
       v0 = menu_read_code();
-      ay_reset();
+      //ay_reset();
       if (v0) {
         NIRVANAP_halt();
         game_tune = 0; // default
@@ -139,11 +139,17 @@ void menu_main() {
       break;
     */
     case 0:
-
-      game_cls();
       ay_reset();
-      audio_game_start();
+      //audio_game_start();
+      ay_fx_play(4, ay_fx_game_start);
       z80_delay_ms(300);
+      game_cls();
+      game_code = 0;
+      if (game_mode) {
+        scr_curr = 20;
+      } else {
+        scr_curr = 0;
+      }
       game_tune = 0; // default
       f_input = 0; // Exit Loop
       break;
@@ -213,20 +219,22 @@ void menu_main_print(void) {
   attrib_osd[1] = PAPER_BLACK | INK_MAGENTA | BRIGHT;
   attrib_osd[2] = PAPER_BLACK | INK_RED;
   attrib_osd[3] = PAPER_BLACK | INK_MAGENTA;
-
+  /* Menu Background*/
+  v0 = 14;
+  while(v0 < 16) {
+    game_paint_attrib(&attrib_osd, 11, 11+8, (v0 * 8) + 8);
+    ++v0;
+  }
+  /* Menu Texts */
   zx_print_str(11, 11, "1 SINCLAIR");
-  game_paint_attrib(&attrib, 11, 11+10, (11 * 8) + 8);
   zx_print_str(12, 11, "2 KEYBOARD");
-  game_paint_attrib(&attrib, 11, 11+10, (12 * 8) + 8);
   zx_print_str(13, 11, "3 KEMPSTON");
-  game_paint_attrib(&attrib, 11, 11+10, (13 * 8) + 8);
   zx_print_str(14, 11, "4 DEFINE");
-  game_paint_attrib(&attrib_osd, 11, 11+8, (14 * 8) + 8);
   zx_print_str(15, 11, "5 CODES");
-  game_paint_attrib(&attrib_osd, 11, 11+7, (15 * 8) + 8);
   zx_print_ink(INK_CYAN);
   zx_print_str(17, 11, "0 START");
   zx_print_ink(INK_WHITE);
+  zx_print_str( 9, 21, "1.0");
   zx_print_str(23, 9, "2019 NOENTIENDO");
 }
 
@@ -295,13 +303,11 @@ unsigned char menu_read_key(unsigned char row, unsigned char col) {
   while (1) {
     in_wait_key();
     key = in_inkey();
-    in_wait_nokey();
-    // if (key >= 48 && key <=57) {
-    // if (key >= 65 && key <= 90) {
     if (key >= 97 && key <= 122) {
+      audio_tick();
       key = key - 32; // UPPERCASE
       zx_print_char(row, col, key);
-      audio_tick();
+      in_wait_nokey();
       return key;
     }
   }
@@ -407,6 +413,7 @@ unsigned char menu_read_code() {
     }
     if (menu_mcodechk("MATTHEWS")) {
       if (game_mode) {
+        game_intro_willy();
         game_mode = 0;
         scr_curr = 0;
       } else {
@@ -428,7 +435,9 @@ unsigned char menu_read_code() {
       if (valid == 2) {
         menu_logo();
       }
+
       menu_main_print();
+      audio_menu();
       return 0;
 
     }
@@ -445,12 +454,8 @@ unsigned char menu_read_code() {
 void menu_logo() {
   game_cls();
   if (game_mode) {
-    // zx_print_str(3, 10, "MANIC PIETRO");
-    //game_logo1(1, 16, 4, 8, 4);
     game_img(&logo1[0],3, 16, 4, 8, 4);
   } else {
-    // zx_print_str(3, 10, "MANIC  MINER");
-    //game_logo1(6, 16, 0, 16, 4); //Back
     game_img(&img1[0],3, 16, 0, 16, 4);
 
     i = 26;
@@ -459,27 +464,13 @@ void menu_logo() {
       i  = i + 2;
     }
 
-/*
-    NIRVANAP_drawT(56,64,26);
-    NIRVANAP_drawT(56,64,28);
-    NIRVANAP_drawT(56,64,30);
-*/
     i = 18;
     while (i <= 30) {
       NIRVANAP_drawT(40,48,i);
       i  = i + 2;
     }
-/*
-    NIRVANAP_drawT(40,48,18);
-    NIRVANAP_drawT(40,48,20);
-    NIRVANAP_drawT(40,48,22);
-    NIRVANAP_drawT(40,48,24);
-    NIRVANAP_drawT(40,48,26);
-    NIRVANAP_drawT(40,48,28);
-    NIRVANAP_drawT(40,48,30);
-*/
+
     game_img(&logo2[0], 3, 64, 3, 10, 1); //Logo
-    //game_logo1(2, 64, 3, 10, 1); //Logo
   }
 }
 

@@ -289,7 +289,6 @@ extern unsigned char game_tileset;
 extern unsigned char game_mode;
 extern unsigned char game_atrac;
 extern unsigned char game_menu;
-extern unsigned char game_effect;
 extern unsigned char game_lang;
 
 

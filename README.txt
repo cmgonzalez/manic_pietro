@@ -1,6 +1,6 @@
 ==============================================================================
 
-README - Manic Pietro v1.2
+README - Manic Pietro v1.0
 
 
 This games was build using the Pietro Engine, with the help of z88dk compiler and using NIRVANA+ for the multicolour graphic engine.
@@ -9,28 +9,42 @@ This games was build using the Pietro Engine, with the help of z88dk compiler an
 ==============================================================================
 HISTORY
 
-Long after the destruction of the Ring, Manic Pietro comebacks for a revenge with the four last demons of Middle earth. Help him to free the world of the remaining evil of Melkor.
+Help Pietro on his journey, thought 20 different brand new levels, based on some of our favorites 8 bit games.
 
-An arcade / rpg mix with four rounds of 16 screens each. Each Round have a an unique boss that have to be defeated to move to the next Round. Control can be by either 1 button or 2 button control. For the ZX Spectrum models with 128 Kb only.
+The brave souls that can finish this adventure, will get a secret code to unlock the original 20 Miner levels.
 
-Manic Pietro can gain experience, this will increase your fire range, levels are upgraded based your points: Also you can pick items that will increase your maximum health and mana. You can have a maximum of 200 health and mana.
+If you die on your quest you will get a code to continue playing from your last stage, with the lives you have when start it, but remember there's no swordfish for cheaters!. There's another more codes so keep playing!
 
-Damage Table:
-Deadly damage 50 points
-Enemy damage 20 points
-Bullet damage 10 points
-Boss Bullet damage 10 points
-Boss damage instant dead.
+A remake of the master piece "Manic Miner" from the genius Matthew Smith, for contest ZX DEV MIA remakes.
 
-Coded on C using the powerfull z88dk compiler , the fabulous Nirvana Plus, and the genial Vortex II Player for AY music. The code is GPL’ed https://bitbucket.org/CmGonzalez/manic_pietro/
+Only for 128kb spectrums, coded on C using z88dk with multicolor effects thanks to the Nirvana Plus Engine.
 
-Code: Cristián González, Alvin Albrecht
-Music: s9
-FX: BeykerSoft
-Testing:Abu Simbel
+Good luck player!
 
 
-Good luck wizard!
+Coding
+Cristián González
+Alvin Albrecht
+Einar Saukas
+
+Graphics and script
+Cristián González
+Igor Errazking
+
+Sound and music
+Sergio Vaquer "Beykersoft"
+Davos
+
+Loading screen
+Mick Farrow
+
+Testing
+Dario Ruellan "Daríopedía"
+Juan José Arenas "Canal de Juanjo"
+Carlos Perezgrín
+Federico Jerez "Abu Simbel"
+Ed Verde
+
 
 
 
@@ -106,32 +120,5 @@ BANK 6
 
 What's NEW
 
-Version 1.03
-  -Fix on Mushroom's not showing after brick hit.
-
-Version 1.02
-  -Player Jump Fix, now it won't stop at platforms
-
-Version 1.01
-  -Player Shoot Animation.
-  -Performance improved
-  -2 buttons alternative mode 1BB (up jumps, fire shoots, up+fire jumps on stairs)
-  -Brick Hit picks items, a la SMB1
-  -Level table updated (10 Level Max)
-  -Player Shoot Sound fix.
-  -Remove Red Dot on loading screen
-  -Repaint menu choice after a game
-  -Mushroom remove block by stopper tiles
-  -Mushroom fix popup on screen
-  -Game key repaint on screen after Round UP
-  -Map fixes
-  -Boss fire left range fixed
-  -Speed up animations
-  -Background paint fixes, strict function.
-  -SPR_P1 / enemies different paint functions for performance
-  -game_audio.c - audio abstract
-  -game_menu.c - menu abstract
-  -Tiles fixes
-  -Corrected btiles paper restore after game end.
-  -Game clear screen better routine
-  -Code clean
+Version 1.0
+-Initial Release

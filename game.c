@@ -55,7 +55,7 @@ void main(void) {
   if (game_debug) {
     game_inmune = 0;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 16;
+    scr_curr = 12;
     game_menu = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
     menu_curr_sel = 2; // Sync Menu
@@ -66,7 +66,7 @@ void main(void) {
     game_menu = 1;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_sinclair1);
     menu_curr_sel = 1; // Sync Menu
-    game_effect = 1;
+
   }
 
   // INTERRUPTS ARE DISABLED
@@ -123,10 +123,8 @@ void main(void) {
   // Init Screen
   frame_time = zx_clock();
 
-  // GAME INTRO
-
-  if (game_effect) {
-
+  // Game Intro
+  if (!game_debug) {
     game_intro();
   }
 
@@ -144,15 +142,8 @@ void main(void) {
     game_cls();
     game_paint_attrib(&attrib, 0, 31, (11 << 3) + 8);
     game_shoe();
-
     game_over = 0; // Hack game_colour_message to render background
-    // GAME OVER
-    if (!game_code) {
-      if (game_mode) {
-        scr_curr = 20;
-      } else {
-        scr_curr = 0;
-      }
-    }
+
+
   }
 }

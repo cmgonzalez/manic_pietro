@@ -12,6 +12,7 @@ OUTS = bin/manic_pietro.sna
 ORG = 23584
 
 CFLAGS = -SO3 --max-allocs-per-node200000 --opt-code-size
+//CFLAGS = -SO3 --max-allocs-per-node100000 --opt-code-size
 //CFLAGS = -SO3 --max-allocs-per-node10000 --opt-code-size
 //CFLAGS = -SO3 --max-allocs-per-node1000 --opt-code-size
 
@@ -32,7 +33,7 @@ zx7: loader.tap game_scr.bin game.font $(OUTC)
 	-rm -f *.bin *.tap *.font *.zx7 game zcc_proj.lst zcc_opt.def
 	grep code_compiler_size game.map
 
-sna: game_scr.bin game_scr.asm game.font $(OUTS)
+sna: game_scr.bin game.font $(OUTS)
 	-ls -l *.bin
 	-rm -f *.bin *.tap *.sna *.font *.zx7 game zcc_proj.lst zcc_opt.def
 	grep code_compiler_size game.map

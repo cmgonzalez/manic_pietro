@@ -22,7 +22,6 @@ extern void          game_draw_map(void);
 extern void          game_fps(void);
 extern void          game_cls(void);
 extern void          game_fill_row(unsigned char f_row, unsigned char f_asc) __z88dk_callee;
-extern void          game_print_footer(void);
 extern void			     game_update_stats(void);
 extern void			     game_start_timer(void);
 extern void			     game_round_init(void);
@@ -57,6 +56,7 @@ extern void          zx_print_char(unsigned char ui_row, unsigned char ui_col, u
 extern void          game_anim_conveyor();
 
 extern void          game_text( unsigned char f_index, unsigned char f_row );
+extern void          game_intro_willy();
 extern void          game_end_willy();
 extern void          game_end_pietro();
 extern void          game_img( unsigned char *f_img, unsigned char f_page,

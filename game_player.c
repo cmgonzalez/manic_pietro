@@ -69,9 +69,11 @@ void player_turn(void) {
     s_col0 = col[INDEX_P1];
 
     dirs = (joyfunc1)(&k1);
+    zx_border(map_border);
 
     player_move();
     player_handle_lock();
+
     player_collision();
 
     player_check_exit();
@@ -208,8 +210,9 @@ void player_debug_keys() {
 
 void player_check_exit() {
   // Level UP
-  if (obj_count == 0xFF && ((col[INDEX_P1] == game_exit_col) ||
-                            col[INDEX_P1] == (game_exit_col + 1))) {
+  v0 = abs(col[INDEX_P1]  - game_exit_col);
+
+  if ( obj_count == 0xFF && v0 < 2) {
 
     v0 = abs((lin[INDEX_P1] + 16) - game_exit_lin);
 
@@ -434,53 +437,48 @@ unsigned char player_move_walk(void) {
 }
 
 void player_handle_lock() {
+  if ((dirs & IN_STICK_LEFT) && (dirs & IN_STICK_RIGHT)) {
+    //DARIO CHEATER!!!
+    BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    dirs = 0;
+    dirs_last = 0xFF;
+    player_check_conveyor();
+  }
+
 
   if (!BIT_CHK(state[INDEX_P1], STAT_CONVEYOR)) {
     // Simplified
     if (dirs == 0) {
       BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+      player_check_conveyor();
     } else {
       if ((dirs & IN_STICK_LEFT) || (dirs & IN_STICK_RIGHT)) {
-        /*
-        if (dirs & IN_STICK_FIRE) {
-          dirs_last = dirs_last | IN_STICK_FIRE;
-        } else {
-          dirs_last = dirs_last & 0x7F; //Remove Fire Bits
-        }
-
-        if (dirs == dirs_last) {
-          BIT_SET(state_a[INDEX_P1], STAT_LOCK);
-          dirs_last = dirs;// & 0x7F;
-        } else {
-          BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
-        }
-        */
-        /*
-        v0 = (dirs & !IN_STICK_FIRE);
-        v1 = (dirs_last & !IN_STICK_FIRE);
-
-        if (v0 == v1) {
-
-          */
-          v0 = dirs & !IN_STICK_FIRE;
-          v1 = dirs_last & !IN_STICK_FIRE;
+          //v0 = dirs & !IN_STICK_FIRE;
+          //v1 = dirs_last & !IN_STICK_FIRE;
         //if ((dirs & !IN_STICK_FIRE) == (dirs_last & !IN_STICK_FIRE)) {
-       if (v0 == v1) {
+
+       if (
+            ((dirs & IN_STICK_LEFT) && (dirs_last & IN_STICK_LEFT)) ||
+            ((dirs & IN_STICK_RIGHT) && (dirs_last & IN_STICK_RIGHT))
+          ) {
           BIT_SET(state_a[INDEX_P1], STAT_LOCK);
           dirs_last = dirs; // & 0x7F;
         } else {
           BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+          player_check_conveyor();
         }
       } else {
         if ((dirs & IN_STICK_FIRE) && (dirs_last & IN_STICK_FIRE)) {
           BIT_SET(state_a[INDEX_P1], STAT_LOCK);
         } else {
           BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+          player_check_conveyor();
         }
       }
     }
   } else {
     BIT_CLR(state_a[INDEX_P1], STAT_LOCK);
+    dirs_last = 0;
   }
 }
 
@@ -796,9 +794,10 @@ unsigned char player_pick_item(unsigned char l_val, int l_index) {
     player_score_add(100);
     scr_map[l_index] = TILE_EMPTY;
     ++player_coins;
-    audio_coin();
+    ay_fx_play(4, ay_fx_coin);
     if (obj_count == player_coins) {
-      audio_door_open();
+      //audio_door_open();
+      ay_fx_play(4, ay_fx_door_open);
       game_flash_exit(FLASH);
       obj_count = 0xFF;
     }
@@ -923,7 +922,7 @@ void player_crumble() {
     if (v0 == TILE_CRUMB) { // TODO CAUTION!
 
       if (scr_map[index1] == TILE_CRUMB_INIT) {
-        audio_crumble();
+        if (ay_is_playing() != AY_PLAYING_FX) ay_fx_play(4, ay_fx_crumble);
         scr_map[index1] = game_crumb_start;
 
       } else {

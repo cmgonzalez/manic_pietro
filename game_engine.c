@@ -45,14 +45,14 @@ void game_loop(void) {
   game_lives = player_lives;
   player_score = 0;
   game_over = 0;
-  game_round_up = 0;
+
   // scr_curr = 0xFF;
   map_paper = PAPER_BLACK;
   player_lin_scr = GAME_LIN_FLOOR - 24;
   player_col_scr = 2;
-
+  game_round_up = 1; //Display presentation on 1 round
   game_round_init();
-
+  game_round_up = 0;
   while (!game_over) {
     /*Player Init*/
     // dirs = 0x00;
@@ -408,8 +408,8 @@ void game_img( unsigned char *f_img, unsigned char f_page,
   len = f_width * f_height;
   // 8 x 4 = 32 logo1
   // Read Draw
-  NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
-  intrinsic_di();
+  //NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
+
   i = 0;
   while (i < 8) {
     NIRVANAP_spriteT(i, 0, 0, 0);
@@ -417,17 +417,18 @@ void game_img( unsigned char *f_img, unsigned char f_page,
   }
 
   src = f_img;
-  page(f_page);
   dest = &btiles[0];
+  intrinsic_di();
+  page(f_page);
   memcpy(dest, src, 48 * len);
   page(0);
-
+  intrinsic_ei();
   i = 0;
   s_col1 = f_col;
   s_lin1 = f_lin;
 
   while (i < (len)) {
-    NIRVANAP_drawT_raw(i, s_lin1, s_col1 * 2);
+    NIRVANAP_drawT(i, s_lin1, s_col1 * 2);
     ++i;
     ++s_col1;
     if ((i % f_width) == 0) {
@@ -435,7 +436,7 @@ void game_img( unsigned char *f_img, unsigned char f_page,
       s_col1 = f_col;
     }
   }
-  intrinsic_ei();
+
 
 }
 
@@ -483,21 +484,12 @@ void game_cell_paint_index() {
   s_row1 = (s_lin1 >> 3) + 1;
   s_lin1 = s_lin1 + 16;
   // game_cell_paint();
-  spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  //spr_draw8(scr_map[index1], s_row1 << 3, s_col1);
+  game_cell_paint();
 }
 
 void game_cell_paint() { spr_draw8(scr_map[index1], s_row1 << 3, s_col1); }
 
-void game_end() {}
-
-void game_print_footer(void) {
-
-  if (game_debug) {
-    /* phase osd bottom*/
-    zx_print_ink(INK_WHITE | PAPER_BLACK);
-    zx_print_str(23, 20, "LPS:");
-  }
-}
 
 void game_print_score(void) {
 
@@ -525,30 +517,6 @@ void game_print_lives(void) {
 }
 
 void game_cls() {
-  /*
-  NIRVANAP_stop();
-  intrinsic_di();
-  zx_paper_fill(INK_BLACK | PAPER_BLACK);
-  zx_border(INK_BLACK);
-
-  v0 = 0;
-  while (v0 <= 8) {
-    v1 = 0;
-    while (v1 < 31) {
-      NIRVANAP_drawT_raw(SPRITE_EMPTY, (v0 * 16) + 8, v1);
-      ++v1;
-      ++v1;
-    }
-    ++v0;
-  }
-  intrinsic_ei();
-  NIRVANAP_start();
-  v0 = 0;
-  while (v0 <= NIRV_TOTAL_SPRITES) {
-    NIRVANAP_spriteT(v0, SPRITE_EMPTY, 0, 0);
-    ++v0;
-  }
-  */
   NIRVANAP_halt();
   spr_clear_scr();
   zx_paper_fill(INK_BLACK | PAPER_BLACK);
@@ -737,7 +705,7 @@ void game_round_init(void) {
   NIRVANAP_start();
   NIRVANAP_halt();
   // Round presentation
-  if (!game_debug && !game_atrac) {
+  if (!game_debug && !game_atrac && game_round_up) {
 
     audio_round_init();
     game_fill_row(10, 32);
@@ -1298,7 +1266,7 @@ void game_shoe() {
   code0[7] = v3 / 100;
   code0[4] = (v3 - (code0[7] * 100)) / 10;
   code0[1] = v3 - (code0[7] * 100 + code0[4] * 10);
-  zx_print_ink(PAPER_BLACK | INK_YELLOW | BRIGHT);
+  zx_print_ink(PAPER_BLACK | INK_WHITE | BRIGHT);
   zx_print_str(20, 8, "CODE : ");
   i = 0;
   while (i < 8) {
@@ -1383,13 +1351,15 @@ void game_text(unsigned char f_index, unsigned char f_row) {
   unsigned char k;
   if (game_lang) {
     src = &texts_en[32 * f_index];
+    v0 = 7;
   } else {
     src = &texts_es[32 * f_index];
+    v0 = 1;
   }
 
   dest = &text_buff[0];
   intrinsic_di();
-  page(7); //BANK 7 TEXTS
+  page(v0); //BANK 7 TEXTS
   memcpy(dest, src, 32);
   page(0);
   intrinsic_ei();
@@ -1413,10 +1383,12 @@ void game_text(unsigned char f_index, unsigned char f_row) {
       z80_delay_ms(8);
     ++v0;
     ++s_col1;
-    ++color;
-    if (color > 7) {
-      color = 1;
-    }
+    menu_rotcolor();
+
+    //++color;
+    //if (color > 7) {
+    //  color = 1;
+    //}
     if (v0 > 31) {
       k = 0;
     }
@@ -1456,10 +1428,7 @@ void game_intro() {
 
       v0 = 1;
       while (v0) {
-        //in_wait_key();
         v1 = in_inkey();
-        //in_wait_nokey();
-        //zx_print_chr(23, 1, v1);
         v1 = v1 - 48;
 
         if (v1 == 1 || v1 == 2) {
@@ -1467,20 +1436,7 @@ void game_intro() {
           game_lang = 0xFF + v1;
         }
       }
-  /*
-      while (v0 < 16) {
-        NIRVANAP_spriteT(v1, v2, 96, v0 + 8);
-        v0 = v0 + 2;
-        ++v2;
-        ++v1;
-        if (v1 == NIRV_TOTAL_SPRITES) {
-          v1 = 0;
-          NIRVANAP_halt();
-        }
-      }
-  */
 
-      //z80_delay_ms(25);
       ay_song_play(AY_SONG_LOOP, 6, ay_song_mistery);
       // ADDR PAGE ROW COL
       // *f_addr, f_page, unsigned char f_lin, unsigned char f_col, unsigned char f_width, unsigned char f_height)
@@ -1496,7 +1452,7 @@ void game_intro() {
       game_img(&cartoon0[0]    , 1, 16, 1, 4, 6);
       game_text(4, 18);
       game_text(5, 19);
-      game_img(&cartoon1[0]    , 1, 40, 6, 10, 6);
+      game_img(&cartoon1[0]    , 1, 40, 7, 9, 6);
       game_text(6, 21);
       game_text(7, 22);
       game_img(&cartoon2[0]    , 1, 20, 5, 6, 7);
@@ -1515,23 +1471,35 @@ void game_intro() {
   }
 }
 
+void game_intro_willy() {
+  ay_song_play(AY_SONG_LOOP, 6, ay_song_mistery);
+  game_cls();
+
+  game_img(&cartoon6[0]    , 1, 32, 1, 8, 5);
+  game_text(14, 19);
+  game_text(15, 20);
+  game_img(&cartoon7[0]    , 1, 80, 8, 7, 4);
+  game_text(16, 21);
+  game_text(17, 22);
+  game_pause0();
+  game_cls();
+}
 
 void game_end_willy() {
   ay_song_play(AY_SONG_LOOP, 6, ay_song_medievo);
   game_cls();
 
-  game_img(&cartoon3[0]    , 1, 16, 2, 3, 6);
-  game_text( 9, 18);
-  game_text(10, 19);
-  game_img(&cartoon4[0]    , 1, 32, 12, 4, 6);
-  game_text(11, 20);
-  game_img(&cartoon5[0]    , 1, 48, 6, 4, 6);
-  game_text(12, 21);
-  game_text(13, 23);
-  v0 = 0;
-  while (v0 == 0) {
-    v0 = in_test_key();
-  }
+
+  game_img(&cartoon9[0]    , 1, 32, 0, 7, 4);
+
+  game_text(18, 19);
+  game_text(19, 20);
+
+  game_img(&cartoon8[0]    , 1, 48, 6, 8, 5);
+  game_text(20, 21);
+  game_text(21, 22);
+  game_text(22, 23);   //CHIMUELO
+  game_pause0();
   game_cls();
 }
 
@@ -1542,14 +1510,18 @@ void game_end_pietro() {
   game_img(&cartoon3[0]    , 1, 16, 2, 3, 6);
   game_text( 9, 18);
   game_text(10, 19);
-  game_img(&cartoon4[0]    , 1, 32, 11, 4, 6);
+  game_img(&cartoon4[0]    , 1, 32, 10, 4, 6);
   game_text(11, 20);
   game_img(&cartoon5[0]    , 1, 48, 6, 4, 6);
   game_text(12, 21);
-  game_text(13, 23);
+  game_text(13, 23); //MATTHEWS
+  game_pause0();
+  game_cls();
+}
+
+void game_pause0() {
   v0 = 0;
   while (v0 == 0) {
     v0 = in_test_key();
   }
-  game_cls();
 }

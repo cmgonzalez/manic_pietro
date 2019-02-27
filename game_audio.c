@@ -76,7 +76,6 @@ void audio_dead(void) {
   ay_fx_play(4, ay_fx_dead);
 }
 
-void audio_crumble(void) { ay_fx_play(4, ay_fx_crumble); }
 
 void audio_jump(void) {
   ay_fx_play(4, ay_fx_jump);
@@ -90,9 +89,9 @@ void audio_fall(void) {
     player_fall_start = 0;
   }
 }
-void audio_game_start(void) { ay_fx_play(4, ay_fx_game_start); }
+//void audio_game_start(void) { ay_fx_play(4, ay_fx_game_start); }
 
-void audio_door_open(void) { ay_fx_play(4, ay_fx_door_open); }
+//void audio_door_open(void) { ay_fx_play(4, ay_fx_door_open); }
 
 void audio_tick(void) {
   ay_fx_stop();
@@ -103,7 +102,6 @@ void audio_select(void) {
   ay_fx_play(4, ay_fx_select);
 }
 
-void audio_coin(void) { ay_fx_play(4, ay_fx_coin); }
 void audio_coin_noentiendo(void) {
   ay_song_play(AY_SONG_ONCE, 4, ay_song_coin_noentiendo);
 }
