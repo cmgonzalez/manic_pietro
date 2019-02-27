@@ -1,25 +1,46 @@
-==============================================================================
+========================================================================
 
 README - Manic Pietro v1.0
 
 
-This games was build using the Pietro Engine, with the help of z88dk compiler and using NIRVANA+ for the multicolour graphic engine.
+This games was built using the Pietro Framework, with the help of z88dk C compiler and using NIRVANA+ for the multi color graphic engine.
 
 
-==============================================================================
+=========================================================================
+
 HISTORY
 
 Help Pietro on his journey, thought 20 different brand new levels, based on some of our favorites 8 bit games.
 
 The brave souls that can finish this adventure, will get a secret code to unlock the original 20 Miner levels.
 
-If you die on your quest you will get a code to continue playing from your last stage, with the lives you have when start it, but remember there's no swordfish for cheaters!. There's another more codes so keep playing!
+If you die on your quest, you will get a code to continue playing from your last stage, with the lives you have when start it,
+but remember there's no swordfish for cheaters!. There's another more codes so keep playing!
 
-A remake of the master piece "Manic Miner" from the genius Matthew Smith, for contest ZX DEV MIA remakes.
+A remake of the master piece "Manic Miner" from the genius Matthew Smith, for contest ZX-DEV M.I.A-Remakes.
 
-Only for 128kb spectrums, coded on C using z88dk with multicolor effects thanks to the Nirvana Plus Engine.
+Only for 128kb spectrums.
 
 Good luck player!
+
+Features
+Spanish / English Language
+2 unique Intro Screens.
+2 unique Final Screens.
+40 levels with different tileset.
+ -20 Unique levels
+ -20 Classic levels
+3 AY Songs
+A lot of AY FXs
+A lot of different enemies.
+Continue Codes to continue from your last screen.
+Unique Secret Codes to unlock some hidden Features.
+Sinclair / Keyboard / Kempston control.
+Redefinable Keyboard
+
+Extra Keys
+Caps Shift : Change Tune / Tune OFF.
+Symbol Shift : Pause.
 
 
 Coding
@@ -41,10 +62,9 @@ Mick Farrow
 Testing
 Dario Ruellan "Daríopedía"
 Juan José Arenas "Canal de Juanjo"
-Carlos Perezgrín
+Carlos Pérezgrín
 Federico Jerez "Abu Simbel"
 Ed Verde
-
 
 
 

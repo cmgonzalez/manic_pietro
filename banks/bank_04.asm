@@ -77,7 +77,7 @@ BINARY "fx/dead.afx"
 
 PUBLIC _ay_fx_jump
 _ay_fx_jump:
-BINARY "fx/jump_test.afx"
+BINARY "fx/jump.afx"
 
 PUBLIC _ay_fx_fall
 _ay_fx_fall:
