@@ -144,7 +144,7 @@ void menu_main() {
       ay_fx_play(4, ay_fx_game_start);
       z80_delay_ms(300);
       game_cls();
-      game_code = 0;
+
       if (game_mode) {
         scr_curr = 20;
       } else {
@@ -234,7 +234,9 @@ void menu_main_print(void) {
   zx_print_ink(INK_CYAN);
   zx_print_str(17, 11, "0 START");
   zx_print_ink(INK_WHITE);
-  zx_print_str( 9, 21, "1.0");
+  v0 = 0;
+  if (!game_mode) v0 = 2;
+  zx_print_str( 9, 21+v0, "1.0");
   zx_print_str(23, 9, "2019 NOENTIENDO");
 }
 

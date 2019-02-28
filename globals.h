@@ -308,6 +308,7 @@ extern unsigned char nirv_sprite_index;
 extern unsigned char s_lin0;
 extern unsigned char s_lin1;
 extern unsigned char s_col0;
+extern unsigned char s_colint0;
 extern unsigned char s_col1;
 extern unsigned char s_row1;
 extern unsigned int loop_count;

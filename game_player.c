@@ -59,6 +59,8 @@ void player_init(unsigned char f_lin, unsigned char f_col,
     tile[INDEX_P1] = f_tile;
     colint[INDEX_P1] = value_b[INDEX_P1];
   }
+  spr_paint_player();
+
 }
 
 void player_turn(void) {
@@ -67,6 +69,7 @@ void player_turn(void) {
   if (spr_chktime()) {
     s_lin0 = lin[INDEX_P1];
     s_col0 = col[INDEX_P1];
+    s_colint0 = colint[INDEX_P1];
 
     dirs = (joyfunc1)(&k1);
     zx_border(map_border);
@@ -114,105 +117,15 @@ void player_turn(void) {
   }
 }
 
-void player_debug_keys() {
-  v0 = in_inkey();
-  switch (v0) {
-  case 49: // 1
-    --scr_curr;
-    game_round_up = 1;
-    if (scr_curr == 255) {
-      scr_curr = 39;
-    }
-    in_wait_nokey();
-    break;
-  case 50:
-    ++scr_curr;
-    game_round_up = 1;
-    if (scr_curr == 40) {
-      scr_curr = 0;
-    }
-    in_wait_nokey();
-    break;
-  case 51:
-    game_inmune = !game_inmune;
-    BIT_CLR(state[INDEX_P1], STAT_KILLED);
-    if (game_inmune) {
-      zx_border(INK_GREEN);
-    } else {
-      zx_border(INK_RED);
-    }
-    in_wait_nokey();
-    break;
-  }
-
-  /* OUT OF MEM
-  unsigned char c;
-
-  c = in_inkey();
-  if (c == 32) { // SPACE
-    if (game_song_play_start) {
-      game_song_play_start = 0;
-      ay_song_stop();
-    } else {
-      audio_ingame();
-    }
-    in_wait_nokey();
-  }
-  if (c == 49) { // 1
-    --scr_curr;
-    game_round_up = 1;
-    if (scr_curr == 255) {
-      scr_curr = 39;
-    }
-    in_wait_nokey();
-  }
-  if (c == 50) { // 2
-    ++scr_curr;
-    game_round_up = 1;
-    if (scr_curr == 40) {
-      scr_curr = 0;
-    }
-    in_wait_nokey();
-  }
-
-  if (c == 51) {
-    game_inmune = !game_inmune;
-    BIT_CLR(state[INDEX_P1], STAT_KILLED);
-    if (game_inmune) {
-      zx_print_str(21, 0, "MILLENIAL MODE");
-    } else {
-      zx_print_str(21, 0, "GENX MODE");
-    }
-
-    z80_delay_ms(25);
-    in_wait_nokey();
-    game_fill_row(21, 32);
-  }
-
-  if (c == 52) {
-    game_round_up = 1;
-    z80_delay_ms(250);
-    in_wait_nokey();
-  }
-
-  if (c == 53) {
-    if (scr_curr >= 20) {
-      scr_curr = 0;
-    } else {
-      scr_curr = 20;
-    }
-    game_round_up = 1;
-    z80_delay_ms(250);
-    in_wait_nokey();
-  }
-  */
-}
-
 void player_check_exit() {
   // Level UP
   v0 = abs(col[INDEX_P1]  - game_exit_col);
+  v1 = 1;
+  if ( BIT_CHK(state[INDEX_P1], STAT_JUMP) || BIT_CHK(state[INDEX_P1], STAT_FALL) ) {
+    v1 = 2;
+  }
 
-  if ( obj_count == 0xFF && v0 < 2) {
+  if ( obj_count == 0xFF && v0 < v1) {
 
     v0 = abs((lin[INDEX_P1] + 16) - game_exit_lin);
 
@@ -258,7 +171,12 @@ unsigned char player_move(void) {
     player_move_walk();
   }
   /* Paint Player Sprite */
-  spr_paint_player();
+  //spr_paint_player();
+
+  if ( !(colint[INDEX_P1] == s_colint0 && col[INDEX_P1] == s_col0 && lin[INDEX_P1] == s_lin0) ) {
+      spr_paint_player();
+    }
+
   return 0;
 }
 
@@ -1058,4 +976,98 @@ void player_lost_life() {
     player_lives = 0;
     game_over = 1;
   }
+}
+
+void player_debug_keys() {
+  v0 = in_inkey();
+  switch (v0) {
+  case 49: // 1
+    --scr_curr;
+    game_round_up = 1;
+    if (scr_curr == 255) {
+      scr_curr = 39;
+    }
+    in_wait_nokey();
+    break;
+  case 50:
+    ++scr_curr;
+    game_round_up = 1;
+    if (scr_curr == 40) {
+      scr_curr = 0;
+    }
+    in_wait_nokey();
+    break;
+  case 51:
+    game_inmune = !game_inmune;
+    BIT_CLR(state[INDEX_P1], STAT_KILLED);
+    if (game_inmune) {
+      zx_border(INK_GREEN);
+    } else {
+      zx_border(INK_RED);
+    }
+    in_wait_nokey();
+    break;
+  }
+
+  /* OUT OF MEM
+  unsigned char c;
+
+  c = in_inkey();
+  if (c == 32) { // SPACE
+    if (game_song_play_start) {
+      game_song_play_start = 0;
+      ay_song_stop();
+    } else {
+      audio_ingame();
+    }
+    in_wait_nokey();
+  }
+  if (c == 49) { // 1
+    --scr_curr;
+    game_round_up = 1;
+    if (scr_curr == 255) {
+      scr_curr = 39;
+    }
+    in_wait_nokey();
+  }
+  if (c == 50) { // 2
+    ++scr_curr;
+    game_round_up = 1;
+    if (scr_curr == 40) {
+      scr_curr = 0;
+    }
+    in_wait_nokey();
+  }
+
+  if (c == 51) {
+    game_inmune = !game_inmune;
+    BIT_CLR(state[INDEX_P1], STAT_KILLED);
+    if (game_inmune) {
+      zx_print_str(21, 0, "MILLENIAL MODE");
+    } else {
+      zx_print_str(21, 0, "GENX MODE");
+    }
+
+    z80_delay_ms(25);
+    in_wait_nokey();
+    game_fill_row(21, 32);
+  }
+
+  if (c == 52) {
+    game_round_up = 1;
+    z80_delay_ms(250);
+    in_wait_nokey();
+  }
+
+  if (c == 53) {
+    if (scr_curr >= 20) {
+      scr_curr = 0;
+    } else {
+      scr_curr = 20;
+    }
+    game_round_up = 1;
+    z80_delay_ms(250);
+    in_wait_nokey();
+  }
+  */
 }

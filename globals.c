@@ -133,6 +133,7 @@ unsigned char game_debug;
 unsigned char s_lin0;
 unsigned char s_lin1;
 unsigned char s_col0;
+unsigned char s_colint0;
 unsigned char s_col1;
 unsigned char s_row1;
 unsigned int loop_count;
