@@ -474,8 +474,13 @@ unsigned char player_handle_conveyor() {
 
 unsigned char player_new_jump() {
 
+
+  //( player_check_floor(0) || player_check_floor(1) )
+
+
   // Can jump?
-  if (player_check_ceil(lin[INDEX_P1] - 2, col[INDEX_P1])) {
+  if (player_check_ceil(lin[INDEX_P1] - 2, col[INDEX_P1]) && ( !player_check_floor(0) || !player_check_floor(1) ) ) {
+
     if (!BIT_CHK(state_a[INDEX_P1], STAT_CONVJMP)) {
       dirs_last = dirs;
     } else {
