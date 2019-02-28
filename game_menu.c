@@ -236,7 +236,7 @@ void menu_main_print(void) {
   zx_print_ink(INK_WHITE);
   v0 = 0;
   if (!game_mode) v0 = 2;
-  zx_print_str( 9, 21+v0, "1.0");
+  zx_print_str( 9, 21+v0, "1.1");
   zx_print_str(23, 9, "2019 NOENTIENDO");
 }
 

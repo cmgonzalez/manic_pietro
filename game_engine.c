@@ -51,6 +51,7 @@ void game_loop(void) {
   player_lin_scr = GAME_LIN_FLOOR - 24;
   player_col_scr = 2;
   game_round_up = 1; //Display presentation on 1 round
+
   game_round_init();
   game_round_up = 0;
   while (!game_over) {
@@ -60,7 +61,7 @@ void game_loop(void) {
     while (!game_round_up && !game_over) {
       // zx_border(map_border);
       /// Enemies turn
-      
+
       enemy_turn();
       // Player 1 turn
       player_turn();
@@ -356,18 +357,11 @@ void game_img( unsigned char *f_img, unsigned char f_page,
   unsigned char *dest;
   unsigned int len;
   len = f_width * f_height;
-  // 8 x 4 = 32 logo1
-  // Read Draw
-  //NIRVANAP_halt(); /// DONT REMOVE CAUSE HANG!!!!
 
-  i = 0;
-  while (i < 8) {
-    NIRVANAP_spriteT(i, 0, 0, 0);
-    ++i;
-  }
 
   src = f_img;
   dest = &btiles[0];
+  
   intrinsic_di();
   page(f_page);
   memcpy(dest, src, 48 * len);
@@ -376,14 +370,19 @@ void game_img( unsigned char *f_img, unsigned char f_page,
   i = 0;
   s_col1 = f_col;
   s_lin1 = f_lin;
-
+  v0 = 0;
   while (i < (len)) {
-    NIRVANAP_drawT(i, s_lin1, s_col1 * 2);
+    NIRVANAP_spriteT(v0 , i, s_lin1, s_col1 * 2);
     ++i;
     ++s_col1;
     if ((i % f_width) == 0) {
       s_lin1 = s_lin1 + 16;
       s_col1 = f_col;
+    }
+    ++v0;
+    if (v0 > 4) {
+      v0 = 0;
+      NIRVANAP_halt();
     }
   }
 
@@ -485,6 +484,7 @@ void game_anim_air() {
       air_curr_byte = air_curr_byte - 1;
       if (!game_round_up && (unsigned int)air_curr_byte == 21065) {
         audio_time();
+        game_atack = 1;
       }
     } else {
       BIT_SET(state[INDEX_P1], STAT_KILLED);
@@ -609,6 +609,7 @@ void game_round_init(void) {
   zx_set_clock(0);
   frame_time = 0;
   player_coins = 0;
+  game_atack = 0;
   air_curr_byte = (unsigned char *)air_start_byte; // Remaing Air anim
 
   // Coin HIGHLIGHT init

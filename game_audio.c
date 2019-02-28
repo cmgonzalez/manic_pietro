@@ -32,9 +32,9 @@
 
 void audio_ingame(void) {
   ay_song_stop();
-
+if (!game_atack) {
   switch (game_tune) {
-  case 0:
+  case 0: //Theme Based
     if (game_mode == 0) {
       ay_song_play(AY_SONG_LOOP, 4, ay_song_ingame0);
       game_tune = 1;
@@ -54,6 +54,10 @@ void audio_ingame(void) {
     ay_song_play(AY_SONG_LOOP, 4, ay_song_menu);
     break;
   }
+} else {
+  audio_time();
+}
+
 }
 
 void audio_round_init(void) {
