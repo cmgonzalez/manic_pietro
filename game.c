@@ -55,7 +55,7 @@ void main(void) {
   if (game_debug) {
     game_inmune = 0;    // GAME_INMUNE;
     game_inf_lives = 1; // GAME_INF_LIVES;
-    scr_curr = 17;
+    scr_curr = 27;
     game_menu = 0;
     joyfunc1 = (uint16_t(*)(udk_t *))(in_stick_keyboard);
     menu_curr_sel = 2; // Sync Menu

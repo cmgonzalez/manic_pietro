@@ -60,6 +60,7 @@ void game_loop(void) {
     while (!game_round_up && !game_over) {
       // zx_border(map_border);
       /// Enemies turn
+      
       enemy_turn();
       // Player 1 turn
       player_turn();
@@ -72,6 +73,7 @@ void game_loop(void) {
       if (game_check_time(&time_key, 4)) {
         time_key = zx_clock();
         game_key_paint();
+        if (!dirs) game_aux_key();
       }
 
       if (game_conveyor_col0 > 0) {
@@ -89,6 +91,7 @@ void game_loop(void) {
           game_fps();
           frame_time = zx_clock();
         }
+
       }
 
       if (scr_curr == 18 && !game_atrac) {
@@ -96,61 +99,8 @@ void game_loop(void) {
       }
       ++loop_count;
       ++fps;
-      // CAPS y SYMBOL READ
 
-      v0 = (joyfunc2)(&k2);
-      if (v0 & IN_STICK_LEFT) { // CAPS
-        ++game_tune;
-        // 0 DEF
-        // 1 Pietro
-        // 2 Willy
-        // 3 MENU
-        // 4 Off
-        if (game_tune > 4) {
-          game_tune = 1;
-        }
-        zx_print_ink((map_border << 3) | INK_WHITE);
-        zx_print_str(0, 13, "TUNE");
-        switch (game_tune) {
-        case 1:
-          zx_print_str(0, 18, "A");
-          break;
-        case 2:
-          zx_print_str(0, 18, "B");
-          break;
-        case 3:
-          zx_print_str(0, 18, "C");
-          break;
-        case 4:
-          zx_print_str(0, 18, "OFF");
-          break;
-        }
-        in_wait_nokey();
-        audio_ingame();
-        z80_delay_ms(25);
-        game_fill_row(0, 32);
-      };
 
-      if (v0 & IN_STICK_RIGHT) { // SYMBOL
-        ay_song_stop();
-        z80_delay_ms(100);
-        ay_fx_play(4, ay_fx_pause);
-        v0 = 1;
-        while (v0) {
-          dirs = (joyfunc2)(&k2);
-          z80_delay_ms(10);
-          if (dirs & IN_STICK_RIGHT) {
-            v0 = 0;
-          }
-
-          menu_rotcolor();
-          zx_print_ink((map_border << 3) | color);
-          zx_print_str(0, 14, "PAUSE");
-        }
-        game_fill_row(0, 32);
-        audio_ingame();
-        z80_delay_ms(100);
-      };
     }
 
     if (game_round_up) {
@@ -1524,4 +1474,63 @@ void game_pause0() {
   while (v0 == 0) {
     v0 = in_test_key();
   }
+}
+
+void game_aux_key() {
+
+  // CAPS y SYMBOL READ
+
+  v0 = (joyfunc2)(&k2);
+  if (v0 & IN_STICK_LEFT) { // CAPS
+    ++game_tune;
+    // 0 DEF
+    // 1 Pietro
+    // 2 Willy
+    // 3 MENU
+    // 4 Off
+    if (game_tune > 4) {
+      game_tune = 1;
+    }
+    zx_print_ink((map_border << 3) | INK_WHITE);
+    zx_print_str(0, 13, "TUNE");
+    switch (game_tune) {
+    case 1:
+      zx_print_str(0, 18, "A");
+      break;
+    case 2:
+      zx_print_str(0, 18, "B");
+      break;
+    case 3:
+      zx_print_str(0, 18, "C");
+      break;
+    case 4:
+      zx_print_str(0, 18, "OFF");
+      break;
+    }
+    in_wait_nokey();
+    audio_ingame();
+    z80_delay_ms(25);
+    game_fill_row(0, 32);
+  };
+
+  if (v0 & IN_STICK_RIGHT) { // SYMBOL
+    ay_song_stop();
+    z80_delay_ms(100);
+    ay_fx_play(4, ay_fx_pause);
+    v0 = 1;
+    while (v0) {
+      v1 = (joyfunc2)(&k2);
+      z80_delay_ms(10);
+      if (v1 & IN_STICK_RIGHT) {
+        v0 = 0;
+      }
+
+      menu_rotcolor();
+      zx_print_ink((map_border << 3) | color);
+      zx_print_str(0, 14, "PAUSE");
+    }
+    game_fill_row(0, 32);
+    audio_ingame();
+    z80_delay_ms(100);
+  };
 }

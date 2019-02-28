@@ -350,6 +350,8 @@ extern unsigned char game_inf_lives;
 extern unsigned char game_tile_cnt;
 
 extern unsigned char game_over;
+extern unsigned char game_atack;
+
 extern unsigned char game_crumb_start;
 extern unsigned char game_crumb_end;
 

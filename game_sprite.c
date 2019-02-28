@@ -569,16 +569,10 @@ unsigned char spr_get_tile(unsigned char *f_sprite) __z88dk_fastcall {
 
 unsigned char spr_get_tile_dir(unsigned char *f_tile, unsigned char *f_inc) {
 
-  if (BIT_CHK(state[sprite], STAT_DIRR)) {
+  if (BIT_CHK(state[sprite], STAT_DIRR) || BIT_CHK(state_a[sprite], STAT_LDIRR)) {
     return *f_tile;
   }
-  if (BIT_CHK(state[sprite], STAT_DIRL)) {
-    return *f_tile + *f_inc;
-  }
-  if (BIT_CHK(state_a[sprite], STAT_LDIRR)) {
-    return *f_tile;
-  }
-  if (BIT_CHK(state_a[sprite], STAT_LDIRL)) {
+  if (BIT_CHK(state[sprite], STAT_DIRL) || BIT_CHK(state_a[sprite], STAT_LDIRL)) {
     return *f_tile + *f_inc;
   }
   return *f_tile;

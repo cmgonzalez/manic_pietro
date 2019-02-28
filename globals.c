@@ -186,6 +186,7 @@ unsigned char game_inf_lives;
 unsigned char game_tile_cnt;
 
 unsigned char game_over;
+unsigned char game_atack;
 
 unsigned char game_crumb_start;
 unsigned char game_crumb_end;

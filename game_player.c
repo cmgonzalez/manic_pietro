@@ -129,7 +129,7 @@ void player_check_exit() {
 
     v0 = abs((lin[INDEX_P1] + 16) - game_exit_lin);
 
-    if (v0 < 8) {
+    if (v0 < 14) {
       game_round_up = 1;
       BIT_CLR(state[INDEX_P1], STAT_KILLED);
       // Amimate Bonus Air
